@@ -9,7 +9,7 @@ line (currently 0.5.x). Older snapshots may not receive fixes.
 
 Please use GitHub's private **Security advisories** flow:
 
-https://github.com/pengxianghao21/switchpilot/security/advisories/new
+https://github.com/PilotFoundry/switchpilot/security/advisories/new
 
 Do not open a public issue for a vulnerability involving permissions, TCC,
 screen cleaning, credential exposure or unsafe automation. Include:
