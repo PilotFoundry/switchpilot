@@ -258,10 +258,13 @@ struct PanelView: View {
                     Button {
                         model.toggleAudioMute()
                     } label: {
-                        Image(systemName: model.audioState.muted == true ? "speaker.slash.fill" : "speaker.wave.2.fill")
+                        Label(
+                            model.audioState.muted == true ? "取消静音" : "静音",
+                            systemImage: model.audioState.muted == true ? "speaker.wave.2.fill" : "speaker.slash.fill")
                     }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
+                    .help(model.audioState.muted == true ? "取消静音" : "静音输出")
                     .accessibilityLabel(model.audioState.muted == true ? "取消静音" : "静音输出")
                 }
             }
@@ -275,10 +278,19 @@ struct PanelView: View {
                         get: { model.audioVolume },
                         set: { model.setAudioVolume($0) }), in: 0...1)
                         .accessibilityLabel("输出音量")
-                    Text("\(Int((model.audioVolume * 100).rounded()))%")
-                        .font(.caption2.monospacedDigit())
-                        .foregroundStyle(Color.secondaryInk)
-                        .frame(width: 34, alignment: .trailing)
+                        .disabled(model.audioState.muted == true)
+                        .opacity(model.audioState.muted == true ? 0.55 : 1)
+                    if model.audioState.muted == true {
+                        Label("已静音", systemImage: "speaker.slash")
+                            .font(.caption2)
+                            .foregroundStyle(Color.secondaryInk)
+                            .labelStyle(.titleAndIcon)
+                    } else {
+                        Text("\(Int((model.audioVolume * 100).rounded()))%")
+                            .font(.caption2.monospacedDigit())
+                            .foregroundStyle(Color.secondaryInk)
+                            .frame(width: 34, alignment: .trailing)
+                    }
                 }
                 Text(model.audioState.name)
                     .font(.caption2)
