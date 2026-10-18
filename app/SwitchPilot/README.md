@@ -1,4 +1,4 @@
-# SwitchPilot（个人自用 v0.3.9）
+# SwitchPilot（个人自用 v0.4.0）
 
 原 One Switch 1.35.4 的个人自用最小菜单栏替代。**不是分发产品**；SwitchPilot 是 2026-10-18 确定并经用户同意转正的正式名（候选比较见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`），中文描述「菜单栏开关」。目标、面板与验收见 `docs/PRD.md`、`docs/DESIGN.md`、`docs/TECH.md`、`docs/TESTPLAN.md`。
 
@@ -10,11 +10,14 @@
 | 系统深色模式 | 已完成（权限门控，行内授权入口） | ✅ 用户现场 M1 通过（2026-10-18） |
 | 启动屏保 | 已完成（点击即执行，无二次确认） | ✅ 用户现场自测通过（M2） |
 | 锁定屏幕 | 已完成（权限门控，点击即执行，无二次确认） | ✅ 用户现场自测通过（M3） |
+| 全局快捷键 | 已完成（固定组合，默认关闭） | ⏳ 注册逻辑已验；真实按键/后台触发待现场（M9） |
+| 关闭显示器 | 已完成（公开 pmset；点击即执行） | ⏳ 真实休眠/唤醒待现场（M10） |
+| 输出音量 | 原型（CoreAudio 能力感知） | ⏳ 当前默认输出 unsupported；支持设备上的真实控制待现场（M11） |
 | 登录时启动 | 已完成（SMAppService 状态机） | ✅ 注册/注销实测；注销/重启真实启动列为**长期待办**（收尾时验证） |
 
-v0.3 面板：单一不透明表面、可读次级文字、状态胶囊、首启引导（可"申请全部权限/稍后再说/重新检查"）、保活进度、权限按缺失项给唯一 CTA、动作磁贴（系统 hover/pressed/focus）、设置窗口（权限/登录/关于）、状态项右键菜单（设置/使用说明/退出）。默认不自动执行 tccutil reset；撤销授权默认走系统设置，高级区另有显式确认的「在应用内重置权限…」。设计见 `docs/DESIGN.md` 与 v0.3 报告。
+v0.4 面板：单一不透明表面、可读次级文字、状态胶囊、首启引导、保活进度、权限单卡、输出音量卡（能力感知；当前默认输出 unsupported 时显示说明）、三个快速动作（屏保/锁屏/关闭显示器，点击即执行、无二次确认）、设置窗口（权限/快捷键/登录/关于，诊断可折叠）、状态项右键菜单。默认不自动执行 tccutil reset；撤销授权默认走系统设置，高级区另有显式确认的「在应用内重置权限…」。设计见 `docs/DESIGN.md` 与扩展报告。
 
-已知排除项：Night Shift 直接控制、合盖不休眠、显示器休眠、输出/麦克风/音量类开关、私有 API、修改原应用、后台自动控制。
+已知排除项：Night Shift 直接控制（私有框架）、合盖不休眠/特权 helper、麦克风静音与音频输出设备切换（v0.4.0 未纳入）、私有 API、修改原应用、后台自动控制。
 
 ## 验收与诊断
 
@@ -45,7 +48,7 @@ open -R ~/Applications/SwitchPilot.app   # 或在 Finder 中定位
 - 重新构建后重新执行 `scripts/install-app`。本机使用自签名代码签名身份 **SwitchPilot Local Signing**（`scripts/build-app` 自动优先使用；身份不存在时回退 ad-hoc），其 designated requirement 为 `identifier + certificate leaf`，所以重建后 TCC 授权不再因 cdhash 变化而失效。签名私钥只在 Keychain 中，不进入 Git。
 - 卸载：`scripts/uninstall-app`（TCC/登录项请在系统设置中手动移除）。
 
-CLT 无 XCTest，使用独立 `SwitchPilotChecks` 可执行文件做真实断言与进度自检（12 项）；构建使用 `--build-system native` 回退，Swift 6.4 已提示该构建系统 deprecated。CLT + native SwiftPM 缺少 SwiftUI 宏插件，因此面板状态放在 PanelModel 而不是 `@State`/`@AppStorage`。
+CLT 无 XCTest，使用独立 `SwitchPilotChecks` 可执行文件做真实断言与进度自检（14 项）；构建使用 `--build-system native` 回退，Swift 6.4 已提示该构建系统 deprecated。CLT + native SwiftPM 缺少 SwiftUI 宏插件，因此面板状态放在 PanelModel 而不是 `@State`/`@AppStorage`。
 
 ## 权限
 
@@ -60,7 +63,7 @@ CLT 无 XCTest，使用独立 `SwitchPilotChecks` 可执行文件做真实断言
 
 - 保活只阻止“用户空闲导致的显示器休眠”，不阻止合盖、手动睡眠、低电量睡眠。
 - 深色模式是系统持久设置，不会在退出时自动恢复。
-- 屏保/锁定屏幕均为点击即执行，无二次确认（v0.3.8/v0.3.7）；可读回状态读不到时显示“未确认”。v0.3.9 起权限提示合并为单张卡、设置成功态更短、诊断默认折叠、应用内重置标为不可逆操作；普通重复启动保持单实例。
+- 屏保/锁定屏幕均为点击即执行，无二次确认（v0.3.8/v0.3.7）；可读回状态读不到时显示“未确认”。v0.3.9 起权限提示合并为单张卡、设置成功态更短、诊断默认折叠、应用内重置标为不可逆操作；普通重复启动保持单实例。v0.4.0 新增快捷键、关闭显示器、输出音量原型（见下）。
 - 无网络、无后台定时动作、不修改原 One Switch 的 app/数据/偏好。
 - 普通重复启动由 `LSMultipleInstancesProhibited` + 启动守卫限制为一个菜单栏图标；`open -n` 仅用于开发诊断（不纳入普通用户路径）；自动化冒烟用 `SWITCHPILOT_SMOKE_TEST=1` 绕过。
 - 首次引导只记录“是否已看过”，不做其他持久化；设置窗口不做持久化（登录项状态由系统保存）。

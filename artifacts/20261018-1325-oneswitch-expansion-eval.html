@@ -10,14 +10,14 @@
 <aside><div class="brand">SWITCHPILOT / EXPANSION</div>
 <p class="muted">扩展开关 / 快捷键评估<br>2026.10.18 · 评估未批准</p>
 <nav aria-label="目录"><a href="#summary">01 · 结论</a><a href="#context">02 · 现状与边界</a><a href="#matrix">03 · 候选矩阵</a><a href="#evidence">04 · API 证据</a><a href="#phases">05 · 推荐路线</a><a href="#decision">06 · 决策</a></nav>
-<p><span class="badge amber">不是已批准需求</span></p>
+<p><span class="badge">已批准 A/B/C/D</span><br><span class="badge">v0.4.0 原型已实现</span></p>
 <p class="muted"><span class="badge">v0.3.9 基线</span><br><span class="badge">无新增 TCC 首选</span><br><span class="badge gray">真实动作待现场</span></p>
 </aside>
 <main>
-<header><div class="eyebrow">EXPANSION EVALUATION · NOT APPROVED</div>
+<header><div class="eyebrow">EXPANSION · IMPLEMENTED IN V0.4.0 · FIELD TESTS PENDING</div>
 <h1>下一步扩什么？<br><span>先快捷键，后新开关。</span></h1>
 <p class="lead">当前四个基础能力已稳定：保活、深色模式、屏保、锁屏；M1/M2/M3 用户自测通过。扩展候选按“公开 API、无新增权限、可逆、UI 成本、真实价值”评估。</p>
-<p class="muted">输入：PRD 非目标、能力矩阵候选池、Night Shift 证据、本机只读 API 探测、当前 v0.3.9 面板/设置实现。评估本身不修改产品范围。</p></header>
+<p class="muted">输入：PRD 非目标、能力矩阵候选池、Night Shift 证据、本机只读 API 探测、当前 v0.3.9 面板/设置实现。<br><strong>实施状态：</strong>用户选择 A/B/C/D；v0.4.0 已实现 A（快捷键）、B（关闭显示器）、C（音量原型），真实按键/休眠/音量写入待现场 M9–M11；D 为收尾测试。</p></header>
 
 <section id="summary"><h2>01 / 结论</h2>
 <div class="grid">
@@ -33,7 +33,7 @@
 <li>当前 v0.3.9；M1 深色模式、M2 屏保、M3 锁屏均已由用户自测通过；M8 简单测试通过。</li>
 <li>M8-3 注销/重启登录启动 = 长期待办；M8-4 图标目视、M5 VoiceOver/小屏仍待现场。</li>
 <li>权限策略：默认只在用户操作时请求；应用内不自动执行 tccutil reset（高级重置需显式确认）。</li>
-<li>本轮只做评估与只读探测，不注册持久快捷键、不切音频、不关显示器、不改 TCC/系统设置。</li>
+<li>评估阶段只做只读探测；用户选择后已在 v0.4.0 实现原型，真实按键/休眠/音量写入仍需现场（M9–M11）。</li>
 </ul></section>
 
 <section id="matrix"><h2>03 / 候选矩阵</h2>
@@ -88,7 +88,8 @@ UnregisterEventHotKey → status 0</pre>
 <li>音量（后续）：支持/不支持两类设备状态正确，设备切换后刷新。</li>
 <li>未执行项不写通过；TCC 相关仍需用户在场。</li></ul></section>
 
-<section id="decision"><h2>06 / 需要你决定</h2>
+<section id="decision"><h2>06 / 用户选择：A+B+C+D</h2>
+<p class="note"><strong>用户已回复“ABCD 你都来吧”。</strong>v0.4.0 已实现 A/B/C 原型；D 的收尾测试仍待现场。下方选项保留为历史决策记录。</p>
 <label for="choice" class="muted">选择下一轮方向</label>
 <select id="choice">
 <option value="A">A · 先做快捷键：保活 + 屏保（推荐）</option>
@@ -100,7 +101,7 @@ UnregisterEventHotKey → status 0</pre>
 <div class="controls"><button id="copy">Copy as prompt · 复制</button><span id="status" class="muted" role="status"></span></div>
 <p class="muted">本评估没有修改 PRD 范围，也没有实现任何新功能；选择后按“规格 → 实现 → 自动检查 → 用户现场验收”的同一流程推进。</p></section>
 
-<footer>SwitchPilot v0.3.9 · 扩展评估 · 2026-10-18 13:25 CST · 证据：[docs/EXPANSION.md](../docs/EXPANSION.md) · [expansion-api-probe.md](../evidence/expansion-api-probe.md) · [night-shift.md](../evidence/features/night-shift.md)</footer>
+<footer>SwitchPilot v0.4.0 · 扩展实施状态 · 2026-10-18 · 现场：[expansion-v040](../evidence/onsite/expansion-v040-2026-10-18.md) · 原始评估 13:25 CST · 证据：[docs/EXPANSION.md](../docs/EXPANSION.md) · [expansion-api-probe.md](../evidence/expansion-api-probe.md) · [night-shift.md](../evidence/features/night-shift.md)</footer>
 </main></div>
 <script>
 const choice = document.getElementById('choice'), prompt = document.getElementById('prompt'), status = document.getElementById('status');

@@ -227,3 +227,13 @@ open app/SwitchPilot/.build/SwitchPilot.app
 - `RuntimeDiagnostics.swift`：`writeRuntimeDiagnostics()` 供 `--diagnose-runtime` 与 URL scheme 共用；Info.plist 增加 `CFBundleURLTypes/switchpilot` 与 `LSMultipleInstancesProhibited`。
 - `scripts/onsite-probe`：优先用运行中应用的 `switchpilot://diagnose` 写只读报告；移除会偶发挂起的 `sfltool dumpbtm`；TCC 日志限 5 分钟。
 - 验证：面板 380×637/710；设置窗口 523/774；普通重复启动保持一个实例；`open -n` 被 LS 禁止（诊断改走 URL）；verify-app 11/11、自检 12/12。
+
+## 15. v0.4.0：快捷键、显示器休眠、音量原型
+
+- `HotKeyManager.swift`：Carbon `InstallEventHandler` + `RegisterEventHotKey`，固定 `⌃⌥⌘K`（保活切换）/`⌃⌥⌘S`（屏保）；启动时按 `UserDefaults switchpilot.hotKeysEnabled` 决定是否注册；默认关闭；注册失败时注销已注册项、回写关闭并返回可读错误；动作通过闭包调用 `PanelModel.toggleKeepAwake()`/`startScreenSaver()`，在 MainActor 执行。无 TCC；设置页开关绑定。
+- `DisplaySleep.swift`：`Process` 调 `/usr/bin/pmset displaysleepnow`；无 TCC、一次性动作；失败返回真实退出码/错误；`PanelModel.sleepDisplay()` 后台执行并更新状态。
+- `AudioOutput.swift`：CoreAudio 读取默认输出设备、名称、`kAudioDevicePropertyMute`/`kAudioDevicePropertyVolumeScalar` 能力与当前值；写入后由 UI 刷新读回；不支持时不显示可操作控件。原型不做设备变更监听，面板刷新/重开时重新探测。
+- `PanelModel`：新增 `toggleKeepAwake()`、`audioState/audioVolume/audioError`、`displaySleepStatus`；刷新时读取音频状态。
+- `SettingsModel`：持有 `HotKeyManager`，提供 enable/disable、组合说明、错误消息；`SettingsView` 新增快捷键区。
+- 自动化：`SwitchPilotChecks` 新增音频只读能力与 pmset 可用性检查（14/14）；verify-app 更新面板尺寸阈值（380×780/860）且保持 11/11。
+- 已知边界：快捷键真实按键分发、pmset 真实休眠/唤醒、音量在支持设备上的真实写入需现场；音量当前默认设备 unsupported。

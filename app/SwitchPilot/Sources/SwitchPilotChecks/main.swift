@@ -116,6 +116,21 @@ let checks: [(String, () throws -> Void)] = [
         print("  login item: \(state)")
         try check(state.description.isEmpty == false, "login item state must describe itself")
     }),
+    ("audio output state readable", {
+        let state = AudioOutput.read()
+        print("  audio=\(state.name) volume=\(state.supportsVolume) mute=\(state.supportsMute)")
+        try check(state.name.isEmpty == false, "audio output name is empty")
+        if let volume = state.volume {
+            try check(volume >= 0 && volume <= 1.0001, "audio volume out of range: \(volume)")
+        }
+        if state.supportsMute {
+            try check(state.muted != nil, "mute is supported but state missing")
+        }
+    }),
+    ("display sleep command available", {
+        try check(DisplaySleep.isAvailable, "pmset is not executable")
+        try check(DisplaySleep.arguments == ["displaysleepnow"], "display sleep arguments changed")
+    }),
     ("lock screen refuses to run without permissions", {
         let permissions = LockScreen.permissions()
         print("  permissions: \(permissions.summary)")

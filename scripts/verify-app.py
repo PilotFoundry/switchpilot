@@ -69,7 +69,7 @@ def check_plists():
     entitlements = plistlib.loads((PKG / "Entitlements.plist").read_bytes())
     if info.get("CFBundleIdentifier") != "local.personal.SwitchPilot":
         raise RuntimeError("unexpected bundle id")
-    if info.get("CFBundleShortVersionString") != "0.3.9":
+    if info.get("CFBundleShortVersionString") != "0.4.0":
         raise RuntimeError(f"unexpected bundle version: {info.get('CFBundleShortVersionString')}")
     if info.get("LSUIElement") is not True:
         raise RuntimeError("LSUIElement must be true")
@@ -187,15 +187,15 @@ def check_panel_sizes():
     if result.returncode != 0 or "x" not in result.stdout:
         raise RuntimeError(f"panel-size (no guide) failed: {result.stderr.strip()}")
     width, height = (int(v) for v in result.stdout.strip().split("x"))
-    if width != 380 or height > 680:
-        raise RuntimeError(f"panel without guide is {width}x{height}, expected 380x<=680")
+    if width != 380 or height > 780:
+        raise RuntimeError(f"panel without guide is {width}x{height}, expected 380x<=780")
     result = run(app, "--panel-size", env=guide)
     if result.returncode != 0 or "x" not in result.stdout:
         raise RuntimeError(f"panel-size (guide) failed: {result.stderr.strip()}")
     width, height = (int(v) for v in result.stdout.strip().split("x"))
-    if width != 380 or height > 760:
-        raise RuntimeError(f"panel with guide is {width}x{height}, expected 380x<=760")
-    return "panel sizes within 380x680 / 380x760"
+    if width != 380 or height > 860:
+        raise RuntimeError(f"panel with guide is {width}x{height}, expected 380x<=860")
+    return "panel sizes within 380x780 / 380x860"
 
 
 def check_no_raw_foreground_colors():
