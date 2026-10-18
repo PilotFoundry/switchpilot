@@ -5,7 +5,7 @@
 ## 样本完整性
 
 - 原包 `/Applications/One Switch.app`；通过 `ditto` 建立 `samples/One Switch.app`。
-- 递归清点 305 条：297 个普通文件、8 个符号链接；11 个 Mach-O 文件，均为 x86_64 + arm64。
+- 递归清点 305 条：293 个普通文件、12 个符号链接；11 个 Mach-O 文件，均为 x86_64 + arm64。
 - 每个普通文件 SHA-256、大小及符号链接目标见 [binary-manifest.json](binary-manifest.json)。不是原始程序或反编译源码。
 - 复制前、复制后原包及副本逐条相等；两份 `codesign --verify --deep --strict --verbose=2` 均退出 0。
 - 清单是文件内容及链接层面的相等，不声称逐项比较全部扩展属性；签名验证另行通过。
@@ -47,3 +47,5 @@ lipo -archs 'samples/One Switch.app/Contents/MacOS/One Switch'
 ```
 
 原始命令结果在忽略目录 `evidence/raw/baseline/`。未启动研究副本、未改原包/许可证/用户数据，未改变全局 Xcode 选择，未代为接受许可。后续仅分析 arm64 切片，记录切片自己的 hash；不能与本表通用文件 hash 混用。
+
+校正记录：初稿将前次文件数误当作本轮计数；提交前数量断言失败，但 shell 未启用 errexit 导致提交继续。当前依本轮清单重新计数修正，后续命令显式启用 set -e。内容相等和签名检查不受此计数错误影响。
