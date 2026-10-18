@@ -1,4 +1,4 @@
-# TESTPLAN：个人自用菜单栏应用 v0.1
+# TESTPLAN：SwitchPilot 个人自用菜单栏应用 v0.2
 
 日期：2026-10-18；对象：`app/SwitchPilot`；规格：`docs/PRD.md`、`docs/DESIGN.md`、`docs/TECH.md`。
 
@@ -6,7 +6,7 @@
 
 - macOS 27.0.1 (26A434)，Apple Silicon arm64。
 - CLT Swift 6.4 / macOS 27.0 SDK；无完整 Xcode、无 XCTest。
-- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app`，bundle id `local.personal.SwitchPilot`，ad-hoc Hardened Runtime 签名。
+- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.2.0，bundle id `local.personal.SwitchPilot`，ad-hoc Hardened Runtime 签名。
 - 原应用：`/Applications/One Switch.app` 1.35.4 (440)，测试前后版本/hash/签名不变；不启动、不修改其数据。
 - 权限前提：未预先授予 Automation/Accessibility；不修改 TCC 数据库、不关闭 SIP、不重签原应用。
 
@@ -20,6 +20,7 @@
 | A4 | 时长解析 | `SwitchPilotChecks` | 拒绝 0/负数/NaN/inf/非数字；接受合法值 |
 | A5 | 真实断言生命周期 | `SwitchPilotChecks` | 三轮 Create/读回/Release；重复 start 幂等；stop 后可读回不存在；deinit 释放 |
 | A6 | 定时释放 | `SwitchPilotChecks` | 短时长会话到时自动释放，OS 断言消失 |
+| A6b | 进度模型 | `SwitchPilotChecks` | 限时会话暴露 0–1 进度；无限期会话不显示进度 |
 | A7 | 权限映射 | `SwitchPilotChecks` | 0/-1743/-1744/-600 映射到正确状态且不崩溃 |
 | A8 | 屏保引擎解析 | `SwitchPilotChecks` | 可解析 `com.apple.ScreenSaver.Engine` 路径；不存在时状态为 unavailable |
 | A9 | 锁屏权限快照 | `SwitchPilotChecks` | 只读返回 Automation/Accessibility 状态；未授权时不发送按键 |
@@ -29,7 +30,7 @@
 | A13 | 原应用不变 | `scripts/verify-app.py` | 版本/hash 与基线一致；`codesign --verify --strict` 通过 |
 | A14 | 静态质量 | `python3 -m py_compile`、`sh -n`、`git diff --check` | 退出 0；不声称运行不存在的 linter |
 
-记录：`evidence/app-runtime.md` + `evidence/raw/app/`（原始日志不入 Git）。
+记录：`evidence/app-runtime.md` + `evidence/raw/app/`（原始日志不入 Git）。本轮核心自检共 10 项。
 
 ## 3. 现场手动验收（需用户在场）
 
@@ -71,6 +72,15 @@
 3. VoiceOver 读数：控件名称、状态、错误可理解（不要求全路径完美）。
 4. 浅色/深色外观下文字对比度可读。
 
+### M7 首次引导与新面板（v0.2）
+
+1. 首次打开面板应出现“开始使用”三条规则；点“知道了”后关闭，重启应用不再自动出现。
+2. 点 footer“使用说明”可重新打开引导卡；“收起说明”可关闭。
+3. 保活开启后显示进度条与剩余时间；无限期不显示进度条。
+4. 深色模式未授权时点开关应回弹并显示行内授权入口，不弹系统设置或改变外观。
+5. 锁屏缺权限时磁贴显示“需授权”，点它只显示行内说明，不锁屏、不发按键。
+6. 浅色/深色系统外观下检查对比度与文字可读性；缩放窗口/不同分辨率下不截断。
+
 ### M6 边界/恢复
 
 1. 重复启动应用的行为（多实例/多图标）记录为已知限制。
@@ -99,4 +109,4 @@ v0.1 收口标准：A1–A14 通过；M1–M3 由用户在场执行并记录（�
 
 ## 7. 本轮明确未执行项
 
-深色模式真实授权与切换、屏保真实启动、锁屏真实锁定、睡眠/唤醒、VoiceOver、多实例、长时间稳定性、分发签名/公证/Sandbox。以上不得在 README 或能力矩阵中记为通过。
+深色模式真实授权与切换、屏保真实启动、锁屏真实锁定、睡眠/唤醒、VoiceOver、多实例、首次引导交互手测、长时间稳定性、分发签名/公证/Sandbox。以上不得在 README 或能力矩阵中记为通过。
