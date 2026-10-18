@@ -6,4 +6,12 @@ stage,measurement,value,unit,qualification
 3,model_output_tokens,unknown,tokens,no authoritative per-stage usage exposed
 3,cached_input_tokens,unknown,tokens,no authoritative per-stage usage exposed
 3,human_work_time,unknown,hours,not measured
-3,codex_reset_cards_used,0,cards,no rate limit observed
+3,codex_reset_cards_used,0,cards,no rate limit observed during step 3; later turns were interrupted
+6,results_draft,2026-10-18T10:34:05.309784+08:00,timestamp,wall-clock endpoint before final review
+6,baseline_to_draft_wall,41.1,minutes,includes waiting and incomplete dynamic gates; not human time
+6,usage_limit_interruptions,2,events,2026-10-18 10:02:03 and 10:38:05 CST; second hit before final closeout commit
+6,reset_cards_used,unknown,cards,user authorized existing cards; consumption not recorded locally
+6,closeout_session,2026-10-18T11:08:07+08:00,timestamp,"DSH takeover: review, closeout commit and ff merge of pilot branch"
+5,core_check_groups,4/4,groups,three real assertion cycles included
+5,process_cases,5/5,cases,timer x3 plus TERM and KILL
+5,dark_switch_cycles,0,cycles,blocked by permission-needed -1744
