@@ -8,7 +8,7 @@
 
 本轮目标是给**单个使用者（本人）**做一个最小、原生、可维护的菜单栏开关面板：日常能用、状态可读回、失败不伪装成功、权限边界清楚、第一次打开就知道怎么用。不追求与原版全功能等价，不做分发与商业化。
 
-正式名：**SwitchPilot**（2026-10-18 确定；候选与冲突比较见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`）。中文描述「菜单栏开关」，bundle id 保持 `local.personal.SwitchPilot` 以避免重置已授予的 TCC 权限。
+正式名：**SwitchPilot**（2026-10-18 确定；候选与冲突比较见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`）。中文描述「菜单栏开关」，bundle id 保持 `local.personal.SwitchPilot` 以减少迁移；ad-hoc 重建后 TCC 仍可能要求重新授权。
 
 ## 2. 用户与场景
 
