@@ -11,6 +11,12 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN/SwitchPilot" "$APP/Contents/MacOS/SwitchPilot"
 cp "$PKG/Info.plist" "$APP/Contents/Info.plist"
 if [ -f "$PKG/Resources/AppIcon.icns" ]; then cp "$PKG/Resources/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"; fi
-codesign --force --sign - --options runtime --entitlements "$PKG/Entitlements.plist" "$APP"
+SIGN_IDENTITY="${SWITCHPILOT_SIGN_IDENTITY:-SwitchPilot Local Signing}"
+if codesign --force --sign "$SIGN_IDENTITY" --options runtime --entitlements "$PKG/Entitlements.plist" "$APP" 2>/dev/null; then
+    echo "signed with $SIGN_IDENTITY"
+else
+    codesign --force --sign - --options runtime --entitlements "$PKG/Entitlements.plist" "$APP"
+    echo "signed ad-hoc (local identity unavailable)"
+fi
 codesign --verify --strict "$APP"
 printf '%s\n' "$APP"

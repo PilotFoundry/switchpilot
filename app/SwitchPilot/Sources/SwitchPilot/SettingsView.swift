@@ -42,6 +42,22 @@ struct SettingsView: View {
                 title: "辅助功能（Accessibility）",
                 detail: model.accessibilityTrusted ? "已授权" : "未授权（锁屏需要）",
                 state: model.accessibilityTrusted)
+            if !model.permissionsReady {
+                VStack(alignment: .leading, spacing: 4) {
+                    Text(model.diagnostic)
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundStyle(Color.secondaryInk)
+                        .textSelection(.enabled)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text("如果系统设置里已经开启但仍显示未授权：通常是应用重新构建后签名身份变了。请退出应用，从 Finder 启动，并重新授权一次；必要时在终端执行 README 里的 tccutil reset 命令。")
+                        .font(.caption)
+                        .foregroundStyle(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                }
+                .padding(9)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(RoundedRectangle(cornerRadius: 7).fill(Color.primary.opacity(0.05)))
+            }
             HStack(spacing: 8) {
                 Button {
                     model.requestAllPermissions()

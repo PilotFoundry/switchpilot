@@ -65,3 +65,10 @@
 - 独立评审：`evidence/reviews/ui-review.md`（P0×1/P1×6）、`ux-review.md`（P0×4/P1×8）、`qa-baseline.md`（v0.3 验收矩阵 31 项）。v0.3 已修主要 P0/P1；复评与现场仍 pending。
 - 批量撤回研究：tccutil bundle-scoped 可行但不内置（无恢复 API、reset All 危险）；设置页给系统设置深链，README 给手动命令。
 - 仍未验证：TCC 允许/拒绝/撤销、锁屏/屏保真实执行、睡眠/唤醒、登录后启动、Finder/TCC/菜单栏图标显示、VoiceOver/键盘、小屏/放大字体真机布局。
+
+## v0.3.3 权限身份修复（2026-10-18）
+
+- 根因：ad-hoc 重建使 TCC 记录与当前代码要求不匹配（tccd: Failed to match existing code requirement）；Automation 的 -600 被误显示为待授权（System Events 未运行）。
+- 修复：稳定自签名身份（SwitchPilot Local Signing）+ designated requirement `identifier + certificate leaf`；-600 自动启动 System Events 后重探测；设置页诊断行/`--diagnose-permissions`。
+- 已清理旧 bundle-scoped TCC 记录；清理后诊断 automation -1744、accessibility false，符合重置预期。
+- 待用户：用当前稳定签名版本重新授予 Automation + Accessibility，再验证设置页/「重新检查」；之后重建应保持授权（需下一次重建验证）。

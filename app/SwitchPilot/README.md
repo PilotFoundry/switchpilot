@@ -1,4 +1,4 @@
-# SwitchPilot（个人自用 v0.3.2）
+# SwitchPilot（个人自用 v0.3.3）
 
 原 One Switch 1.35.4 的个人自用最小菜单栏替代。**不是分发产品**；SwitchPilot 是 2026-10-18 确定并经用户同意转正的正式名（候选比较见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`），中文描述「菜单栏开关」。目标、面板与验收见 `docs/PRD.md`、`docs/DESIGN.md`、`docs/TECH.md`、`docs/TESTPLAN.md`。
 
@@ -34,7 +34,7 @@ open -R ~/Applications/SwitchPilot.app   # 或在 Finder 中定位
 ```
 
 - 之后从 Finder/Launchpad 打开 `SwitchPilot.app` 即可；登录时启动也建议从这份安装副本开启（位置稳定）。
-- 重新构建后重新执行 `scripts/install-app`；ad-hoc 签名变化可能要求重新授予 TCC。
+- 重新构建后重新执行 `scripts/install-app`。本机使用自签名代码签名身份 **SwitchPilot Local Signing**（`scripts/build-app` 自动优先使用；身份不存在时回退 ad-hoc），其 designated requirement 为 `identifier + certificate leaf`，所以重建后 TCC 授权不再因 cdhash 变化而失效。签名私钥只在 Keychain 中，不进入 Git。
 - 卸载：`scripts/uninstall-app`（TCC/登录项请在系统设置中手动移除）。
 
 CLT 无 XCTest，使用独立 `SwitchPilotChecks` 可执行文件做真实断言与进度自检（12 项）；构建使用 `--build-system native` 回退，Swift 6.4 已提示该构建系统 deprecated。CLT + native SwiftPM 缺少 SwiftUI 宏插件，因此面板状态放在 PanelModel 而不是 `@State`/`@AppStorage`。

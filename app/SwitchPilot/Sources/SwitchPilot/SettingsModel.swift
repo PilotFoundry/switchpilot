@@ -18,19 +18,23 @@ final class SettingsModel: ObservableObject {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.3.0"
     }
 
+    var diagnostic: String {
+        "应用位置：\(Bundle.main.bundlePath) · Automation：\(automation.description) · 辅助功能：\(accessibilityTrusted ? "已授权" : "未授权")"
+    }
+
     var permissionsReady: Bool {
         automation == .allowed && accessibilityTrusted
     }
 
     func refresh() {
-        automation = Permissions.automationStatus()
+        automation = Permissions.automationStatusResolvingTarget()
         accessibilityTrusted = Permissions.accessibilityTrusted()
         loginState = LoginItem.state
     }
 
     func refreshAsync(completion: (() -> Void)? = nil) {
         DispatchQueue.global(qos: .userInitiated).async {
-            let automation = Permissions.automationStatus()
+            let automation = Permissions.automationStatusResolvingTarget()
             let access = Permissions.accessibilityTrusted()
             let login = LoginItem.state
             DispatchQueue.main.async { [weak self] in
@@ -50,7 +54,10 @@ final class SettingsModel: ObservableObject {
         busy = true
         message = "正在请求 Automation 授权…"
         DispatchQueue.global(qos: .userInitiated).async {
-            let state = Permissions.requestAutomation()
+            var state = Permissions.requestAutomation()
+            if state == .targetNotRunning {
+                state = Permissions.automationStatusResolvingTarget()
+            }
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 self.automation = state
