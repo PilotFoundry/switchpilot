@@ -66,7 +66,7 @@ scripts/verify-app.py             # 自动化验收脚本
 - 依据：原版主程序存在 `ScreenSaverEngine` 字符串与 `EnableScreensaveSwitch` 类；原版本地化文案为"屏幕保护/随时手动打开"（见 `evidence/features/screen-saver.md`）。
 - 无 TCC 权限要求；属于"启动系统应用"而非公开 API，系统升级可能改变行为。
 - 读回：启动后 best-effort 检查 `NSRunningApplication.runningApplications(withBundleIdentifier:)`；无法可靠读回时 UI 显示"已请求，未确认"。
-- 动作前确认（会立即启动屏保，可能需密码解锁）；不后台自动触发。UI 为快速动作磁贴，读数不明时显示"已请求启动（未确认）"。
+- 点击即启动（v0.3.8 起无二次确认，符合交互确认策略）；不后台自动触发。UI 为快速动作磁贴，读数不明时显示"已请求启动（未确认）"。
 
 ### 3.4 锁定屏幕（P3，权限门控，运行时待现场验收）
 
@@ -86,7 +86,7 @@ scripts/verify-app.py             # 自动化验收脚本
 - 面板宽 360，单列分区：Header（名称/版本/状态胶囊）→ 首次引导卡 → 保持亮屏 → 外观 → 快速动作 → Footer。
 - 主操作突出：保活开关 + 时长分段 + 进度条 + 剩余时间；无限期不显示进度。
 - 首次引导：三条规则 + "知道了"；`UserDefaults("switchpilot.hasSeenWelcome")` 持久化；footer 可重新打开。
-- 权限行内化：深色模式/锁屏的权限状态、原因与授权入口在对应行内；只有屏保/锁屏执行前保留 NSAlert 二次确认。
+- 权限行内化：深色模式/锁屏的权限状态、原因与授权入口在对应行内；v0.3.8 起屏保/锁屏均无应用内二次确认（仅不可逆的应用内权限重置保留确认）。
 - macOS 27 方向：减少装饰图标、沿用 popover 系统材质、低对比卡片底色、系统语义色、统一圆角；不新增自定义皮肤。
 - 可访问性：标准控件 + `accessibilityLabel`/`accessibilityValue`；状态不只靠颜色。
 
