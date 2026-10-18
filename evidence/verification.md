@@ -116,3 +116,8 @@
 - 自动检查新增 Info.plist 单实例 key、`switchpilot://diagnose` URL scheme、PanelView stale confirmation copy；verify 11/11、自检 12/12。
 - 普通重复启动实测 1 实例；URL 诊断与 onsite-probe 正常；面板 637/710pt，设置窗口 523/774pt。
 - 未记通过：M2/M3 真实动作、M8-3 登录真实启动、M8-4 图标目视、M5 无障碍/小屏；按收尾 backlog 处理。
+
+## v0.3.9 现场补充：M2/M3 自测通过（2026-10-18）
+
+- 用户自测通过启动屏保与锁定屏幕（均为点击即执行，无二次确认）；M1 此前已通过。
+- 未执行项保持：M8-3 注销/重启登录启动（长期待办）、M8-4 图标目视、M5 无障碍/小屏等；不记通过。
