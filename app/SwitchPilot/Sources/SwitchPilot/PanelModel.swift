@@ -292,6 +292,14 @@ final class PanelModel: ObservableObject {
         Permissions.openAccessibilitySettings()
     }
 
+    /// Preview-only helper for `--dump-panel`: does not touch audio hardware.
+    func previewSupportedAudio(muted: Bool) {
+        audioState = AudioOutputDevice(
+            deviceID: 1, name: "MacBook Pro 扬声器", supportsVolume: true,
+            supportsMute: true, volume: 0.28, muted: muted, message: nil)
+        audioVolume = 0.28
+    }
+
     // MARK: - Guide
 
     func forceGuideForPreview() {

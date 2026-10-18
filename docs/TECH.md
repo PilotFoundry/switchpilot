@@ -237,3 +237,8 @@ open app/SwitchPilot/.build/SwitchPilot.app
 - `SettingsModel`：持有 `HotKeyManager`，提供 enable/disable、组合说明、错误消息；`SettingsView` 新增快捷键区。
 - 自动化：`SwitchPilotChecks` 新增音频只读能力与 pmset 可用性检查（14/14）；verify-app 更新面板尺寸阈值（380×780/860）且保持 11/11。
 - 已知边界：快捷键真实按键分发、pmset 真实休眠/唤醒、音量在支持设备上的真实写入需现场；音量当前默认设备 unsupported。
+
+### 15.1 v0.4.1 音量卡交互修正
+
+- 用户截图反馈音量卡显示歧义；v0.4.1 将静音按钮改为动作文案（`取消静音`/`静音` + 对应图标），标题图标保留当前状态；静音时滑块 `.disabled` 并显示“已静音”，未静音显示百分比。
+- 增加 `audioVolume/audioMuted` 到运行诊断，便于现场核对 CoreAudio 状态；快捷键测试按用户要求并入长期收尾，不在本轮催测。

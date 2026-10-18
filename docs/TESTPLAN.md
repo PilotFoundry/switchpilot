@@ -6,7 +6,7 @@
 
 - macOS 27.0.1 (26A434)，Apple Silicon arm64。
 - CLT Swift 6.4 / macOS 27.0 SDK；无完整 Xcode、无 XCTest。
-- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.4.0，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
+- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.4.1，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
 - 原应用：`/Applications/One Switch.app` 1.35.4 (440)，测试前后版本/hash/签名不变；不启动、不修改其数据。
 - 权限前提：未预先授予 Automation/Accessibility；不修改 TCC 数据库、不关闭 SIP、不重签原应用。
 
@@ -99,20 +99,20 @@
 9. 稳定签名身份：重建/重签/重装后，已授予的 Automation/Accessibility 不应失效；用 `--diagnose-permissions` 复核。
 10. v0.3.5 应用内重置（手动、破坏性，自动化不执行）：展开「终端命令（高级）」→「在应用内重置权限…」→ 取消应无变化；确认后两项 TCC 记录被重置、权限区回到未授权、可重新申请；确认框文案必须包含不可逆/需要重新授权/非官方 API/无 sudo/无 reset All。
 
-### M9 全局快捷键（v0.4.0）
+### M9 全局快捷键（v0.4.0；用户 2026-10-18 指示并入长期统一测试）
 
 1. 设置 › 快捷键启用；若组合被占用应显示可读错误且保持关闭，不静默。
 2. 关闭设置/应用后台，按 `⌃⌥⌘K` 应切换保持亮屏；按 `⌃⌥⌘S` 应启动屏保。
 3. 停用后两个组合均不再响应；重启应用后保持停用状态（默认关闭）。
 4. 全程不应新增 Accessibility/Automation 提示。
 
-### M10 关闭显示器（v0.4.0）
+### M10 关闭显示器（v0.4.0；用户 2026-10-18 自测通过：鼠标唤醒）
 
 1. 点击「关闭显示器」→ 屏幕应休眠，无二次确认；移动鼠标/按键唤醒。
 2. 唤醒后面板状态显示“已请求关闭（鼠标/按键唤醒）”；失败时显示真实错误。
 3. 确认动作不触发锁屏/屏保语义混淆。
 
-### M11 输出音量原型（v0.4.0）
+### M11 输出音量原型（v0.4.0；v0.4.1 UI 修复，待复验）
 
 1. 当前默认输出若为外接显示器音频：卡显示“当前输出设备不支持系统音量/静音控制”，不出现无效滑块。
 2. 切换到支持音量的输出（内置扬声器/USB）后重新打开面板：出现滑块/静音按钮；调整后系统音量真实变化并读回。
@@ -134,7 +134,7 @@
 - [ ] M2 屏保真实启动/退出（交互已改为点击即执行）
 - [ ] M3 移除确认后真实锁定与解锁复测
 - [ ] M4 睡眠/唤醒后的保活与断言检查
-- [ ] M9 快捷键后台触发/停用/重启保持
+- [ ] M9 快捷键后台触发/停用/重启保持（用户指示与注销/重启等收尾测试一起做）
 - [ ] M10 关闭显示器真实休眠/唤醒
 - [ ] M11 音量在支持/不支持输出设备上的真实行为
 - [ ] M5 VoiceOver/键盘全路径、小屏/放大字体真机布局
