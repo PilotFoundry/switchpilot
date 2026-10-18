@@ -1,0 +1,36 @@
+[
+  {
+    "name": "open_binary",
+    "arguments": {
+      "path": "analysis/slices/OneSwitch.arm64",
+      "provider_id": "ghidra"
+    }
+  },
+  {
+    "name": "list_procedures",
+    "arguments": {}
+  },
+  {
+    "name": "batch_decompile",
+    "arguments": {
+      "addresses": [
+        "0x100035f44",
+        "0x100035fe8",
+        "0x100035ce4",
+        "0x10004fe60",
+        "0x1000521f4",
+        "0x100055e34"
+      ]
+    }
+  },
+  {
+    "name": "trace_feature",
+    "arguments": {
+      "query": "enableDarkMode"
+    }
+  },
+  {
+    "name": "close_binary",
+    "arguments": {}
+  }
+]
