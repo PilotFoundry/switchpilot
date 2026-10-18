@@ -79,3 +79,9 @@
 - 窗口高度随 disclosure 自动调整（544 → 711，实测）；键盘/VoiceOver 说明写入 DESIGN/TECH。
 - 稳定签名身份复核：重建 + 重装 + 重启后 Automation/辅助功能仍为已授权（diagnostic 输出 allowed/true）。
 - 自动化 verify 11/11、自检 12/12。
+
+## v0.3.5 应用内高级撤销（2026-10-18）
+
+- 应用内重置入口位于高级命令区，带确认框；范围固定本应用 Automation + Accessibility，无 sudo/reset All，后台执行，完成后刷新并提示重新授权。
+- 自动化只验证构建/命令可用性与 UI；真实重置未在用户授权上执行，列为 M8 手动破坏性项。
+- verify 11/11、自检 12/12；版本 0.3.5。

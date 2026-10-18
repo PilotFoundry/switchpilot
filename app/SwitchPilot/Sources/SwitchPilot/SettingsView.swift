@@ -122,7 +122,7 @@ struct SettingsView: View {
 
             if model.showsRevokeHelp {
                 VStack(alignment: .leading, spacing: 9) {
-                    Text("撤销需在系统设置中手动完成；SwitchPilot 不会自动修改 TCC。")
+                    Text("推荐在系统设置中手动撤销（更可控）；SwitchPilot 不会自动修改 TCC。")
                         .font(.caption)
                         .foregroundStyle(Color.secondaryInk)
                         .fixedSize(horizontal: false, vertical: true)
@@ -171,6 +171,17 @@ struct SettingsView: View {
                                     .foregroundStyle(Color.secondaryInk)
                                     .fixedSize(horizontal: false, vertical: true)
                             }
+                            Divider()
+                            Button("在应用内重置权限…") {
+                                confirmInAppReset()
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
+                            .disabled(model.busy)
+                            Text("高级：调用系统 tccutil，仅重置本应用的两项授权。非 Apple 官方 API、不可撤销，重置后需要重新授权；系统弹窗不保证再次出现。")
+                                .font(.caption2)
+                                .foregroundStyle(Color.secondaryInk)
+                                .fixedSize(horizontal: false, vertical: true)
                         }
                     }
                 }
@@ -178,6 +189,21 @@ struct SettingsView: View {
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.04)))
             }
+        }
+    }
+
+    private func confirmInAppReset() {
+        let alert = NSAlert()
+        alert.messageText = "在应用内重置 SwitchPilot 的权限？"
+        alert.informativeText = "将执行系统自带的 tccutil，仅重置本应用（Automation + 辅助功能）的授权记录。此操作不可撤销，重置后需要重新授权；系统弹窗不保证再次出现，可能需要在系统设置中手动添加。SwitchPilot 不会使用 sudo，也不会执行 reset All。"
+        alert.alertStyle = .warning
+        alert.addButton(withTitle: "取消")
+        alert.addButton(withTitle: "重置两项权限")
+        if let resetButton = alert.buttons.last {
+            resetButton.hasDestructiveAction = true
+        }
+        if alert.runModal() == .alertSecondButtonReturn {
+            model.resetInAppPermissions()
         }
     }
 

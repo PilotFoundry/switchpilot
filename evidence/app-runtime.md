@@ -116,3 +116,10 @@
 - 预览：`--dump-settings` + `SWITCHPILOT_PREVIEW_AUTHORIZED=1` / `SWITCHPILOT_EXPAND_REVOKE=1` 渲染折叠/展开，浅/深外观检查通过。
 - 评审：`evidence/reviews/revoke-disclosure-ui.md`（推荐 inline disclosure、一级「如何撤销授权…」）、`revoke-disclosure-ux.md`（推荐「管理权限…」，强调 tccutil 只复制不执行、三态 CTA）。
 - 版本 0.3.4；verify-app 11/11、自检 12/12。
+
+## v0.3.5：应用内高级撤销实现（2026-10-18）
+
+- 设置页「如何撤销授权…」展开 →「终端命令（高级）」下新增「在应用内重置权限…」；点击先弹 `NSAlert`（取消默认、重置按钮 destructive），确认后后台执行 `/usr/bin/tccutil reset AppleEvents|Accessibility local.personal.SwitchPilot`。仅本应用两项、无 sudo、无 reset All、非自动；完成后刷新权限状态并提示重新授权，若状态未变提示重启。
+- 定位：默认路径仍是系统设置手动撤销；应用内重置是高级/unsupported 选项（Apple 无正式 revoke API），不是推荐主路径。
+- 验证：verify 11/11、自检 12/12；用不存在 bundle id 试跑 tccutil 返回 `No such bundle identifier (-10814)`，未触碰真实授权。真实重置需用户在确认框触发，列为 M8 手动项（自动化不执行破坏性操作）。
+- 版本 0.3.5。

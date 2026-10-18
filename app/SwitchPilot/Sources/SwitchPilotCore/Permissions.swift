@@ -101,7 +101,62 @@ public enum Permissions {
     }
 }
 
+public struct PermissionResetResult: Sendable {
+    public let succeeded: Bool
+    public let summary: String
+    public let output: String
+
+    public init(succeeded: Bool, summary: String, output: String) {
+        self.succeeded = succeeded
+        self.summary = summary
+        self.output = output
+    }
+}
+
 extension Permissions {
+    /// Advanced, explicit user action only: reset this app's TCC decisions with
+    /// the system tccutil. This is not an Apple-supported revoke API, has no
+    /// undo, and is never called automatically. Scope is always this bundle and
+    /// the two named services; never All, never sudo.
+    public static func resetInAppPermissions() -> PermissionResetResult {
+        guard let bundleID = Bundle.main.bundleIdentifier, !bundleID.isEmpty else {
+            return PermissionResetResult(
+                succeeded: false,
+                summary: "无法确定应用标识，未执行重置。",
+                output: "")
+        }
+        let services = ["AppleEvents", "Accessibility"]
+        var lines: [String] = []
+        var allOK = true
+        for service in services {
+            let process = Process()
+            process.executableURL = URL(fileURLWithPath: "/usr/bin/tccutil")
+            process.arguments = ["reset", service, bundleID]
+            let pipe = Pipe()
+            process.standardOutput = pipe
+            process.standardError = pipe
+            do {
+                try process.run()
+                process.waitUntilExit()
+                let data = pipe.fileHandleForReading.readDataToEndOfFile()
+                let text = String(data: data, encoding: .utf8)?
+                    .trimmingCharacters(in: .whitespacesAndNewlines) ?? ""
+                if process.terminationStatus != 0 {
+                    allOK = false
+                }
+                lines.append("\(service) exit=\(process.terminationStatus) \(text)")
+            } catch {
+                allOK = false
+                lines.append("\(service) error=\(error.localizedDescription)")
+            }
+        }
+        let output = lines.joined(separator: "\n")
+        let summary = allOK
+            ? "已在应用内重置本应用的两项权限；请重新申请授权。若状态未变，请重启应用后再检查。"
+            : "应用内重置未完全成功，请用系统设置或终端命令重试。"
+        return PermissionResetResult(succeeded: allOK, summary: summary, output: output)
+    }
+
     public static var bundleIdentifier: String {
         Bundle.main.bundleIdentifier ?? "local.personal.SwitchPilot"
     }
