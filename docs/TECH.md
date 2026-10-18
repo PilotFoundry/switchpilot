@@ -234,8 +234,8 @@ open app/SwitchPilot/.build/SwitchPilot.app
 - `PanelModel`：新增 `microphoneState/microphoneError/toggleMicrophoneMute/refreshMicrophone`；`startScreenCleaning` 调用清洁管理器并在失败时显示真实原因。
 - `ScreenCleaningManager.swift`：
   - 需要既有 Accessibility；用 `CGEvent.tapCreate(.cgSessionEventTap, .defaultTap)` 拦截 `keyDown/keyUp/flagsChanged`，**不拦截鼠标事件**。
-  - 每个 `NSScreen` 建一个 borderless 黑色 `NSWindow`（`CGShieldingWindowLevel`），内含「退出清洁模式」`NSButton`、倒计时和说明；鼠标点击退出。
-  - 60 秒 `Timer` 自动退出；`PowerAssertion` 防显示器睡眠；`stop()` 幂等清理 tap/窗口/断言/定时器；事件 tap 被系统禁用时尝试 re-enable，失败则退出。
+  - 每个 `NSScreen` 建一个 borderless 黑色 `NSWindow`（`CGShieldingWindowLevel`），内含醒目的「退出清洁模式」`NSButton` 和说明；鼠标点击退出。
+  - 普通模式不显示倒计时、不自动退出；仅测试时通过 `SWITCHPILOT_CLEAN_SCREEN_TEST_SECONDS` 启用定时自动退出。`PowerAssertion` 防显示器睡眠；`stop()` 幂等清理 tap/窗口/断言/定时器；事件 tap 被系统禁用时尝试 re-enable，失败则退出。
   - 无 Accessibility/事件 tap 创建失败：返回明确错误，不创建遮罩。
 - `HotKeyManager.swift`：Carbon 固定组合快捷键（保活/屏保），默认关闭；注册失败回写关闭并报错；无 TCC。
 - `DisplaySleep.swift`：公开 pmset，一次性动作。
