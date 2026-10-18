@@ -26,3 +26,21 @@
 - 原应用仍为 1.35.4 (440)，主程序 SHA-256 与基线一致，`codesign --verify --strict` 通过；无本原型进程或断言残留，System Events 未被修改。
 - `scripts/rea doctor --provider ghidra --format json` 复核 `healthy=true`；Ghidra/Java 版本与证据一致。
 - 上述检查只验证文档与工作区可安全接手，不新增任何功能行为或动态验收通过项。
+
+## 个人自用 v0.1 应用验收（2026-10-18）
+
+自动化（`python3 scripts/verify-app.py`，8/8 通过；详见 `evidence/app-runtime.md`）：
+
+- 构建 + bundle/plist + ad-hoc Hardened Runtime 签名 + 退出 0 均通过；应用可执行文件 SHA-256 `238524889cbe…`、CDHash `19e82d8c…`。
+- `SwitchPilotChecks` 9/9 通过：时长校验、权限状态码映射、三轮真实 IOPM 断言生命周期、deinit 释放、定时会话自动释放、深色模式全局外观只读、屏保引擎解析、无权限时锁屏拒绝执行。
+- 启动冒烟：菜单栏应用进程存活 >2 秒，SIGTERM 退出后无本应用电源断言、无残留进程。
+- 原应用 1.35.4 (440) 主程序 hash 与签名未变；未启动或修改原应用。
+- 本轮自动化未请求 TCC、未发送锁屏按键、未启动屏保、未切换深色模式、未修改系统设置。
+
+仍未验证（需用户在场，`docs/TESTPLAN.md` M1–M6）：
+
+- 深色模式真实授权、切换、读回、拒绝/撤销；
+- 屏保真实启动与退出；
+- 锁屏授权、锁定/解锁、读回；
+- 睡眠/唤醒、合盖、长时间稳定性（强退清理仅冒烟到 SIGTERM）；
+- 菜单栏/面板视觉、键盘、VoiceOver、深浅外观；多实例与卸载残留。
