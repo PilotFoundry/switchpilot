@@ -9,6 +9,10 @@ final class SettingsModel: ObservableObject {
     @Published private(set) var loginState: LoginItemState = .notRegistered
     @Published private(set) var busy = false
     @Published private(set) var message = ""
+    @Published private(set) var showsRevokeHelp = false
+    @Published private(set) var showsAdvancedTCCUtil = false
+    @Published private(set) var tccutilCopied = false
+    private var copyResetWorkItem: DispatchWorkItem?
 
     init() {
         refreshAsync()
@@ -16,6 +20,14 @@ final class SettingsModel: ObservableObject {
 
     var version: String {
         Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.3.0"
+    }
+
+    var hasAnyPermission: Bool {
+        automation == .allowed || accessibilityTrusted
+    }
+
+    var tccutilResetCommands: String {
+        "tccutil reset AppleEvents \(Permissions.bundleIdentifier)\ntccutil reset Accessibility \(Permissions.bundleIdentifier)"
     }
 
     var diagnostic: String {
@@ -42,6 +54,10 @@ final class SettingsModel: ObservableObject {
                 self.automation = automation
                 self.accessibilityTrusted = access
                 self.loginState = login
+                if !self.hasAnyPermission {
+                    self.showsRevokeHelp = false
+                    self.showsAdvancedTCCUtil = false
+                }
                 completion?()
             }
         }
@@ -125,5 +141,41 @@ final class SettingsModel: ObservableObject {
 
     func openLoginItemsSettings() {
         LoginItem.openSystemSettings()
+    }
+
+    func toggleRevokeHelp() {
+        showsRevokeHelp.toggle()
+        if !showsRevokeHelp {
+            showsAdvancedTCCUtil = false
+        }
+    }
+
+    func toggleAdvancedTCCUtil() {
+        showsAdvancedTCCUtil.toggle()
+    }
+
+    func copyTCCUtilResetCommands() {
+        let pasteboard = NSPasteboard.general
+        pasteboard.clearContents()
+        pasteboard.setString(tccutilResetCommands, forType: .string)
+        tccutilCopied = true
+        copyResetWorkItem?.cancel()
+        let workItem = DispatchWorkItem { [weak self] in
+            self?.tccutilCopied = false
+        }
+        copyResetWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.8, execute: workItem)
+    }
+
+    /// Preview-only helper for `--dump-settings`: does not touch TCC/user data.
+    func previewAuthorizedPermissions() {
+        automation = .allowed
+        accessibilityTrusted = true
+    }
+
+    /// Preview-only helper for `--dump-settings`: does not touch TCC/user data.
+    func previewExpandRevoke() {
+        showsRevokeHelp = true
+        showsAdvancedTCCUtil = true
     }
 }

@@ -107,3 +107,12 @@
   `tccutil reset AppleEvents local.personal.SwitchPilot` / `tccutil reset Accessibility local.personal.SwitchPilot` → `Successfully reset ...`。
 - 清理后诊断（LaunchServices 启动）：`automationRaw=需要用户授权 (-1744)`、`automationResolved=需要用户授权 (-1744)`、`systemEventsRunning=true`、`accessibilityTrusted=false`。这是重置后的预期状态；待用户对稳定签名版本重新授权并验证"重新检查"。
 - 版本 0.3.3；verify-app 11/11（签名步骤允许本地身份或 ad-hoc）、自检 12/12。
+
+## v0.3.4：设置页撤销授权 IA + 稳定签名复核（2026-10-18）
+
+- 设置页权限区：成功态移除「申请全部权限」，显示「✓ 全部权限已授权」+「重新检查」；撤销说明收进默认收起的「如何撤销授权…」，展开后才显示系统设置深链与二级「终端命令（高级）」（复制、不执行）。
+- 窗口自适应：`SettingsWindowController` 订阅 `objectWillChange` 调整内容尺寸；离屏/真机窗口实测展开前后高度 544 → 711，未裁切。
+- 稳定签名复核：用 `SwitchPilot Local Signing` 重建 v0.3.4、`install-app` 覆盖安装并重启后，`--diagnose-permissions` 输出 `automationRaw=已授权`、`automationResolved=已授权`、`accessibilityTrusted=true`，证明 TCC 授权跨重签/重装保持。
+- 预览：`--dump-settings` + `SWITCHPILOT_PREVIEW_AUTHORIZED=1` / `SWITCHPILOT_EXPAND_REVOKE=1` 渲染折叠/展开，浅/深外观检查通过。
+- 评审：`evidence/reviews/revoke-disclosure-ui.md`（推荐 inline disclosure、一级「如何撤销授权…」）、`revoke-disclosure-ux.md`（推荐「管理权限…」，强调 tccutil 只复制不执行、三态 CTA）。
+- 版本 0.3.4；verify-app 11/11、自检 12/12。

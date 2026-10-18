@@ -42,7 +42,16 @@ struct SettingsView: View {
                 title: "辅助功能（Accessibility）",
                 detail: model.accessibilityTrusted ? "已授权" : "未授权（锁屏需要）",
                 state: model.accessibilityTrusted)
-            if !model.permissionsReady {
+
+            if model.permissionsReady {
+                Label("全部权限已授权", systemImage: "checkmark.circle.fill")
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(Color.successInk)
+                Button("重新检查") { model.recheck() }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    .disabled(model.busy)
+            } else {
                 VStack(alignment: .leading, spacing: 4) {
                     Text(model.diagnostic)
                         .font(.system(size: 10, design: .monospaced))
@@ -57,33 +66,63 @@ struct SettingsView: View {
                 .padding(9)
                 .frame(maxWidth: .infinity, alignment: .leading)
                 .background(RoundedRectangle(cornerRadius: 7).fill(Color.primary.opacity(0.05)))
-            }
-            HStack(spacing: 8) {
-                Button {
-                    model.requestAllPermissions()
-                } label: {
-                    Label("申请全部权限", systemImage: "checkmark.shield")
-                }
-                .buttonStyle(.borderedProminent)
-                .disabled(model.busy)
-                Button("重新检查") { model.recheck() }
-                    .buttonStyle(.bordered)
-                    .disabled(model.busy)
-                if !model.accessibilityTrusted {
-                    Button("去授权辅助功能") { model.requestAccessibilityPrompt() }
+
+                HStack(spacing: 8) {
+                    if model.automation == .denied {
+                        Button("打开自动化设置") { model.openAutomationSettings() }
+                            .buttonStyle(.borderedProminent)
+                    } else if model.automation != .allowed {
+                        Button {
+                            model.requestAllPermissions()
+                        } label: {
+                            Label("申请全部权限", systemImage: "checkmark.shield")
+                        }
+                        .buttonStyle(.borderedProminent)
+                    }
+                    if !model.accessibilityTrusted {
+                        if model.automation == .allowed {
+                            Button("去授权辅助功能") { model.requestAccessibilityPrompt() }
+                                .buttonStyle(.borderedProminent)
+                        } else {
+                            Button("去授权辅助功能") { model.requestAccessibilityPrompt() }
+                                .buttonStyle(.bordered)
+                        }
+                    }
+                    Button("重新检查") { model.recheck() }
                         .buttonStyle(.bordered)
-                        .disabled(model.busy)
+                }
+                .controlSize(.small)
+                .disabled(model.busy)
+            }
+
+            if model.hasAnyPermission {
+                revokeDisclosure
+            }
+        }
+    }
+
+    private var revokeDisclosure: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Button {
+                model.toggleRevokeHelp()
+            } label: {
+                HStack(spacing: 4) {
+                    Text("如何撤销授权…")
+                    Image(systemName: model.showsRevokeHelp ? "chevron.down" : "chevron.right")
+                        .font(.caption2)
                 }
             }
-            Divider()
-            HStack(alignment: .top, spacing: 7) {
-                Image(systemName: "info.circle.fill")
-                    .font(.caption)
-                    .foregroundStyle(Color.secondaryInk)
-                VStack(alignment: .leading, spacing: 4) {
-                    Text("如何撤销授权")
-                        .font(.caption.weight(.medium))
-                    Text("macOS 没有应用内批量撤回授权的 API。请在系统设置 › 隐私与安全性 › 自动化 / 辅助功能中手动取消 SwitchPilot；如果需要重置记录，可在终端自行执行 tccutil（本应用不会自动调用）。")
+            .buttonStyle(.plain)
+            .foregroundStyle(Color.secondaryInk)
+            .frame(maxWidth: .infinity, alignment: .leading)
+            .contentShape(Rectangle())
+            .accessibilityLabel("如何撤销授权")
+            .accessibilityValue(model.showsRevokeHelp ? "已展开" : "已收起")
+            .accessibilityHint("显示在系统设置中撤销授权的步骤，以及可复制的终端命令")
+
+            if model.showsRevokeHelp {
+                VStack(alignment: .leading, spacing: 9) {
+                    Text("撤销需在系统设置中手动完成；SwitchPilot 不会自动修改 TCC。")
                         .font(.caption)
                         .foregroundStyle(Color.secondaryInk)
                         .fixedSize(horizontal: false, vertical: true)
@@ -95,7 +134,49 @@ struct SettingsView: View {
                             .buttonStyle(.bordered)
                             .controlSize(.small)
                     }
+                    Button {
+                        model.toggleAdvancedTCCUtil()
+                    } label: {
+                        HStack(spacing: 4) {
+                            Text("终端命令（高级）")
+                            Image(systemName: model.showsAdvancedTCCUtil ? "chevron.down" : "chevron.right")
+                                .font(.caption2)
+                        }
+                    }
+                    .buttonStyle(.plain)
+                    .font(.caption)
+                    .foregroundStyle(Color.secondaryInk)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .contentShape(Rectangle())
+                    .accessibilityLabel("终端命令（高级）")
+                    .accessibilityValue(model.showsAdvancedTCCUtil ? "已展开" : "已收起")
+
+                    if model.showsAdvancedTCCUtil {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text(model.tccutilResetCommands)
+                                .font(.system(size: 10, design: .monospaced))
+                                .textSelection(.enabled)
+                                .fixedSize(horizontal: false, vertical: true)
+                                .padding(7)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                                .background(RoundedRectangle(cornerRadius: 6).fill(Color.primary.opacity(0.06)))
+                            HStack(spacing: 8) {
+                                Button(model.tccutilCopied ? "已复制" : "复制命令") {
+                                    model.copyTCCUtilResetCommands()
+                                }
+                                .buttonStyle(.bordered)
+                                .controlSize(.small)
+                                Text("只重置本应用；不要 sudo，勿用 reset All；重置后需重新授权。")
+                                    .font(.caption2)
+                                    .foregroundStyle(Color.secondaryInk)
+                                    .fixedSize(horizontal: false, vertical: true)
+                            }
+                        }
+                    }
                 }
+                .padding(10)
+                .frame(maxWidth: .infinity, alignment: .leading)
+                .background(RoundedRectangle(cornerRadius: 8).fill(Color.primary.opacity(0.04)))
             }
         }
     }
@@ -120,7 +201,7 @@ struct SettingsView: View {
                 Button("打开系统设置 › 登录项") { model.openLoginItemsSettings() }
                     .buttonStyle(.bordered)
             }
-            Text("如果系统拒绝注册（例如签名或应用位置限制），会显示真实错误；ad-hoc 个人构建可能需要在系统设置中批准。")
+            Text("如果系统拒绝注册（例如签名或应用位置限制），会显示真实错误；个人构建可能需要在系统设置中批准。")
                 .font(.caption)
                 .foregroundStyle(Color.secondaryInk)
                 .fixedSize(horizontal: false, vertical: true)

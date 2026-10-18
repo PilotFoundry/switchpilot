@@ -6,7 +6,7 @@
 
 - macOS 27.0.1 (26A434)，Apple Silicon arm64。
 - CLT Swift 6.4 / macOS 27.0 SDK；无完整 Xcode、无 XCTest。
-- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.3，bundle id `local.personal.SwitchPilot`，ad-hoc Hardened Runtime 签名。
+- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.4，bundle id `local.personal.SwitchPilot`，ad-hoc Hardened Runtime 签名。
 - 原应用：`/Applications/One Switch.app` 1.35.4 (440)，测试前后版本/hash/签名不变；不启动、不修改其数据。
 - 权限前提：未预先授予 Automation/Accessibility；不修改 TCC 数据库、不关闭 SIP、不重签原应用。
 
@@ -94,6 +94,8 @@
 4. 状态项右键菜单：设置… / 使用说明 / 退出均可用；左键仍打开面板。
 5. Finder Get Info / 系统设置隐私列表 / 登录项 / TCC 提示显示自定义图标（非通用图标）；菜单栏图标为 S monogram 且浅/深/选中状态可辨。
 6. 小屏（1280×800）/放大字体下，首启 guide 面板完整可见、底部按钮不裁切；`--panel-size` 已做逻辑尺寸断言，但真机 popover 需目视。
+7. v0.3.4 权限区：已授权时无「申请全部权限」；「如何撤销授权…」默认收起，展开含系统设置深链与「终端命令（高级）」；展开后窗口自动增高（实测 544→711），键盘 Space/Return 可切换、VoiceOver 读展开状态；复制命令不改变系统。
+8. 稳定签名身份：重建/重签/重装后，已授予的 Automation/Accessibility 不应失效；用 `--diagnose-permissions` 复核。
 
 ### M6 边界/恢复
 
