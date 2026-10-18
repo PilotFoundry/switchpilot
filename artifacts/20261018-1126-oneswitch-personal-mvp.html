@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One Switch · 个人自用 v0.1 里程碑</title>
+<style>
+:root{--bg:#f2f4ee;--paper:#fffefa;--ink:#1f3630;--muted:#5f7268;--line:#d7e0d5;--green:#1e6a4b;--soft:#e7f2e8;--amber:#7e5516;--warn:#fff2d8;--red:#9d3838;--redsoft:#f8e8e4;--blue:#276783;--bluesoft:#e6eff3}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}a{color:var(--blue);text-underline-offset:3px}.layout{max-width:1360px;margin:auto;padding:38px;display:grid;grid-template-columns:215px minmax(0,1fr);gap:36px}aside{position:sticky;top:30px;height:calc(100vh - 60px);overflow:auto}nav a{display:block;padding:7px 0;font-size:14px;text-decoration:none}.brand{font-weight:750;letter-spacing:1px}main{min-width:0}header{padding:8px 0 26px}h1{font-size:clamp(32px,4.2vw,52px);line-height:1.25;margin:14px 0}h1 span{color:var(--green)}h2{font-size:23px;line-height:1.45;margin:0 0 18px}h3{font-size:17px;margin:0 0 10px}.eyebrow{color:var(--green);font-size:12px;letter-spacing:2px;font-weight:750}.lead{font-size:19px;color:var(--muted)}section{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:27px;margin-bottom:22px}p{margin:8px 0 14px}.muted,small{font-size:13px;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.card{padding:18px;border:1px solid var(--line);border-radius:10px}.metric{font-size:27px;font-weight:750;color:var(--green);line-height:1.25}.badge{display:inline-block;font-size:12px;font-weight:650;background:var(--soft);color:var(--green);padding:2px 8px;border-radius:6px}.amber{background:var(--warn);color:var(--amber)}.red{background:var(--redsoft);color:var(--red)}.gray{background:#e9ece7;color:#52645c}.blue{background:var(--bluesoft);color:var(--blue)}.note{padding:15px 18px;border-left:4px solid var(--green);background:var(--soft);border-radius:0 8px 8px 0}.risk{border-color:var(--amber);background:var(--warn)}.stop{border-color:var(--red);background:var(--redsoft)}.table{overflow:auto}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:11px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}th{color:var(--muted);background:#eef3e9;font-size:12px}code,pre{font:12px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;color:#235f42}code{background:#eef3e9;padding:2px 4px;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf3e9;padding:16px;border-radius:8px}details{border:1px solid var(--line);border-radius:9px;margin:12px 0}summary{cursor:pointer;padding:12px 16px;font-weight:650}.detail{padding:0 16px 14px}.diagram{overflow:auto;border:1px solid var(--line);border-radius:10px;background:#fbfcf8;padding:6px 0}.diagram svg{min-width:760px;width:100%;height:auto;display:block}.diagram text{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}ul,ol{padding-left:23px}li{margin:6px 0}button,select,textarea{font:inherit;color:var(--ink)}button,select{min-height:44px;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:9px 14px;max-width:100%}button{cursor:pointer}button:hover{background:var(--soft)}textarea{width:100%;min-height:200px;margin:12px 0;padding:14px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fafbf7}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.checklist label{display:block;padding:6px 0}input[type=checkbox]{accent-color:var(--green);width:18px;height:18px;vertical-align:middle;margin-right:8px}:focus-visible{outline:3px solid var(--blue);outline-offset:3px}footer{padding:5px 0 30px;color:var(--muted);font-size:12px}@media(max-width:1050px){.layout{padding:25px;grid-template-columns:170px minmax(0,1fr);gap:23px}.grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.layout{display:block;padding:16px}aside{position:static;height:auto;margin-bottom:20px}nav{display:flex;overflow:auto;gap:16px}nav a{white-space:nowrap}section{padding:20px}.grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}th,td{min-width:120px}}@media print{aside,.controls,textarea,.checklist{display:none}.layout{display:block;padding:0}section{break-inside:avoid}body{background:white}}
+</style></head>
+<body><div class="layout">
+<aside><div class="brand">ONE SWITCH / V0.1</div>
+<p class="muted">个人自用里程碑 · 2026.10.18<br>Codex 试验 → 可运行面板</p>
+<nav aria-label="目录"><a href="#summary">01 · 本轮结论</a><a href="#scope">02 · 确认的范围</a><a href="#deliverables">03 · 交付物</a><a href="#architecture">04 · 实现结构</a><a href="#evidence">05 · 验收结果</a><a href="#permissions">06 · 权限与安全</a><a href="#pending">07 · 待现场验证</a><a href="#run">08 · 运行方式</a><a href="#history">09 · Git 历史</a><a href="#next">10 · 下一步</a></nav>
+<p class="muted"><span class="badge">8/8 自动化</span><br><span class="badge">9/9 核心自检</span><br><span class="badge amber">3 项待现场</span></p>
+</aside>
+<main>
+<header><div class="eyebrow">PERSONAL MVP / MILESTONE</div>
+<h1>规格已定，面板已能构建。<br><span>剩下的是现场验收。</span></h1>
+<p class="lead">个人自用 v0.1 已完成 PRD / DESIGN / TECH / TESTPLAN 与最小原生菜单栏应用。保活通过自动化验收；深色模式、屏保、锁屏已实现但需要你在场完成 TCC 授权与屏幕状态相关的验收，未执行项不记为通过。</p>
+<p class="muted">macOS 27.0.1 · Apple Silicon · CLT Swift 6.4 · app bundle `local.personal.SwitchPilot` · 本轮 3 个提交</p></header>
+
+<section id="summary"><h2>01 / 本轮结论</h2>
+<p class="note"><strong>范围已确认并可运行。</strong>用户选择个人自用方向，四项候选进入 v0.1：显示器保活（P0）、系统深色模式（P1）、启动屏保（P2）、锁定屏幕（P3）。Night Shift 直接控制、合盖保活、显示器休眠与其余音频/音量开关明确排除。</p>
+<div class="grid">
+<div class="card"><span class="badge">自动化</span><div class="metric">8/8</div><p>构建、plist、签名、自检、启动冒烟、无残留、原应用不变、脚本语法。</p></div>
+<div class="card"><span class="badge">核心自检</span><div class="metric">9/9</div><p>含三轮真实电源断言、定时释放、权限映射、屏保引擎解析、锁屏拒绝执行。</p></div>
+<div class="card"><span class="badge">功能实现</span><div class="metric">4 项</div><p>保活可日常使用；其余三项按权限/确认门控，失败不显示成功。</p></div>
+<div class="card"><span class="badge amber">未验证</span><div class="metric">3 组</div><p>深色模式真实授权、屏保启动、锁屏锁定均为现场手动项（TESTPLAN M1–M3）。</p></div>
+</div>
+<p class="muted">“本轮完成”指规格、实现、构建与自动化验收完成，不等于每个功能的运行时验收通过。睡眠/唤醒、VoiceOver、长时间稳定性仍是缺口。</p></section>
+
+<section id="scope"><h2>02 / 已确认的范围</h2>
+<div class="table"><table><tr><th>优先级</th><th>功能</th><th>形态</th><th>运行时状态</th></tr>
+<tr><td>P0</td><td>显示器保活</td><td>开关 + 15/30/60 分钟 / 无限期</td><td><span class="badge">已验证</span> 真实断言、读回、定时/退出释放</td></tr>
+<tr><td>P1</td><td>系统深色模式</td><td>开关（Automation 门控 + 读回）</td><td><span class="badge amber">待授权</span> 未授予 Automation，未执行写操作</td></tr>
+<tr><td>P2</td><td>启动屏保</td><td>动作（二次确认）</td><td><span class="badge amber">待现场</span> 引擎静态可解析，未实际启动</td></tr>
+<tr><td>P3</td><td>锁定屏幕</td><td>动作（Automation + Accessibility 门控 + 二次确认）</td><td><span class="badge amber">待现场</span> 拒绝路径已验证，未发送按键</td></tr>
+</table></div>
+<p><strong>非目标：</strong>Night Shift 直接控制、合盖不休眠、显示器休眠、输出/麦克风/音量/音频设备开关、快捷键、登录自启、场景组合；分发签名/公证/Sandbox、正式命名与品牌；修改原 One Switch 的 app/数据/偏好。</p></section>
+
+<section id="deliverables"><h2>03 / 交付物</h2>
+<div class="two"><div class="card"><h3>规格（Markdown）</h3><ul>
+<li><a href="../docs/PRD.md">docs/PRD.md</a>：用户、场景、优先级、非目标、验收。</li>
+<li><a href="../docs/DESIGN.md">docs/DESIGN.md</a>：菜单栏面板、状态模型、确认与无障碍。</li>
+<li><a href="../docs/TECH.md">docs/TECH.md</a>：每项接口/权限/失败策略、构建与已知限制。</li>
+<li><a href="../docs/TESTPLAN.md">docs/TESTPLAN.md</a>：自动化项 A1–A14 与现场手动项 M1–M6。</li>
+</ul></div><div class="card"><h3>实现与证据</h3><ul>
+<li><a href="../app/SwitchPilot/README.md">app/SwitchPilot</a>：SwiftUI 面板 + AppKit 状态项 + core + 自检。</li>
+<li><a href="../scripts/build-app">scripts/build-app</a>、<a href="../scripts/verify-app.py">scripts/verify-app.py</a>。</li>
+<li><a href="../evidence/app-runtime.md">evidence/app-runtime.md</a>：构建身份、8/8、9/9、未执行项。</li>
+<li><a href="../evidence/features/screen-saver.md">屏保</a> 与 <a href="../evidence/features/lock-screen.md">锁屏</a> 的原行为线索与推断边界。</li>
+</ul></div></div>
+<p class="muted">仓库根 <a href="../README.md">README</a> 已更新入口；能力矩阵与验证缺口同步更新。原始运行日志在 <code>evidence/raw/app/</code>（不入 Git）。</p></section>
+
+<section id="architecture"><h2>04 / 实现结构</h2>
+<div class="diagram"><svg viewBox="0 0 900 300" role="img" aria-labelledby="arch"><title id="arch">菜单栏应用结构与系统接口边界</title>
+<defs><marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8" fill="#6f8d7a"/></marker></defs>
+<g font-size="13" text-anchor="middle">
+<rect x="20" y="20" width="180" height="64" rx="9" fill="#e7f2e8"/><text x="110" y="46">NSStatusItem</text><text x="110" y="66" fill="#5f7268">菜单栏图标</text>
+<rect x="250" y="20" width="200" height="64" rx="9" fill="#e7f2e8"/><text x="350" y="46">NSPopover + SwiftUI</text><text x="350" y="66" fill="#5f7268">PanelModel / PanelView</text>
+<rect x="20" y="130" width="180" height="64" rx="9" fill="#fff2d8"/><text x="110" y="156">SwitchPilotCore</text><text x="110" y="176" fill="#7e5516">断言 / 权限 / 脚本封装</text>
+<rect x="250" y="130" width="200" height="64" rx="9" fill="#eef3e9"/><text x="350" y="156">SwitchPilotChecks</text><text x="350" y="176" fill="#5f7268">无 XCTest 的标准库自检</text>
+<rect x="510" y="20" width="170" height="64" rx="9" fill="#e6eff3"/><text x="595" y="46">IOKit</text><text x="595" y="66" fill="#276783">IOPMAssertion</text>
+<rect x="510" y="110" width="170" height="64" rx="9" fill="#e6eff3"/><text x="595" y="136">System Events</text><text x="595" y="156" fill="#276783">Automation / TCC</text>
+<rect x="510" y="200" width="170" height="64" rx="9" fill="#e6eff3"/><text x="595" y="226">ScreenSaverEngine</text><text x="595" y="246" fill="#276783">系统应用启动</text>
+<rect x="720" y="110" width="160" height="64" rx="9" fill="#fff2d8"/><text x="800" y="136">Accessibility</text><text x="800" y="156" fill="#7e5516">仅锁屏按键注入</text>
+<path d="M200 52H245" stroke="#6f8d7a" stroke-width="2" marker-end="url(#a)"/>
+<path d="M110 84V125" stroke="#6f8d7a" stroke-width="2" marker-end="url(#a)"/>
+<path d="M200 162H245" stroke="#6f8d7a" stroke-width="2" marker-end="url(#a)"/>
+<path d="M450 52H505" stroke="#6f8d7a" stroke-width="2" marker-end="url(#a)"/>
+<path d="M450 162H505" stroke="#6f8d7a" stroke-width="2" marker-end="url(#a)"/>
+<path d="M680 162H715" stroke="#b68a4e" stroke-width="2" stroke-dasharray="5 4" marker-end="url(#a)"/>
+<text x="450" y="285" fill="#5f7268">写操作只在用户显式动作与权限满足时发生；无后台自动触发、无私有 API、无 TCC 数据库修改</text>
+</g></svg></div>
+<p>代码分层：Core 不依赖 UI，可被自检程序直接调用；应用层只做状态编排与呈现。所有系统写操作都跟随读回或显示“未确认”，失败保留真实 OSStatus/脚本错误。</p></section>
+
+<section id="evidence"><h2>05 / 验收结果</h2>
+<div class="table"><table><tr><th>检查</th><th>结果</th><th>证据/说明</th></tr>
+<tr><td>构建 + bundle + plist + ad-hoc Hardened Runtime 签名</td><td><span class="badge">通过</span></td><td>`scripts/build-app`；Info.plist entries=10；flags=0x10002(adhoc,runtime)</td></tr>
+<tr><td>核心自检 9/9</td><td><span class="badge">通过</span></td><td>时长校验、权限映射、三轮真实断言、deinit、定时释放、深色只读、屏保引擎、锁屏拒绝</td></tr>
+<tr><td>启动冒烟</td><td><span class="badge">通过</span></td><td>菜单栏进程存活 &gt;2s；SIGTERM 后无本应用断言/残留进程</td></tr>
+<tr><td>原应用完整性</td><td><span class="badge">通过</span></td><td>1.35.4 (440)，主程序 hash `ee4551f9…` 与签名不变</td></tr>
+<tr><td>深色模式真实授权/切换</td><td><span class="badge amber">未执行</span></td><td>应用身份预检未授权；没有写系统外观</td></tr>
+<tr><td>屏保真实启动</td><td><span class="badge amber">未执行</span></td><td>避免打断当前会话/潜在锁定；引擎静态可解析</td></tr>
+<tr><td>锁屏真实锁定</td><td><span class="badge amber">未执行</span></td><td>未授予 Accessibility；没有发送按键</td></tr>
+</table></div>
+<p class="muted">应用可执行文件 SHA-256 <code>238524889cbe3f1949b05bb0191935618b340c7da178cd6757bd90de6e7fa5b3</code>；CDHash <code>19e82d8cfb38560c9d88c19297356363ef98baa3</code>。构建使用已提示 deprecated 的 native SwiftPM 回退，不是零警告构建；CLT 无 XCTest。</p></section>
+
+<section id="permissions"><h2>06 / 权限与安全边界</h2>
+<div class="table"><table><tr><th>权限</th><th>用途</th><th>何时触发</th><th>未授权时行为</th></tr>
+<tr><td>Automation（System Events）</td><td>深色模式读写；锁屏按键注入</td><td>仅用户点击开关/“请求授权…”后</td><td>只显示状态与入口，不写系统设置、不发按键</td></tr>
+<tr><td>Accessibility</td><td>锁屏按键注入（UI 脚本）</td><td>仅用户点击锁屏并在系统设置中手动勾选</td><td>不发送按键，显示辅助功能设置入口</td></tr>
+</table></div>
+<ul>
+<li>启动时不弹权限框；不请求 Full Disk Access、屏幕录制、输入监控等无关权限。</li>
+<li>不修改 TCC 数据库、不关闭 SIP、不重签原应用、不修改原应用数据/偏好。</li>
+<li>不引入私有 API；屏保/锁屏属于系统行为依赖，已在证据中标注推断边界。</li>
+<li>ad-hoc 签名在重新构建后可能被系统视为新应用，需要重新授权；正式分发需要 Developer ID + 公证（不在本轮）。</li>
+</ul></section>
+
+<section id="pending"><h2>07 / 待你现场验证（不会自动执行）</h2>
+<p>以下项目会触发系统授权弹窗或立即改变屏幕状态，必须由你在场执行；未完成前不应把对应功能称为“已验证”。详细步骤见 <a href="../docs/TESTPLAN.md">docs/TESTPLAN.md</a> M1–M6。</p>
+<div class="checklist">
+<label><input type="checkbox" value="M1"> M1 深色模式：授权 → 深/浅各 3 次切换与读回 → 撤销授权后应显示拒绝 → 结束时恢复原外观</label>
+<label><input type="checkbox" value="M2"> M2 屏保：确认后启动 → 手动退出 → 记录是否出现密码提示</label>
+<label><input type="checkbox" value="M3"> M3 锁屏：先验证未授权时拒绝执行 → 授予 Automation + Accessibility → 确认后锁定/解锁 → 检查读回</label>
+<label><input type="checkbox" value="M4"> M4 保活扩展：各时长开关/读回/释放；正常退出与强退后无断言；有条件时睡眠/唤醒</label>
+<label><input type="checkbox" value="M5"> M5 UI：菜单栏面板、键盘、VoiceOver、深浅外观对比度</label>
+<label><input type="checkbox" value="M6"> M6 边界：多实例、权限撤销后不崩溃、卸载与 TCC 残留说明</label>
+</div>
+<p class="note risk">深色模式与锁屏当前应继续按“待授权”呈现；如果拒绝授予 Accessibility，锁屏应降级为提示使用系统 Ctrl+Cmd+Q，而不是假装可用。</p></section>
+
+<section id="run"><h2>08 / 运行方式</h2>
+<pre>scripts/build-app
+open app/SwitchPilot/.build/SwitchPilot.app
+python3 scripts/verify-app.py</pre>
+<p>应用为 LSUIElement（无 Dock 图标），点击菜单栏 <code>switch.2</code> 图标打开面板。退出按钮在面板底部；退出/终止时释放保活断言。卸载只需删除 <code>app/SwitchPilot/.build/SwitchPilot.app</code>。</p>
+<p class="muted">当前工作目录已包含全部 tracked 产物；构建只需要 CLT，不依赖外部工作区的 `.tools/` 或样本。</p></section>
+
+<section id="history"><h2>09 / Git 历史（本轮）</h2>
+<div class="table"><table><tr><th>提交</th><th>内容</th></tr>
+<tr><td><code>22953d4</code></td><td>docs: define personal-use v0.1 scope and specifications（PRD/DESIGN/TECH/TESTPLAN + AGENTS.md）</td></tr>
+<tr><td><code>a74ed2a</code></td><td>feat: add minimal personal menu bar app（app + 构建/验证脚本 + 证据）</td></tr>
+<tr><td><code>fe6461e</code></td><td>docs: record v0.1 acceptance and update project status（README/矩阵/验证/usage）</td></tr>
+</table></div>
+<p class="muted">此前历史：可行性试验（b1356af…505df81）、交接核验（57261e5、07b83be）。main 工作区干净，未改写历史，未配置远端。</p></section>
+
+<section id="next"><h2>10 / 下一步</h2>
+<p>建议顺序：先完成 M1（深色模式授权验收）与 M3（锁屏权限/锁定验收），再决定是否把屏保/锁屏保留为正式能力；之后才讨论新增开关、快捷键、登录自启或分发打包。</p>
+<label for="target">验收完成后优先事项</label>
+<select id="target">
+<option value="A">A · 修复现场验收中发现的问题，再扩展新开关</option>
+<option value="B">B · 保持四项范围，进入日常自用观察期</option>
+<option value="C">C · 讨论 Developer ID 签名/公证与分发准备</option>
+<option value="D">D · 暂停，保留当前构建与文档</option>
+</select>
+<label for="prompt" class="muted">下一会话提示，可编辑</label>
+<textarea id="prompt"></textarea>
+<div class="controls"><button id="copy" type="button">Copy as prompt · 复制</button><button id="export" type="button">导出 TXT</button><span id="status" role="status" class="muted"></span></div></section>
+
+<footer>个人自用 v0.1 里程碑 · 2026-10-18 11:26 CST · 自动验收 8/8、核心自检 9/9、待现场 M1–M3 · 单文件离线可读，无外部资源依赖</footer>
+</main></div>
+<script>
+const target=document.getElementById('target'),box=document.getElementById('prompt'),statusBox=document.getElementById('status');
+function updatePrompt(){const map={A:'先根据现场验收结果修复深色模式/屏保/锁屏问题，再评估新增开关。',B:'保持显示器保活、深色模式、屏保、锁屏四项范围，进入日常自用观察期并记录问题。',C:'讨论 Developer ID 签名、公证与分发准备；不改动当前功能范围。',D:'暂停开发，保留当前构建、文档与证据。'};const selected=[...document.querySelectorAll('.checklist input:checked')].map(x=>x.value);box.value='继续 One Switch 个人自用 v0.1 的现场验收与后续。先读取 README.md、docs/PRD.md、docs/TECH.md、docs/TESTPLAN.md、evidence/app-runtime.md 和 artifacts/20261018-1126-oneswitch-personal-mvp.html。\n方向：'+map[target.value]+'\n已完成现场项：'+(selected.join('、')||'尚未执行')+'（未执行项不得记为通过）。\n边界：保活已验证；深色模式需 Automation；锁屏需 Automation + Accessibility；屏保/锁屏运行时验收需用户在场；Night Shift/合盖/显示器休眠首版排除；不改原 app 与数据；每个可审阅里程碑保留 Git 提交；token/工时未知就标未知。';statusBox.textContent='';}
+target.addEventListener('change',updatePrompt);document.querySelectorAll('.checklist input').forEach(x=>x.addEventListener('change',updatePrompt));
+document.getElementById('copy').addEventListener('click',async()=>{try{if(!navigator.clipboard)throw Error();await navigator.clipboard.writeText(box.value);statusBox.textContent='已复制';}catch{box.focus();box.select();let ok=false;try{ok=document.execCommand('copy');}catch{}statusBox.textContent=ok?'已复制':'已选中，请按 ⌘C / Ctrl+C';}});
+document.getElementById('export').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([box.value],{type:'text/plain;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='oneswitch-v01-next.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+updatePrompt();
+</script>
+</body></html>

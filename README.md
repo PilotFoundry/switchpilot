@@ -3,6 +3,7 @@
 本仓库保留调研、可复现分析、独立原型与个人自用应用的 Git 历史。前一轮 REA/Ghidra 可行性试验已完成（结论：缩范围继续）；当前里程碑是**个人自用 v0.1 菜单栏应用**（研究代号 SwitchPilot，正式名称未决定）。
 
 - 应用：[app/SwitchPilot](app/SwitchPilot/README.md)（菜单栏面板；保活已验证，深色模式/屏保/锁屏权限门控与现场验收状态见文档）
+- 个人自用 v0.1 里程碑：[artifacts/20261018-1126-oneswitch-personal-mvp.html](artifacts/20261018-1126-oneswitch-personal-mvp.html)
 - 规格：[docs/PRD.md](docs/PRD.md) · [docs/DESIGN.md](docs/DESIGN.md) · [docs/TECH.md](docs/TECH.md) · [docs/TESTPLAN.md](docs/TESTPLAN.md)
 - 运行验收：[evidence/app-runtime.md](evidence/app-runtime.md)
 - 能力矩阵：[evidence/capability-matrix.md](evidence/capability-matrix.md) · 验证与缺口：[evidence/verification.md](evidence/verification.md)
