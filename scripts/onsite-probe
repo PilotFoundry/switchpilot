@@ -1,7 +1,7 @@
 #!/bin/sh
 # Read-only onsite acceptance snapshot for SwitchPilot.
-# Opens the app once with --diagnose-runtime (does not grant/revoke TCC, lock,
-# launch the screen saver, or change appearance) and writes a sanitized log.
+# Uses the running app's switchpilot://diagnose URL (or starts the app first);
+# it does not grant/revoke TCC, lock, launch the screen saver or change appearance.
 set -eu
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 APP="${SWITCHPILOT_APP:-$HOME/Applications/SwitchPilot.app}"
@@ -19,14 +19,18 @@ mkdir -p "$(dirname "$OUT")"
     pgrep -fl "SwitchPilot.app/Contents/MacOS/SwitchPilot" || true
     printf '\n## runtime diagnostic\n'
     rm -f /tmp/switchpilot-runtime-diagnose.txt
-    open -n "$APP" --args --diagnose-runtime || true
-    sleep 3
-    cat /tmp/switchpilot-runtime-diagnose.txt 2>/dev/null || echo 'diagnostic missing'
-    printf '\n## login item BTM\n'
-    sfltool dumpbtm 2>/dev/null | grep -A12 -i 'Name: SwitchPilot' | head -16 || true
+    if ! pgrep -f "SwitchPilot.app/Contents/MacOS/SwitchPilot" >/dev/null 2>&1; then
+        open "$APP" >/dev/null 2>&1 || true
+        sleep 2
+    fi
+    open "switchpilot://diagnose" >/dev/null 2>&1 || true
+    sleep 2
+    cat /tmp/switchpilot-runtime-diagnose.txt 2>/dev/null || echo 'diagnostic missing (run --diagnose-runtime or check URL registration)'
+    # sfltool dumpbtm can hang on some macOS builds; keep the probe read-only and
+    # bounded. The runtime diagnostic already reports SMAppService status.
     printf '\n## assertions\n'
     pmset -g assertions 2>/dev/null | grep -i SwitchPilot || echo 'no SwitchPilot assertions'
-    printf '\n## TCC log tail (SwitchPilot, 30m)\n'
-    log show --last 30m --predicate 'subsystem == "com.apple.TCC"' 2>/dev/null | grep -i 'SwitchPilot' | tail -40 || true
+    printf '\n## TCC log tail (SwitchPilot, 5m)\n'
+    log show --last 5m --predicate 'subsystem == "com.apple.TCC"' 2>/dev/null | grep -i 'SwitchPilot' | tail -20 || true
 } > "$OUT"
 printf '%s\n' "$OUT"
