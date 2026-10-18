@@ -1,10 +1,10 @@
 # One Switch：REA/Ghidra 小范围验证执行计划
 
-日期：2026-10-18；方式：plan / direct；状态：计划已交付，执行未开始。
+日期：2026-10-18；方式：plan / direct；状态：执行中，第一步完成，第二步进行中。
 
 ## 目标与范围
 
-本轮目标是用 REA + Ghidra 验证三个代表性功能能否被解释并独立实现，得到继续 / 缩范围 / 暂停的可追溯结论。当前只交付执行计划，六个执行步骤均未开始。
+本轮目标是用 REA + Ghidra 验证三个代表性功能能否被解释并独立实现，得到继续 / 缩范围 / 暂停的可追溯结论。用户已授权执行六步试验，进度与证据随里程碑提交。
 
 默认个人研究、Apple Silicon / macOS 27、单人顺序推进；先不购买软件、不引入云端分析服务。默认样本为常规保活、系统深色模式、Night Shift；这是技术覆盖选择，不代表用户已确定首版功能。
 
@@ -24,7 +24,7 @@
 
 ## Git 历史与资产管理（用户要求）
 
-代码相关资产必须持续积累 Git history。当前目录已建立本地 `main` 仓库，基线提交 `b1356af` 保存了既有调研、计划及忽略规则；这是本次建立的历史起点，不追溯伪造旧提交日期。六步分析执行仍未开始。
+代码相关资产必须持续积累 Git history。当前目录已建立本地 `main` 仓库，基线提交 `b1356af` 保存了既有调研、计划及忽略规则；这是本次建立的历史起点，不追溯伪造旧提交日期。六步分析执行于 2026-10-18 开始。
 
 ### 入库范围
 
@@ -51,14 +51,14 @@
 
 ## 六步执行
 
-### 1. 冻结样本与环境基线（0.5–1 小时）
+### Task 1: 冻结样本与环境基线（0.5–1 小时）
 
-- [ ] 检查已安装 .app 的版本、完整包清单、主程序与各 helper 的 SHA-256、签名、CPU 架构；创建研究副本，原包保持原样。
-- [ ] 再次查找所给 ZIP；找不到就明确使用已安装样本，不为此阻断研究。若找到，先比对版本和内容。
-- [ ] 检查 Node、可实际启动的 Java/JDK、Ghidra、REA 与 Xcode 的状态；PATH 中出现 java 不等于已装可用 JDK。
-- [ ] 默认验证常规保活、系统深色模式、Night Shift 三类机制；这只是技术代表样本，不代表首版功能优先级已由用户确认。
+- [x] 检查已安装 .app 的版本、完整包清单、主程序与各 helper 的 SHA-256、签名、CPU 架构；创建研究副本，原包保持原样。
+- [x] 再次查找所给 ZIP；找不到就明确使用已安装样本，不为此阻断研究。若找到，先比对版本和内容。
+- [x] 检查 Node、可实际启动的 Java/JDK、Ghidra、REA 与 Xcode 的状态；PATH 中出现 java 不等于已装可用 JDK。
+- [x] 默认验证常规保活、系统深色模式、Night Shift 三类机制；这只是技术代表样本，不代表首版功能优先级已由用户确认。
 
-计划产物（当前尚不存在）：
+已验证产物（见 evidence/baseline.md）：
 - `evidence/baseline.md`
 - `evidence/binary-manifest.json`
 - `samples/One Switch.app（研究副本，不提交 Git）`
@@ -69,7 +69,7 @@
 
 Git 检查点：`chore: capture analysis baseline` — 记录基线、样本 hash 与复现命令，不提交样本。记录验证与缺口后提交，并在步骤汇报中附 commit hash。
 
-### 2. 准备最小分析环境并做冒烟验证（1–3 小时）
+### Task 2: 准备最小分析环境并做冒烟验证（1–3 小时）
 
 - [ ] 执行时核对 REA / Ghidra 官方稳定版本与 JDK 要求，锁定版本、来源 URL 和可取得的校验信息，不直接跟随 main。
 - [ ] 优先项目局部工具目录 .tools/ 与独立 Ghidra 项目；先验证 CLI，避免一开始运行会改全局 agent 配置的 setup。必要的安装范围和回退方式先写入环境清单。
@@ -88,7 +88,7 @@ Git 检查点：`chore: capture analysis baseline` — 记录基线、样本 has
 
 Git 检查点：`chore: document reproducible analysis toolchain` — 记录锁定版本、配置模板、冒烟结果；脚本如新增，一并提交。记录验证与缺口后提交，并在步骤汇报中附 commit hash。
 
-### 3. 先跑通一个功能：常规保活（2–4 小时）
+### Task 3: 先跑通一个功能：常规保活（2–4 小时）
 
 - [ ] 只围绕“谁创建/释放电源断言、计时如何结束、退出如何恢复”追调用链；从主程序到 XPC/helper 的跨进程路径要注明，不能只分析主程序。
 - [ ] 记录相关导入、地址、调用关系、关键伪代码片段；明确哪些是已证实、哪些只是命名或字符串推断。
@@ -105,7 +105,7 @@ Git 检查点：`chore: document reproducible analysis toolchain` — 记录锁�
 
 Git 检查点：`docs: trace keep-awake behavior and API options` — 提交保活证据摘要、推断边界与实际消耗。记录验证与缺口后提交，并在步骤汇报中附 commit hash。
 
-### 4. 补齐 Automation 与高风险样本（3–5 小时）
+### Task 4: 补齐 Automation 与高风险样本（3–5 小时）
 
 - [ ] 系统深色模式：研究脚本调用、Automation 目标、状态查询和拒绝授权后的处理；已知两个 .scpt 样本无法恢复源文本，不反复尝试相同解码方法。
 - [ ] Night Shift：确认实现线索是否涉及私有框架/服务，核查是否有可用于 27 的受支持接口；硬件不支持时只做静态结论并标记动态验证缺口。
@@ -123,7 +123,7 @@ Git 检查点：`docs: trace keep-awake behavior and API options` — 提交保�
 
 Git 检查点：`docs: assess dark-mode and night-shift feasibility` — 提交另两项结论及有必要的引擎对照。记录验证与缺口后提交，并在步骤汇报中附 commit hash。
 
-### 5. 做可丢弃原型与有界行为验证（3–7 小时）
+### Task 5: 做可丢弃原型与有界行为验证（3–7 小时）
 
 - [ ] 确认完整 Xcode/SDK 可用；如仍需用户接受许可，明确实际阻塞；不代为接受，也不更改全局 xcode-select，优先单次 DEVELOPER_DIR。
 - [ ] 在 prototypes/ 下建立一个最小 Swift 工程，使用独立身份，只验证常规保活与系统深色模式候选；Night Shift 仅在已有可接受实现路径时加入。此原型不是最终产品。
@@ -142,7 +142,7 @@ Git 检查点：`docs: assess dark-mode and night-shift feasibility` — 提交�
 
 Git 检查点：`feat: add validated system-toggle prototypes` — 原型源码、工程、必要测试及验证记录；未通过的实验明确标记 experiment。记录验证与缺口后提交，并在步骤汇报中附 commit hash。
 
-### 6. 汇总决定：继续、缩范围，或停止（1–2 小时）
+### Task 6: 汇总决定：继续、缩范围，或停止（1–2 小时）
 
 - [ ] 汇总三个样本的可解释性、公开接口可行性、权限、恢复证据、工具成本与未解问题；原行为证据与新实现测试分开。
 - [ ] 按实际 usage 和工时重新估算。决定保留 Ghidra、是否值得增加 Hopper，不用工具数量作为成功指标。
