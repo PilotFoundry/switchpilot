@@ -1,0 +1,15 @@
+#!/bin/sh
+set -eu
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+PKG="$ROOT/app/SwitchPilot"
+APP="$PKG/.build/SwitchPilot.app"
+# shortcut: CLT lacks XCTest; native SwiftPM is the local fallback until full Xcode is available.
+swift build --package-path "$PKG" --build-system native
+BIN=$(swift build --package-path "$PKG" --build-system native --show-bin-path)
+rm -rf "$APP"
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
+cp "$BIN/SwitchPilot" "$APP/Contents/MacOS/SwitchPilot"
+cp "$PKG/Info.plist" "$APP/Contents/Info.plist"
+codesign --force --sign - --options runtime --entitlements "$PKG/Entitlements.plist" "$APP"
+codesign --verify --strict "$APP"
+printf '%s\n' "$APP"
