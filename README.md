@@ -3,6 +3,7 @@
 本仓库保留调研、独立原型、工具配置及每个里程碑的 Git 历史。当前决定：**缩范围继续**；普通保活已验证，深色模式待 Automation 授权验证，Night Shift 暂不直接控制。
 
 - 结果：`artifacts/20261018-1034-oneswitch-pilot-results.html`
+- 交接核验：[artifacts/20261018-1110-oneswitch-codex-handoff.html](artifacts/20261018-1110-oneswitch-codex-handoff.html)
 - 能力矩阵：[evidence/capability-matrix.md](evidence/capability-matrix.md)
 - 验证与缺口：[evidence/verification.md](evidence/verification.md)
 - 工具复现：[evidence/toolchain.md](evidence/toolchain.md)
