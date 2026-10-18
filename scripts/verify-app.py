@@ -24,8 +24,20 @@ ORIGINAL_VERSION = "1.35.4"
 results = []
 
 
+def app_pids():
+    ps = run("/bin/ps", "-axo", "pid=,command=").stdout
+    return {
+        line.split()[0]
+        for line in ps.splitlines()
+        if "SwitchPilot.app/Contents/MacOS/SwitchPilot" in line
+    }
+
+
 def run(*args, **kwargs):
     return subprocess.run(args, capture_output=True, text=True, **kwargs)
+
+
+BASELINE_APP_PIDS = app_pids()
 
 
 def check(name, function):
@@ -56,6 +68,8 @@ def check_plists():
     entitlements = plistlib.loads((PKG / "Entitlements.plist").read_bytes())
     if info.get("CFBundleIdentifier") != "local.personal.SwitchPilot":
         raise RuntimeError("unexpected bundle id")
+    if info.get("CFBundleShortVersionString") != "0.2.0":
+        raise RuntimeError(f"unexpected bundle version: {info.get('CFBundleShortVersionString')}")
     if info.get("LSUIElement") is not True:
         raise RuntimeError("LSUIElement must be true")
     if not info.get("NSAppleEventsUsageDescription"):
@@ -123,11 +137,11 @@ def check_launch_smoke():
 
 
 def check_no_leftover_process():
-    ps = run("/bin/ps", "-axo", "pid=,command=").stdout
-    leftovers = [line for line in ps.splitlines() if "SwitchPilot.app/Contents/MacOS/SwitchPilot" in line]
+    leftovers = app_pids() - BASELINE_APP_PIDS
     if leftovers:
-        raise RuntimeError("leftover app process: " + "; ".join(leftovers[:2]))
-    return "no leftover SwitchPilot process"
+        raise RuntimeError("leftover app process: " + ", ".join(sorted(leftovers)))
+    ignored = len(BASELINE_APP_PIDS)
+    return f"no new leftover SwitchPilot process" + (f" (ignoring {ignored} pre-existing instance)" if ignored else "")
 
 
 def check_original_app():

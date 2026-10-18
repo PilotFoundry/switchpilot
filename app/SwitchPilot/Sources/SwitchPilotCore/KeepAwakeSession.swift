@@ -36,6 +36,7 @@ public enum KeepAwakePreset: Int, CaseIterable, Identifiable, Hashable {
 public final class KeepAwakeSession {
     public private(set) var assertion: PowerAssertion
     public private(set) var endDate: Date?
+    public private(set) var totalSeconds: TimeInterval?
     public var onChange: (() -> Void)?
     private var timer: Timer?
 
@@ -63,15 +64,23 @@ public final class KeepAwakeSession {
         }
         stop()
         try assertion.start()
+        totalSeconds = seconds
         endDate = seconds.map { Date().addingTimeInterval($0) }
         if seconds != nil { scheduleTimer() }
         onChange?()
+    }
+
+    /// 1.0 right after start, decreasing toward 0; nil for indefinite sessions.
+    public var fractionRemaining: Double? {
+        guard let totalSeconds, let remaining = remainingSeconds, totalSeconds > 0 else { return nil }
+        return min(1, max(0, Double(remaining) / totalSeconds))
     }
 
     public func stop() {
         timer?.invalidate()
         timer = nil
         endDate = nil
+        totalSeconds = nil
         try? assertion.stop()
         onChange?()
     }
