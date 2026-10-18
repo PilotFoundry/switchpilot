@@ -10,6 +10,7 @@ rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN/SwitchPilot" "$APP/Contents/MacOS/SwitchPilot"
 cp "$PKG/Info.plist" "$APP/Contents/Info.plist"
+if [ -f "$PKG/Resources/AppIcon.icns" ]; then cp "$PKG/Resources/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"; fi
 codesign --force --sign - --options runtime --entitlements "$PKG/Entitlements.plist" "$APP"
 codesign --verify --strict "$APP"
 printf '%s\n' "$APP"

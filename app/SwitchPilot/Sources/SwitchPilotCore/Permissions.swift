@@ -26,6 +26,17 @@ public enum AutomationState: Equatable, CustomStringConvertible {
 
     public var canWrite: Bool { self == .allowed }
 
+    /// Short user-facing label; keeps OSStatus out of normal UI text.
+    public var userFacingDescription: String {
+        switch self {
+        case .allowed: return "已授权"
+        case .denied: return "已被拒绝"
+        case .notDetermined: return "待授权"
+        case .targetNotRunning: return "待授权（首次操作时提示）"
+        case .failed(let code): return "未知状态 (\(code))"
+        }
+    }
+
     public var description: String {
         switch self {
         case .allowed: return "已授权"
@@ -61,5 +72,35 @@ public enum Permissions {
 
     public static func systemEventsRunning() -> Bool {
         !NSRunningApplication.runningApplications(withBundleIdentifier: systemEventsBundleID).isEmpty
+    }
+}
+
+extension Permissions {
+    public static var bundleIdentifier: String {
+        Bundle.main.bundleIdentifier ?? "local.personal.SwitchPilot"
+    }
+
+    public static func openAccessibilitySettings() {
+        openSecurityPane("Privacy_Accessibility")
+    }
+
+    public static func openAutomationSettings() {
+        openSecurityPane("Privacy_Automation")
+    }
+
+    private static func openSecurityPane(_ pane: String) {
+        guard let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?\(pane)") else { return }
+        NSWorkspace.shared.open(url)
+    }
+}
+
+extension Permissions {
+    /// Shows the system Accessibility consent prompt (the app cannot grant it).
+    /// Returns the trust state immediately after the prompt; the user may need
+    /// to toggle the app in System Settings afterwards.
+    @discardableResult
+    public static func accessibilityPrompt() -> Bool {
+        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        return AXIsProcessTrustedWithOptions(options)
     }
 }

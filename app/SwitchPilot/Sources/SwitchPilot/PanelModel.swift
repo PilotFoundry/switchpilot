@@ -19,9 +19,15 @@ final class PanelModel: ObservableObject {
     @Published private(set) var screenSaverStatus = "未执行"
     @Published private(set) var lockStatus = "未执行"
     @Published private(set) var lockPermissions = LockPermissions(automation: .notDetermined, accessibilityTrusted: false)
+    @Published private(set) var accessibilityTrusted = false
+    @Published private(set) var permissionSetupMessage = ""
+    @Published private(set) var permissionBusy = false
 
     @Published private(set) var hasSeenWelcome: Bool
     @Published var showGuide: Bool
+
+    var onOpenSettings: (() -> Void)?
+    var onContentSizeChanged: (() -> Void)?
 
     private let session = KeepAwakeSession()
     private var didShutdown = false
@@ -33,31 +39,64 @@ final class PanelModel: ObservableObject {
         session.onChange = { [weak self] in
             Task { @MainActor in self?.refreshKeepAwake() }
         }
-        refresh()
+        refreshAsync()
     }
 
     var version: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.2.0"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.3.0"
     }
 
     var statusTitle: String {
-        keepAwakeActive ? "保护中" : "空闲"
+        keepAwakeActive ? "保护中" : "保活关闭"
     }
 
-    var darkModeNeedsPermission: Bool { !darkModePermission.canWrite }
-    var lockNeedsPermission: Bool { !lockPermissions.canAttempt }
+    var guideVisible: Bool { !hasSeenWelcome || showGuide }
+
+    var darkModeNeedsPermission: Bool {
+        darkModePermission != .allowed
+    }
+
+    var lockNeedsPermission: Bool {
+        !lockPermissions.canAttempt
+    }
 
     var permissionsSummary: String {
-        "Automation：\(darkModePermission.description) · 辅助功能：\(lockPermissions.accessibilityTrusted ? "已授权" : "未授权")"
+        "权限：Automation \(darkModePermission.userFacingDescription) · 辅助功能 \(accessibilityTrusted ? "已授权" : "未授权")"
+    }
+
+    var allPermissionsReady: Bool {
+        darkModePermission == .allowed && accessibilityTrusted
     }
 
     // MARK: - Refresh
 
+    /// Synchronous preflight for immediate display; prefer refreshAsync for user-visible refreshes.
     func refresh() {
         systemIsDark = DarkMode.currentAppearanceIsDark()
         darkModePermission = Permissions.automationStatus()
         lockPermissions = LockScreen.permissions()
+        accessibilityTrusted = Permissions.accessibilityTrusted()
         refreshKeepAwake()
+    }
+
+    /// AEDeterminePermissionToAutomateTarget may block; probe off the main thread
+    /// and publish results on the main actor.
+    func refreshAsync(completion: (() -> Void)? = nil) {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let automation = Permissions.automationStatus()
+            let lock = LockScreen.permissions()
+            let accessibility = Permissions.accessibilityTrusted()
+            let dark = DarkMode.currentAppearanceIsDark()
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.darkModePermission = automation
+                self.lockPermissions = lock
+                self.accessibilityTrusted = accessibility
+                self.systemIsDark = dark
+                self.refreshKeepAwake()
+                completion?()
+            }
+        }
     }
 
     private func refreshKeepAwake() {
@@ -105,9 +144,7 @@ final class PanelModel: ObservableObject {
         darkModeBusy = true
         defer { darkModeBusy = false }
         darkModeError = nil
-        let state = Permissions.automationStatus()
-        darkModePermission = state
-        guard state == .allowed else {
+        guard darkModePermission == .allowed else {
             darkModeStatus = "需要授权后才能切换"
             return
         }
@@ -122,12 +159,144 @@ final class PanelModel: ObservableObject {
         }
     }
 
+    /// Explicit Automation-only request (used by the appearance row).
     func requestDarkModeAuthorization() {
-        guard !darkModeBusy else { return }
-        darkModeBusy = true
-        darkModePermission = DarkMode.requestPermission()
-        darkModeStatus = darkModePermission == .allowed ? "已授权，可以切换" : "授权未完成"
-        darkModeBusy = false
+        guard !permissionBusy else { return }
+        permissionBusy = true
+        permissionSetupMessage = "正在请求 Automation 授权…"
+        DispatchQueue.global(qos: .userInitiated).async {
+            let state = Permissions.requestAutomation()
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.darkModePermission = state
+                self.permissionBusy = false
+                self.refreshAsync()
+                self.permissionSetupMessage = state == .allowed
+                    ? "Automation 已授权，可以切换深色模式。"
+                    : "Automation 未授权：\(state.userFacingDescription)。可在系统设置中开启。"
+            }
+        }
+    }
+
+    /// Request everything that can be requested: Automation through the system
+    /// prompt, Accessibility through its consent prompt (macOS has no silent grant).
+    func requestAllPermissions() {
+        guard !permissionBusy else { return }
+        permissionBusy = true
+        permissionSetupMessage = "正在请求 Automation 授权…"
+        DispatchQueue.global(qos: .userInitiated).async {
+            let automation = Permissions.requestAutomation()
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.darkModePermission = automation
+                self.accessibilityTrusted = Permissions.accessibilityTrusted()
+                if !self.accessibilityTrusted {
+                    let trusted = Permissions.accessibilityPrompt()
+                    self.accessibilityTrusted = trusted || Permissions.accessibilityTrusted()
+                }
+                self.permissionBusy = false
+                self.refreshAsync()
+                self.updatePermissionMessage(automation: automation)
+            }
+        }
+    }
+
+    /// Shows the Accessibility prompt again (for the lock-screen permission block).
+    func requestAccessibilityPrompt() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let trusted = Permissions.accessibilityPrompt() || Permissions.accessibilityTrusted()
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.permissionBusy = false
+                self.permissionSetupMessage = trusted
+                    ? "辅助功能已授权。"
+                    : "辅助功能仍未授权：请在系统设置 › 隐私与安全性 › 辅助功能中勾选 SwitchPilot。"
+                self.refreshAsync()
+            }
+        }
+    }
+
+    func requestLockAutomation() {
+        guard !permissionBusy else { return }
+        permissionBusy = true
+        permissionSetupMessage = "正在请求 Automation 授权…"
+        DispatchQueue.global(qos: .userInitiated).async {
+            let state = LockScreen.requestAutomationPermission()
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.lockPermissions = LockScreen.permissions()
+                self.darkModePermission = state
+                self.accessibilityTrusted = Permissions.accessibilityTrusted()
+                self.permissionBusy = false
+                self.refreshAsync()
+                if state == .allowed {
+                    self.permissionSetupMessage = self.accessibilityTrusted
+                        ? "锁定屏幕所需权限已就绪。"
+                        : "Automation 已授权；锁屏仍需要辅助功能授权。"
+                } else {
+                    self.permissionSetupMessage = "Automation 未授权：\(state.userFacingDescription)。"
+                }
+            }
+        }
+    }
+
+    private func updatePermissionMessage(automation: AutomationState) {
+        if allPermissionsReady {
+            permissionSetupMessage = "所需权限已就绪。"
+        } else if !accessibilityTrusted {
+            permissionSetupMessage = automation == .allowed
+                ? "Automation 已授权。请在系统提示或辅助功能设置中勾选 SwitchPilot，然后点“重新检查”。"
+                : "Automation：\(automation.userFacingDescription)；辅助功能未授权。可先点“稍后再说”，保活与屏保仍可使用。"
+        } else {
+            permissionSetupMessage = "Automation：\(automation.userFacingDescription)。深色模式与锁屏暂不可用。"
+        }
+    }
+
+    func recheckPermissions() {
+        permissionBusy = true
+        permissionSetupMessage = "正在检查权限…"
+        refreshAsync { [weak self] in
+            guard let self else { return }
+            self.permissionBusy = false
+            self.permissionSetupMessage = self.allPermissionsReady ? "所需权限已就绪。" : "权限仍未就绪：\(self.permissionsSummary)"
+        }
+    }
+
+    func openSettings() {
+        onOpenSettings?()
+    }
+
+    func openAutomationSettings() {
+        Permissions.openAutomationSettings()
+    }
+
+    func openAccessibilitySettings() {
+        Permissions.openAccessibilitySettings()
+    }
+
+    // MARK: - Guide
+
+    func forceGuideForPreview() {
+        hasSeenWelcome = false
+        showGuide = true
+    }
+
+    /// Preview-only: hides the guide in memory without touching UserDefaults.
+    func hideGuideForPreview() {
+        hasSeenWelcome = true
+        showGuide = false
+    }
+
+    func dismissGuide() {
+        hasSeenWelcome = true
+        showGuide = false
+        UserDefaults.standard.set(true, forKey: "switchpilot.hasSeenWelcome")
+        onContentSizeChanged?()
+    }
+
+    func toggleGuide() {
+        showGuide.toggle()
+        onContentSizeChanged?()
     }
 
     // MARK: - Screen saver
@@ -153,9 +322,27 @@ final class PanelModel: ObservableObject {
     // MARK: - Lock screen
 
     func lockScreen() {
-        lockPermissions = LockScreen.permissions()
-        guard lockPermissions.canAttempt else {
+        permissionBusy = true
+        DispatchQueue.global(qos: .userInitiated).async {
+            let permissions = LockScreen.permissions()
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.permissionBusy = false
+                self.lockPermissions = permissions
+                self.accessibilityTrusted = permissions.accessibilityTrusted
+                self.presentLockFlow(permissions: permissions)
+            }
+        }
+    }
+
+    private func presentLockFlow(permissions: LockPermissions) {
+        guard permissions.canAttempt else {
             lockStatus = "未执行：缺少权限"
+            if permissions.automation != .allowed {
+                requestLockAutomation()
+            } else {
+                requestAccessibilityPrompt()
+            }
             return
         }
         guard confirm(
@@ -175,21 +362,8 @@ final class PanelModel: ObservableObject {
             }
         } catch {
             lockStatus = "失败：\(error)"
+            lockPermissions = LockScreen.permissions()
         }
-    }
-
-    func requestLockAutomation() {
-        let state = LockScreen.requestAutomationPermission()
-        lockPermissions = LockScreen.permissions()
-        lockStatus = state == .allowed ? "自动化已授权；辅助功能仍需检查" : "自动化状态：\(state.description)"
-    }
-
-    func openAccessibilitySettings() {
-        openSystemSettings(path: "Privacy_Accessibility")
-    }
-
-    func openAutomationSettings() {
-        openSystemSettings(path: "Privacy_Automation")
     }
 
     // MARK: - Lifecycle
@@ -200,27 +374,12 @@ final class PanelModel: ObservableObject {
         session.stop()
     }
 
-    func dismissGuide() {
-        hasSeenWelcome = true
-        showGuide = false
-        UserDefaults.standard.set(true, forKey: "switchpilot.hasSeenWelcome")
-    }
-
-    func toggleGuide() {
-        showGuide.toggle()
-    }
-
     func quit() {
         shutdown()
         NSApplication.shared.terminate(nil)
     }
 
     // MARK: - Helpers
-
-    private func openSystemSettings(path: String) {
-        guard let url = URL(string: "x-apple.systempreferences:com.apple.preference.security?\(path)") else { return }
-        NSWorkspace.shared.open(url)
-    }
 
     private func confirm(title: String, message: String, confirmTitle: String) -> Bool {
         let alert = NSAlert()
