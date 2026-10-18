@@ -1,6 +1,6 @@
 # Expansion evaluation
 
-Status: current baseline **v0.7.1**. This document is a decision record for
+Status: current baseline **v0.7.2**. This document is a decision record for
 proposed scope changes; it is not a promise that a candidate will ship.
 
 ## 1. Current boundary

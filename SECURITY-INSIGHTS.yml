@@ -15,6 +15,11 @@ project:
   type: application
   license: MIT
   releases:
+    - name: v0.7.2
+      description: Custom NSPanel presentation, menu material, magnet alignment
+      created: '2026-10-18'
+      url: https://github.com/PilotFoundry/switchpilot/releases/tag/v0.7.2
+      type: source
     - name: v0.7.1
       description: Open-source About/README positioning and ad-hoc universal binary
       created: '2026-10-18'

@@ -1,6 +1,6 @@
 # UI/UX design
 
-Status: current baseline **v0.7.1**. English is canonical. Screenshots live in
+Status: current baseline **v0.7.2**. English is canonical. Screenshots live in
 `docs/images/`; all UI must be readable in light and dark appearances.
 
 ## 1. Design principles
@@ -11,8 +11,9 @@ Status: current baseline **v0.7.1**. English is canonical. Screenshots live in
   denied, failure or unsupported state.
 - **One panel, few decisions.** The panel is a compact control surface, not a
   dashboard. Settings holds configuration and permission explanations.
-- **Quiet by default.** The app is an `LSUIElement` agent with no Dock icon and
-  no decorative animation.
+- **Quiet by default.** The app is an `LSUIElement` agent with no Dock icon. The
+  panel uses a short, restrained scale/fade anchored under the menu-bar icon;
+  Reduce Motion removes the scale.
 - **Localizable by construction.** Copy must fit English, Simplified Chinese,
   Traditional Chinese and Japanese. Language names are shown natively.
 
@@ -20,6 +21,17 @@ Status: current baseline **v0.7.1**. English is canonical. Screenshots live in
 
 - Template icon in the system menu bar; no color-only state.
 - Left click opens the panel; the status item follows standard macOS behavior.
+- Panel presentation: custom borderless `NSPanel`, 80 ms ease-out, very light
+  scale 0.985 → 1 plus opacity fade, anchored at the menu-bar icon; close is
+  60 ms ease-in. No popover arrow.
+- Surface: behind-window `NSVisualEffectView` menu material plus a 90% adaptive
+  window-background tint, rounded 12pt mask, hairline border and standard window
+  shadow. The content sits transparently on the material.
+- Magnet alignment: the panel's leading/trailing edge snaps 4pt outside the
+  status item edge on the corresponding screen half, then clamps to the visible
+  screen.
+- Transient dismissal uses outside-click monitors, Escape and app activation;
+  menus inside the panel must not dismiss it prematurely.
 - Single instance. A second launch explains that SwitchPilot is already running.
 - The menu-bar app remains useful when permissions are missing, but gated
   actions must explain what is unavailable.

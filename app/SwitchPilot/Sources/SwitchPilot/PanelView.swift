@@ -6,6 +6,7 @@ import SwitchPilotCore
 /// permissions at once. Basic actions stay usable without any permission.
 struct PanelView: View {
     @ObservedObject var model: PanelModel
+    var opaqueBackground = false
 
     var body: some View {
         VStack(alignment: .leading, spacing: 14) {
@@ -24,12 +25,27 @@ struct PanelView: View {
         .padding(16)
         .frame(width: 380)
         .background(panelBackground)
+        .clipShape(RoundedRectangle(cornerRadius: 12, style: .continuous))
+        .overlay(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .stroke(Color.primary.opacity(0.08), lineWidth: 0.5)
+        )
     }
 
     private var panelBackground: some View {
-        // One opaque surface: macOS 27 dials down layered glass, and an opaque
-        // background keeps the measured contrast stable over any desktop.
-        Color(nsColor: .windowBackgroundColor)
+        // The live panel uses a behind-window NSVisualEffectView material. The
+        // development dump paths request an opaque fallback so offscreen
+        // screenshots remain readable without a desktop behind them.
+        Group {
+            if opaqueBackground {
+                Color(nsColor: .windowBackgroundColor)
+            } else {
+                // Magnet-like menu material: a stronger adaptive tint keeps the
+                // surface dark and readable while retaining a little desktop
+                // depth. This is intentionally more opaque than Xiaomi's menu.
+                Color(nsColor: .windowBackgroundColor).opacity(0.90)
+            }
+        }
     }
 
     // MARK: - Header

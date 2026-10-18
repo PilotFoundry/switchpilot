@@ -17,9 +17,11 @@ app/SwitchPilot/
   creates the application and dispatches maintenance modes such as
   `--panel-size`, `--dump-panel`, `--dump-settings` and the diagnostics URL
   handler.
-- `AppDelegate.swift` owns the `NSStatusItem`, the SwiftUI `NSPopover`, the
-  Settings window, single-instance guard and the optional `SMAppService` login
-  item.
+- `AppDelegate.swift` owns the `NSStatusItem`, the custom `PanelWindowController`,
+  the Settings window, single-instance guard and the optional `SMAppService`
+  login item. The panel is a borderless non-activating `NSPanel`, not an
+  `NSPopover`, so its anchor, transient dismissal and scale/fade timing are
+  controlled by the app.
 - `PanelModel` is the observable UI state and coordinates the core services.
 - `SettingsModel` / `SettingsWindowController` own preferences, permissions,
   hotkeys, language and login-item controls.
@@ -56,6 +58,28 @@ from the menu bar. It is a single-instance app and supports the
 - A language change requires a relaunch so the bundle and `InfoPlist.strings`
   reload consistently. Settings provides **Quit and Reopen**.
 - `SWITCHPILOT_LANGUAGE` is a development/screenshot-only override.
+
+## Panel presentation
+
+- The panel is a borderless, non-activating `NSPanel` hosted by
+  `PanelWindowController`.
+- The background is a behind-window `NSVisualEffectView` using the macOS menu
+  material, a more opaque, Magnet-like adaptive `windowBackgroundColor` tint (90% opacity), a
+  rounded mask and a subtle hairline border. The SwiftUI content is transparent
+  over it.
+- Opening: 80 ms ease-out, opacity 0 → 1 and a very subtle content scale
+  0.985 → 1 anchored at the top-trailing edge.
+- Closing: 60 ms ease-in, opacity 1 → 0 and a subtle scale 1 → 0.995.
+- Magnet alignment: on the left half of the screen the panel's leading edge
+  snaps 4pt outside the status item's leading edge; on the right half its
+  trailing edge snaps 4pt outside the item's trailing edge, then it is clamped
+  to the visible screen.
+- The panel is positioned below the status item and has no NSPopover arrow.
+- Transient behavior is preserved with local/global mouse monitors, Escape
+  handling and workspace activation; SwiftUI menus (such as the keep-awake
+  preset picker) do not dismiss the panel while open.
+- Reduce Motion disables the scale and uses an immediate/near-instant
+  transition.
 
 The full contract is [LOCALIZATION.md](LOCALIZATION.md).
 
