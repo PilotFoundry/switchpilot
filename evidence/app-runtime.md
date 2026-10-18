@@ -158,4 +158,4 @@
 - 自动化：verify-app 11/11（新增单实例 key/URL scheme/stale copy 检查）、`SwitchPilotChecks` 12/12。
 - 尺寸实测：面板 380×637（无 guide）/380×710（guide）；设置窗口 523（折叠）/774（展开）pt。
 - 单实例：普通第二次 `open` 保持 1 个实例；`open -n` 被 LaunchServices 阻止（仅开发/诊断路径），运行中诊断走 URL；`scripts/onsite-probe` 已验证可完成且不触发 TCC/屏幕操作。
-- 未执行：M2/M3 真实动作、M8-3 注销/重启登录、M8-4 图标目视、M5 VoiceOver/小屏；不记为通过。版本 0.3.9。
+- 未执行：M2/M3 真实动作、M8-3 注销/重启登录、M8-4 图标目视、M5 VoiceOver/小屏；不记为通过。版本 0.3.9；最终构建 SHA-256 `a252db3f9381faa2da3e2705b0fdb458bf393f00dda2c92052125cd89755b4b2`。
