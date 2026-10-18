@@ -1,0 +1,7 @@
+#!/bin/sh
+# Keep the pilot toolchain scoped to this checkout.
+set -eu
+PILOT_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+export GHIDRA_INSTALL_DIR="$PILOT_ROOT/.tools/ghidra_12.1.4_PUBLIC"
+export JAVA_HOME="$PILOT_ROOT/.tools/jdk-21.0.12.1+1/Contents/Home"
+exec "$PILOT_ROOT/.tools/rea/node_modules/.bin/rea" "$@"

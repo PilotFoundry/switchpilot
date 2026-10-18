@@ -1,0 +1,30 @@
+[
+  {
+    "source": "Contents/Library/LaunchServices/studio.fireball.OneSwitch.PrivilegedHelper",
+    "source_sha256": "05eec224f475c47b5d7660af7258c963edef9c8ab344c06f72579aa605f0deab",
+    "slice": "analysis/slices/studio.fireball.OneSwitch.PrivilegedHelper.arm64",
+    "architecture": "arm64",
+    "sha256": "f0ebcf5483a4a41feaf50531a00a934c61ddfe3a042a7024e5a1c5325b3b0ac3"
+  },
+  {
+    "source": "Contents/Library/LoginItems/OneSwitchHelper.app/Contents/MacOS/OneSwitchHelper",
+    "source_sha256": "7bc5b2002aad142fc7fa19ae0136dcba5adc6287323cf8cfda1385c7e06bdeec",
+    "slice": "analysis/slices/OneSwitchHelper.arm64",
+    "architecture": "arm64",
+    "sha256": "fe6520b5cb24b59c1ff13a2133b3cae680ef938a662298100277203f11d50746"
+  },
+  {
+    "source": "Contents/MacOS/One Switch",
+    "source_sha256": "ee4551f90014801f0252abea9787911a8ce04e9e6bae1207589eebf1584208fa",
+    "slice": "analysis/slices/OneSwitch.arm64",
+    "architecture": "arm64",
+    "sha256": "0c3ba5c7a8f840d13114046283d2609e2bbd2762e69c359c85f5649c8f247528"
+  },
+  {
+    "source": "Contents/XPCServices/OneSwitchXPC.xpc/Contents/MacOS/OneSwitchXPC",
+    "source_sha256": "e561f0902dd28ac8c6bc5577905a9d8e736d7d49b117841ced8314b6bb49a646",
+    "slice": "analysis/slices/OneSwitchXPC.arm64",
+    "architecture": "arm64",
+    "sha256": "8c322a725b0c1838fc1f4fba9defc9a0d6cf5c1661fb403e1c8ca90ee5dec666"
+  }
+]
