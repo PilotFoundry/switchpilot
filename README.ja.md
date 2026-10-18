@@ -1,6 +1,6 @@
 # <img src="assets/logo-512.png" width="72" align="left" alt="SwitchPilot logo"> SwitchPilot
 
-[English](README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-Hant.md) · [設計原則](docs/en/CORE.md) · [アーキテクチャ](docs/en/ARCHITECTURE.md) · [テスト](docs/en/TESTING.md) · [ロードマップ](docs/en/ROADMAP.md)
+[English](README.md) · [简体中文](README.zh-CN.md) · [繁體中文](README.zh-Hant.md) · [ドキュメント](docs/README.md) · [設計原則](docs/en/CORE.md) · [アーキテクチャ](docs/en/ARCHITECTURE.md) · [テスト](docs/en/TESTING.md) · [ロードマップ](docs/en/ROADMAP.md)
 
 [![CI](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml)
 
@@ -100,7 +100,7 @@ open ~/Applications/SwitchPilot.app
 SWITCHPILOT_SIGN_IDENTITY="Apple Development: Your Name (TEAMID)" ./scripts/build-app
 ```
 
-証明書、署名用の素材、Gatekeeper の回避策は絶対にコミットしないでください。このアプリは公証されておらず、ローカルでビルドして実行することを前提としています。配布用のバイナリではありません。
+証明書、署名用の素材、Gatekeeper の回避策は絶対にコミットしないでください。このアプリは公証されていません。universal の ad-hoc バイナリを利便性のために配布していますが、より高い信頼性が必要な場合はソースからビルドして署名してください。詳しくは [docs/en/RELEASE.md](docs/en/RELEASE.md) をご覧ください。
 
 ### Make ターゲット
 

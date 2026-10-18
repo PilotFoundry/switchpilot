@@ -7,14 +7,19 @@ header:
   license: https://github.com/PilotFoundry/switchpilot/blob/main/LICENSE
 project:
   name: SwitchPilot
-  description: A small, privacy-first macOS menu bar utility for a few reliable system controls.
+  description: An open-source, privacy-first macOS menu bar utility for a few reliable system controls.
   homepage: https://github.com/PilotFoundry/switchpilot
   security-policy: https://github.com/PilotFoundry/switchpilot/blob/main/SECURITY.md
   roadmap: https://github.com/PilotFoundry/switchpilot/blob/main/docs/en/ROADMAP.md
-  documentation: https://github.com/PilotFoundry/switchpilot#readme
+  documentation: https://github.com/PilotFoundry/switchpilot/blob/main/docs/README.md
   type: application
   license: MIT
   releases:
+    - name: v0.7.1
+      description: Open-source About/README positioning and ad-hoc universal binary
+      created: '2026-10-18'
+      url: https://github.com/PilotFoundry/switchpilot/releases/tag/v0.7.1
+      type: source
     - name: v0.7.0
       description: Traditional Chinese, Japanese and in-app language selection
       created: '2026-10-18'
@@ -29,7 +34,7 @@ repository:
   security:
     assessments:
       self:
-        comment: 'Personal-use project; automated build/smoke checks are in CI. Manual TCC and screen-state checks remain in docs/en/TESTING.md.'
+        comment: 'Open-source project; automated build, smoke, policy and CodeQL checks run in CI. Release artifacts are ad-hoc and not notarized. Manual TCC, hardware, screen-cleaning and Gatekeeper checks remain documented in docs/en/TESTING.md and docs/en/RELEASE.md.'
         evidence: https://github.com/PilotFoundry/switchpilot/actions
     attestations: []
     dependency-management: []
