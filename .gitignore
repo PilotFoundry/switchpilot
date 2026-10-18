@@ -36,3 +36,7 @@ __pycache__/
 *.pfx
 *.mobileprovision
 *.provisionprofile
+
+# Release/package scratch
+/.build-release-*/
+/dist/

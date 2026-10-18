@@ -59,6 +59,20 @@ SwitchPilot は 4 つの UI ローカライズを提供しています：
 
 初期状態では**システムに従う**が選択されています。設定 → 言語で利用可能な言語のいずれかを明示的に選択できます。変更後は、AppKit／SwiftUI と権限確認ダイアログのローカライズを確実に再読み込みするため、アプリを開き直すよう求められます。
 
+## ダウンロード（ad-hoc プレビュー）
+
+[最新リリース](https://github.com/PilotFoundry/switchpilot/releases/latest) では、対応するタグのソースからビルドした universal（Apple Silicon + Intel）版 macOS アプリを配布しています。現在このプロジェクトには Developer ID 証明書がないため、**ad-hoc 署名・未公証** のビルドです。
+
+- 要件：macOS 14 以降
+- ファイル：`SwitchPilot-0.7.0-macos-universal-adhoc.zip`
+- ダウンロードして展開し、`SwitchPilot.app` を `/Applications` に移動
+- 初回起動時に macOS にブロックされる場合：アプリを右クリック → **開く**
+- ターミナルを使う場合は、このアプリだけに限定して実行：
+  `xattr -dr com.apple.quarantine /Applications/SwitchPilot.app`
+- Gatekeeper をシステム全体で無効にしないでください
+
+zip は `./scripts/build-release` でビルドされ、SHA-256 ファイルもリリースに添付されます（`SwitchPilot-0.7.0-macos-universal-adhoc.zip.sha256`）。これはダウンロード用の便宜的なビルドであり、Developer ID／公証済みの配布物ではありません。完全に信頼したい場合は、ソースから自分でビルドして署名してください。
+
 ## 動作環境
 
 - macOS 14 以降（主に macOS 27 で開発・検証）

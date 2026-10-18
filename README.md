@@ -72,6 +72,24 @@ The default is **Follow System**. Settings → Language can force one of the
 available languages; the app asks you to reopen it so AppKit/SwiftUI and the
 permission prompt localizations reload consistently.
 
+## Download (ad-hoc preview)
+
+The [latest release](https://github.com/PilotFoundry/switchpilot/releases/latest)
+asset is a universal (Apple Silicon + Intel) macOS app built from the tagged source. It is **ad-hoc signed and not notarized**, because this project
+does not currently have a Developer ID certificate.
+
+- Requirement: macOS 14 or later
+- Asset: `SwitchPilot-0.7.0-macos-universal-adhoc.zip`
+- Download, unzip, move `SwitchPilot.app` to `/Applications`
+- On first launch macOS may block it: **right-click the app → Open**
+- If you prefer a terminal command, limit it to this app:
+  `xattr -dr com.apple.quarantine /Applications/SwitchPilot.app`
+- Do not disable Gatekeeper system-wide
+
+The zip is built by `./scripts/build-release`; its SHA-256 checksum is published
+next to the asset (`SwitchPilot-0.7.0-macos-universal-adhoc.zip.sha256`). This is a convenience build, not a Developer ID/notarized
+distribution. Build from source if you want to inspect or sign it yourself.
+
 ## Requirements
 
 - macOS 14 or later (developed and tested primarily on macOS 27)
