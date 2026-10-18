@@ -91,6 +91,18 @@ let checks: [(String, () throws -> Void)] = [
             print("  engine=\(url.path)")
         }
     }),
+    ("timed progress and indefinite session", {
+        let session = KeepAwakeSession()
+        try session.start(minutes: 15)
+        try check(session.totalSeconds == 900, "15 minute preset must map to 900 seconds")
+        guard let progress = session.fractionRemaining else { throw CheckFailure(message: "timed session must expose progress") }
+        try check(progress > 0.98 && progress <= 1.0, "fresh timed session progress out of range: \(progress)")
+        session.stop()
+        try session.start(minutes: nil)
+        try check(session.fractionRemaining == nil, "indefinite session must not expose progress")
+        try check(session.isActive, "indefinite session should be active")
+        session.stop()
+    }),
     ("lock screen refuses to run without permissions", {
         let permissions = LockScreen.permissions()
         print("  permissions: \(permissions.summary)")
