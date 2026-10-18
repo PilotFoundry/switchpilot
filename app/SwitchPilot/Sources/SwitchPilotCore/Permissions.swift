@@ -73,6 +73,32 @@ public enum Permissions {
     public static func systemEventsRunning() -> Bool {
         !NSRunningApplication.runningApplications(withBundleIdentifier: systemEventsBundleID).isEmpty
     }
+
+    /// Launch System Events without bringing it to the foreground. The preflight
+    /// API returns -600 (target not running) even when Automation is granted, so
+    /// starting the target is required before a status can be determined.
+    public static func launchSystemEvents() {
+        guard !systemEventsRunning(),
+              let url = NSWorkspace.shared.urlForApplication(withBundleIdentifier: systemEventsBundleID) else { return }
+        let configuration = NSWorkspace.OpenConfiguration()
+        configuration.activates = false
+        NSWorkspace.shared.openApplication(at: url, configuration: configuration, completionHandler: nil)
+    }
+
+    /// Resolve -600 by starting System Events, then re-run the read-only preflight.
+    /// Only prompts are suppressed; the caller still decides when to ask for consent.
+    public static func automationStatusResolvingTarget(timeout: TimeInterval = 1.2) -> AutomationState {
+        let initial = automationStatus()
+        guard initial == .targetNotRunning else { return initial }
+        launchSystemEvents()
+        let deadline = Date().addingTimeInterval(timeout)
+        var status = automationStatus()
+        while status == .targetNotRunning && Date() < deadline {
+            Thread.sleep(forTimeInterval: 0.1)
+            status = automationStatus()
+        }
+        return status
+    }
 }
 
 extension Permissions {

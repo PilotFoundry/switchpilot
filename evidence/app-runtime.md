@@ -97,3 +97,13 @@
 - 修复：打开系统设置时轮询前台应用；检测到系统设置曾在前台、随后离开（关闭/切换/退出）后，自动把 SP 设置窗口前置并刷新真实权限状态；180 秒超时自动停止。app activation 路径保留为兜底。
 - 修复：持久轮询（设置窗口存在期间）+ `NSWorkspace.didActivateApplicationNotification` / `didTerminateApplicationNotification` 观察者；系统设置关闭/切换/退出后自动前置 SP 设置窗口并刷新权限；设置窗口关闭时停止观察。
 - 版本 0.3.2；build/verify 复跑 11/11、自检 12/12；`--dev` 窗口自动打开钩子仅由 `SWITCHPILOT_DEV=1` 启用。
+
+## v0.3.3：权限"已授权仍显示未授权"根因与修复（2026-10-18）
+
+- 现象：用户已在系统设置开启 Automation / 辅助功能，SP 设置页仍显示"待授权（首次操作时提示）/未授权"，"重新检查"无变化。
+- TCC 日证据（tccd）：`Failed to match existing code requirement for subject local.personal.SwitchPilot and service kTCCServiceAccessibility`，当前路径 `~/Applications/SwitchPilot.app`。说明授权记录属于旧 ad-hoc 构建；重建改变 cdhash 后当前应用不匹配。Automation 显示"待授权"的直接原因是 System Events 未运行（-600），非真实授权状态。
+- 修复：自签名稳定身份 `SwitchPilot Local Signing`（Keychain，设计化要求 `identifier + certificate leaf = H"02f684b1…"`）；build-app 优先使用；-600 时启动 System Events 后重探测；设置页显示诊断行；`--diagnose-permissions` 输出当前状态。
+- 已清理旧 ad-hoc TCC 记录（bundle-scoped，当前用户）：
+  `tccutil reset AppleEvents local.personal.SwitchPilot` / `tccutil reset Accessibility local.personal.SwitchPilot` → `Successfully reset ...`。
+- 清理后诊断（LaunchServices 启动）：`automationRaw=需要用户授权 (-1744)`、`automationResolved=需要用户授权 (-1744)`、`systemEventsRunning=true`、`accessibilityTrusted=false`。这是重置后的预期状态；待用户对稳定签名版本重新授权并验证"重新检查"。
+- 版本 0.3.3；verify-app 11/11（签名步骤允许本地身份或 ad-hoc）、自检 12/12。
