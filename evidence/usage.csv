@@ -1,0 +1,9 @@
+stage,measurement,value,unit,qualification
+1,baseline_capture,2026-10-18T09:52:56+08:00,timestamp,manifest timestamp not task start
+2,xpc_first_function_wall,48.80,seconds,includes startup and autoanalysis
+2,main_first_function_wall,135.10,seconds,includes startup and autoanalysis
+3,model_input_tokens,unknown,tokens,no authoritative per-stage usage exposed
+3,model_output_tokens,unknown,tokens,no authoritative per-stage usage exposed
+3,cached_input_tokens,unknown,tokens,no authoritative per-stage usage exposed
+3,human_work_time,unknown,hours,not measured
+3,codex_reset_cards_used,0,cards,no rate limit observed
