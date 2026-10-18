@@ -109,10 +109,8 @@ let checks: [(String, () throws -> Void)] = [
         try check(icon.size.width >= 16 && icon.size.height >= 16, "status icon is too small")
         try check(icon.isTemplate, "status icon must be a template image")
         try check((icon.tiffRepresentation?.count ?? 0) > 0, "status icon has no bitmap representation")
-        let muted = StatusIcon.make(microphoneMuted: true)
-        try check(muted.isTemplate, "muted status icon must be a template image")
-        try check((muted.tiffRepresentation?.count ?? 0) > 0, "muted status icon has no bitmap representation")
-        try check(muted.tiffRepresentation != icon.tiffRepresentation, "muted status icon should differ")
+        let iconAgain = StatusIcon.make()
+        try check(iconAgain.tiffRepresentation == icon.tiffRepresentation, "status icon must remain the stable S mark")
         try check(!Permissions.bundleIdentifier.isEmpty, "bundle identifier is empty")
     }),
     ("login item state is readable", {

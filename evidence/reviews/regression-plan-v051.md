@@ -13,7 +13,7 @@
 | R3 | 无私有 CoreBrightness/NightShift/私有输入 API | 本脚本：禁用符号扫描 | — |
 | R4 | `tccutil` 不得自动执行（仅设置页显式确认） | 本脚本：允许文件白名单、唯一调用点、启动路径无引用、有破坏性确认、无 sudo/reset All | M13-4/应用内重置真实执行 |
 | R5 | 启动/刷新不主动请求权限、不自动静音/清洁 | 本脚本：启动路径禁用符号、麦克风只读+唯一 toggle、清洁仅显式入口 | 首启/权限引导交互复现 |
-| R6 | 麦克风静音：能力感知 + 状态可见（含状态项）+ 不支持降级 | 本脚本：`kAudioDevicePropertyMute`、`setMuted/toggle`、不支持文案、面板状态/标签；Checks：`microphone state readable` | M12 支持/不支持设备真实写入 |
+| R6 | 麦克风静音：能力感知 + 面板/右键状态 + 不支持降级（状态栏图标固定 S） | 本脚本：`kAudioDevicePropertyMute`、`setMuted/toggle`、不支持文案、面板状态/标签；Checks：`microphone state readable` | M12 支持/不支持设备真实写入 |
 | R7 | 屏幕清洁：普通模式无倒计时/自动退出 | 本脚本：`duration: Int? = nil`、`showsCountdown = duration != nil`、Timer 仅测试分支、env 变量门控、文案 | M13 步骤 4：普通模式不自动退出 |
 | R8 | 屏幕清洁：键盘锁定 + 鼠标点击退出 | 本脚本：keyDown/keyUp/flagsChanged 事件掩码、无鼠标事件拦截、退出文案 | M13 键盘拦截/鼠标退出真实事件 |
 | R9 | 清洁无权限降级 | 本脚本：`accessibilityRequired` 错误路径存在（静态） | M13-4 无权限真实降级 |
