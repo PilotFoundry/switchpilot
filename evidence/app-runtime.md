@@ -150,3 +150,12 @@
 - 用户补充确认：M8 的注销/重启测试操作较重，**留作长期待办**，等后续功能迭代接近收尾时与其余现场测试一起验证。
 - 因此 M8-3（真实登录启动）继续保持未执行，不记通过；M8-4 图标目视在收尾测试中复看；M2/M3 的真实动作、M4 睡眠/唤醒、M5 VoiceOver/小屏、M7 首次引导复现、应用内重置真实执行一并列入收尾 backlog。
 - backlog 已写入 `docs/TESTPLAN.md` §3.1 与 `evidence/onsite/M1-M3-M8-2026-10-18.md` §6；版本保持 0.3.8，无代码变更。
+
+## v0.3.9：UI/UX 复评后的细节收敛（2026-10-18）
+
+- 复评：UI（P1×2）、UX（P1×4/P2×7）无 P0；修复响应见 `evidence/reviews/fix-response-2026-10-18.md`。
+- 主要变更：guide/磁贴文案与"点击即执行"策略一致；外观与快速动作的两个权限 callout 合并为单一「需要授权」卡并动态列出缺失项；设置成功态去重复总结、版本只留关于区、诊断默认折叠、disclosure 去省略号、应用内重置独立"不可逆操作"块；登录项状态消息在刷新后生成；Info.plist 增加 `LSMultipleInstancesProhibited` 与 `switchpilot://diagnose` URL scheme。
+- 自动化：verify-app 11/11（新增单实例 key/URL scheme/stale copy 检查）、`SwitchPilotChecks` 12/12。
+- 尺寸实测：面板 380×637（无 guide）/380×710（guide）；设置窗口 523（折叠）/774（展开）pt。
+- 单实例：普通第二次 `open` 保持 1 个实例；`open -n` 被 LaunchServices 阻止（仅开发/诊断路径），运行中诊断走 URL；`scripts/onsite-probe` 已验证可完成且不触发 TCC/屏幕操作。
+- 未执行：M2/M3 真实动作、M8-3 注销/重启登录、M8-4 图标目视、M5 VoiceOver/小屏；不记为通过。版本 0.3.9。

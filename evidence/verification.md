@@ -109,3 +109,10 @@
 - 用户指示：M8-3 注销/重启真实登录启动操作较重，留到功能收尾时与其余现场测试一起验证。
 - 该项保持未执行；M2/M3 真实动作、M4 睡眠/唤醒、M5 VoiceOver/小屏、M7 首次引导、应用内重置真实执行等一并列入 `docs/TESTPLAN.md` §3.1，均不记通过。
 - 版本 0.3.8，无代码变更；自动化 11/11、12/12。
+
+## v0.3.9 UI/UX 复评修复（2026-10-18）
+
+- UI/UX 独立复评无 P0；P1 文案/权限卡/不可逆重置/单实例均已处理，详见 `evidence/reviews/fix-response-2026-10-18.md`。
+- 自动检查新增 Info.plist 单实例 key、`switchpilot://diagnose` URL scheme、PanelView stale confirmation copy；verify 11/11、自检 12/12。
+- 普通重复启动实测 1 实例；URL 诊断与 onsite-probe 正常；面板 637/710pt，设置窗口 523/774pt。
+- 未记通过：M2/M3 真实动作、M8-3 登录真实启动、M8-4 图标目视、M5 无障碍/小屏；按收尾 backlog 处理。

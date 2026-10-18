@@ -6,7 +6,7 @@
 
 - macOS 27.0.1 (26A434)，Apple Silicon arm64。
 - CLT Swift 6.4 / macOS 27.0 SDK；无完整 Xcode、无 XCTest。
-- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.8，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
+- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.9，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
 - 原应用：`/Applications/One Switch.app` 1.35.4 (440)，测试前后版本/hash/签名不变；不启动、不修改其数据。
 - 权限前提：未预先授予 Automation/Accessibility；不修改 TCC 数据库、不关闭 SIP、不重签原应用。
 
@@ -32,7 +32,7 @@
 | A16 | 对比度 token | `scripts/check-contrast.py` | `secondaryInk/warningInk/successInk/errorInk` 在 light/dark panel/card/tile ≥4.5:1 |
 | A17 | 面板尺寸 | `--panel-size` | 宽 380；无 guide ≤680pt、有 guide ≤760pt（逻辑尺寸） |
 | A18 | 语义色静态检查 | `verify-app.py` | PanelView/SettingsView 中 `.foregroundStyle(.green/.orange/.red)` = 0 |
-| A19 | 单实例 | 启动冒烟/人工 | 第二个实例提示后退出；`SWITCHPILOT_SMOKE_TEST=1` 仅供测试 |
+| A19 | 单实例 | 启动冒烟/人工 | Info.plist `LSMultipleInstancesProhibited` + 运行时守卫；普通重复启动保持一个图标；`open -n` 仅供诊断 |
 | A14 | 静态质量 | `python3 -m py_compile`、`sh -n`、`git diff --check` | 退出 0；不声称运行不存在的 linter |
 
 记录：`evidence/app-runtime.md` + `evidence/raw/app/`（原始日志不入 Git）。v0.3 核心自检 12 项、自动化验收 11 项；独立评审见 `evidence/reviews/`。现场前置/模板见 `evidence/onsite/M1-M3-M8-2026-10-18.md`；只读探针 `scripts/onsite-probe`。
@@ -93,14 +93,15 @@
 3. 设置 › 登录：开启后系统设置 › 通用 › 登录项出现 SwitchPilot；需要批准时按钮可打开登录项设置；关闭后登录项消失。**注销/重启验证自动启动：长期待办（用户 2026-10-18 指示：操作较重，留到功能收尾时与其余测试一起验证）。**
 4. 状态项右键菜单：设置… / 使用说明 / 退出均可用；左键仍打开面板。
 5. Finder Get Info / 系统设置隐私列表 / 登录项 / TCC 提示显示自定义图标（非通用图标）；菜单栏图标为 S monogram 且浅/深/选中状态可辨。
-6. 小屏（1280×800）/放大字体下，首启 guide 面板完整可见、底部按钮不裁切；`--panel-size` 已做逻辑尺寸断言，但真机 popover 需目视。
-7. v0.3.4 权限区：已授权时无「申请全部权限」；「如何撤销授权…」默认收起，展开含系统设置深链与「终端命令（高级）」；展开后窗口自动增高（实测 544→711），键盘 Space/Return 可切换、VoiceOver 读展开状态；复制命令不改变系统。
-8. 稳定签名身份：重建/重签/重装后，已授予的 Automation/Accessibility 不应失效；用 `--diagnose-permissions` 复核。
-9. v0.3.5 应用内重置（手动、破坏性，自动化不执行）：展开「终端命令（高级）」→「在应用内重置权限…」→ 取消应无变化；确认后两项 TCC 记录被重置、权限区回到未授权、可重新申请；确认框文案必须包含不可逆/需要重新授权/非官方 API/无 sudo/无 reset All。
+6. 单实例：运行中再次双击/`open` 只保留一个菜单栏图标；`open -n` 是诊断专用，不纳入普通用户路径。
+7. 小屏（1280×800）/放大字体下，首启 guide 面板完整可见、底部按钮不裁切；`--panel-size` 已做逻辑尺寸断言，但真机 popover 需目视。
+8. 权限区：已授权时无「申请全部权限」；「如何撤销授权」默认收起，展开含系统设置深链、「终端命令（高级）」与不可逆的重置操作；窗口随内容增高（v0.3.9 实测约 523→774pt），键盘 Space/Return 可切换、VoiceOver 读展开状态；复制命令不改变系统。
+9. 稳定签名身份：重建/重签/重装后，已授予的 Automation/Accessibility 不应失效；用 `--diagnose-permissions` 复核。
+10. v0.3.5 应用内重置（手动、破坏性，自动化不执行）：展开「终端命令（高级）」→「在应用内重置权限…」→ 取消应无变化；确认后两项 TCC 记录被重置、权限区回到未授权、可重新申请；确认框文案必须包含不可逆/需要重新授权/非官方 API/无 sudo/无 reset All。
 
 ### M6 边界/恢复
 
-1. 重复启动应用的行为（多实例/多图标）记录为已知限制。
+1. 普通重复启动由 `LSMultipleInstancesProhibited` + 启动守卫限制为一个菜单栏图标；`open -n` 仅用于诊断。
 2. 系统设置中撤销自动化/辅助功能后，应用不崩溃、不假成功。
 3. 卸载：删除 `.app` 即可；TCC 中残留条目可手动删除（记录步骤，不自动改 TCC）。
 

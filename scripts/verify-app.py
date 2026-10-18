@@ -69,7 +69,7 @@ def check_plists():
     entitlements = plistlib.loads((PKG / "Entitlements.plist").read_bytes())
     if info.get("CFBundleIdentifier") != "local.personal.SwitchPilot":
         raise RuntimeError("unexpected bundle id")
-    if info.get("CFBundleShortVersionString") != "0.3.8":
+    if info.get("CFBundleShortVersionString") != "0.3.9":
         raise RuntimeError(f"unexpected bundle version: {info.get('CFBundleShortVersionString')}")
     if info.get("LSUIElement") is not True:
         raise RuntimeError("LSUIElement must be true")
@@ -77,6 +77,12 @@ def check_plists():
         raise RuntimeError("missing NSAppleEventsUsageDescription")
     if info.get("CFBundleIconFile") != "AppIcon":
         raise RuntimeError("missing CFBundleIconFile")
+    if info.get("LSMultipleInstancesProhibited") is not True:
+        raise RuntimeError("missing LSMultipleInstancesProhibited")
+    url_types = info.get("CFBundleURLTypes") or []
+    schemes = {scheme for entry in url_types for scheme in entry.get("CFBundleURLSchemes", [])}
+    if "switchpilot" not in schemes:
+        raise RuntimeError("missing switchpilot URL scheme")
     icon = APP / "Contents/Resources/AppIcon.icns"
     if not icon.exists() or icon.stat().st_size < 10_000:
         raise RuntimeError("missing or tiny AppIcon.icns in bundle")
@@ -203,9 +209,12 @@ def check_no_raw_foreground_colors():
         for needle in (".foregroundStyle(.green)", ".foregroundStyle(.orange)", ".foregroundStyle(.red)"):
             if needle in text:
                 bad.append(f"{path.name}: {needle}")
+        for stale in ("确认后立即启动", "会先确认"):
+            if stale in text:
+                bad.append(f"{path.name}: stale confirmation copy {stale}")
     if bad:
-        raise RuntimeError("raw semantic foreground colors found: " + "; ".join(bad))
-    return "no raw green/orange/red foreground text"
+        raise RuntimeError("UI copy/color regressions: " + "; ".join(bad))
+    return "no raw colors or stale confirmation copy"
 
 
 def check_static_scripts():

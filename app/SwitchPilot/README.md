@@ -1,4 +1,4 @@
-# SwitchPilot（个人自用 v0.3.8）
+# SwitchPilot（个人自用 v0.3.9）
 
 原 One Switch 1.35.4 的个人自用最小菜单栏替代。**不是分发产品**；SwitchPilot 是 2026-10-18 确定并经用户同意转正的正式名（候选比较见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`），中文描述「菜单栏开关」。目标、面板与验收见 `docs/PRD.md`、`docs/DESIGN.md`、`docs/TECH.md`、`docs/TESTPLAN.md`。
 
@@ -19,8 +19,8 @@ v0.3 面板：单一不透明表面、可读次级文字、状态胶囊、首启
 ## 验收与诊断
 
 - M1/M3/M8 现场验收前置/步骤：`evidence/onsite/M1-M3-M8-2026-10-18.md`。
-- 只读探针：`scripts/onsite-probe [输出路径]`（打开一次诊断实例，收集版本、签名、权限、登录项、断言、TCC 摘要；不授权/不锁屏/不改外观）。
-- `--diagnose-runtime` 写 `/tmp/switchpilot-runtime-diagnose.txt`；`--diagnose-permissions` 写权限简表。
+- 只读探针：`scripts/onsite-probe [输出路径]`（通过运行中应用的 `switchpilot://diagnose` 收集版本、签名、权限、登录项、断言、TCC 摘要；不授权/不锁屏/不改外观）。
+- `--diagnose-runtime` 写 `/tmp/switchpilot-runtime-diagnose.txt`；应用运行中也可执行 `open "switchpilot://diagnose"`。`--diagnose-permissions` 写权限简表。
 - TCC/屏幕状态项必须用户在场；未执行项不标记通过。
 
 ## 构建与运行
@@ -60,9 +60,9 @@ CLT 无 XCTest，使用独立 `SwitchPilotChecks` 可执行文件做真实断言
 
 - 保活只阻止“用户空闲导致的显示器休眠”，不阻止合盖、手动睡眠、低电量睡眠。
 - 深色模式是系统持久设置，不会在退出时自动恢复。
-- 屏保/锁定屏幕均为点击即执行，无二次确认（v0.3.8/v0.3.7）；可读回状态读不到时显示“未确认”。
+- 屏保/锁定屏幕均为点击即执行，无二次确认（v0.3.8/v0.3.7）；可读回状态读不到时显示“未确认”。v0.3.9 起权限提示合并为单张卡、设置成功态更短、诊断默认折叠、应用内重置标为不可逆操作；普通重复启动保持单实例。
 - 无网络、无后台定时动作、不修改原 One Switch 的 app/数据/偏好。
-- 重复启动会被单实例保护提示并退出；自动化冒烟用 `SWITCHPILOT_SMOKE_TEST=1` 绕过。
+- 普通重复启动由 `LSMultipleInstancesProhibited` + 启动守卫限制为一个菜单栏图标；`open -n` 仅用于开发诊断（不纳入普通用户路径）；自动化冒烟用 `SWITCHPILOT_SMOKE_TEST=1` 绕过。
 - 首次引导只记录“是否已看过”，不做其他持久化；设置窗口不做持久化（登录项状态由系统保存）。
 
 ## 卸载

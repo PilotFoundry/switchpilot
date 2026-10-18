@@ -13,6 +13,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var externalWatchStartedAt: Date?
     private var hosting: NSHostingController<PanelView>?
 
+    @MainActor func application(_ application: NSApplication, open urls: [URL]) {
+        guard urls.contains(where: { $0.scheme == "switchpilot" && $0.host == "diagnose" }) else { return }
+        writeRuntimeDiagnostics()
+    }
+
     @MainActor func applicationDidFinishLaunching(_ notification: Notification) {
         let model = PanelModel()
         self.model = model
