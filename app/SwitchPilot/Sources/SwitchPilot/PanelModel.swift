@@ -6,6 +6,7 @@ import SwitchPilotCore
 final class PanelModel: ObservableObject {
     @Published private(set) var keepAwakeActive = false
     @Published private(set) var keepAwakeRemaining: String = "未开启"
+    @Published private(set) var keepAwakeProgress: Double?
     @Published private(set) var keepAwakeError: String?
     @Published var preset: KeepAwakePreset = .unlimited
 
@@ -19,10 +20,16 @@ final class PanelModel: ObservableObject {
     @Published private(set) var lockStatus = "未执行"
     @Published private(set) var lockPermissions = LockPermissions(automation: .notDetermined, accessibilityTrusted: false)
 
+    @Published private(set) var hasSeenWelcome: Bool
+    @Published var showGuide: Bool
+
     private let session = KeepAwakeSession()
     private var didShutdown = false
 
     init() {
+        let seen = UserDefaults.standard.bool(forKey: "switchpilot.hasSeenWelcome")
+        hasSeenWelcome = seen
+        showGuide = !seen
         session.onChange = { [weak self] in
             Task { @MainActor in self?.refreshKeepAwake() }
         }
@@ -30,8 +37,18 @@ final class PanelModel: ObservableObject {
     }
 
     var version: String {
-        let short = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.1.0"
-        return short
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.2.0"
+    }
+
+    var statusTitle: String {
+        keepAwakeActive ? "保护中" : "空闲"
+    }
+
+    var darkModeNeedsPermission: Bool { !darkModePermission.canWrite }
+    var lockNeedsPermission: Bool { !lockPermissions.canAttempt }
+
+    var permissionsSummary: String {
+        "Automation：\(darkModePermission.description) · 辅助功能：\(lockPermissions.accessibilityTrusted ? "已授权" : "未授权")"
     }
 
     // MARK: - Refresh
@@ -45,12 +62,13 @@ final class PanelModel: ObservableObject {
 
     private func refreshKeepAwake() {
         keepAwakeActive = session.isActive
+        keepAwakeProgress = session.fractionRemaining
         if let remaining = session.remainingSeconds {
             let minutes = remaining / 60
             let seconds = remaining % 60
             keepAwakeRemaining = String(format: "剩余 %02d:%02d", minutes, seconds)
         } else if session.isActive {
-            keepAwakeRemaining = "无限期（直到关闭或退出）"
+            keepAwakeRemaining = "无限期 · 直到关闭或退出"
         } else {
             keepAwakeRemaining = "未开启"
         }
@@ -90,7 +108,7 @@ final class PanelModel: ObservableObject {
         let state = Permissions.automationStatus()
         darkModePermission = state
         guard state == .allowed else {
-            darkModeStatus = "需要授权后才能切换（当前：\(state.description)）"
+            darkModeStatus = "需要授权后才能切换"
             return
         }
         do {
@@ -108,7 +126,7 @@ final class PanelModel: ObservableObject {
         guard !darkModeBusy else { return }
         darkModeBusy = true
         darkModePermission = DarkMode.requestPermission()
-        darkModeStatus = darkModePermission == .allowed ? "已授权，可以切换" : "授权未完成：\(darkModePermission.description)"
+        darkModeStatus = darkModePermission == .allowed ? "已授权，可以切换" : "授权未完成"
         darkModeBusy = false
     }
 
@@ -138,7 +156,6 @@ final class PanelModel: ObservableObject {
         lockPermissions = LockScreen.permissions()
         guard lockPermissions.canAttempt else {
             lockStatus = "未执行：缺少权限"
-            presentLockPermissionsAlert()
             return
         }
         guard confirm(
@@ -164,7 +181,7 @@ final class PanelModel: ObservableObject {
     func requestLockAutomation() {
         let state = LockScreen.requestAutomationPermission()
         lockPermissions = LockScreen.permissions()
-        lockStatus = state == .allowed ? "自动化已授权；辅助功能仍为 \(lockPermissions.accessibilityTrusted ? "已授权" : "未授权")" : "自动化状态：\(state.description)"
+        lockStatus = state == .allowed ? "自动化已授权；辅助功能仍需检查" : "自动化状态：\(state.description)"
     }
 
     func openAccessibilitySettings() {
@@ -181,6 +198,16 @@ final class PanelModel: ObservableObject {
         guard !didShutdown else { return }
         didShutdown = true
         session.stop()
+    }
+
+    func dismissGuide() {
+        hasSeenWelcome = true
+        showGuide = false
+        UserDefaults.standard.set(true, forKey: "switchpilot.hasSeenWelcome")
+    }
+
+    func toggleGuide() {
+        showGuide.toggle()
     }
 
     func quit() {
@@ -203,28 +230,5 @@ final class PanelModel: ObservableObject {
         alert.addButton(withTitle: confirmTitle)
         alert.addButton(withTitle: "取消")
         return alert.runModal() == .alertFirstButtonReturn
-    }
-
-    private func presentLockPermissionsAlert() {
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.messageText = "锁定屏幕需要额外权限"
-        alert.informativeText = """
-        \(lockPermissions.summary)
-
-        锁定屏幕使用与系统快捷键 Ctrl+Cmd+Q 等价的 System Events 按键注入：
-        · Automation 授权用于向 System Events 发送指令；
-        · 辅助功能授权用于按键注入。
-        缺少权限时不会发送按键。
-        """
-        alert.addButton(withTitle: "请求 Automation 授权")
-        alert.addButton(withTitle: "打开辅助功能设置")
-        alert.addButton(withTitle: "取消")
-        let response = alert.runModal()
-        if response == .alertFirstButtonReturn {
-            requestLockAutomation()
-        } else if response == .alertSecondButtonReturn {
-            openAccessibilitySettings()
-        }
     }
 }
