@@ -1,17 +1,18 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0"><dict>
-<key>CFBundleIdentifier</key><string>local.personal.SwitchPilot</string>
+<key>CFBundleIdentifier</key><string>io.github.pengxianghao21.SwitchPilot</string>
 <key>CFBundleExecutable</key><string>SwitchPilot</string>
 <key>CFBundleIconFile</key><string>AppIcon</string>
 <key>CFBundleName</key><string>SwitchPilot</string>
-<key>CFBundleDisplayName</key><string>SwitchPilot</string>
+<key>CFBundleDevelopmentRegion</key><string>zh-Hans</string>
+	<key>CFBundleDisplayName</key><string>SwitchPilot</string>
 <key>CFBundlePackageType</key><string>APPL</string>
-<key>CFBundleShortVersionString</key><string>0.5.3</string>
+<key>CFBundleShortVersionString</key><string>0.6.0</string>
 <key>CFBundleVersion</key><string>1</string>
 <key>LSMinimumSystemVersion</key><string>14.0</string>
 <key>LSUIElement</key><true/>
 <key>NSAppleEventsUsageDescription</key><string>SwitchPilot 仅在你主动操作时，通过 System Events 读取/切换系统深色模式或发送锁定屏幕快捷键；不会在后台自动控制其他应用。</string>
 <key>LSMultipleInstancesProhibited</key><true/>
-<key>CFBundleURLTypes</key><array><dict><key>CFBundleURLName</key><string>local.personal.SwitchPilot</string><key>CFBundleURLSchemes</key><array><string>switchpilot</string></array></dict></array>
+<key>CFBundleURLTypes</key><array><dict><key>CFBundleURLName</key><string>io.github.pengxianghao21.SwitchPilot</string><key>CFBundleURLSchemes</key><array><string>switchpilot</string></array></dict></array>
 </dict></plist>

@@ -1,4 +1,5 @@
 import AppKit
+import SwitchPilotCore
 import Combine
 import SwiftUI
 
@@ -15,7 +16,7 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
         self.hosting = hosting
 
         let window = NSWindow(contentViewController: hosting)
-        window.title = "SwitchPilot 设置"
+        window.title = L("SwitchPilot 设置")
         window.styleMask = [.titled, .closable]
         window.isReleasedWhenClosed = false
         window.hidesOnDeactivate = false

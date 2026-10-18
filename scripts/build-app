@@ -11,12 +11,13 @@ mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN/SwitchPilot" "$APP/Contents/MacOS/SwitchPilot"
 cp "$PKG/Info.plist" "$APP/Contents/Info.plist"
 if [ -f "$PKG/Resources/AppIcon.icns" ]; then cp "$PKG/Resources/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"; fi
-SIGN_IDENTITY="${SWITCHPILOT_SIGN_IDENTITY:-SwitchPilot Local Signing}"
-if codesign --force --sign "$SIGN_IDENTITY" --options runtime --entitlements "$PKG/Entitlements.plist" "$APP" 2>/dev/null; then
-    echo "signed with $SIGN_IDENTITY"
+find "$PKG/Resources" -maxdepth 1 -type d -name '*.lproj' -exec cp -R {} "$APP/Contents/Resources/" \;
+SIGN_IDENTITY="${SWITCHPILOT_SIGN_IDENTITY:-}"
+if [ -n "$SIGN_IDENTITY" ] && codesign --force --sign "$SIGN_IDENTITY" --options runtime --entitlements "$PKG/Entitlements.plist" "$APP" 2>/dev/null; then
+    echo "signed with configured identity"
 else
     codesign --force --sign - --options runtime --entitlements "$PKG/Entitlements.plist" "$APP"
-    echo "signed ad-hoc (local identity unavailable)"
+    echo "signed ad-hoc (no stable identity configured)"
 fi
 codesign --verify --strict "$APP"
 printf '%s\n' "$APP"

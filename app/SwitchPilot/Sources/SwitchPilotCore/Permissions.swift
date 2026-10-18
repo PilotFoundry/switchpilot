@@ -29,21 +29,21 @@ public enum AutomationState: Equatable, CustomStringConvertible {
     /// Short user-facing label; keeps OSStatus out of normal UI text.
     public var userFacingDescription: String {
         switch self {
-        case .allowed: return "已授权"
-        case .denied: return "已被拒绝"
-        case .notDetermined: return "待授权"
-        case .targetNotRunning: return "待授权（首次操作时提示）"
-        case .failed(let code): return "未知状态 (\(code))"
+        case .allowed: return L("已授权")
+        case .denied: return L("已被拒绝")
+        case .notDetermined: return L("待授权")
+        case .targetNotRunning: return L("待授权（首次操作时提示）")
+        case .failed(let code): return LF("未知状态 (%@)", String(code))
         }
     }
 
     public var description: String {
         switch self {
-        case .allowed: return "已授权"
-        case .denied: return "已被拒绝 (-1743)"
-        case .notDetermined: return "需要用户授权 (-1744)"
-        case .targetNotRunning: return "目标进程未运行 (-600)"
-        case .failed(let code): return "未知状态 (\(code))"
+        case .allowed: return L("已授权")
+        case .denied: return L("已被拒绝 (-1743)")
+        case .notDetermined: return L("需要用户授权 (-1744)")
+        case .targetNotRunning: return L("目标进程未运行 (-600)")
+        case .failed(let code): return LF("未知状态 (%@)", String(code))
         }
     }
 }
@@ -122,7 +122,7 @@ extension Permissions {
         guard let bundleID = Bundle.main.bundleIdentifier, !bundleID.isEmpty else {
             return PermissionResetResult(
                 succeeded: false,
-                summary: "无法确定应用标识，未执行重置。",
+                summary: L("无法确定应用标识，未执行重置。"),
                 output: "")
         }
         let services = ["AppleEvents", "Accessibility"]
@@ -152,13 +152,13 @@ extension Permissions {
         }
         let output = lines.joined(separator: "\n")
         let summary = allOK
-            ? "已在应用内重置本应用的两项权限；请重新申请授权。若状态未变，请重启应用后再检查。"
-            : "应用内重置未完全成功，请用系统设置或终端命令重试。"
+            ? L("已在应用内重置本应用的两项权限；请重新申请授权。若状态未变，请重启应用后再检查。")
+            : L("应用内重置未完全成功，请用系统设置或终端命令重试。")
         return PermissionResetResult(succeeded: allOK, summary: summary, output: output)
     }
 
     public static var bundleIdentifier: String {
-        Bundle.main.bundleIdentifier ?? "local.personal.SwitchPilot"
+        Bundle.main.bundleIdentifier ?? "io.github.pengxianghao21.SwitchPilot"
     }
 
     public static func openAccessibilitySettings() {

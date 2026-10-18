@@ -24,10 +24,10 @@ public enum KeepAwakePreset: Int, CaseIterable, Identifiable, Hashable {
 
     public var label: String {
         switch self {
-        case .minutes15: return "15 分钟"
-        case .minutes30: return "30 分钟"
-        case .minutes60: return "60 分钟"
-        case .unlimited: return "无限期"
+        case .minutes15: return L("15 分钟")
+        case .minutes30: return L("30 分钟")
+        case .minutes60: return L("60 分钟")
+        case .unlimited: return L("无限期")
         }
     }
 }

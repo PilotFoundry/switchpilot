@@ -27,8 +27,8 @@ public enum Microphone {
 
     public static func read() -> MicrophoneDevice {
         guard let device = defaultInputDevice() else {
-            return MicrophoneDevice(deviceID: 0, name: "无输入设备", supportsMute: false,
-                                    muted: nil, message: "未找到默认输入设备")
+            return MicrophoneDevice(deviceID: 0, name: L("无输入设备"), supportsMute: false,
+                                    muted: nil, message: L("未找到默认输入设备"))
         }
         let element = supportedMuteElement(device)
         let muted = element.flatMap { readMute(device, element: $0) }
@@ -37,7 +37,7 @@ public enum Microphone {
             name: deviceName(device),
             supportsMute: muted != nil,
             muted: muted,
-            message: muted == nil ? "当前输入设备不支持系统静音控制" : nil)
+            message: muted == nil ? L("当前输入设备不支持系统静音控制") : nil)
     }
 
     public static func setMuted(_ muted: Bool) -> Bool {
@@ -80,7 +80,7 @@ public enum Microphone {
             mScope: kAudioObjectPropertyScopeGlobal,
             mElement: kAudioObjectPropertyElementMain)
         let status = AudioObjectGetPropertyData(device, &address, 0, nil, &size, &name)
-        guard status == noErr else { return "未知输入设备" }
+        guard status == noErr else { return L("未知输入设备") }
         return name as String
     }
 

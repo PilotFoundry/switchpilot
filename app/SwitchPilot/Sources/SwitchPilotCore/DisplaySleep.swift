@@ -6,9 +6,9 @@ public enum DisplaySleepError: Error, CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case .unavailable: return "系统未找到 pmset"
+        case .unavailable: return L("系统未找到 pmset")
         case .commandFailed(let code, let message):
-            return message.isEmpty ? "关闭显示器失败（退出码 \(code)）" : "关闭显示器失败（\(code)）：\(message)"
+            return message.isEmpty ? LF("关闭显示器失败（退出码 %@）", String(code)) : LF("关闭显示器失败（%@）：%@", String(code), message)
         }
     }
 }

@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """SwitchPilot 独立防回归检查（只读、零外部依赖、可重复运行）。
 
-设计约束（见 docs/CORE.md §3.7/§3.8 与 TESTPLAN）：
+设计约束（见 docs/en/CORE.md 与 TESTPLAN）：
 - 只读源码与构建产物；不写仓库文件、不改 defaults/TCC/系统设置，不注册登录项，
   不锁屏/启动屏保/清洁模式/录音，不请求任何权限。
 - 不构建、不启动常驻菜单栏应用；仅当已存在构建产物时，以 `--panel-size` 做一次
@@ -77,12 +77,12 @@ def check(name, function):
 
 # 1. CORE 边界文档存在且被项目约定引用（AGENTS/README）。
 def core_doc():
-    core = read("docs/CORE.md")
-    for needle in ("个人自用", "低权限", "少而可靠", "明确不做", "未执行不写通过"):
-        require(needle in core, f"CORE.md 缺少边界表述：{needle}")
+    core = read("docs/en/CORE.md")
+    for needle in ("personal-use", "low-permission", "not planned", "Manual acceptance"):
+        require(needle in core, f"docs/en/CORE.md is missing boundary text: {needle}")
     for ref in ("AGENTS.md", "README.md"):
-        require("docs/CORE.md" in read(ref), f"{ref} 未引用 docs/CORE.md")
-    return "CORE.md 存在且被 AGENTS/README 引用"
+        require("docs/en/CORE.md" in read(ref), f"{ref} does not reference docs/en/CORE.md")
+    return "docs/en/CORE.md exists and is referenced by AGENTS/README"
 
 
 # 2. 输出音量已移除（源码实现与 UI 文案都不得残留）。
@@ -218,8 +218,8 @@ def hotkeys_default_off():
                      "app/SwitchPilot/Sources/SwitchPilot/AppDelegate.swift"):
         require("set(true, forKey: Self.enabledDefaultsKey)" not in read(relative),
                 f"{Path(relative).name} 不得在启动时开启快捷键")
-    docs = read("docs/CORE.md") + read("docs/TECH.md")
-    require("默认关闭" in docs, "文档未声明快捷键默认关闭")
+    docs = read("docs/en/CORE.md") + read("docs/en/ROADMAP.md") + read("docs/TECH.md")
+    require("disabled by default" in docs.lower(), "文档未声明快捷键默认关闭")
     return "快捷键默认关闭，仅显式设置后注册"
 
 
@@ -227,7 +227,7 @@ def hotkeys_default_off():
 def bundle_boundaries():
     info = plistlib.loads(read_bytes("app/SwitchPilot/Info.plist"))
     entitlements = plistlib.loads(read_bytes("app/SwitchPilot/Entitlements.plist"))
-    require(info.get("CFBundleIdentifier") == "local.personal.SwitchPilot", "bundle id 变更")
+    require(info.get("CFBundleIdentifier") == "io.github.pengxianghao21.SwitchPilot", "bundle id changed")
     version = str(info.get("CFBundleShortVersionString") or "")
     require(re.fullmatch(r"\d+\.\d+\.\d+", version) is not None,
             f"版本不是语义化版本：{version!r}")

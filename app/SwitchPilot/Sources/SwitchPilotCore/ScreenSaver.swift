@@ -7,8 +7,8 @@ public enum ScreenSaverError: Error, CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case .engineMissing: return "未找到系统屏幕保护引擎 (com.apple.ScreenSaver.Engine)"
-        case .launchFailed(let message): return "启动屏幕保护失败：\(message)"
+        case .engineMissing: return L("未找到系统屏幕保护引擎 (com.apple.ScreenSaver.Engine)")
+        case .launchFailed(let message): return LF("启动屏幕保护失败：%@", message)
         }
     }
 }

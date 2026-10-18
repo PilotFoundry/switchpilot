@@ -28,11 +28,11 @@ final class SettingsModel: ObservableObject {
     var hotKeysAvailable: Bool { hotKeys != nil }
 
     var hotKeyCombos: String {
-        "\(HotKeyManager.keepAwakeCombo) 保持亮屏 · \(HotKeyManager.screenSaverCombo) 启动屏保"
+        LF("%@ 保持亮屏 · %@ 启动屏保", HotKeyManager.keepAwakeCombo, HotKeyManager.screenSaverCombo)
     }
 
     var version: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.5.0"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.6.0"
     }
 
     var hasAnyPermission: Bool {
@@ -44,7 +44,7 @@ final class SettingsModel: ObservableObject {
     }
 
     var diagnostic: String {
-        "应用位置：\(Bundle.main.bundlePath) · Automation：\(automation.description) · 辅助功能：\(accessibilityTrusted ? "已授权" : "未授权")"
+        LF("应用位置：%@ · Automation：%@ · 辅助功能：%@", Bundle.main.bundlePath, automation.description, accessibilityTrusted ? L("已授权") : L("未授权"))
     }
 
     var permissionsReady: Bool {
@@ -84,7 +84,7 @@ final class SettingsModel: ObservableObject {
     func requestAllPermissions() {
         guard !busy else { return }
         busy = true
-        message = "正在请求 Automation 授权…"
+        message = L("正在请求 Automation 授权…")
         DispatchQueue.global(qos: .userInitiated).async {
             var state = Permissions.requestAutomation()
             if state == .targetNotRunning {
@@ -100,7 +100,7 @@ final class SettingsModel: ObservableObject {
                 self.busy = false
                 self.refreshAsync()
                 if self.permissionsReady {
-                    self.message = "所需权限已就绪。"
+                    self.message = L("所需权限已就绪。")
                 } else if !self.accessibilityTrusted {
                     self.message = state == .allowed
                         ? "Automation 已授权。请在辅助功能设置中勾选 SwitchPilot，然后点“重新检查”。"
@@ -114,7 +114,7 @@ final class SettingsModel: ObservableObject {
 
     func requestAccessibilityPrompt() {
         accessibilityTrusted = Permissions.accessibilityPrompt() || Permissions.accessibilityTrusted()
-        message = accessibilityTrusted ? "辅助功能已授权。" : "辅助功能仍未授权，请在系统设置中勾选 SwitchPilot。"
+        message = accessibilityTrusted ? L("辅助功能已授权。") : L("辅助功能仍未授权，请在系统设置中勾选 SwitchPilot。")
         refreshAsync()
     }
 
@@ -123,7 +123,7 @@ final class SettingsModel: ObservableObject {
         refreshAsync { [weak self] in
             guard let self else { return }
             self.busy = false
-            self.message = self.permissionsReady ? "所需权限已就绪。" : "权限仍未就绪。可再次使用“申请全部权限”。"
+            self.message = self.permissionsReady ? L("所需权限已就绪。") : L("权限仍未就绪。可再次使用“申请全部权限”。")
         }
     }
 
@@ -154,15 +154,15 @@ final class SettingsModel: ObservableObject {
             guard let self, !failed else { return }
             switch self.loginState {
             case .enabled:
-                self.message = "登录时启动已开启。"
+                self.message = L("登录时启动已开启。")
             case .requiresApproval:
-                self.message = "已注册，但还需要在系统设置 › 通用 › 登录项中批准。"
+                self.message = L("已注册，但还需要在系统设置 › 通用 › 登录项中批准。")
             case .notFound:
-                self.message = "未找到登录项；请从 ~/Applications 的安装副本重试。"
+                self.message = L("未找到登录项；请从 ~/Applications 的安装副本重试。")
             case .unknown:
-                self.message = "登录时启动状态未知，请在系统设置中检查。"
+                self.message = L("登录时启动状态未知，请在系统设置中检查。")
             case .notRegistered:
-                self.message = "登录时启动已关闭。"
+                self.message = L("登录时启动已关闭。")
             }
         }
     }
@@ -198,7 +198,7 @@ final class SettingsModel: ObservableObject {
 
     func setHotKeysEnabled(_ enabled: Bool) {
         guard let hotKeys else {
-            hotKeyError = "设置窗口未连接快捷键服务"
+            hotKeyError = L("设置窗口未连接快捷键服务")
             return
         }
         if let error = hotKeys.setEnabled(enabled) {
@@ -208,14 +208,14 @@ final class SettingsModel: ObservableObject {
         } else {
             hotKeysEnabled = hotKeys.isEnabled
             hotKeyError = ""
-            message = enabled ? "全局快捷键已启用。" : "全局快捷键已停用。"
+            message = enabled ? L("全局快捷键已启用。") : L("全局快捷键已停用。")
         }
     }
 
     func resetInAppPermissions() {
         guard !busy else { return }
         busy = true
-        message = "正在应用内重置权限…"
+        message = L("正在应用内重置权限…")
         DispatchQueue.global(qos: .userInitiated).async {
             let result = Permissions.resetInAppPermissions()
             DispatchQueue.main.async { [weak self] in
