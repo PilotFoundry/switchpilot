@@ -1,0 +1,38 @@
+# Local tools, proprietary samples, and raw analysis projects
+/.tools/
+/samples/
+/analysis/
+/evidence/raw/
+/evidence/private/
+*.app/
+*.dmg
+*.zip
+
+# local-agent-state runtime is local; reviewed plans are versioned
+/local-agent-state/*
+!/local-agent-state/plans/
+/local-agent-state/plans/*
+!/local-agent-state/plans/*.md
+
+# Build output and per-user IDE state
+.DS_Store
+.build/
+build/
+DerivedData/
+xcuserdata/
+*.xcuserstate
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+
+# Local secrets and signing material
+.env
+.env.*
+!.env.example
+*.key
+*.pem
+*.p12
+*.pfx
+*.mobileprovision
+*.provisionprofile
