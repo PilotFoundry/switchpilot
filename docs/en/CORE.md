@@ -43,6 +43,11 @@ notarization remain out of scope while no certificate is available.
     login, hardware and Gatekeeper acceptance. Unexecuted manual checks stay
     pending.
 
+11. **Self-evident over annotated.** Controls, state and system behavior should
+    explain themselves. Do not add persistent copy for successful quick actions
+    or for what a label already says; reserve text for permissions, failures,
+    recovery and safety-critical exits.
+
 ## Scope
 
 ### Included

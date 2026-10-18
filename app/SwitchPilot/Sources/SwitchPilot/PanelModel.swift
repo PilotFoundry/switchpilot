@@ -62,7 +62,7 @@ final class PanelModel: ObservableObject {
     }
 
     var version: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.7.6"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.7.7"
     }
 
     var statusTitle: String {
@@ -358,7 +358,7 @@ final class PanelModel: ObservableObject {
                 guard let self else { return }
                 switch result {
                 case .success:
-                    self.screenSaverStatus = ScreenSaver.isRunning() ? L("已启动（进程可见）") : L("已请求启动（未确认）")
+                    self.screenSaverStatus = L("未执行")
                 case .failure(let error):
                     self.screenSaverStatus = LF("失败：%@", String(describing: error))
                 }
@@ -384,7 +384,7 @@ final class PanelModel: ObservableObject {
 
     private func presentLockFlow(permissions: LockPermissions) {
         guard permissions.canAttempt else {
-            lockStatus = L("未执行：缺少权限")
+            lockStatus = L("未执行")
             if permissions.automation != .allowed {
                 requestLockAutomation()
             } else {
@@ -397,15 +397,7 @@ final class PanelModel: ObservableObject {
         // shortcut's immediacy. Permission gating still happens above.
         do {
             try LockScreen.lock()
-            lockStatus = L("已请求锁定，确认中…")
-            Task { @MainActor in
-                try? await Task.sleep(nanoseconds: 1_000_000_000)
-                if let locked = LockScreen.isLocked() {
-                    lockStatus = locked ? L("已锁定") : L("已请求锁定（读回未锁定）")
-                } else {
-                    lockStatus = L("已请求锁定（未确认）")
-                }
-            }
+            lockStatus = L("未执行")
         } catch {
             lockStatus = LF("失败：%@", String(describing: error))
             lockPermissions = LockScreen.permissions()
@@ -470,7 +462,7 @@ final class PanelModel: ObservableObject {
             do {
                 try DisplaySleep.request()
                 DispatchQueue.main.async { [weak self] in
-                    self?.displaySleepStatus = L("已请求关闭（鼠标/按键唤醒）")
+                    self?.displaySleepStatus = L("未执行")
                 }
             } catch {
                 DispatchQueue.main.async { [weak self] in

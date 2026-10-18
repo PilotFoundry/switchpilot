@@ -1,6 +1,6 @@
 # Release engineering
 
-Status: current release process for **v0.7.6**. The project publishes an
+Status: current release process for **v0.7.7**. The project publishes an
 ad-hoc universal binary for convenience. It does **not** have a Developer ID
 certificate or notarization.
 
@@ -62,7 +62,7 @@ local development identities only.
 ## 4. Verify before upload
 
 ```sh
-VERSION=0.7.6
+VERSION=0.7.7
 ZIP=dist/SwitchPilot-${VERSION}-macos-universal-adhoc.zip
 shasum -a 256 -c "$ZIP.sha256"
 unzip -l "$ZIP"

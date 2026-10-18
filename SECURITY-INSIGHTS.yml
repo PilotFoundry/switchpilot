@@ -15,6 +15,11 @@ project:
   type: application
   license: MIT
   releases:
+    - name: v0.7.7
+      description: Remove persistent annotations and reduce quick-action status noise
+      created: '2026-10-18'
+      url: https://github.com/PilotFoundry/switchpilot/releases/tag/v0.7.7
+      type: source
     - name: v0.7.6
       description: Screen-cleaning exit hint and documentation refresh
       created: '2026-10-18'
