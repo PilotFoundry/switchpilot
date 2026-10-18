@@ -116,15 +116,12 @@ let checks: [(String, () throws -> Void)] = [
         print("  login item: \(state)")
         try check(state.description.isEmpty == false, "login item state must describe itself")
     }),
-    ("audio output state readable", {
-        let state = AudioOutput.read()
-        print("  audio=\(state.name) volume=\(state.supportsVolume) mute=\(state.supportsMute)")
-        try check(state.name.isEmpty == false, "audio output name is empty")
-        if let volume = state.volume {
-            try check(volume >= 0 && volume <= 1.0001, "audio volume out of range: \(volume)")
-        }
+    ("microphone state readable", {
+        let state = Microphone.read()
+        print("  microphone=\(state.name) muteSupported=\(state.supportsMute)")
+        try check(state.name.isEmpty == false, "microphone name is empty")
         if state.supportsMute {
-            try check(state.muted != nil, "mute is supported but state missing")
+            try check(state.muted != nil, "microphone mute is supported but state missing")
         }
     }),
     ("display sleep command available", {

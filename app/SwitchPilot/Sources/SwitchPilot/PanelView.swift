@@ -15,7 +15,7 @@ struct PanelView: View {
             }
             keepAwakeCard
             appearanceCard
-            audioCard
+            microphoneCard
             quickActionsCard
             if !model.allPermissionsReady && !model.guideVisible {
                 permissionsNeededCard
@@ -243,81 +243,71 @@ struct PanelView: View {
         }
     }
 
-    // MARK: - Output volume
+    // MARK: - Microphone
 
-    private var audioCard: some View {
+    private var microphoneCard: some View {
         VStack(alignment: .leading, spacing: 8) {
             HStack(spacing: 8) {
-                Image(systemName: audioIcon)
+                Image(systemName: microphoneIcon)
                     .font(.system(size: 14, weight: .medium))
                     .foregroundStyle(.primary)
-                Text("输出音量")
+                Text("麦克风")
                     .font(.system(size: 14, weight: .medium))
                 Spacer()
-                if model.audioState.supportsMute {
-                    Button {
-                        model.toggleAudioMute()
-                    } label: {
-                        Label(
-                            model.audioState.muted == true ? "取消静音" : "静音",
-                            systemImage: model.audioState.muted == true ? "speaker.wave.2.fill" : "speaker.slash.fill")
+                if model.microphoneState.supportsMute {
+                    if model.microphoneState.muted == true {
+                        Button {
+                            model.toggleMicrophoneMute()
+                        } label: {
+                            Label("取消静音", systemImage: "mic.fill")
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .controlSize(.small)
+                        .help("取消麦克风静音")
+                        .accessibilityLabel("取消麦克风静音")
+                    } else {
+                        Button {
+                            model.toggleMicrophoneMute()
+                        } label: {
+                            Label("静音麦克风", systemImage: "mic.slash.fill")
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.small)
+                        .help("静音麦克风")
+                        .accessibilityLabel("静音麦克风")
                     }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                    .help(model.audioState.muted == true ? "取消静音" : "静音输出")
-                    .accessibilityLabel(model.audioState.muted == true ? "取消静音" : "静音输出")
                 }
             }
-            if !model.audioState.isAvailable {
-                Text(model.audioState.message ?? "未找到输出设备")
+            if !model.microphoneState.isAvailable {
+                Text(model.microphoneState.message ?? "未找到输入设备")
                     .font(.caption)
                     .foregroundStyle(Color.secondaryInk)
-            } else if model.audioState.supportsVolume {
-                HStack(spacing: 8) {
-                    Slider(value: Binding(
-                        get: { model.audioVolume },
-                        set: { model.setAudioVolume($0) }), in: 0...1)
-                        .accessibilityLabel("输出音量")
-                        .disabled(model.audioState.muted == true)
-                        .opacity(model.audioState.muted == true ? 0.55 : 1)
-                    if model.audioState.muted == true {
-                        Label("已静音", systemImage: "speaker.slash")
-                            .font(.caption2)
-                            .foregroundStyle(Color.secondaryInk)
-                            .labelStyle(.titleAndIcon)
-                    } else {
-                        Text("\(Int((model.audioVolume * 100).rounded()))%")
-                            .font(.caption2.monospacedDigit())
-                            .foregroundStyle(Color.secondaryInk)
-                            .frame(width: 34, alignment: .trailing)
-                    }
-                }
-                Text(model.audioState.name)
+            } else if model.microphoneState.supportsMute {
+                Text(model.microphoneState.muted == true ? "麦克风已静音" : "麦克风已开启")
+                    .font(.caption.weight(.medium))
+                    .foregroundStyle(model.microphoneState.muted == true ? Color.errorInk : Color.secondaryInk)
+                Text(model.microphoneState.name)
                     .font(.caption2)
                     .foregroundStyle(Color.secondaryInk)
             } else {
-                Text(model.audioState.message ?? "当前输出不支持系统音量控制")
+                Text(model.microphoneState.message ?? "当前输入设备不支持系统静音控制")
                     .font(.caption)
                     .foregroundStyle(Color.secondaryInk)
                     .fixedSize(horizontal: false, vertical: true)
-                Text(model.audioState.name)
+                Text(model.microphoneState.name)
                     .font(.caption2)
                     .foregroundStyle(Color.secondaryInk)
             }
-            if !model.audioError.isEmpty {
-                inlineError(model.audioError)
+            if !model.microphoneError.isEmpty {
+                inlineError(model.microphoneError)
             }
         }
         .padding(12)
         .background(cardBackground)
     }
 
-    private var audioIcon: String {
-        if model.audioState.muted == true { return "speaker.slash" }
-        if model.audioState.supportsVolume {
-            return model.audioVolume < 0.05 ? "speaker.wave.1" : "speaker.wave.2"
-        }
-        return "speaker"
+    private var microphoneIcon: String {
+        model.microphoneState.muted == true ? "mic.slash.fill" : "mic.fill"
     }
 
     // MARK: - Quick actions
@@ -351,9 +341,32 @@ struct PanelView: View {
                 Text("屏保：\(model.screenSaverStatus)")
                 Text("锁屏：\(model.lockStatus)")
                 Text("显示器：\(model.displaySleepStatus)")
+                Text("清洁：\(model.screenCleaningStatus)")
             }
             .font(.caption2)
             .foregroundStyle(Color.secondaryInk)
+            Button {
+                model.startScreenCleaning()
+            } label: {
+                HStack(spacing: 8) {
+                    Image(systemName: "sparkles")
+                        .font(.system(size: 14, weight: .medium))
+                    VStack(alignment: .leading, spacing: 1) {
+                        Text("清洁屏幕")
+                            .font(.system(size: 12, weight: .medium))
+                        Text("锁定键盘输入；鼠标点击退出")
+                            .font(.caption2)
+                            .foregroundStyle(Color.secondaryInk)
+                    }
+                    Spacer()
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.bordered)
+            .controlSize(.small)
+            .disabled(model.screenCleaningActive)
+            .accessibilityLabel("清洁屏幕")
+            .accessibilityHint("锁定键盘输入，屏幕上点击按钮或等待计时结束退出")
         }
         .padding(12)
         .background(cardBackground)
