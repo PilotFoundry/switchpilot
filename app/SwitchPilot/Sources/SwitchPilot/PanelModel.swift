@@ -305,10 +305,8 @@ final class PanelModel: ObservableObject {
     // MARK: - Screen saver
 
     func startScreenSaver() {
-        guard confirm(
-            title: "启动屏幕保护？",
-            message: "将立即启动系统屏幕保护。如果系统设置为唤醒需要密码，可能需要先解锁。",
-            confirmTitle: "启动") else { return }
+        // Interaction policy (v0.3.8): a clearly labelled, common, reversible
+        // action runs immediately; only irreversible/high-risk actions confirm.
         ScreenSaver.start { [weak self] result in
             Task { @MainActor in
                 guard let self else { return }
@@ -383,13 +381,4 @@ final class PanelModel: ObservableObject {
 
     // MARK: - Helpers
 
-    private func confirm(title: String, message: String, confirmTitle: String) -> Bool {
-        let alert = NSAlert()
-        alert.alertStyle = .warning
-        alert.messageText = title
-        alert.informativeText = message
-        alert.addButton(withTitle: confirmTitle)
-        alert.addButton(withTitle: "取消")
-        return alert.runModal() == .alertFirstButtonReturn
-    }
 }

@@ -6,7 +6,7 @@
 
 - macOS 27.0.1 (26A434)，Apple Silicon arm64。
 - CLT Swift 6.4 / macOS 27.0 SDK；无完整 Xcode、无 XCTest。
-- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.7，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
+- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.8，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
 - 原应用：`/Applications/One Switch.app` 1.35.4 (440)，测试前后版本/hash/签名不变；不启动、不修改其数据。
 - 权限前提：未预先授予 Automation/Accessibility；不修改 TCC 数据库、不关闭 SIP、不重签原应用。
 
@@ -51,8 +51,8 @@
 
 ### M2 启动屏保
 
-1. 点击"启动屏保" → 确认对话框出现，文案说明可能的密码解锁影响。
-2. 确认后屏保应启动；移动鼠标/按键退出屏保。
+1. 点击"启动屏保" → **直接启动**（v0.3.8 起无二次确认）；记录是否出现系统密码解锁提示。
+2. 移动鼠标/按键退出屏保；确认面板状态显示“已启动/已请求”。
 3. 记录是否出现密码提示；退出后界面显示"已请求启动"或真实错误。
 4. 失败/行为不符时记录系统版本与具体现象，不把静态线索算作通过。
 
@@ -116,7 +116,7 @@ v0.1 收口标准：A1–A14 通过；M1–M3 由用户在场执行并记录（�
 
 - 原应用、其偏好与签名不做任何修改；测试前后比较 hash。
 - 深色模式：测试前记录当前外观，测试结束恢复并读回。
-- 屏保：现场确认后执行；锁屏点击即执行（v0.3.7 起无二次确认，需用户可立即解锁）。
+- 屏保/锁屏均点击即执行（v0.3.8/v0.3.7 起无二次确认，需用户可立即解锁/退出屏保）。
 - 权限：仅在用户主动操作时申请；撤销入口写在 README；不直接编辑 TCC 数据库。
 - 删除应用 = 删除 `app/SwitchPilot/.build/SwitchPilot.app`；不新增全局配置文件。
 
