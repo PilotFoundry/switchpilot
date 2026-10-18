@@ -154,6 +154,23 @@ final class SettingsModel: ObservableObject {
         showsAdvancedTCCUtil.toggle()
     }
 
+    func resetInAppPermissions() {
+        guard !busy else { return }
+        busy = true
+        message = "正在应用内重置权限…"
+        DispatchQueue.global(qos: .userInitiated).async {
+            let result = Permissions.resetInAppPermissions()
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.busy = false
+                self.showsRevokeHelp = false
+                self.showsAdvancedTCCUtil = false
+                self.message = result.summary
+                self.refreshAsync()
+            }
+        }
+    }
+
     func copyTCCUtilResetCommands() {
         let pasteboard = NSPasteboard.general
         pasteboard.clearContents()
