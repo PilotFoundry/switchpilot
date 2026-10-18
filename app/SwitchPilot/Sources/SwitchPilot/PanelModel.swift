@@ -314,6 +314,17 @@ final class PanelModel: ObservableObject {
 
     // MARK: - Guide
 
+    /// Preview-only helper for screenshots: makes permission cards disappear
+    /// without touching TCC or persisted state.
+    func previewAuthorized() {
+        hasSeenWelcome = true
+        showGuide = false
+        darkModePermission = .allowed
+        lockPermissions = LockPermissions(automation: .allowed, accessibilityTrusted: true)
+        accessibilityTrusted = true
+        systemIsDark = false
+    }
+
     func forceGuideForPreview() {
         hasSeenWelcome = false
         showGuide = true

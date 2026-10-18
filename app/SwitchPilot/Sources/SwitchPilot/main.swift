@@ -18,6 +18,9 @@ func dumpPanel() -> Int32 {
     if ProcessInfo.processInfo.environment["SWITCHPILOT_PREVIEW_MIC_UNMUTED"] != nil {
         model.previewMicrophone(muted: false)
     }
+    if ProcessInfo.processInfo.environment["SWITCHPILOT_PREVIEW_AUTHORIZED"] != nil {
+        model.previewAuthorized()
+    }
     if ProcessInfo.processInfo.environment["SWITCHPILOT_FORCE_GUIDE"] != nil {
         model.forceGuideForPreview()
     }
@@ -112,6 +115,9 @@ func panelSize() -> Int32 {
     }
     if ProcessInfo.processInfo.environment["SWITCHPILOT_PREVIEW_MIC_UNMUTED"] != nil {
         model.previewMicrophone(muted: false)
+    }
+    if ProcessInfo.processInfo.environment["SWITCHPILOT_PREVIEW_AUTHORIZED"] != nil {
+        model.previewAuthorized()
     }
     if ProcessInfo.processInfo.environment["SWITCHPILOT_FORCE_GUIDE"] != nil {
         model.forceGuideForPreview()
