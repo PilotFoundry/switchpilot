@@ -10,10 +10,6 @@ final class SettingsModel: ObservableObject {
     @Published private(set) var busy = false
     @Published private(set) var message = ""
 
-    /// Called before opening System Settings so the app can keep the settings
-    /// window available when the user returns from the system pane.
-    var onExternalSettingsOpened: (() -> Void)?
-
     init() {
         refreshAsync()
     }
@@ -60,7 +56,6 @@ final class SettingsModel: ObservableObject {
                 self.automation = state
                 self.accessibilityTrusted = Permissions.accessibilityTrusted()
                 if !self.accessibilityTrusted {
-                    self.onExternalSettingsOpened?()
                     self.accessibilityTrusted = Permissions.accessibilityPrompt() || Permissions.accessibilityTrusted()
                 }
                 self.busy = false
@@ -94,12 +89,10 @@ final class SettingsModel: ObservableObject {
     }
 
     func openAutomationSettings() {
-        onExternalSettingsOpened?()
         Permissions.openAutomationSettings()
     }
 
     func openAccessibilitySettings() {
-        onExternalSettingsOpened?()
         Permissions.openAccessibilitySettings()
     }
 

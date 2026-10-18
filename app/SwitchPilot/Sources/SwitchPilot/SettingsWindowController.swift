@@ -2,7 +2,9 @@ import AppKit
 import SwiftUI
 
 @MainActor
-final class SettingsWindowController: NSWindowController {
+final class SettingsWindowController: NSWindowController, NSWindowDelegate {
+    var onClose: (() -> Void)?
+
     convenience init(model: SettingsModel) {
         let hosting = NSHostingController(rootView: SettingsView(model: model))
         hosting.sizingOptions = [.preferredContentSize]
@@ -13,6 +15,11 @@ final class SettingsWindowController: NSWindowController {
         window.hidesOnDeactivate = false
         window.center()
         self.init(window: window)
+        window.delegate = self
+    }
+
+    func windowWillClose(_ notification: Notification) {
+        onClose?()
     }
 
     func present() {
