@@ -108,8 +108,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @MainActor private func updateMicrophoneStatusItem() {
+        // The status bar always keeps the SwitchPilot S icon; mute state is
+        // exposed by the tooltip and the right-click action only.
         guard let button = statusItem?.button else { return }
-        button.image = StatusIcon.make(size: 18, microphoneMuted: microphoneMuted)
         button.toolTip = microphoneMuted ? "SwitchPilot · 麦克风已静音" : "SwitchPilot"
     }
 

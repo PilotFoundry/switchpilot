@@ -238,7 +238,7 @@ open app/SwitchPilot/.build/SwitchPilot.app
   - 普通模式不显示倒计时、不自动退出；仅测试时通过 `SWITCHPILOT_CLEAN_SCREEN_TEST_SECONDS` 启用定时自动退出。`PowerAssertion` 防显示器睡眠；`stop()` 幂等清理 tap/窗口/断言/定时器；事件 tap 被系统禁用时尝试 re-enable，失败则退出。
   - 无 Accessibility/事件 tap 创建失败：返回明确错误，不创建遮罩。
 - `HotKeyManager.swift`：Carbon 固定组合快捷键（保活/屏保），默认关闭；注册失败回写关闭并报错；无 TCC。
-- `StatusIcon.make(size:microphoneMuted:)`：静音时画 S+斜线 template 变体；`AppDelegate` 订阅 `PanelModel.$microphoneState` 更新状态项图标/tooltip，右键菜单提供“取消麦克风静音/静音麦克风”，不新增权限。
+- `StatusIcon` 始终生成同一 S 图标；`AppDelegate` 订阅 `PanelModel.$microphoneState`，只更新 tooltip 与右键菜单（“取消麦克风静音/静音麦克风”），**不替换状态栏图标**；不新增权限。
 - 面板压缩（v0.5.2）：深色模式与麦克风合并为 system card；快速动作改 2×2，清洁进入磁贴；仅显示非默认动作状态；权限卡缺失时置顶。
 - 屏幕清洁：普通模式无倒计时/不自动退出；隐藏 5 分钟失效 Timer 只用于鼠标失效兜底，不展示；测试环境变量可启用可见倒计时。
 - 回归门禁：`scripts/qa-regression.py`（13 组政策/边界断言）已接入 `verify-app.py` 作为第 12 步；verify-app 12/12。
