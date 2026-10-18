@@ -1,10 +1,9 @@
 import SwiftUI
 import SwitchPilotCore
 
-/// macOS 27 (Golden Gate) direction: quiet surfaces, few decorative icons, clear
-/// hierarchy and generous targets. The panel is the primary onboarding surface:
-/// the first-run guide explains what each control does and when a permission
-/// prompt appears, then gets out of the way.
+/// v0.3 panel: readable surfaces, explicit button affordances, permission
+/// actions visible as buttons, and a first-run guide that can request all
+/// permissions at once. Basic actions stay usable without any permission.
 struct PanelView: View {
     @ObservedObject var model: PanelModel
 
@@ -14,16 +13,20 @@ struct PanelView: View {
             if !model.hasSeenWelcome || model.showGuide {
                 guideCard
             }
-            keepAwakeSection
-            Divider().opacity(0.5)
-            appearanceSection
-            Divider().opacity(0.5)
-            quickActionsSection
-            Divider().opacity(0.5)
+            keepAwakeCard
+            appearanceCard
+            quickActionsCard
             footer
         }
         .padding(16)
-        .frame(width: 360)
+        .frame(width: 380)
+        .background(panelBackground)
+    }
+
+    private var panelBackground: some View {
+        // One opaque surface: macOS 27 dials down layered glass, and an opaque
+        // background keeps the measured contrast stable over any desktop.
+        Color(nsColor: .windowBackgroundColor)
     }
 
     // MARK: - Header
@@ -31,11 +34,11 @@ struct PanelView: View {
     private var header: some View {
         HStack(spacing: 10) {
             RoundedRectangle(cornerRadius: 9, style: .continuous)
-                .fill(Color.primary.opacity(0.07))
+                .fill(Color.primary.opacity(0.08))
                 .frame(width: 34, height: 34)
                 .overlay(
-                    Image(systemName: "switch.2")
-                        .font(.system(size: 17, weight: .medium))
+                    Image(nsImage: StatusIcon.make(size: 20))
+                        .renderingMode(.template)
                         .foregroundStyle(.primary)
                 )
             VStack(alignment: .leading, spacing: 1) {
@@ -43,7 +46,7 @@ struct PanelView: View {
                     .font(.system(size: 15, weight: .semibold))
                 Text("菜单栏开关 · v\(model.version)")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.secondaryInk)
             }
             Spacer()
             statusBadge
@@ -53,7 +56,7 @@ struct PanelView: View {
     private var statusBadge: some View {
         HStack(spacing: 5) {
             Circle()
-                .fill(model.keepAwakeActive ? Color.green : Color.secondary.opacity(0.5))
+                .fill(model.keepAwakeActive ? Color.successInk : Color.secondary.opacity(0.55))
                 .frame(width: 6, height: 6)
             Text(model.statusTitle)
                 .font(.caption2.weight(.medium))
@@ -61,36 +64,64 @@ struct PanelView: View {
         .padding(.horizontal, 8)
         .padding(.vertical, 4)
         .background(
-            Capsule().fill(model.keepAwakeActive ? Color.green.opacity(0.14) : Color.primary.opacity(0.06))
+            Capsule().fill(model.keepAwakeActive ? Color.green.opacity(0.16) : Color.primary.opacity(0.07))
         )
     }
 
     // MARK: - First-run guide
 
     private var guideCard: some View {
-        VStack(alignment: .leading, spacing: 8) {
+        VStack(alignment: .leading, spacing: 9) {
             HStack {
                 Text("开始使用")
                     .font(.system(size: 13, weight: .semibold))
                 Spacer()
-                Button {
-                    model.dismissGuide()
-                } label: {
-                    Text("知道了")
-                        .font(.caption)
+                if model.allPermissionsReady {
+                    Label("权限已就绪", systemImage: "checkmark.seal.fill")
+                        .font(.caption2)
+                        .foregroundStyle(Color.successInk)
                 }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
             }
             guideRow("1", "「保持亮屏」开启后，系统不会因空闲而熄灭屏幕；可设置时长。")
-            guideRow("2", "「深色模式」首次使用需要授权 Automation；只在点击后请求。")
+            guideRow("2", "「深色模式」首次使用需要 Automation 授权；不需要时也可以不使用该开关。")
             guideRow("3", "「屏保 / 锁屏」会先确认；锁屏还需要辅助功能授权。")
-            Text("所有权限都可在系统设置中随时撤销，SwitchPilot 不会在后台自动控制。")
+            Text("不授权也可以使用保持亮屏和启动屏保；所有权限都可在设置中撤销。")
                 .font(.caption2)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.secondaryInk)
+            if !model.permissionSetupMessage.isEmpty {
+                Text(model.permissionSetupMessage)
+                    .font(.caption2)
+                    .foregroundStyle(.primary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            if model.permissionBusy {
+                ProgressView().progressViewStyle(.linear).controlSize(.small)
+            }
+            HStack(spacing: 8) {
+                Button {
+                    model.requestAllPermissions()
+                } label: {
+                    Label(model.permissionBusy ? "请求中…" : (model.allPermissionsReady ? "权限已就绪" : "申请全部权限"), systemImage: "checkmark.shield")
+                }
+                .buttonStyle(.borderedProminent)
+                .controlSize(.small)
+                .disabled(model.allPermissionsReady || model.permissionBusy)
+
+                Button("重新检查") { model.recheckPermissions() }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+
+                Button("稍后再说") { model.dismissGuide() }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+            }
+            .padding(.top, 1)
         }
         .padding(12)
-        .background(RoundedRectangle(cornerRadius: 12, style: .continuous).fill(Color.accentColor.opacity(0.08)))
+        .background(
+            RoundedRectangle(cornerRadius: 12, style: .continuous)
+                .fill(Color.accentColor.opacity(0.09))
+        )
     }
 
     private func guideRow(_ number: String, _ text: String) -> some View {
@@ -98,17 +129,17 @@ struct PanelView: View {
             Text(number)
                 .font(.caption2.weight(.bold))
                 .frame(width: 16, height: 16)
-                .background(Circle().fill(Color.accentColor.opacity(0.16)))
+                .background(Circle().fill(Color.accentColor.opacity(0.18)))
             Text(text)
                 .font(.caption)
-                .foregroundStyle(.secondary)
+                .foregroundStyle(Color.secondaryInk)
                 .fixedSize(horizontal: false, vertical: true)
         }
     }
 
     // MARK: - Keep awake
 
-    private var keepAwakeSection: some View {
+    private var keepAwakeCard: some View {
         VStack(alignment: .leading, spacing: 9) {
             HStack {
                 Text("保持亮屏")
@@ -121,7 +152,6 @@ struct PanelView: View {
                     .accessibilityLabel("保持亮屏")
                     .accessibilityValue(model.keepAwakeActive ? "已开启，\(model.keepAwakeRemaining)" : "已关闭")
             }
-
             Picker("时长", selection: Binding(get: { model.preset }, set: { model.setPreset($0) })) {
                 ForEach(KeepAwakePreset.allCases) { preset in
                     Text(preset.label).tag(preset)
@@ -130,37 +160,34 @@ struct PanelView: View {
             .pickerStyle(.segmented)
             .labelsHidden()
             .controlSize(.small)
-
             if let progress = model.keepAwakeProgress {
                 ProgressView(value: progress)
                     .progressViewStyle(.linear)
-                    .tint(.green)
+                    .tint(Color.successInk)
             }
-
-            HStack(spacing: 4) {
+            HStack(spacing: 5) {
                 Image(systemName: model.keepAwakeActive ? "checkmark.circle.fill" : "minus.circle")
                     .font(.caption2)
-                    .foregroundStyle(model.keepAwakeActive ? Color.green : Color.secondary)
+                    .foregroundStyle(model.keepAwakeActive ? Color.successInk : Color.secondary)
                 Text(model.keepAwakeRemaining)
                     .font(.caption)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.secondaryInk)
             }
-            .accessibilityElement(children: .combine)
-
             if let error = model.keepAwakeError {
-                Text(error).font(.caption).foregroundStyle(.red)
+                inlineError(error)
             }
             Text("不阻止合盖、手动睡眠或低电量睡眠。")
                 .font(.caption2)
-                .foregroundStyle(.tertiary)
+                .foregroundStyle(Color.secondaryInk)
         }
+        .padding(12)
+        .background(cardBackground)
     }
 
     // MARK: - Appearance
 
-    private var appearanceSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            sectionLabel("外观")
+    private var appearanceCard: some View {
+        VStack(alignment: .leading, spacing: 9) {
             HStack {
                 Text("深色模式")
                     .font(.system(size: 14, weight: .medium))
@@ -173,87 +200,101 @@ struct PanelView: View {
                     .accessibilityLabel("深色模式")
                     .accessibilityValue(model.systemIsDark ? "系统当前为深色" : "系统当前为浅色")
             }
-            HStack(spacing: 6) {
+            HStack(spacing: 5) {
+                Image(systemName: model.darkModePermission == .allowed ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
+                    .font(.caption2)
+                    .foregroundStyle(model.darkModePermission == .allowed ? Color.successInk : permissionColor)
                 Text(model.systemIsDark ? "系统当前：深色" : "系统当前：浅色")
-                    .font(.caption2)
-                    .foregroundStyle(.secondary)
-                Text("·").foregroundStyle(.tertiary)
-                Text(permissionStateText)
-                    .font(.caption2)
-                    .foregroundStyle(permissionStateColor)
+                    .font(.caption)
+                    .foregroundStyle(Color.secondaryInk)
+                Text("·").foregroundStyle(Color.secondaryInk)
+                Text(permissionText)
+                    .font(.caption)
+                    .foregroundStyle(.primary)
             }
             if let error = model.darkModeError {
-                Text(error).font(.caption).foregroundStyle(.red)
+                inlineError(error)
             } else if !model.darkModeStatus.isEmpty {
-                Text(model.darkModeStatus).font(.caption).foregroundStyle(.secondary)
+                Text(model.darkModeStatus)
+                    .font(.caption2)
+                    .foregroundStyle(Color.secondaryInk)
             }
-            if model.darkModeNeedsPermission {
-                HStack(spacing: 8) {
-                    Button("请求授权…") { model.requestDarkModeAuthorization() }
-                        .buttonStyle(.bordered)
-                        .controlSize(.small)
-                        .disabled(model.darkModeBusy)
-                    Button("打开系统设置") { model.openAutomationSettings() }
-                        .buttonStyle(.borderless)
-                        .controlSize(.small)
-                }
+            if model.darkModeNeedsPermission && !model.guideVisible {
+                permissionPanel(
+                    text: "切换系统外观需要 Automation 授权；未授权时不会修改外观。",
+                    primaryTitle: "申请 Automation 授权",
+                    primaryIcon: "lock.open",
+                    primaryAction: { model.requestDarkModeAuthorization() },
+                    secondaryTitle: "打开系统设置",
+                    secondaryAction: { model.openAutomationSettings() })
             }
         }
+        .padding(12)
+        .background(cardBackground)
     }
 
-    private var permissionStateText: String {
+    private var permissionText: String {
         if model.darkModePermission == .allowed { return "已授权" }
-        if model.darkModePermission == .targetNotRunning { return "首次操作会请求授权" }
-        return model.darkModePermission.description
+        if model.darkModePermission == .targetNotRunning || model.darkModePermission == .notDetermined { return "待授权" }
+        return model.darkModePermission.userFacingDescription
     }
 
-    private var permissionStateColor: Color {
+    private var permissionColor: Color {
         switch model.darkModePermission {
-        case .allowed: return .secondary
-        case .denied: return .red
-        default: return .orange
+        case .denied: return .errorInk
+        default: return .warningInk
         }
     }
 
     // MARK: - Quick actions
 
-    private var quickActionsSection: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            sectionLabel("快速动作")
+    private var quickActionsCard: some View {
+        VStack(alignment: .leading, spacing: 9) {
+            Text("快速动作")
+                .font(.caption2.weight(.semibold))
+                .foregroundStyle(Color.secondaryInk)
             HStack(spacing: 10) {
                 actionTile(
                     title: "启动屏保",
-                    subtitle: "立即启动系统屏幕保护",
+                    subtitle: "确认后立即启动",
                     systemImage: "play.rectangle",
                     badge: nil,
                     action: { model.startScreenSaver() })
                 actionTile(
                     title: "锁定屏幕",
-                    subtitle: "等价 Ctrl+Cmd+Q",
+                    subtitle: "发送系统锁定快捷键",
                     systemImage: "lock",
                     badge: model.lockNeedsPermission ? "需授权" : nil,
                     action: { model.lockScreen() })
             }
-            Text("屏保：\(model.screenSaverStatus) · 锁屏：\(model.lockStatus)")
-                .font(.caption2)
-                .foregroundStyle(.secondary)
-            if model.lockNeedsPermission {
-                VStack(alignment: .leading, spacing: 6) {
-                    Text("锁屏需要 Automation + 辅助功能授权；未授权时不会发送按键。")
-                        .font(.caption2)
-                        .foregroundStyle(.orange)
-                        .fixedSize(horizontal: false, vertical: true)
-                    HStack(spacing: 8) {
-                        Button("请求 Automation…") { model.requestLockAutomation() }
-                            .buttonStyle(.bordered)
-                            .controlSize(.small)
-                        Button("打开辅助功能设置") { model.openAccessibilitySettings() }
-                            .buttonStyle(.borderless)
-                            .controlSize(.small)
-                    }
+            VStack(alignment: .leading, spacing: 2) {
+                Text("屏保：\(model.screenSaverStatus)")
+                Text("锁屏：\(model.lockStatus)")
+            }
+            .font(.caption2)
+            .foregroundStyle(Color.secondaryInk)
+            if model.lockNeedsPermission && !model.guideVisible {
+                if model.lockPermissions.automation != .allowed {
+                    permissionPanel(
+                        text: "锁屏需要 Automation 与辅助功能授权；当前缺少 Automation，未授权时不会发送按键。",
+                        primaryTitle: "申请 Automation 授权",
+                        primaryIcon: "lock.open",
+                        primaryAction: { model.requestLockAutomation() },
+                        secondaryTitle: "打开辅助功能设置",
+                        secondaryAction: { model.openAccessibilitySettings() })
+                } else {
+                    permissionPanel(
+                        text: "Automation 已授权；锁屏还需要辅助功能（Accessibility）授权，未授权时不会发送按键。",
+                        primaryTitle: "去授权辅助功能",
+                        primaryIcon: "hand.raised",
+                        primaryAction: { model.requestAccessibilityPrompt() },
+                        secondaryTitle: "打开辅助功能设置",
+                        secondaryAction: { model.openAccessibilitySettings() })
                 }
             }
         }
+        .padding(12)
+        .background(cardBackground)
     }
 
     private func actionTile(
@@ -268,30 +309,90 @@ struct PanelView: View {
                 HStack {
                     Image(systemName: systemImage)
                         .font(.system(size: 16, weight: .medium))
+                        .foregroundStyle(.primary)
                     Spacer()
                     if let badge {
                         Text(badge)
                             .font(.caption2.weight(.semibold))
-                            .foregroundStyle(.orange)
+                            .foregroundStyle(.primary)
+                            .accessibilityLabel("需要授权")
+                            .padding(.horizontal, 6)
+                            .padding(.vertical, 2)
+                            .background(Capsule().fill(Color.orange.opacity(0.20)))
                     }
                 }
                 Text(title)
                     .font(.system(size: 13, weight: .semibold))
                 Text(subtitle)
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.secondaryInk)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .padding(10)
             .frame(maxWidth: .infinity, alignment: .leading)
-            .background(
-                RoundedRectangle(cornerRadius: 10, style: .continuous)
-                    .fill(Color.primary.opacity(0.05))
-            )
+            .contentShape(Rectangle())
         }
-        .buttonStyle(.plain)
+        .buttonStyle(.bordered)
+        .controlSize(.regular)
         .accessibilityLabel(title)
         .accessibilityHint(subtitle)
+    }
+
+    // MARK: - Permission panel
+
+    private func permissionPanel(
+        text: String,
+        primaryTitle: String,
+        primaryIcon: String,
+        primaryAction: @escaping () -> Void,
+        secondaryTitle: String,
+        secondaryAction: @escaping () -> Void
+    ) -> some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(alignment: .top, spacing: 7) {
+                Image(systemName: "exclamationmark.shield.fill")
+                    .font(.caption)
+                    .foregroundStyle(Color.warningInk)
+                Text(text)
+                    .font(.caption2)
+                    .foregroundStyle(.primary)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            HStack(spacing: 8) {
+                Button {
+                    primaryAction()
+                } label: {
+                    Label(primaryTitle, systemImage: primaryIcon)
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+
+                Button(secondaryTitle) { secondaryAction() }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+            }
+        }
+        .padding(10)
+        .background(
+            RoundedRectangle(cornerRadius: 9, style: .continuous)
+                .fill(Color.orange.opacity(0.08))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 9, style: .continuous)
+                .strokeBorder(Color.orange.opacity(0.25), lineWidth: 1)
+        )
+    }
+
+    private func inlineError(_ message: String) -> some View {
+        HStack(alignment: .top, spacing: 6) {
+            Image(systemName: "xmark.octagon.fill")
+                .font(.caption2)
+                .foregroundStyle(Color.errorInk)
+            Text(message)
+                .font(.caption2)
+                .foregroundStyle(.primary)
+                .fixedSize(horizontal: false, vertical: true)
+        }
     }
 
     // MARK: - Footer
@@ -301,33 +402,29 @@ struct PanelView: View {
             HStack(spacing: 6) {
                 Image(systemName: "info.circle")
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.secondaryInk)
                 Text(model.permissionsSummary)
                     .font(.caption2)
-                    .foregroundStyle(.secondary)
+                    .foregroundStyle(Color.secondaryInk)
                     .lineLimit(2)
-                Spacer()
-                Button(model.showGuide ? "收起说明" : "使用说明") {
-                    model.toggleGuide()
-                }
-                .buttonStyle(.borderless)
-                .controlSize(.small)
             }
-            HStack {
-                Text("原 One Switch 未被修改 · 无后台自动操作")
-                    .font(.caption2)
-                    .foregroundStyle(.tertiary)
+            HStack(spacing: 8) {
+                Button("使用说明") { model.toggleGuide() }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                Button("设置…") { model.openSettings() }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
                 Spacer()
                 Button("退出") { model.quit() }
-                    .buttonStyle(.borderless)
+                    .buttonStyle(.bordered)
                     .controlSize(.small)
             }
         }
     }
 
-    private func sectionLabel(_ text: String) -> some View {
-        Text(text)
-            .font(.caption2.weight(.semibold))
-            .foregroundStyle(.secondary)
+    private var cardBackground: some View {
+        RoundedRectangle(cornerRadius: 12, style: .continuous)
+            .fill(Color.primary.opacity(0.05))
     }
 }
