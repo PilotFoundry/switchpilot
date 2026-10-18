@@ -1,6 +1,6 @@
 # UI/UX design
 
-Status: current baseline **v0.7.2**. English is canonical. Screenshots live in
+Status: current baseline **v0.7.3**. English is canonical. Screenshots live in
 `docs/images/`; all UI must be readable in light and dark appearances.
 
 ## 1. Design principles

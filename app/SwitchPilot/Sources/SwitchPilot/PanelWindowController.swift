@@ -10,7 +10,7 @@ final class PanelWindowController {
     private let model: PanelModel
     private let hosting: NSHostingController<PanelView>
     private let panel: PanelWindow
-    private let materialView = NSVisualEffectView()
+    private let materialView = PassthroughVisualEffectView()
     private var anchorButton: NSStatusBarButton?
     private var localClickMonitor: Any?
     private var globalClickMonitor: Any?
@@ -61,6 +61,16 @@ final class PanelWindowController {
         }
     }
 
+    /// Regression probe for the click-through material fix. This is run by
+    /// `SwitchPilot --panel-hit-test` in verify-app.py so a future background
+    /// view cannot silently start swallowing all panel clicks again.
+    static func hitTestRegressionProbe() -> Bool {
+        let material = PassthroughVisualEffectView(
+            frame: NSRect(x: 0, y: 0, width: 100, height: 100)
+        )
+        return material.hitTest(NSPoint(x: 50, y: 50)) == nil
+    }
+
     func show(relativeTo button: NSStatusBarButton) {
         if isShown || isClosing {
             return
@@ -73,8 +83,12 @@ final class PanelWindowController {
         panel.setFrame(frame(for: size), display: false)
         panel.alphaValue = 0
         configureContentLayer(for: size)
-        panel.orderFrontRegardless()
-        panel.makeKey()
+        // A non-activating panel can become key, but activating the accessory app
+        // first is what makes the first click on a SwiftUI button perform its
+        // action instead of merely activating the window. It also gives the
+        // Accessibility consent prompt a foreground app to attach to.
+        NSApp.activate(ignoringOtherApps: true)
+        panel.makeKeyAndOrderFront(nil)
         isShown = true
         installClickMonitors()
         animateOpen()
@@ -309,6 +323,13 @@ final class PanelWindowController {
         let rect = button.convert(button.bounds, to: nil)
         return window.convertToScreen(rect)
     }
+}
+
+/// The material must never participate in hit testing. It is installed as a
+/// subview of the SwiftUI hosting view; a normal NSVisualEffectView would sit
+/// above the SwiftUI hit-test tree and swallow every click.
+private final class PassthroughVisualEffectView: NSVisualEffectView {
+    override func hitTest(_ point: NSPoint) -> NSView? { nil }
 }
 
 /// Borderless panel that can become key without activating the app and can

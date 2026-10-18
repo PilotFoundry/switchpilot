@@ -1,6 +1,6 @@
 # Test plan
 
-Status: current baseline **v0.7.2**. English is canonical. Automated checks are
+Status: current baseline **v0.7.3**. English is canonical. Automated checks are
 not a substitute for manual TCC, hardware, login, screen-cleaning or release
 verification.
 
@@ -32,8 +32,8 @@ Not covered by CI:
 | Core | `SwitchPilotChecks` | Assertions, presets, permission mapping, screen saver, microphone, display sleep |
 | Build | `scripts/build-app` | Compile, bundle, plist, resources, ad-hoc/local signature |
 | Smoke | `make smoke` | Build, bundle, contrast, four `.lproj` tables |
-| Verification | `scripts/verify-app.py` | 12-step bundle/app/launch/policy check |
-| Policy | `scripts/qa-regression.py` | 13 checks for scope, TCC, APIs and safety boundaries |
+| Verification | `scripts/verify-app.py` | 13-step bundle/app/launch/policy check |
+| Policy | `scripts/qa-regression.py` | 14 checks for scope, TCC, APIs, click path and safety boundaries |
 | Release | `scripts/build-release` | Universal build, ad-hoc signature, zip, checksum |
 | Manual | this document | TCC, hardware, UI, localization, Gatekeeper |
 
