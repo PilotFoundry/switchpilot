@@ -197,3 +197,13 @@ v0.2 仍只有单面板：不提供设置窗口、偏好页、快捷键与登录
 - 撤销 disclosure 只在至少一项已授权时出现；外部撤销后刷新会导致其自动隐藏。
 - 状态保存在 `SettingsModel`（CLT 无 SwiftUI 宏，不能用 `@State`）；`SettingsWindowController` 监听 `objectWillChange` 自动调整窗口高度，展开/收起不裁切。
 - 验收：`--dump-settings` 折叠/展开两态（含 `SWITCHPILOT_PREVIEW_AUTHORIZED`、`SWITCHPILOT_EXPAND_REVOKE` 预览钩子）；键盘/VoiceOver 可操作；展开后窗口高度由 544 增至 711（实测）。
+
+## 12. v0.3.5：应用内高级撤销（显式、带确认）
+
+- 默认路径仍是「系统设置中手动撤销」（可恢复、可解释、Apple 支持），放在展开区最上方。
+- 展开区「终端命令（高级）」下新增 **「在应用内重置权限…」**（`.bordered` 小按钮，非主 CTA）。点击弹出 `NSAlert` 警告：
+  - 将调用系统自带 `tccutil`，仅重置本应用（Automation + 辅助功能）两项授权；
+  - 非 Apple 官方 API、不可撤销；重置后需要重新授权；系统弹窗不保证再次出现，可能需手动添加；
+  - 应用不会 sudo、不会 reset All、不会静默/自动执行。
+- 确认按钮为 destructive；取消为默认。确认后在后台依次执行 bundle-scoped 两项 reset，结果回主线程刷新权限区；只有至少一项已授权时才出现该高级入口。
+- 风险与定位：它是"高级"能力，不是推荐主路径；默认 UI 仍不鼓励使用，文案明确标注 unsupported/不可逆。

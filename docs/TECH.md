@@ -211,3 +211,10 @@ open app/SwitchPilot/.build/SwitchPilot.app
 - `SettingsWindowController` 改为 designated init，使用 Combine 订阅 `model.objectWillChange`，异步调用 `resizeToFit()`：`preferredContentSize` 变化时按内容调整窗口高度并保持顶边；展开实测 544 → 711。
 - 预览钩子（仅 DEV/dump）：`SWITCHPILOT_PREVIEW_AUTHORIZED=1` 模拟已授权，`SWITCHPILOT_EXPAND_REVOKE=1` 展开，`--dump-settings` 渲染两态；`SWITCHPILOT_DEV=1` 才允许自动打开设置窗口。
 - 验收：verify-app 11/11、自检 12/12；权限在重建/重签/重装后仍为 `已授权`（稳定签名身份实测）。
+
+## 13. v0.3.5：应用内权限重置实现
+
+- `Permissions.resetInAppPermissions()`：`Process` 调用 `/usr/bin/tccutil reset AppleEvents|Accessibility <bundle-id>`；仅这两个服务、仅当前用户、无 sudo、无 `All`；在后台队列执行，输出/退出码汇总；bundle id 从 `Bundle.main` 读取，无法确定时直接失败、不猜测。
+- `SettingsModel.resetInAppPermissions()`：二次确认后调用（确认在 `SettingsView.confirmInAppReset()` 的 `NSAlert` 中，取消为默认，重置为 destructive），完成后刷新权限状态并提示重新授权；若状态未变提示重启。
+- 安全边界：不是 Apple 官方支持 API；应用不自动调用；不提供静默/一键批量（重置范围固定本应用两项）；从 UI 默认路径与文案上仍推荐系统设置手动撤销。原先 QA 反对的是"应用内自动/静默 reset"，此实现改为用户显式确认的高级选项，且保留系统设置路径。
+- 验证：build/verify 11/11、自检 12/12；tccutil 命令用不存在的 bundle id 试跑返回 `No such bundle identifier (-10814)`，未触碰真实授权；真实执行需用户在确认框中触发，列为 TESTPLAN M8 手动项。
