@@ -29,7 +29,7 @@
 要求 macOS 14+、Swift 6.x、Command Line Tools 或 Xcode。
 
 ```sh
-git clone https://github.com/pengxianghao21/switchpilot.git
+git clone https://github.com/PilotFoundry/switchpilot.git
 cd switchpilot
 swift build --package-path app/SwitchPilot --build-system native
 ./scripts/build-app

@@ -2,7 +2,7 @@
 
 [中文说明](README.zh-CN.md) · [Design principles](docs/en/CORE.md) · [Architecture](docs/en/ARCHITECTURE.md) · [Testing](docs/en/TESTING.md) · [Roadmap](docs/en/ROADMAP.md)
 
-[![CI](https://github.com/pengxianghao21/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/pengxianghao21/switchpilot/actions/workflows/ci.yml)
+[![CI](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml)
 
 Version 0.6.0 · A small, privacy-first macOS menu bar utility for a few reliable system
 controls. SwitchPilot is a personal-use project, not a full One Switch clone
@@ -72,7 +72,7 @@ No external Swift packages are required.
 ## Build and run
 
 ```sh
-git clone https://github.com/pengxianghao21/switchpilot.git
+git clone https://github.com/PilotFoundry/switchpilot.git
 cd switchpilot
 
 swift build --package-path app/SwitchPilot --build-system native
@@ -166,7 +166,7 @@ Issues and pull requests are welcome. Read
 CORE admission rules; small fixes do not need a feature debate.
 
 For security reports, use GitHub's private
-[security advisory](https://github.com/pengxianghao21/switchpilot/security/advisories)
+[security advisory](https://github.com/PilotFoundry/switchpilot/security/advisories)
 flow; see [SECURITY.md](SECURITY.md).
 
 ## License

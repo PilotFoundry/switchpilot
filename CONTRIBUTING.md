@@ -29,7 +29,7 @@ changes are out of scope.
 ## Development
 
 ```sh
-git clone https://github.com/pengxianghao21/switchpilot.git
+git clone https://github.com/PilotFoundry/switchpilot.git
 cd switchpilot
 make build
 make smoke
