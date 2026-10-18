@@ -4,7 +4,7 @@ import AppKit
 /// app icon and deliberately not a generic switch/toggle glyph. Drawn in code
 /// so it stays crisp at 1x/2x and follows the system template tint.
 public enum StatusIcon {
-    public static func make(size: CGFloat = 18, microphoneMuted: Bool = false) -> NSImage {
+    public static func make(size: CGFloat = 18) -> NSImage {
         let image = NSImage(size: NSSize(width: size, height: size), flipped: false) { rect in
             NSColor.black.setFill()
             NSColor.black.setStroke()
@@ -24,23 +24,11 @@ public enum StatusIcon {
                 controlPoint2: NSPoint(x: inner.minX + width * 0.30, y: inner.minY - height * 0.02))
             path.lineWidth = max(1.8, inner.height * 0.18)
             path.lineCapStyle = .round
-            if microphoneMuted {
-                NSColor.black.withAlphaComponent(0.35).setStroke()
-            }
             path.stroke()
-            if microphoneMuted {
-                let slash = NSBezierPath()
-                slash.move(to: NSPoint(x: size * 0.16, y: size * 0.84))
-                slash.line(to: NSPoint(x: size * 0.84, y: size * 0.16))
-                slash.lineWidth = max(1.6, size * 0.11)
-                slash.lineCapStyle = .round
-                NSColor.black.setStroke()
-                slash.stroke()
-            }
             return true
         }
         image.isTemplate = true
-        image.accessibilityDescription = microphoneMuted ? "SwitchPilot，麦克风已静音" : "SwitchPilot"
+        image.accessibilityDescription = "SwitchPilot"
         return image
     }
 }
