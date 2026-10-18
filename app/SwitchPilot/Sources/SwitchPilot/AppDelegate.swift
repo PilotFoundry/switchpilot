@@ -8,7 +8,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var model: PanelModel?
     private var settingsModel: SettingsModel?
     private var settingsWindow: SettingsWindowController?
-    private var settingsShouldReappear = false
+    private var externalSettingsWatch: Timer?
+    private var sawSystemSettingsFrontmost = false
+    private var externalWatchStartedAt: Date?
     private var hosting: NSHostingController<PanelView>?
 
     @MainActor func applicationDidFinishLaunching(_ notification: Notification) {
@@ -38,10 +40,32 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.statusItem = statusItem
         self.popover = popover
 
-        if ProcessInfo.processInfo.environment["SWITCHPILOT_OPEN_SETTINGS"] == "1" {
+        if ProcessInfo.processInfo.environment["SWITCHPILOT_DEV"] == "1",
+           ProcessInfo.processInfo.environment["SWITCHPILOT_OPEN_SETTINGS"] == "1" {
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
                 self?.openSettings()
+                if ProcessInfo.processInfo.environment["SWITCHPILOT_OPEN_SYSTEM_SETTINGS"] == "1" {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
+                        self?.settingsModel?.openAutomationSettings()
+                    }
+                }
             }
+        }
+
+        let workspaceCenter = NSWorkspace.shared.notificationCenter
+        workspaceCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] note in
+            Task { @MainActor in self?.workspaceAppActivated(note) }
+        }
+        workspaceCenter.addObserver(
+            forName: NSWorkspace.didTerminateApplicationNotification,
+            object: nil,
+            queue: .main
+        ) { [weak self] note in
+            Task { @MainActor in self?.workspaceAppTerminated(note) }
         }
 
         NotificationCenter.default.addObserver(
@@ -52,10 +76,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             Task { @MainActor in
                 self?.model?.refreshAsync()
                 self?.settingsModel?.refreshAsync()
-                if self?.settingsShouldReappear == true {
-                    self?.settingsShouldReappear = false
-                    self?.settingsWindow?.present()
-                }
             }
         }
     }
@@ -126,20 +146,76 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    @MainActor private func workspaceAppActivated(_ note: Notification) {
+        guard let app = note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else { return }
+        if app.bundleIdentifier == "com.apple.systempreferences" {
+            sawSystemSettingsFrontmost = true
+            return
+        }
+        guard sawSystemSettingsFrontmost, settingsWindow?.window != nil else { return }
+        sawSystemSettingsFrontmost = false
+        settingsWindow?.present()
+        settingsModel?.refreshAsync()
+    }
+
+    @MainActor private func workspaceAppTerminated(_ note: Notification) {
+        guard let app = note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
+              app.bundleIdentifier == "com.apple.systempreferences",
+              settingsWindow?.window != nil else { return }
+        sawSystemSettingsFrontmost = false
+        settingsWindow?.present()
+        settingsModel?.refreshAsync()
+    }
+
+    @MainActor private func startExternalSettingsWatch() {
+        guard externalSettingsWatch == nil else { return }
+        sawSystemSettingsFrontmost = false
+        externalSettingsWatch = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
+            Task { @MainActor in self?.pollExternalSettings() }
+        }
+    }
+
+    @MainActor private func stopExternalSettingsWatch() {
+        externalSettingsWatch?.invalidate()
+        externalSettingsWatch = nil
+        sawSystemSettingsFrontmost = false
+    }
+
+    /// While the SwitchPilot settings window is open, notice when the user has
+    /// been in System Settings and then leaves it (close/quit/switch back).
+    /// Bring the settings window forward and refresh the real permission state;
+    /// the user keeps a place to press "re-check" instead of losing the window.
+    @MainActor private func pollExternalSettings() {
+        guard settingsWindow?.window != nil else {
+            stopExternalSettingsWatch()
+            return
+        }
+        let front = NSWorkspace.shared.frontmostApplication?.bundleIdentifier
+        if front == "com.apple.systempreferences" {
+            sawSystemSettingsFrontmost = true
+            return
+        }
+        guard sawSystemSettingsFrontmost else { return }
+        sawSystemSettingsFrontmost = false
+        settingsWindow?.present()
+        settingsModel?.refreshAsync()
+    }
+
     @MainActor func openSettings() {
         if settingsWindow == nil {
             let settingsModel = SettingsModel()
-            settingsModel.onExternalSettingsOpened = { [weak self] in
-                self?.settingsShouldReappear = true
-            }
             self.settingsModel = settingsModel
-            settingsWindow = SettingsWindowController(model: settingsModel)
+            let controller = SettingsWindowController(model: settingsModel)
+            controller.onClose = { [weak self] in self?.stopExternalSettingsWatch() }
+            settingsWindow = controller
         }
         settingsModel?.refreshAsync()
         settingsWindow?.present()
+        startExternalSettingsWatch()
     }
 
     @MainActor func applicationWillTerminate(_ notification: Notification) {
+        externalSettingsWatch?.invalidate()
         model?.shutdown()
     }
 }
