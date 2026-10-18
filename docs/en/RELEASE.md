@@ -34,6 +34,7 @@ Update together:
 5. `docs/en/ROADMAP.md` baseline version.
 6. All four README version/download references.
 7. Release notes and tag.
+8. Run `make docs-check` after the version/README/release-doc updates.
 
 Use one version for the app, source tag and artifact. Do not bump only one
 surface.

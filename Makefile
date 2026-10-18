@@ -1,4 +1,4 @@
-.PHONY: build app release install smoke clean
+.PHONY: build app release install smoke docs-check clean
 
 build:
 	swift build --package-path app/SwitchPilot --build-system native
@@ -14,6 +14,9 @@ install:
 
 smoke:
 	./scripts/smoke.sh
+
+docs-check:
+	python3 scripts/check-docs.py
 
 clean:
 	swift package --package-path app/SwitchPilot clean

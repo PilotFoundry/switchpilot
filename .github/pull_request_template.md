@@ -10,6 +10,14 @@
 - [ ] Does not alter TCC automatically
 - [ ] Includes docs/CHANGELOG updates if behavior changed
 
+## Docs impact
+
+<!-- docs-check validates links/version consistency; it does not require every
+     code change to modify docs. -->
+- [ ] No user-facing docs change needed
+- [ ] README/docs updated
+- [ ] Docs follow-up issue: #
+
 ## Verification
 
 - [ ] `make smoke` passes

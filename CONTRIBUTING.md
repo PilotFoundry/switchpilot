@@ -61,7 +61,7 @@ a compelling reason.
 
 ## Documentation
 
-English is canonical. Product docs live in `docs/`; engineering specs live in
+English is canonical. Run `make docs-check` when changing READMEs, docs, version references, release docs or the PR template. Product docs live in `docs/`; engineering specs live in
 `docs/en/`. Keep the [documentation map](docs/README.md), READMEs, CHANGELOG and
 version references aligned.
 

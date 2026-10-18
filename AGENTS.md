@@ -33,6 +33,7 @@ canonical documentation language.
 
 - `make build` / `./scripts/build-app`
 - `make smoke` for the CI-safe smoke test
+- `make docs-check` for Markdown links, version consistency, docs map and release-doc checks
 - `./scripts/verify-app.py` for bundle, signature, policy and sizing checks
 - Manual TCC/login/screen/release checks are documented in
   `docs/en/TESTING.md` and `docs/TESTPLAN.md`.
