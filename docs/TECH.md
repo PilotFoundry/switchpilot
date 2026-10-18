@@ -187,3 +187,18 @@ open app/SwitchPilot/.build/SwitchPilot.app
 - ad-hoc 重建改变 cdhash，TCC 与登录项身份可能失效；建议固定路径与稳定签名后再长期使用。
 - 应用图标需重新注册/启动后在 Finder、系统设置、TCC 提示中目视确认；代理启动无法验证 responsible process。
 - 菜单栏 S monogram 与 app icon 的 16px 可辨性仅离屏检查，未在浅/深/选中菜单栏状态实机确认。
+
+## 11. v0.3.3：TCC 身份与权限探测修复
+
+### 11.1 问题证据
+
+- 用户 v0.3.2 设置页显示 Automation「待授权（首次操作时提示）」、辅助功能「未授权」，但用户已在系统设置授权。`log show --predicate 'subsystem == "com.apple.TCC"'` 显示 tccd 对当前 `~/Applications/SwitchPilot.app` 报 `Failed to match existing code requirement for subject local.personal.SwitchPilot and service kTCCServiceAccessibility`：授权记录属于之前的 ad-hoc 构建，重建后 cdhash 改变，当前二进制不匹配。
+- 另：`AEDeterminePermissionToAutomateTarget` 在 System Events 未运行时返回 **-600**，被 UI 映射成"待授权"，即使 Automation 实际已授权也无法判定。
+
+### 11.2 修复
+
+- `Permissions.automationStatusResolvingTarget()`：-600 时后台启动 System Events（不激活、不发送 AppleEvent），等待后重跑只读 preflight，得到真实 0/-1743/-1744；设置/面板刷新与"重新检查"都走该函数。
+- 签名：创建本机自签名身份 **SwitchPilot Local Signing**（Keychain，私钥不入 Git），`scripts/build-app` 优先用它签名，否则回退 ad-hoc；designated requirement 变为 `identifier "local.personal.SwitchPilot" and certificate leaf = H"02f684b1…"`，重建不再改变 TCC 匹配条件。
+- 设置页在权限未就绪时显示诊断行（应用路径、Automation 原始状态、辅助功能布尔值）和"若系统设置已开启仍显示未授权，通常是签名身份变化"的提示；`--diagnose-permissions` 可把同样的信息写到 `/tmp/switchpilot-permission-diagnose.txt`。
+- 已用 `tccutil reset AppleEvents local.personal.SwitchPilot` 与 `tccutil reset Accessibility local.personal.SwitchPilot` 清理旧 ad-hoc 授权记录（仅 SwitchPilot、当前用户），需要用户对稳定签名版本重新授权一次。
+- 版本 0.3.3；verify-app 11/11、自检 12/12。

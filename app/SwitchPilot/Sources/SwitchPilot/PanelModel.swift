@@ -73,7 +73,7 @@ final class PanelModel: ObservableObject {
     /// Synchronous preflight for immediate display; prefer refreshAsync for user-visible refreshes.
     func refresh() {
         systemIsDark = DarkMode.currentAppearanceIsDark()
-        darkModePermission = Permissions.automationStatus()
+        darkModePermission = Permissions.automationStatusResolvingTarget()
         lockPermissions = LockScreen.permissions()
         accessibilityTrusted = Permissions.accessibilityTrusted()
         refreshKeepAwake()
@@ -83,7 +83,7 @@ final class PanelModel: ObservableObject {
     /// and publish results on the main actor.
     func refreshAsync(completion: (() -> Void)? = nil) {
         DispatchQueue.global(qos: .userInitiated).async {
-            let automation = Permissions.automationStatus()
+            let automation = Permissions.automationStatusResolvingTarget()
             let lock = LockScreen.permissions()
             let accessibility = Permissions.accessibilityTrusted()
             let dark = DarkMode.currentAppearanceIsDark()
@@ -165,7 +165,10 @@ final class PanelModel: ObservableObject {
         permissionBusy = true
         permissionSetupMessage = "正在请求 Automation 授权…"
         DispatchQueue.global(qos: .userInitiated).async {
-            let state = Permissions.requestAutomation()
+            var state = Permissions.requestAutomation()
+            if state == .targetNotRunning {
+                state = Permissions.automationStatusResolvingTarget()
+            }
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 self.darkModePermission = state

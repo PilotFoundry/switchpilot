@@ -57,6 +57,21 @@ func loginItemTest() -> Int32 {
 }
 
 @MainActor
+func diagnosePermissions() -> Int32 {
+    let raw = Permissions.automationStatus()
+    let resolved = Permissions.automationStatusResolvingTarget()
+    let lines = [
+        "bundlePath=\(Bundle.main.bundlePath)",
+        "automationRaw=\(raw)",
+        "automationResolved=\(resolved)",
+        "systemEventsRunning=\(Permissions.systemEventsRunning())",
+        "accessibilityTrusted=\(Permissions.accessibilityTrusted())",
+    ].joined(separator: "\n") + "\n"
+    try? lines.write(toFile: "/tmp/switchpilot-permission-diagnose.txt", atomically: true, encoding: .utf8)
+    return 0
+}
+
+@MainActor
 func panelSize() -> Int32 {
     let application = NSApplication.shared
     application.setActivationPolicy(.prohibited)
@@ -101,6 +116,9 @@ func dumpSettings() -> Int32 {
 let arguments = CommandLine.arguments
 if arguments.contains("--login-item-test") {
     exit(MainActor.assumeIsolated { loginItemTest() })
+}
+if arguments.contains("--diagnose-permissions") {
+    exit(MainActor.assumeIsolated { diagnosePermissions() })
 }
 if arguments.contains("--panel-size") {
     exit(MainActor.assumeIsolated { panelSize() })
