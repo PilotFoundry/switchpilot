@@ -25,3 +25,8 @@ v02,automated_verify,2026-10-18T11:37:00+08:00,timestamp,verify-app 8/8 and chec
 v02,wall_clock,7.0,minutes,naming/design research + implementation + automated verification; excludes user manual checks
 v02,model_tokens,unknown,tokens,no authoritative measurement
 v02,new_credit_purchases,0,cards,no new purchase
+v03,start,2026-10-18T11:50:00+08:00,timestamp,user feedback milestone: naming/UI/permissions/login/icons/reviews
+v03,automated_verify,2026-10-18T12:06:00+08:00,timestamp,verify-app 11/11 and checks 12/12
+v03,wall_clock,16.0,minutes,implementation + three independent reviews + automated verification; excludes user manual checks
+v03,model_tokens,unknown,tokens,no authoritative measurement
+v03,new_credit_purchases,0,cards,no new purchase

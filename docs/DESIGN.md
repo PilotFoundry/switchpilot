@@ -1,4 +1,4 @@
-# DESIGN：SwitchPilot 菜单栏面板 v0.2
+# DESIGN：SwitchPilot 菜单栏面板 v0.3
 
 日期：2026-10-18；对应 PRD：`docs/PRD.md`；实现约束：`docs/TECH.md`；正式名与设计依据：`artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`。
 
@@ -153,3 +153,34 @@ v0.2 仍只有单面板：不提供设置窗口、偏好页、快捷键与登录
 ## 9. 非目标
 
 设置窗口、快捷键、开机自启、多语言、图标状态变化定制、主题定制、菜单栏图标管理器、深色模式定时、保活合盖增强、分发视觉资产（正式图标/品牌稿）。
+
+## 10. v0.3 增量（权限/设置/品牌）
+
+### 10.1 首次授权引导
+
+- 首次打开：三条规则 + **申请全部权限** + 重新检查 + 稍后再说；引导可见时隐藏外观/锁屏的重复权限 callout（减少冗余）。
+- "申请全部权限"状态机：后台请求 Automation（系统弹窗）→ 若辅助功能未授权，调用 `AXIsProcessTrustedWithOptions(prompt)` 显示系统提示 → 用户到系统设置勾选 → 回面板"重新检查"。任一步拒绝都保留保持亮屏与启动屏保，并显示真实原因。
+- 拒绝后不重复弹窗；提供系统设置深链。检查权限时按钮显示"请求中…"，不显示假成功。
+
+### 10.2 设置窗口（460pt 单窗格）
+
+- 权限区：Automation / 辅助功能状态；申请全部权限、重新检查、去授权辅助功能、打开两个系统设置面板；说明"如何撤销授权"，不内置 tccutil 自动撤回。
+- 登录区：登录时启动开关（`SMAppService`），状态：未开启 / 已开启 / 需要批准 / 未找到；需要批准时给"打开登录项设置"。
+- 关于区：版本、个人自用说明。窗口打开/应用重新激活时自动刷新权限状态。
+
+### 10.3 菜单栏与图标
+
+- 菜单栏：自绘 template "S" monogram（SwitchPilot），不再使用 SF Symbol `switch.2`；单状态，不随保活变化。
+- 应用图标：1024 画布、824×824 内容居中（约 100pt 透明边距）、continuous squircle；深绿渐变 + 奶油色 S；导出 16–1024 全套 .icns。`CFBundleIconFile=AppIcon`，build 脚本复制。
+- 状态项右键菜单：设置… / 使用说明 / 退出；左键打开面板。
+
+### 10.4 表面与对比度
+
+- 面板使用单一不透明 `windowBackgroundColor`，不再叠多层材料（符合 macOS 27 收敛玻璃方向）。
+- 新增 `secondaryInk`（浅色 #5F5F5F / 深色 #A8A8A8）用于 12–13pt 说明；关键边界/权限说明用 primary。
+- `warningInk/successInk/errorInk` 只用于图标/填充；不把系统橙/绿/红当小字号正文。对比度脚本断言 light/dark panel/card/tile ≥4.5:1。
+- 磁贴改用系统 bordered 按钮，提供 hover/pressed/focus；卡片圆角统一 10/12。
+
+### 10.5 面板尺寸
+
+- 无 guide ≤680pt、有 guide ≤760pt（逻辑）；AppDelegate 按屏幕 visibleFrame 约束 popover 高度。

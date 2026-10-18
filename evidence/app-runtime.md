@@ -71,3 +71,15 @@
 - v0.2.0 可执行文件 SHA-256 `f3185f00fc8185aad1008a60c809028df10f4832677c1a6d05da3f7685ea76a7`，CDHash `01e7ecb48834f4b7981a44800bfcae413ce94f9d`。
 - 用户 2026-10-18 口头确认 v0.1 初步验收可行（未提供逐项清单；不据此把 M1–M3 记为已通过）。v0.2 的新面板/引导交互验收（TESTPLAN M7）仍待用户手动确认。
 - 本轮自动化同样未请求 TCC、未启动屏保、未发送锁屏按键、未切换系统外观。
+
+## v0.3 反馈修复与独立评审验收（2026-10-18）
+
+- 版本 **0.3.0**；应用图标 `Contents/Resources/AppIcon.icns`（1024 画布/824 内容/16–1024 全套）+ `CFBundleIconFile=AppIcon`；菜单栏为自绘 S monogram template 图标。
+- 面板：单一不透明表面；新增 `secondaryInk`；权限 CTA 按缺失项分支；首启引导可"申请全部权限"；引导可见时隐藏重复 callout；面板逻辑尺寸 **380×672（无 guide）/380×710（guide）**。
+- 设置窗口：权限（申请全部/重新检查/辅助功能提示/系统设置深链/撤销说明）、登录时启动（SMAppService）、关于；状态项右键菜单（设置/使用说明/退出）。应用内**不调用** tccutil reset（研究结论见报告 §05）。
+- 登录项实测（`evidence/raw/app/login-item-test.log`）：初始 `notFound` → `register()` 后 `enabled` → `unregister()` 后 `notRegistered`；未验证登录后真实启动。
+- `SwitchPilotChecks`：**12/12**；`scripts/verify-app.py`：**11/11**（新增对比度、面板尺寸、语义色静态检查；应用图标检查）。
+- 对比度（`scripts/check-contrast.py`）：secondaryInk 浅色最差 5.15:1、深色最差 6.04:1；warning/success/error ink 浅色最差 5.50/5.99/6.03:1；全部 ≥4.5:1。
+- 应用身份：可执行 SHA-256 `71a3db8f22117729cf5a6a022e808a161e12ee7cc9b7615834474a32da0e9b1d`，CDHash `322f452f00381553ef09afa69edfe7f2262f8ddc`。
+- 独立评审（`evidence/reviews/`）：UI P0×1/P1×6、UX P0×4/P1×8、QA 基线 8/8+10/10；v0.3 已修主要 P0/P1，评审报告注明"修复后未复评"，真机 TCC/登录/图标/菜单栏三态仍未验证。
+- 用户 2026-10-18 同意 SwitchPilot 转正；此前 v0.1 初步验收为口头确认，未逐项记录。

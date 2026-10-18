@@ -1,6 +1,6 @@
-# TECH：SwitchPilot 个人自用菜单栏应用 v0.2 实现与接口
+# TECH：SwitchPilot 个人自用菜单栏应用 v0.3 实现与接口
 
-日期：2026-10-18；对应 PRD：`docs/PRD.md`、DESIGN：`docs/DESIGN.md`；正式名与设计依据：`artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`；证据摘要：`evidence/features/*`、`evidence/app-runtime.md`。v0.2 = 正式命名 + 面板/引导重设计。
+日期：2026-10-18；对应 PRD：`docs/PRD.md`、DESIGN：`docs/DESIGN.md`；正式名与设计依据：`artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`；证据摘要：`evidence/features/*`、`evidence/app-runtime.md`。v0.2 = 正式命名 + 面板/引导重设计；v0.3 = 权限首启流程 + 设置/登录启动 + 品牌图标 + 对比度修复。
 
 ## 1. 技术栈与约束
 
@@ -152,3 +152,37 @@ open app/SwitchPilot/.build/SwitchPilot.app
 - 单实例未强制；菜单栏图标不随状态变化；无多语言；仅持久化"引导是否已看过"。
 - 正式名已确定（SwitchPilot），但分发前的商标/域名检索未做；本轮不改 bundle id。
 - 未做 VoiceOver/键盘全路径验收；仅代码层使用标准控件并给出标签。
+
+## 10. v0.3 增量实现
+
+### 10.1 权限请求异步化
+
+`AEDeterminePermissionToAutomateTarget` 可能阻塞（SDK 头明确不建议在主线程等待），因此权限预检与请求放到 `DispatchQueue.global(qos: .userInitiated)`，完成后再回主线程更新 `@Published` 状态；UI 显示"正在请求/检查…"。启动时不再同步预检。辅助功能使用 `AXIsProcessTrustedWithOptions([kAXTrustedCheckOptionPrompt: true])` 显示系统提示；应用无法授予 Accessibility。
+
+### 10.2 首启全部申请状态机
+
+`PanelModel.requestAllPermissions()`：Automation 请求 → 若 Accessibility 未授权则系统提示 → 用户去设置勾选 → "重新检查"；`permissionSetupMessage` 按真实状态生成，拒绝时不会显示"已发起"。引导可见时隐藏重复的权限 callout。基本功能（保持亮屏、启动屏保）不依赖权限。
+
+### 10.3 设置与登录项
+
+- `SettingsWindowController` + `SettingsView`/`SettingsModel`：权限区（状态、申请全部、重新检查、辅助功能提示、两个系统设置深链、撤销说明）、登录区、关于。
+- `LoginItem`：`SMAppService.mainApp.register()/unregister()/status`（macOS 13+）；状态映射 `notRegistered/enabled/requiresApproval/notFound`；`SMAppService.openSystemSettingsLoginItems()` 引导批准。实测（本机 ad-hoc + .build 路径）：register 成功、unregister 后回到 notRegistered（`evidence/raw/app/login-item-test.log`）；但登录后真实启动、requiresApproval、重建失效仍需现场验证。
+- 单实例：启动时检测同 bundle 的其它实例，弹窗提示并退出；`SWITCHPILOT_SMOKE_TEST=1` 供自动化启动冒烟绕过。
+- 状态项右键菜单：设置… / 使用说明 / 退出；应用激活时自动刷新权限状态。
+
+### 10.4 品牌图标与构建
+
+- `StatusIcon.make()`：代码绘制 template "S" monogram（16–18pt 光学居中），替换 SF Symbol。
+- `Resources/AppIcon.icns`：1024 画布、824×824 内容居中、squircle、深绿渐变 + 奶油 S；`Resources/AppIcon.html` 为可重生成的源；`scripts/build-app` 复制 `.icns`；Info.plist `CFBundleIconFile=AppIcon`。小尺寸（16/32）仍可辨，但未在 Finder/TCC 提示现场确认。
+- 自动验收新增：icon 资源存在/大小、对比度 token 脚本、面板尺寸、语义色静态检查；`verify-app.py` 共 11 项，`SwitchPilotChecks` 12 项。
+
+### 10.5 批量撤回研究结论
+
+`tccutil reset AppleEvents|Accessibility <bundle>` 在本机可用（man 仅列出 reset；`list` 子命令不可用）；默认只影响当前用户，sudo 才影响所有账户，`reset All` 会清空所有应用隐私决定。Apple 将其定位为开发/测试且无恢复 API。**应用内不自动执行**；设置页只提供系统设置深链与文案，README 给出手动 bundle-scoped 命令，避免不可逆副作用。
+
+### 10.6 v0.3 已知限制
+
+- 首启授权、TCC 弹窗归属/图标、从 Finder 启动、真实登录启动与重建失效、辅助功能提示是否重现，均需用户现场验证（见 TESTPLAN M1–M3/M8）。
+- ad-hoc 重建改变 cdhash，TCC 与登录项身份可能失效；建议固定路径与稳定签名后再长期使用。
+- 应用图标需重新注册/启动后在 Finder、系统设置、TCC 提示中目视确认；代理启动无法验证 responsible process。
+- 菜单栏 S monogram 与 app icon 的 16px 可辨性仅离屏检查，未在浅/深/选中菜单栏状态实机确认。

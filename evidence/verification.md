@@ -53,3 +53,15 @@
 - 设计/命名报告 HTML 在 390/768/1440 无横向溢出、无 console 错误、无外部资源加载、交互预览可用。
 - 用户 2026-10-18 口头确认 v0.1 初步验收可行；未提供逐项记录，因此 M1–M3 仍不记为通过。
 - 仍未验证：深色模式真实授权/切换/拒绝/撤销、屏保真实启动、锁屏授权与锁定/解锁、睡眠/唤醒、VoiceOver/键盘手测、M7 首次引导与面板视觉手测。
+
+## v0.3 反馈修复与独立评审（2026-10-18）
+
+- 自动化：`scripts/verify-app.py` **11/11**（新增应用图标、对比度 token、面板尺寸、语义色静态检查）；`SwitchPilotChecks` **12/12**。
+- 对比度：`secondaryInk` 浅色 panel/card/tile 5.74/5.65/5.15:1、深色 7.47/6.69/6.04:1；warning/success/error ink 浅色最差 5.50/5.99/6.03:1（全部 ≥4.5）。
+- 面板逻辑尺寸：无 guide 380×672、有 guide 380×710；AppDelegate 再按屏幕 visibleFrame clamp。
+- 首启权限流程：后台请求 Automation（系统弹窗）+ Accessibility 系统提示；拒绝后保活/屏保仍可用；设置页可再申请；引导可见时隐藏重复权限 callout。
+- 登录项：SMAppService register/unregister 本机实测成功并回滚（`evidence/raw/app/login-item-test.log`）；登录后真实启动、requiresApproval、重建失效待现场。
+- 图标：应用图标链（Info.plist → build 拷贝 → bundle → NSWorkspace 解析 32 个表示）通过；菜单栏/系统 UI 显示需现场。
+- 独立评审：`evidence/reviews/ui-review.md`（P0×1/P1×6）、`ux-review.md`（P0×4/P1×8）、`qa-baseline.md`（v0.3 验收矩阵 31 项）。v0.3 已修主要 P0/P1；复评与现场仍 pending。
+- 批量撤回研究：tccutil bundle-scoped 可行但不内置（无恢复 API、reset All 危险）；设置页给系统设置深链，README 给手动命令。
+- 仍未验证：TCC 允许/拒绝/撤销、锁屏/屏保真实执行、睡眠/唤醒、登录后启动、Finder/TCC/菜单栏图标显示、VoiceOver/键盘、小屏/放大字体真机布局。

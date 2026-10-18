@@ -47,3 +47,12 @@
 - 正式名：**SwitchPilot**；候选冲突调研（Tack / Perch / Sill / Tact / Switchbar / Barkeep / MenuSwitch / OneBar / Flick / Switchlet 等已被占用）与设计依据见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`。
 - 命名决定不更换 bundle id（`local.personal.SwitchPilot`）以减少迁移；ad-hoc 重建后 TCC 仍可能要求重新授权。分发前的商标/域名检索未做。
 - UI/UX v0.2：首次引导、状态胶囊、保活进度、权限行内化、动作磁贴、权限摘要；实现与自动验收见 `evidence/app-runtime.md`。运行时/TCC/视觉手测仍待用户（TESTPLAN M1–M3、M5、M7）。
+
+## v0.3 UI/UX 与权限能力（2026-10-18）
+
+- 正式名 SwitchPilot 经用户同意转正。
+- 权限首启：一笔申请 Automation（系统弹窗）+ Accessibility（系统提示/设置勾选）；拒绝后保持亮屏/启动屏保可用；设置可再申请与检查；应用内不执行 tccutil reset。
+- 设置窗口与登录时启动：SMAppService 状态机（未开启/已开启/需要批准/未找到）；本机注册/注销实测成功，登录后行为待现场。
+- 图标：应用 .icns（macOS 网格）+ 菜单栏 S monogram；系统显示待现场。
+- 可读性：单一不透明表面、secondaryInk、语义墨色；对比度脚本所有 token ≥4.5:1；面板尺寸 guide ≤760/无 guide ≤680。
+- 独立评审：UI/UX/QA 三份报告入库；修复清单与现场项见 evidence/reviews 与 TESTPLAN M5/M7/M8。
