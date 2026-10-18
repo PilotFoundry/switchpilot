@@ -415,9 +415,12 @@ struct PanelView: View {
                 }
                 Text(L(title))
                     .font(.system(size: 13, weight: .semibold))
+                    .lineLimit(2)
+                    .fixedSize(horizontal: false, vertical: true)
                 Text(L(subtitle))
                     .font(.caption2)
                     .foregroundStyle(Color.secondaryInk)
+                    .lineLimit(2)
                     .fixedSize(horizontal: false, vertical: true)
             }
             .padding(9)

@@ -2,11 +2,12 @@
 
 ## Current baseline
 
-- Version: 0.6.0
+- Version: 0.7.0
 - Status: personal-use early release; not notarized, no distributed binaries.
 - Implemented: keep awake, dark mode, screen saver, lock screen, display sleep,
   microphone mute, screen cleaning, optional login item, fixed hotkeys, and
-  system-language English/Chinese UI.
+  system-language English, Simplified Chinese, Traditional Chinese and
+  Japanese UI, with an optional in-app language override.
 - Deliberately removed: output volume (system menu bar/Control Center already
   covers it).
 

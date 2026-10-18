@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml)
 
-Version 0.6.0 · A small, privacy-first macOS menu bar utility for a few reliable system
+Version 0.7.0 · A small, privacy-first macOS menu bar utility for a few reliable system
 controls. SwitchPilot is a personal-use project, not a full One Switch clone
 and not affiliated with One Switch.
 
@@ -31,7 +31,7 @@ and not affiliated with One Switch.
 | Screen cleaning | Full-screen overlay, keyboard input suspended, mouse exit, hidden last-resort timeout |
 | Login at start | Optional `SMAppService` login item, controlled in Settings |
 | Global hotkeys | Fixed `⌃⌥⌘K` / `⌃⌥⌘S` shortcuts, disabled by default |
-| Localization | English UI on English systems; Chinese source/fallback; localized permission prompts and screenshots |
+| Localization | English, Simplified Chinese, Traditional Chinese and Japanese; system language by default, with an in-app language override and restart |
 
 <p align="center">
   <img src="docs/images/clean-overlay.png" width="720" alt="SwitchPilot screen-cleaning overlay">
@@ -58,6 +58,19 @@ See [docs/en/CORE.md](docs/en/CORE.md) for the admission rules and
 ## Repository identity
 
 The README mark, app icon and `assets/social-preview.png` use the same SwitchPilot mark. The social-preview image is provided for the repository owner to upload in GitHub settings; the app icon remains the source of truth.
+
+## Languages
+
+SwitchPilot ships four UI localizations:
+
+- English
+- 简体中文
+- 繁體中文
+- 日本語
+
+The default is **Follow System**. Settings → Language can force one of the
+available languages; the app asks you to reopen it so AppKit/SwiftUI and the
+permission prompt localizations reload consistently.
 
 ## Requirements
 

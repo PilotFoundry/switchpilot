@@ -1,0 +1,3 @@
+"NSAppleEventsUsageDescription" = "SwitchPilot が System Events を使用するのは、ユーザーが明示的にダークモードを切り替えたり、画面をロックしたりする場合だけです。バックグラウンドで他のアプリを制御することはありません。";
+"CFBundleDisplayName" = "SwitchPilot";
+"CFBundleName" = "SwitchPilot";

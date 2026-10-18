@@ -2,7 +2,7 @@
 
 [English](README.md) · [核心理念](docs/en/CORE.md) · [架构](docs/en/ARCHITECTURE.md) · [测试](docs/en/TESTING.md)
 
-当前 0.6.0 · 一个小而克制的 macOS 菜单栏系统开关工具，个人自用项目，不是 One Switch 的全量复刻，也与 One Switch 无隶属关系。
+当前 0.7.0 · 一个小而克制的 macOS 菜单栏系统开关工具，个人自用项目，不是 One Switch 的全量复刻，也与 One Switch 无隶属关系。
 
 <p align="center">
   <img src="docs/images/zh/panel-light.png" width="330" alt="SwitchPilot 面板浅色模式">
@@ -16,6 +16,7 @@
 - 麦克风静音：按默认输入设备能力显示和切换，不支持时诚实提示。
 - 屏幕清洁：全屏遮罩，暂停键盘输入，鼠标点击退出；正常模式不显示倒计时，保留内部 5 分钟失效保护。
 - 登录时启动（可选）、固定全局快捷键（默认关闭）、单实例。
+- English / 简体中文 / 繁體中文 / 日本語；默认跟随系统，可在设置中覆盖并重启应用生效。
 - 无遥测、无网络、无私有 API、无后台自动化；不自动执行 `tccutil reset`。
 
 明确不做：输出音量、低电量模式、原彩显示、隐藏桌面、Night Shift、Wi-Fi/蓝牙控制、场景自动化。取舍原因见 [docs/en/CORE.md](docs/en/CORE.md)。

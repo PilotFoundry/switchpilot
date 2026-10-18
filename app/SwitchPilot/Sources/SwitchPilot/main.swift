@@ -2,6 +2,9 @@ import AppKit
 import SwiftUI
 import SwitchPilotCore
 
+// Must run before NSApplication/SwiftUI resolve localized resources.
+LanguagePreference.applyAtLaunch()
+
 @MainActor
 func dumpPanel() -> Int32 {
     // Development aid: render the SwiftUI panel offscreen so layout/contrast can
