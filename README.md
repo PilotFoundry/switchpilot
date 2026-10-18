@@ -7,6 +7,7 @@
 - v0.3 反馈修复与独立评审：[artifacts/20261018-1210-oneswitch-v03-feedback-review.html](artifacts/20261018-1210-oneswitch-v03-feedback-review.html)
 - 命名与 UI/UX 设计（v0.2）：[artifacts/20261018-1138-oneswitch-naming-ui-redesign.html](artifacts/20261018-1138-oneswitch-naming-ui-redesign.html)
 - 独立评审：[UI](evidence/reviews/ui-review.md) · [UX](evidence/reviews/ux-review.md) · [QA 基线](evidence/reviews/qa-baseline.md)
+- 扩展开关/快捷键评估（未批准）：[artifacts/20261018-1325-oneswitch-expansion-eval.html](artifacts/20261018-1325-oneswitch-expansion-eval.html) · [评估记录](docs/EXPANSION.md) · [API 探测](evidence/expansion-api-probe.md)
 - 规格：[docs/PRD.md](docs/PRD.md) · [docs/DESIGN.md](docs/DESIGN.md) · [docs/TECH.md](docs/TECH.md) · [docs/TESTPLAN.md](docs/TESTPLAN.md)
 - 运行验收：[evidence/app-runtime.md](evidence/app-runtime.md)
 - 能力矩阵：[evidence/capability-matrix.md](evidence/capability-matrix.md) · 验证与缺口：[evidence/verification.md](evidence/verification.md)

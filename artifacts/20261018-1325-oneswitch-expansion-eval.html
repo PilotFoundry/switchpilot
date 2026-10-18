@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SwitchPilot · 扩展开关 / 快捷键评估</title>
+<style>
+:root{--bg:#f2f4ee;--paper:#fffefa;--ink:#1f3630;--muted:#5f7268;--line:#d7e0d5;--green:#1e6a4b;--soft:#e7f2e8;--amber:#7e5516;--warn:#fff2d8;--red:#9d3838;--redsoft:#f8e8e4;--blue:#276783;--bluesoft:#e6eff3}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}a{color:var(--blue);text-underline-offset:3px}
+.layout{max-width:1320px;margin:auto;padding:38px;display:grid;grid-template-columns:210px minmax(0,1fr);gap:34px}aside{position:sticky;top:30px;height:calc(100vh - 60px);overflow:auto}nav a{display:block;padding:7px 0;font-size:14px;text-decoration:none}.brand{font-weight:750;letter-spacing:1px}main{min-width:0}header{padding:8px 0 24px}h1{font-size:clamp(31px,4vw,48px);line-height:1.28;margin:14px 0}h1 span{color:var(--green)}h2{font-size:22px;line-height:1.45;margin:0 0 16px}h3{font-size:16px;margin:0 0 8px}.eyebrow{color:var(--green);font-size:12px;letter-spacing:2px;font-weight:750}.lead{font-size:18px;color:var(--muted)}section{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:26px;margin-bottom:20px}p{margin:8px 0 13px}.muted,small{font-size:13px;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:13px}.card{padding:17px;border:1px solid var(--line);border-radius:10px}.metric{font-size:25px;font-weight:750;color:var(--green);line-height:1.3}.badge{display:inline-block;font-size:12px;font-weight:650;background:var(--soft);color:var(--green);padding:2px 8px;border-radius:6px}.amber{background:var(--warn);color:var(--amber)}.red{background:var(--redsoft);color:var(--red)}.gray{background:#e9ece7;color:#52645c}.blue{background:var(--bluesoft);color:var(--blue)}.note{padding:14px 17px;border-left:4px solid var(--green);background:var(--soft);border-radius:0 8px 8px 0}.risk{border-color:var(--amber);background:var(--warn)}.stop{border-color:var(--red);background:var(--redsoft)}.table{overflow:auto}table{width:100%;border-collapse:collapse;font-size:13.5px}th,td{padding:10px 11px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}th{color:var(--muted);background:#eef3e9;font-size:12px}code,pre{font:12px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;color:#235f42}code{background:#eef3e9;padding:2px 4px;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf3e9;padding:14px;border-radius:8px}ul,ol{padding-left:22px}li{margin:6px 0}.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}button,select,textarea{font:inherit;color:var(--ink)}button,select{min-height:40px;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:7px 12px;max-width:100%}button{cursor:pointer}button:hover{background:var(--soft)}textarea{width:100%;min-height:170px;margin:12px 0;padding:13px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fafbf7}.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}footer{padding:5px 0 30px;color:var(--muted);font-size:12px}@media(max-width:1050px){.layout{padding:24px;grid-template-columns:170px minmax(0,1fr);gap:22px}.grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.layout{display:block;padding:16px}aside{position:static;height:auto;margin-bottom:18px}nav{display:flex;overflow:auto;gap:15px}nav a{white-space:nowrap}section{padding:19px}.grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}th,td{min-width:115px}}@media print{aside,.controls{display:none}.layout{display:block;padding:0}section{break-inside:avoid}body{background:white}}
+</style></head>
+<body><div class="layout">
+<aside><div class="brand">SWITCHPILOT / EXPANSION</div>
+<p class="muted">扩展开关 / 快捷键评估<br>2026.10.18 · 评估未批准</p>
+<nav aria-label="目录"><a href="#summary">01 · 结论</a><a href="#context">02 · 现状与边界</a><a href="#matrix">03 · 候选矩阵</a><a href="#evidence">04 · API 证据</a><a href="#phases">05 · 推荐路线</a><a href="#decision">06 · 决策</a></nav>
+<p><span class="badge amber">不是已批准需求</span></p>
+<p class="muted"><span class="badge">v0.3.9 基线</span><br><span class="badge">无新增 TCC 首选</span><br><span class="badge gray">真实动作待现场</span></p>
+</aside>
+<main>
+<header><div class="eyebrow">EXPANSION EVALUATION · NOT APPROVED</div>
+<h1>下一步扩什么？<br><span>先快捷键，后新开关。</span></h1>
+<p class="lead">当前四个基础能力已稳定：保活、深色模式、屏保、锁屏；M1/M2/M3 用户自测通过。扩展候选按“公开 API、无新增权限、可逆、UI 成本、真实价值”评估。</p>
+<p class="muted">输入：PRD 非目标、能力矩阵候选池、Night Shift 证据、本机只读 API 探测、当前 v0.3.9 面板/设置实现。评估本身不修改产品范围。</p></header>
+
+<section id="summary"><h2>01 / 结论</h2>
+<div class="grid">
+<div class="card"><span class="badge">推荐 Phase 1</span><div class="metric">全局快捷键</div><p>先做保活开关 + 启动屏保；Carbon 注册本机 status 0，不需要 Accessibility/Automation。</p></div>
+<div class="card"><span class="badge">推荐 Phase 2</span><div class="metric">关闭显示器</div><p>公开 <code>pmset displaysleepnow</code>，无 TCC、实现小；作为独立快速动作，不并入锁屏。</p></div>
+<div class="card"><span class="badge amber">暂缓</span><div class="metric">输出音量</div><p>CoreAudio 可行但设备能力不一：本机默认输出（外接显示器音频）不支持 mute/volume。</p></div>
+<div class="card"><span class="badge red">不纳入</span><div class="metric">Night Shift</div><p>仍依赖私有 CoreBrightness；不接受私有接口维护成本前不实现。</p></div>
+</div>
+<p class="note"><strong>首选理由：</strong>快捷键复用已验证能力、无新增权限面、可随时停用；先把“已有能力更快触达”做好，再考虑新增系统状态（音量/设备）带来的设备差异与 UI 维护。</p></section>
+
+<section id="context"><h2>02 / 当前状态与边界</h2>
+<ul>
+<li>当前 v0.3.9；M1 深色模式、M2 屏保、M3 锁屏均已由用户自测通过；M8 简单测试通过。</li>
+<li>M8-3 注销/重启登录启动 = 长期待办；M8-4 图标目视、M5 VoiceOver/小屏仍待现场。</li>
+<li>权限策略：默认只在用户操作时请求；应用内不自动执行 tccutil reset（高级重置需显式确认）。</li>
+<li>本轮只做评估与只读探测，不注册持久快捷键、不切音频、不关显示器、不改 TCC/系统设置。</li>
+</ul></section>
+
+<section id="matrix"><h2>03 / 候选矩阵</h2>
+<div class="table"><table>
+<tr><th>候选</th><th>入口/证据</th><th>权限</th><th>风险</th><th>结论</th></tr>
+<tr><td>快捷键：保活 / 屏保</td><td>Carbon <code>RegisterEventHotKey</code>；本机 status 0</td><td>无需 TCC</td><td>组合冲突；后台触发需状态反馈</td><td><span class="badge">Phase 1 推荐</span></td></tr>
+<tr><td>快捷键：深色 / 锁屏</td><td>同一机制；动作已有权限门控</td><td>需要既有 Automation/Accessibility</td><td>后台无显式反馈；拒绝时用户无感</td><td><span class="badge gray">可选，默认不绑定</span></td></tr>
+<tr><td>关闭显示器</td><td><code>pmset displaysleepnow</code> 公开 man</td><td>无</td><td>与锁屏语义混淆；真实休眠待现场</td><td><span class="badge">Phase 2 推荐</span></td></tr>
+<tr><td>输出静音 / 音量</td><td>CoreAudio mute/volume；设备能力探测</td><td>无</td><td>默认设备可能 unsupported；需降级/读回</td><td><span class="badge amber">Phase 3 暂缓</span></td></tr>
+<tr><td>音频输出切换</td><td>CoreAudio default output</td><td>无</td><td>设备列表/热插拔/命名</td><td><span class="badge gray">延后</span></td></tr>
+<tr><td>麦克风静音</td><td>CoreAudio input mute/volume</td><td>无</td><td>设备差异 + 隐私语义</td><td><span class="badge gray">延后</span></td></tr>
+<tr><td>Night Shift / DND / Wi-Fi / 蓝牙 / 桌面图标</td><td>私有框架或 entitlement</td><td>不明确/额外</td><td>系统升级与分发风险</td><td><span class="badge red">不纳入</span></td></tr>
+<tr><td>场景组合 / 自动规则</td><td>—</td><td>—</td><td>复杂度高，先不做</td><td><span class="badge gray">延后</span></td></tr>
+</table></div></section>
+
+<section id="evidence"><h2>04 / 只读 API 证据</h2>
+<div class="two">
+<div class="card"><h3>Carbon 全局快捷键</h3>
+<pre>RegisterEventHotKey(
+  kVK_ANSI_K,
+  cmdKey|optionKey|controlKey,
+  ...
+) → status 0
+UnregisterEventHotKey → status 0</pre>
+<p class="muted">探测进程注册后立即注销；不需要 Accessibility。实现时仍需逐个组合做冲突检测（eventHotKeyExistsErr）。</p></div>
+<div class="card"><h3>CoreAudio 设备能力</h3>
+<ul><li>默认输出（外接显示器音频）：<strong>不支持</strong> mute/volume。</li>
+<li>内置扬声器 / USB 音频设备 / 部分麦克风：支持 mute/volume。</li>
+<li>输入侧也存在设备差异（部分耳机麦克风不支持）。</li></ul>
+<p class="muted">任何音量/静音实现都必须 capability detection + readback + unsupported 降级。</p></div>
+</div>
+<p class="note risk"><strong>关闭显示器：</strong><code>man pmset</code> 明确列出 <code>displaysleepnow</code>；本轮未执行。需要真实休眠/唤醒现场验证，不能只凭静态命令算通过。</p></section>
+
+<section id="phases"><h2>05 / 推荐路线</h2>
+<div class="two">
+<div class="card"><h3>Phase 1 · 快捷键（推荐）</h3>
+<ul><li>设置 › 快捷键：启用开关 + 两个固定组合。</li>
+<li>初始：<code>⌃⌥⌘K</code> 切换保活；<code>⌃⌥⌘S</code> 启动屏保。</li>
+<li>注册失败/组合被占用时显示可读错误；停用后注销。</li>
+<li>只调用现有动作，不新增权限路径；后台失败要有状态反馈。</li></ul></div>
+<div class="card"><h3>Phase 2 · 关闭显示器</h3>
+<ul><li>快速动作独立磁贴「关闭显示器」。</li>
+<li>文案明确“显示器休眠，移动鼠标/按键唤醒”，与“锁定屏幕”区分。</li>
+<li>实现用公开 pmset；失败显示真实错误。</li>
+<li>现场验证休眠与唤醒后再记通过。</li></ul></div>
+</div>
+<h3 style="margin-top:16px">Phase 3 · 输出音量（条件）</h3>
+<p>先解决设备能力与 unsupported 降级；默认输出不支持时不允许显示假成功。麦克风静音、输出设备切换、Night Shift 继续延后/不纳入。</p>
+<h3>验收要点</h3>
+<ul><li>快捷键：注册/注销无残留、冲突检测、停用生效、无新增 TCC、设置页键盘/VoiceOver 可达。</li>
+<li>关闭显示器：真实休眠/唤醒、失败错误、不误触发锁屏。</li>
+<li>音量（后续）：支持/不支持两类设备状态正确，设备切换后刷新。</li>
+<li>未执行项不写通过；TCC 相关仍需用户在场。</li></ul></section>
+
+<section id="decision"><h2>06 / 需要你决定</h2>
+<label for="choice" class="muted">选择下一轮方向</label>
+<select id="choice">
+<option value="A">A · 先做快捷键：保活 + 屏保（推荐）</option>
+<option value="B">B · 先做关闭显示器快速动作（更小，需现场验证休眠/唤醒）</option>
+<option value="C">C · 先做输出音量可行性原型（先解决设备 unsupported）</option>
+<option value="D">D · 暂不扩展，先做收尾/长期测试</option>
+</select>
+<textarea id="prompt" aria-label="下一会话提示"></textarea>
+<div class="controls"><button id="copy">Copy as prompt · 复制</button><span id="status" class="muted" role="status"></span></div>
+<p class="muted">本评估没有修改 PRD 范围，也没有实现任何新功能；选择后按“规格 → 实现 → 自动检查 → 用户现场验收”的同一流程推进。</p></section>
+
+<footer>SwitchPilot v0.3.9 · 扩展评估 · 2026-10-18 13:25 CST · 证据：[docs/EXPANSION.md](../docs/EXPANSION.md) · [expansion-api-probe.md](../evidence/expansion-api-probe.md) · [night-shift.md](../evidence/features/night-shift.md)</footer>
+</main></div>
+<script>
+const choice = document.getElementById('choice'), prompt = document.getElementById('prompt'), status = document.getElementById('status');
+function update() {
+  const map = {
+    A: '实现 Phase 1 全局快捷键（保活开关 + 启动屏保，固定组合、设置可停用、冲突检测）；先读 docs/EXPANSION.md 与 docs/PRD.md、DESIGN.md、TECH.md、TESTPLAN.md，更新规格后实现并验证。',
+    B: '实现 Phase 2「关闭显示器」快速动作（公开 pmset displaysleepnow，独立磁贴，不并入锁屏）；真实休眠/唤醒需用户现场验证。',
+    C: '先做输出音量/静音的可行性原型：CoreAudio capability detection、unsupported 降级、readback；不要用 AppleScript/TCC；范围先限定单输出设备。',
+    D: '暂不扩展新开关；按 TESTPLAN §3.1 推进收尾/长期测试（M8-3 注销重启、M8-4 图标、M5 无障碍/小屏等）。'
+  };
+  prompt.value = '继续 SwitchPilot v0.3 的下一步。先读 README.md、docs/PRD.md、docs/DESIGN.md、docs/TECH.md、docs/TESTPLAN.md、docs/EXPANSION.md、evidence/expansion-api-probe.md、evidence/reviews/ 与 artifacts/20261018-1325-oneswitch-expansion-eval.html。\\n方向：' + map[choice.value] + '\\n边界：TCC/真实登录/图标/屏幕状态需用户在场；未执行项不记通过；应用内不自动执行 tccutil reset；不改原 app；每个可审阅里程碑保留 Git 提交。';
+  status.textContent = '';
+}
+choice.addEventListener('change', update);
+document.getElementById('copy').addEventListener('click', async () => {
+  try { await navigator.clipboard.writeText(prompt.value); status.textContent = '已复制'; }
+  catch { prompt.focus(); prompt.select(); status.textContent = '请按 ⌘C 复制'; }
+});
+update();
+</script></body></html>
