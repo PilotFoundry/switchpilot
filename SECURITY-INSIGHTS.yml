@@ -1,0 +1,44 @@
+header:
+  schema-version: 1.0.0
+  expiration-date: '2027-10-18T00:00:00.000Z'
+  last-updated: '2026-10-18'
+  last-reviewed: '2026-10-18'
+  project-url: https://github.com/pengxianghao21/switchpilot
+  license: https://github.com/pengxianghao21/switchpilot/blob/main/LICENSE
+project:
+  name: SwitchPilot
+  description: A small, privacy-first macOS menu bar utility for a few reliable system controls.
+  homepage: https://github.com/pengxianghao21/switchpilot
+  security-policy: https://github.com/pengxianghao21/switchpilot/blob/main/SECURITY.md
+  roadmap: https://github.com/pengxianghao21/switchpilot/blob/main/docs/en/ROADMAP.md
+  documentation: https://github.com/pengxianghao21/switchpilot#readme
+  type: application
+  license: MIT
+  releases:
+    - name: v0.6.0
+      description: English localization and complete open-source history
+      created: '2026-10-18'
+      url: https://github.com/pengxianghao21/switchpilot/releases/tag/v0.6.0
+      type: source
+repository:
+  url: https://github.com/pengxianghao21/switchpilot
+  status: active
+  accepts-change-request: true
+  accepts-automated-change-request: false
+  no-third-party-packages: true
+  security:
+    assessments:
+      self:
+        comment: 'Personal-use project; automated build/smoke checks are in CI. Manual TCC and screen-state checks remain in docs/en/TESTING.md.'
+        evidence: https://github.com/pengxianghao21/switchpilot/actions
+    attestations: []
+    dependency-management: []
+    tools:
+      - name: GitHub CodeQL
+        type: SAST
+        version: 'v3'
+        comment: 'Swift analysis workflow.'
+      - name: OpenSSF Scorecard
+        type: review
+        version: 'v2.4.0'
+        comment: 'Weekly supply-chain/security posture checks.'

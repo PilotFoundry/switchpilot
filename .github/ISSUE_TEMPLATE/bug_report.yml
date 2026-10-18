@@ -1,0 +1,62 @@
+name: Bug report
+description: Report a reproducible problem with SwitchPilot
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Do not include TCC databases, Keychain data,
+        certificates, personal paths, or unrelated system logs.
+  - type: input
+    id: macos
+    attributes:
+      label: macOS version
+      placeholder: "e.g. 27.0.1 (26A434)"
+    validations:
+      required: true
+  - type: input
+    id: app_version
+    attributes:
+      label: SwitchPilot version
+      placeholder: "e.g. 0.5.3"
+    validations:
+      required: true
+  - type: dropdown
+    id: permissions
+    attributes:
+      label: Permission state
+      options:
+        - Automation granted, Accessibility granted
+        - Automation granted, Accessibility missing
+        - Automation missing, Accessibility granted
+        - Both missing
+        - Not applicable
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      description: Include the exact menu/panel path.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+    validations:
+      required: true
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional context
+      description: Screenshots, sanitized logs, build method (ad-hoc or developer identity).
+    validations:
+      required: false
