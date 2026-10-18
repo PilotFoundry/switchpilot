@@ -1,6 +1,6 @@
 # UI/UX design
 
-Status: current baseline **v0.7.7**. English is canonical. Screenshots live in
+Status: current baseline **v0.7.8**. English is canonical. Screenshots live in
 `docs/images/`; all UI must be readable in light and dark appearances.
 
 ## 1. Design principles
@@ -50,8 +50,9 @@ Width: 380 pt. Normal height: about 709 pt; with the permission guide: about
    capability/state.
 4. **Quick actions** — screen saver, lock screen, display sleep, screen
    cleaning. Each tile has an icon, title, short subtitle and optional badge.
-   Successful quick actions are not narrated in a status line; errors and the
-   screen-cleaning recovery state remain visible.
+   Successful quick actions are fire-and-forget: no success history or
+   completion line. Only errors surface; screen-cleaning failures have their
+   own row.
 5. **Permissions** — only when needed; readiness summary, grant/recheck
    actions, diagnostics disclosure.
 6. **Footer** — How to use, Settings, Quit. Permission state stays in the
@@ -139,8 +140,8 @@ See [en/BRAND.md](en/BRAND.md) for naming and trademark boundaries.
 - Never claim success when state could not be verified.
 - Use "Follow System" for the language default, not "Auto".
 - Release/download copy must state that the binary is ad-hoc and not notarized.
-- Do not narrate successful quick actions in persistent copy; show failures,
-  permission gaps and recovery instead.
+- Do not narrate successful quick actions in persistent copy; show failures and
+  permission gaps instead. Quick actions are fire-and-forget.
 - Keep the four READMEs aligned on user-visible facts.
 
 ## 10. Current screenshots

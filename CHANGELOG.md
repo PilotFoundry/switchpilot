@@ -16,6 +16,15 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
+## [0.7.8] - 2026-10-18
+
+- Remove the final screen-cleaning completion line ("清洁：已退出清洁模式").
+  Quick actions are now fire-and-forget: no success/completion/history line.
+- Keep failure and permission feedback; screen-cleaning failures remain in the
+  dedicated error row.
+- Extend the self-evident UI principle with "quick actions are fire-and-forget".
+- Refresh docs/screenshots for the cleaner quick-actions card.
+
 ## [0.7.7] - 2026-10-18
 
 - Remove the persistent screen-cleaning exit hint. The action label and overlay

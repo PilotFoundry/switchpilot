@@ -1,6 +1,6 @@
 # Core principles
 
-Status: current baseline **v0.7.7**. This document defines SwitchPilot's product
+Status: current baseline **v0.7.8**. This document defines SwitchPilot's product
 boundary. The implementation-level admission checklist lives in
 [en/CORE.md](en/CORE.md).
 
@@ -46,6 +46,7 @@ not the product scope.
     pending.
 
 11. **Self-evident over annotated.** Controls, state and system behavior should explain themselves. Do not add persistent copy for successful quick actions or for what a label already says; reserve text for permissions, failures, recovery and safety-critical exits.
+12. **Quick actions are fire-and-forget.** Screen saver, lock, display sleep and screen cleaning do not keep a success history or completion status in the panel. Errors surface; successful actions simply happen and disappear.
 
 ## Included scope
 
