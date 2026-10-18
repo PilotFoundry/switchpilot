@@ -218,3 +218,12 @@ open app/SwitchPilot/.build/SwitchPilot.app
 - `SettingsModel.resetInAppPermissions()`：二次确认后调用（确认在 `SettingsView.confirmInAppReset()` 的 `NSAlert` 中，取消为默认，重置为 destructive），完成后刷新权限状态并提示重新授权；若状态未变提示重启。
 - 安全边界：不是 Apple 官方支持 API；应用不自动调用；不提供静默/一键批量（重置范围固定本应用两项）；从 UI 默认路径与文案上仍推荐系统设置手动撤销。原先 QA 反对的是"应用内自动/静默 reset"，此实现改为用户显式确认的高级选项，且保留系统设置路径。
 - 验证：build/verify 11/11、自检 12/12；tccutil 命令用不存在的 bundle id 试跑返回 `No such bundle identifier (-10814)`，未触碰真实授权；真实执行需用户在确认框中触发，列为 TESTPLAN M8 手动项。
+
+## 14. v0.3.9：UI/UX 复评修复实现
+
+- `PanelView`：新增 `permissionsNeededCard` 统一权限区；移除 `permissionPanel` 内联调用；guide 第 3 条、屏保/锁屏磁贴副标题与即时执行一致；guide 在权限已就绪时不再显示禁用"申请全部权限"按钮。
+- `SettingsModel`：新增 `showsDiagnostic`；登录项 `setLoginItem` 改为注册/注销后 `refreshAsync` 完成再按真实状态生成中文消息（避免读旧状态竞争）。
+- `SettingsView`：成功态去第三行总结；版本仅关于区；诊断折叠；disclosure 文案去省略号、chevron `.accessibilityHidden(true)`；高级区新增"不可逆操作"标题与"在应用内重置两项权限（不可撤销）…"（`.tint(.red)`，确认框不变）。
+- `RuntimeDiagnostics.swift`：`writeRuntimeDiagnostics()` 供 `--diagnose-runtime` 与 URL scheme 共用；Info.plist 增加 `CFBundleURLTypes/switchpilot` 与 `LSMultipleInstancesProhibited`。
+- `scripts/onsite-probe`：优先用运行中应用的 `switchpilot://diagnose` 写只读报告；移除会偶发挂起的 `sfltool dumpbtm`；TCC 日志限 5 分钟。
+- 验证：面板 380×637/710；设置窗口 523/774；普通重复启动保持一个实例；`open -n` 被 LS 禁止（诊断改走 URL）；verify-app 11/11、自检 12/12。

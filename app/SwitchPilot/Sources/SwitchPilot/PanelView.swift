@@ -16,6 +16,9 @@ struct PanelView: View {
             keepAwakeCard
             appearanceCard
             quickActionsCard
+            if !model.allPermissionsReady && !model.guideVisible {
+                permissionsNeededCard
+            }
             footer
         }
         .padding(16)
@@ -83,8 +86,8 @@ struct PanelView: View {
                 }
             }
             guideRow("1", "「保持亮屏」开启后，系统不会因空闲而熄灭屏幕；可设置时长。")
-            guideRow("2", "「深色模式」首次使用需要 Automation 授权；不需要时也可以不使用该开关。")
-            guideRow("3", "「屏保 / 锁屏」会先确认；锁屏还需要辅助功能授权。")
+            guideRow("2", "「深色模式」需要 Automation 授权；不授权时此开关不会生效。")
+            guideRow("3", "「屏保 / 锁屏」点击即执行；屏保移动鼠标退出，锁屏需密码解锁；锁屏还需要辅助功能授权。")
             Text("不授权也可以使用保持亮屏和启动屏保；所有权限都可在设置中撤销。")
                 .font(.caption2)
                 .foregroundStyle(Color.secondaryInk)
@@ -98,14 +101,16 @@ struct PanelView: View {
                 ProgressView().progressViewStyle(.linear).controlSize(.small)
             }
             HStack(spacing: 8) {
-                Button {
-                    model.requestAllPermissions()
-                } label: {
-                    Label(model.permissionBusy ? "请求中…" : (model.allPermissionsReady ? "权限已就绪" : "申请全部权限"), systemImage: "checkmark.shield")
+                if !model.allPermissionsReady {
+                    Button {
+                        model.requestAllPermissions()
+                    } label: {
+                        Label(model.permissionBusy ? "请求中…" : "申请全部权限", systemImage: "checkmark.shield")
+                    }
+                    .buttonStyle(.borderedProminent)
+                    .controlSize(.small)
+                    .disabled(model.permissionBusy)
                 }
-                .buttonStyle(.borderedProminent)
-                .controlSize(.small)
-                .disabled(model.allPermissionsReady || model.permissionBusy)
 
                 Button("重新检查") { model.recheckPermissions() }
                     .buttonStyle(.bordered)
@@ -219,15 +224,6 @@ struct PanelView: View {
                     .font(.caption2)
                     .foregroundStyle(Color.secondaryInk)
             }
-            if model.darkModeNeedsPermission && !model.guideVisible {
-                permissionPanel(
-                    text: "切换系统外观需要 Automation 授权；未授权时不会修改外观。",
-                    primaryTitle: "申请 Automation 授权",
-                    primaryIcon: "lock.open",
-                    primaryAction: { model.requestDarkModeAuthorization() },
-                    secondaryTitle: "打开系统设置",
-                    secondaryAction: { model.openAutomationSettings() })
-            }
         }
         .padding(12)
         .background(cardBackground)
@@ -256,13 +252,13 @@ struct PanelView: View {
             HStack(spacing: 10) {
                 actionTile(
                     title: "启动屏保",
-                    subtitle: "确认后立即启动",
+                    subtitle: "点击启动 · 鼠标退出",
                     systemImage: "play.rectangle",
                     badge: nil,
                     action: { model.startScreenSaver() })
                 actionTile(
                     title: "锁定屏幕",
-                    subtitle: "发送系统锁定快捷键",
+                    subtitle: "点击锁定 · 密码解锁",
                     systemImage: "lock",
                     badge: model.lockNeedsPermission ? "需授权" : nil,
                     action: { model.lockScreen() })
@@ -273,25 +269,6 @@ struct PanelView: View {
             }
             .font(.caption2)
             .foregroundStyle(Color.secondaryInk)
-            if model.lockNeedsPermission && !model.guideVisible {
-                if model.lockPermissions.automation != .allowed {
-                    permissionPanel(
-                        text: "锁屏需要 Automation 与辅助功能授权；当前缺少 Automation，未授权时不会发送按键。",
-                        primaryTitle: "申请 Automation 授权",
-                        primaryIcon: "lock.open",
-                        primaryAction: { model.requestLockAutomation() },
-                        secondaryTitle: "打开辅助功能设置",
-                        secondaryAction: { model.openAccessibilitySettings() })
-                } else {
-                    permissionPanel(
-                        text: "Automation 已授权；锁屏还需要辅助功能（Accessibility）授权，未授权时不会发送按键。",
-                        primaryTitle: "去授权辅助功能",
-                        primaryIcon: "hand.raised",
-                        primaryAction: { model.requestAccessibilityPrompt() },
-                        secondaryTitle: "打开辅助功能设置",
-                        secondaryAction: { model.openAccessibilitySettings() })
-                }
-            }
         }
         .padding(12)
         .background(cardBackground)
@@ -340,48 +317,6 @@ struct PanelView: View {
 
     // MARK: - Permission panel
 
-    private func permissionPanel(
-        text: String,
-        primaryTitle: String,
-        primaryIcon: String,
-        primaryAction: @escaping () -> Void,
-        secondaryTitle: String,
-        secondaryAction: @escaping () -> Void
-    ) -> some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(alignment: .top, spacing: 7) {
-                Image(systemName: "exclamationmark.shield.fill")
-                    .font(.caption)
-                    .foregroundStyle(Color.warningInk)
-                Text(text)
-                    .font(.caption2)
-                    .foregroundStyle(.primary)
-                    .fixedSize(horizontal: false, vertical: true)
-            }
-            HStack(spacing: 8) {
-                Button {
-                    primaryAction()
-                } label: {
-                    Label(primaryTitle, systemImage: primaryIcon)
-                }
-                .buttonStyle(.bordered)
-                .controlSize(.small)
-
-                Button(secondaryTitle) { secondaryAction() }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-            }
-        }
-        .padding(10)
-        .background(
-            RoundedRectangle(cornerRadius: 9, style: .continuous)
-                .fill(Color.orange.opacity(0.08))
-        )
-        .overlay(
-            RoundedRectangle(cornerRadius: 9, style: .continuous)
-                .strokeBorder(Color.orange.opacity(0.25), lineWidth: 1)
-        )
-    }
 
     private func inlineError(_ message: String) -> some View {
         HStack(alignment: .top, spacing: 6) {
@@ -393,6 +328,61 @@ struct PanelView: View {
                 .foregroundStyle(.primary)
                 .fixedSize(horizontal: false, vertical: true)
         }
+    }
+
+    // MARK: - Permissions
+
+    private var missingPermissionLabels: [String] {
+        var labels: [String] = []
+        if model.darkModePermission != .allowed {
+            labels.append("Automation（深色模式、锁屏）")
+        }
+        if !model.accessibilityTrusted {
+            labels.append("辅助功能（锁屏）")
+        }
+        return labels
+    }
+
+    private var permissionsNeededCard: some View {
+        VStack(alignment: .leading, spacing: 9) {
+            HStack(spacing: 6) {
+                Image(systemName: "lock.shield")
+                    .font(.caption)
+                    .foregroundStyle(Color.warningInk)
+                Text("需要授权")
+                    .font(.system(size: 13, weight: .semibold))
+                Spacer()
+            }
+            Text("缺少：\(missingPermissionLabels.joined(separator: "、"))。未授权时相关操作不会执行；保持亮屏和启动屏保不受影响。")
+                .font(.caption)
+                .foregroundStyle(Color.secondaryInk)
+                .fixedSize(horizontal: false, vertical: true)
+            HStack(spacing: 8) {
+                if model.darkModePermission == .denied {
+                    Button("打开自动化设置") { model.openAutomationSettings() }
+                        .buttonStyle(.borderedProminent)
+                } else if model.darkModePermission != .allowed {
+                    Button {
+                        model.requestAllPermissions()
+                    } label: {
+                        Label("申请全部权限", systemImage: "checkmark.shield")
+                    }
+                    .buttonStyle(.borderedProminent)
+                } else if !model.accessibilityTrusted {
+                    Button("去授权辅助功能") { model.requestAccessibilityPrompt() }
+                        .buttonStyle(.borderedProminent)
+                }
+                if model.darkModePermission == .denied && !model.accessibilityTrusted {
+                    Button("去授权辅助功能") { model.requestAccessibilityPrompt() }
+                        .buttonStyle(.bordered)
+                }
+                Button("重新检查") { model.recheckPermissions() }
+                    .buttonStyle(.bordered)
+            }
+            .controlSize(.small)
+        }
+        .padding(12)
+        .background(cardBackground)
     }
 
     // MARK: - Footer

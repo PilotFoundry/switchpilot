@@ -22,7 +22,7 @@ struct SettingsView: View {
 
             HStack {
                 Spacer()
-                Text("v\(model.version) · 个人自用")
+                Text("个人自用")
                     .font(.caption)
                     .foregroundStyle(Color.secondaryInk)
             }
@@ -44,29 +44,11 @@ struct SettingsView: View {
                 state: model.accessibilityTrusted)
 
             if model.permissionsReady {
-                Label("全部权限已授权", systemImage: "checkmark.circle.fill")
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(Color.successInk)
                 Button("重新检查") { model.recheck() }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
                     .disabled(model.busy)
             } else {
-                VStack(alignment: .leading, spacing: 4) {
-                    Text(model.diagnostic)
-                        .font(.system(size: 10, design: .monospaced))
-                        .foregroundStyle(Color.secondaryInk)
-                        .textSelection(.enabled)
-                        .fixedSize(horizontal: false, vertical: true)
-                    Text("如果系统设置里已经开启但仍显示未授权：通常是应用重新构建后签名身份变了。请退出应用，从 Finder 启动，并重新授权一次；必要时在终端执行 README 里的 tccutil reset 命令。")
-                        .font(.caption)
-                        .foregroundStyle(.primary)
-                        .fixedSize(horizontal: false, vertical: true)
-                }
-                .padding(9)
-                .frame(maxWidth: .infinity, alignment: .leading)
-                .background(RoundedRectangle(cornerRadius: 7).fill(Color.primary.opacity(0.05)))
-
                 HStack(spacing: 8) {
                     if model.automation == .denied {
                         Button("打开自动化设置") { model.openAutomationSettings() }
@@ -79,20 +61,42 @@ struct SettingsView: View {
                         }
                         .buttonStyle(.borderedProminent)
                     }
-                    if !model.accessibilityTrusted {
-                        if model.automation == .allowed {
-                            Button("去授权辅助功能") { model.requestAccessibilityPrompt() }
-                                .buttonStyle(.borderedProminent)
-                        } else {
-                            Button("去授权辅助功能") { model.requestAccessibilityPrompt() }
-                                .buttonStyle(.bordered)
-                        }
+                    if !model.accessibilityTrusted && model.automation == .allowed {
+                        Button("去授权辅助功能") { model.requestAccessibilityPrompt() }
+                            .buttonStyle(.borderedProminent)
+                    } else if !model.accessibilityTrusted && model.automation == .denied {
+                        Button("去授权辅助功能") { model.requestAccessibilityPrompt() }
+                            .buttonStyle(.bordered)
                     }
                     Button("重新检查") { model.recheck() }
                         .buttonStyle(.bordered)
                 }
                 .controlSize(.small)
                 .disabled(model.busy)
+
+                Button(model.showsDiagnostic ? "收起诊断详情" : "诊断详情") {
+                    model.toggleDiagnostic()
+                }
+                .buttonStyle(.plain)
+                .font(.caption)
+                .foregroundStyle(Color.secondaryInk)
+
+                if model.showsDiagnostic {
+                    VStack(alignment: .leading, spacing: 4) {
+                        Text(model.diagnostic)
+                            .font(.system(size: 10, design: .monospaced))
+                            .foregroundStyle(Color.secondaryInk)
+                            .textSelection(.enabled)
+                            .fixedSize(horizontal: false, vertical: true)
+                        Text("如果系统设置里已经开启但仍显示未授权：通常是应用重新构建后签名身份变了。请退出应用，从 Finder 启动，并重新授权一次；必要时在终端执行 README 里的 tccutil reset 命令。")
+                            .font(.caption)
+                            .foregroundStyle(.primary)
+                            .fixedSize(horizontal: false, vertical: true)
+                    }
+                    .padding(9)
+                    .frame(maxWidth: .infinity, alignment: .leading)
+                    .background(RoundedRectangle(cornerRadius: 7).fill(Color.primary.opacity(0.05)))
+                }
             }
 
             if model.hasAnyPermission {
@@ -107,9 +111,10 @@ struct SettingsView: View {
                 model.toggleRevokeHelp()
             } label: {
                 HStack(spacing: 4) {
-                    Text("如何撤销授权…")
+                    Text("如何撤销授权")
                     Image(systemName: model.showsRevokeHelp ? "chevron.down" : "chevron.right")
                         .font(.caption2)
+                        .accessibilityHidden(true)
                 }
             }
             .buttonStyle(.plain)
@@ -172,13 +177,21 @@ struct SettingsView: View {
                                     .fixedSize(horizontal: false, vertical: true)
                             }
                             Divider()
-                            Button("在应用内重置权限…") {
+                            HStack(spacing: 5) {
+                                Image(systemName: "exclamationmark.triangle.fill")
+                                    .font(.caption)
+                                    .foregroundStyle(Color.errorInk)
+                                Text("不可逆操作")
+                                    .font(.caption.weight(.medium))
+                            }
+                            Button("在应用内重置两项权限（不可撤销）…") {
                                 confirmInAppReset()
                             }
                             .buttonStyle(.bordered)
+                            .tint(.red)
                             .controlSize(.small)
                             .disabled(model.busy)
-                            Text("高级：调用系统 tccutil，仅重置本应用的两项授权。非 Apple 官方 API、不可撤销，重置后需要重新授权；系统弹窗不保证再次出现。")
+                            Text("调用系统 tccutil，仅重置本应用两项授权；无 sudo、无 reset All；重置后需重新授权，系统弹窗不保证再次出现。")
                                 .font(.caption2)
                                 .foregroundStyle(Color.secondaryInk)
                                 .fixedSize(horizontal: false, vertical: true)
@@ -208,7 +221,7 @@ struct SettingsView: View {
     }
 
     private var loginItemSection: some View {
-        section("登录", subtitle: "使用 macOS ServiceManagement（SMAppService）注册本应用。") {
+        section("登录", subtitle: "让 SwitchPilot 在你登录后自动启动。") {
             HStack {
                 VStack(alignment: .leading, spacing: 2) {
                     Text("登录时启动 SwitchPilot")
@@ -227,7 +240,7 @@ struct SettingsView: View {
                 Button("打开系统设置 › 登录项") { model.openLoginItemsSettings() }
                     .buttonStyle(.bordered)
             }
-            Text("如果系统拒绝注册（例如签名或应用位置限制），会显示真实错误；个人构建可能需要在系统设置中批准。")
+            Text("由 macOS 服务管理注册；如果系统拒绝会显示真实错误，个人构建可能需要在系统设置中批准。")
                 .font(.caption)
                 .foregroundStyle(Color.secondaryInk)
                 .fixedSize(horizontal: false, vertical: true)

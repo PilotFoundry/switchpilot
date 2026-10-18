@@ -10,6 +10,7 @@ final class SettingsModel: ObservableObject {
     @Published private(set) var busy = false
     @Published private(set) var message = ""
     @Published private(set) var showsRevokeHelp = false
+    @Published private(set) var showsDiagnostic = false
     @Published private(set) var showsAdvancedTCCUtil = false
     @Published private(set) var tccutilCopied = false
     private var copyResetWorkItem: DispatchWorkItem?
@@ -57,6 +58,9 @@ final class SettingsModel: ObservableObject {
                 if !self.hasAnyPermission {
                     self.showsRevokeHelp = false
                     self.showsAdvancedTCCUtil = false
+                }
+                if self.permissionsReady {
+                    self.showsDiagnostic = false
                 }
                 completion?()
             }
@@ -120,22 +124,34 @@ final class SettingsModel: ObservableObject {
     }
 
     func setLoginItem(_ enabled: Bool) {
+        guard !busy else { return }
         busy = true
-        defer { busy = false }
+        var failed = false
         do {
             if enabled {
                 try LoginItem.enable()
-                message = "已开启登录时启动。"
             } else {
                 try LoginItem.disable()
-                message = "已关闭登录时启动。"
             }
         } catch {
             message = "\(error)"
+            failed = true
         }
-        refreshAsync()
-        if loginState == .requiresApproval {
-            message = "已注册，但还需要在系统设置中批准。"
+        busy = false
+        refreshAsync { [weak self] in
+            guard let self, !failed else { return }
+            switch self.loginState {
+            case .enabled:
+                self.message = "登录时启动已开启。"
+            case .requiresApproval:
+                self.message = "已注册，但还需要在系统设置 › 通用 › 登录项中批准。"
+            case .notFound:
+                self.message = "未找到登录项；请从 ~/Applications 的安装副本重试。"
+            case .unknown:
+                self.message = "登录时启动状态未知，请在系统设置中检查。"
+            case .notRegistered:
+                self.message = "登录时启动已关闭。"
+            }
         }
     }
 
@@ -152,6 +168,10 @@ final class SettingsModel: ObservableObject {
 
     func toggleAdvancedTCCUtil() {
         showsAdvancedTCCUtil.toggle()
+    }
+
+    func toggleDiagnostic() {
+        showsDiagnostic.toggle()
     }
 
     func resetInAppPermissions() {
