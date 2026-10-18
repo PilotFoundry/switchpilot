@@ -28,7 +28,7 @@ func dumpPanel() -> Int32 {
         model.forceGuideForPreview()
     }
     let dumpHeight = ProcessInfo.processInfo.environment["SWITCHPILOT_PANEL_HEIGHT"].flatMap(Double.init) ?? 640
-    let hosting = NSHostingController(rootView: PanelView(model: model))
+    let hosting = NSHostingController(rootView: PanelView(model: model, opaqueBackground: true))
     let view = hosting.view
     view.frame = NSRect(x: 0, y: 0, width: 380, height: CGFloat(dumpHeight))
     if ProcessInfo.processInfo.environment["SWITCHPILOT_DARK"] != nil {
@@ -125,7 +125,7 @@ func panelSize() -> Int32 {
     if ProcessInfo.processInfo.environment["SWITCHPILOT_FORCE_GUIDE"] != nil {
         model.forceGuideForPreview()
     }
-    let hosting = NSHostingController(rootView: PanelView(model: model))
+    let hosting = NSHostingController(rootView: PanelView(model: model, opaqueBackground: true))
     hosting.sizingOptions = [.preferredContentSize]
     hosting.view.layoutSubtreeIfNeeded()
     let size = hosting.preferredContentSize

@@ -1,6 +1,6 @@
 # Technical design
 
-Status: current baseline **v0.7.1**. This is the implementation-level summary;
+Status: current baseline **v0.7.2**. This is the implementation-level summary;
 the module map and runtime details live in
 [en/ARCHITECTURE.md](en/ARCHITECTURE.md).
 
@@ -32,7 +32,7 @@ app/SwitchPilot/
 | Component | Responsibility |
 |---|---|
 | `main.swift` | Launch, maintenance modes, language application before AppKit |
-| `AppDelegate` | Status item, popover, settings window, single instance, login item |
+| `AppDelegate` | Status item, custom panel controller, settings window, single instance, login item |
 | `PanelModel` | Observable panel state and action coordination |
 | `SettingsModel` | Preferences, language, permissions, hotkeys, login item |
 | `KeepAwakeSession` / `PowerAssertion` | IOKit display-sleep assertions and timing |
@@ -65,6 +65,9 @@ app/SwitchPilot/
 - `scripts/build-app` builds the package (debug by default), assembles the
   `.app`, copies `Info.plist`, icon and every `.lproj`, then signs it.
 - `scripts/install-app` copies the bundle to `~/Applications`.
+- The menu-bar panel uses a behind-window `NSVisualEffectView` menu material,
+  magnet edge alignment to the status item, and an 80/60 ms scale/fade. The
+  offscreen `--dump-panel` path requests an opaque fallback background.
 - `scripts/build-release` builds release binaries for `arm64` and `x86_64`,
   combines them with `lipo`, assembles the app, copies all localizations,
   ad-hoc signs it, and writes a universal zip plus portable SHA-256 file.

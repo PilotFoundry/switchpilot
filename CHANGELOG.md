@@ -16,6 +16,20 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
+## [0.7.2] - 2026-10-18
+
+- Replace the AppKit `NSPopover` with a custom borderless, non-activating
+  `NSPanel` (`PanelWindowController`).
+- Add an 80 ms open / 60 ms close scale+fade animation, anchored to the
+  menu-bar status item.
+- Add a dark behind-window menu material with an adaptive 90% background tint,
+  rounded mask, hairline border and window shadow.
+- Add magnet edge alignment: the panel's leading/trailing edge snaps 4 pt
+  outside the status item and is clamped to the visible screen.
+- Preserve transient dismissal (outside click, Escape, app activation), keep
+  SwiftUI menus open, and support Reduce Motion.
+- Add docs for panel presentation, material and magnet alignment.
+
 ## [0.7.1] - 2026-10-18
 
 - Reword the About section for the open-source release: it now describes

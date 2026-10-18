@@ -5,14 +5,13 @@ import SwitchPilotCore
 
 final class AppDelegate: NSObject, NSApplicationDelegate {
     private var statusItem: NSStatusItem?
-    private var popover: NSPopover?
+    private var panelController: PanelWindowController?
     private var model: PanelModel?
     private var settingsModel: SettingsModel?
     private var settingsWindow: SettingsWindowController?
     private var externalSettingsWatch: Timer?
     private var sawSystemSettingsFrontmost = false
     private var externalWatchStartedAt: Date?
-    private var hosting: NSHostingController<PanelView>?
     private var hotKeys: HotKeyManager?
     private var microphoneMuted = false
     private var microphoneCancellable: AnyCancellable?
@@ -26,7 +25,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let model = PanelModel()
         self.model = model
         model.onOpenSettings = { [weak self] in self?.openSettings() }
-        model.onContentSizeChanged = { [weak self] in self?.resizePopover() }
+        model.onContentSizeChanged = { [weak self] in self?.resizePanel() }
 
         let hotKeys = HotKeyManager()
         hotKeys.onKeepAwakeToggle = { [weak model] in model?.toggleKeepAwake() }
@@ -51,16 +50,16 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             button.target = self
         }
 
-        let hosting = NSHostingController(rootView: PanelView(model: model))
-        hosting.sizingOptions = [.preferredContentSize]
-        self.hosting = hosting
-        let popover = NSPopover()
-        popover.contentViewController = hosting
-        popover.behavior = .transient
-        popover.contentSize = NSSize(width: 380, height: 620)
-
+        let panelController = PanelWindowController(model: model)
         self.statusItem = statusItem
-        self.popover = popover
+        self.panelController = panelController
+
+        if ProcessInfo.processInfo.environment["SWITCHPILOT_DEV"] == "1",
+           ProcessInfo.processInfo.environment["SWITCHPILOT_OPEN_PANEL"] == "1" {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
+                self?.showPopover()
+            }
+        }
 
         if ProcessInfo.processInfo.environment["SWITCHPILOT_DEV"] == "1",
            ProcessInfo.processInfo.environment["SWITCHPILOT_OPEN_SETTINGS"] == "1" {
@@ -124,6 +123,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @MainActor private func showStatusMenu() {
         guard let statusItem else { return }
+        panelController?.close(animated: false)
         let menu = NSMenu()
         let settingsItem = NSMenuItem(title: L("设置…"), action: #selector(menuOpenSettings), keyEquivalent: ",")
         settingsItem.target = self
@@ -168,34 +168,24 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @MainActor private func showPopover() {
-        guard let button = statusItem?.button, let popover, !popover.isShown else { return }
-        model?.refreshAsync()
-        resizePopover()
-        popover.show(relativeTo: button.bounds, of: button, preferredEdge: .minY)
-        popover.contentViewController?.view.window?.makeKey()
+        guard let button = statusItem?.button, let panelController else { return }
+        panelController.show(relativeTo: button)
     }
 
     @MainActor @objc private func togglePopover(_ sender: Any?) {
-        guard let button = statusItem?.button, let popover else { return }
-        if popover.isShown {
-            popover.performClose(sender)
-            return
-        }
-        showPopover()
+        guard let button = statusItem?.button, let panelController else { return }
+        panelController.toggle(relativeTo: button)
     }
 
-    @MainActor private func resizePopover() {
-        guard let hosting, let popover else { return }
-        hosting.view.layoutSubtreeIfNeeded()
-        let size = hosting.preferredContentSize
-        if size.height > 100 {
-            let screenLimit = (NSScreen.main?.visibleFrame.height ?? 900) - 120
-            popover.contentSize = NSSize(width: 380, height: min(size.height, max(480, screenLimit)))
-        }
+    @MainActor private func resizePanel() {
+        panelController?.resizeToFit()
     }
 
     @MainActor private func workspaceAppActivated(_ note: Notification) {
         guard let app = note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else { return }
+        if app.bundleIdentifier != Bundle.main.bundleIdentifier {
+            panelController?.close()
+        }
         if app.bundleIdentifier == "com.apple.systempreferences" {
             sawSystemSettingsFrontmost = true
             return
@@ -250,6 +240,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @MainActor func openSettings() {
+        panelController?.close(animated: false)
         if settingsWindow == nil {
             let settingsModel = SettingsModel(hotKeys: hotKeys)
             self.settingsModel = settingsModel
@@ -263,6 +254,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @MainActor func applicationWillTerminate(_ notification: Notification) {
+        panelController?.close(animated: false)
         externalSettingsWatch?.invalidate()
         hotKeys?.stop()
         model?.shutdown()
