@@ -64,7 +64,7 @@
 
 ## v0.2 正式命名与面板重设计验收（2026-10-18）
 
-- 正式名 SwitchPilot 确定；bundle id 保持 `local.personal.SwitchPilot`，不重置已授予的 TCC 授权。命名依据见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`。
+- 正式名 SwitchPilot 确定；bundle id 保持 `local.personal.SwitchPilot` 以减少迁移；ad-hoc 重建后 TCC 仍可能要求重新授权。命名依据见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`。
 - 面板重写：状态胶囊、首次引导卡（`UserDefaults("switchpilot.hasSeenWelcome")`）、保活进度条、外观/锁屏权限行内入口、动作磁贴、权限摘要 footer。
 - `SwitchPilotChecks` 扩为 **10/10**：新增“限时进度 / 无限期无进度”检查。
 - `python3 scripts/verify-app.py`：**8/8 通过**（构建、plists、ad-hoc Hardened Runtime 签名、自检 10/10、启动冒烟、无新增残留进程、原应用不变、脚本语法）。

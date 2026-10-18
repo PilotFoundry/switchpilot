@@ -45,5 +45,5 @@
 ## 正式命名与 v0.2 UI/UX（2026-10-18）
 
 - 正式名：**SwitchPilot**；候选冲突调研（Tack / Perch / Sill / Tact / Switchbar / Barkeep / MenuSwitch / OneBar / Flick / Switchlet 等已被占用）与设计依据见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`。
-- 命名决定不更换 bundle id（`local.personal.SwitchPilot`），避免重置用户已授予的 TCC 授权；分发前的商标/域名检索未做。
+- 命名决定不更换 bundle id（`local.personal.SwitchPilot`）以减少迁移；ad-hoc 重建后 TCC 仍可能要求重新授权。分发前的商标/域名检索未做。
 - UI/UX v0.2：首次引导、状态胶囊、保活进度、权限行内化、动作磁贴、权限摘要；实现与自动验收见 `evidence/app-runtime.md`。运行时/TCC/视觉手测仍待用户（TESTPLAN M1–M3、M5、M7）。

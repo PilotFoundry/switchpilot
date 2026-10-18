@@ -23,7 +23,7 @@
 <div class="card"><span class="badge">实现状态</span><div class="metric">v0.2</div><p>面板与引导已重做并构建；自动化 8/8、自检 10/10。</p></div>
 <div class="card"><span class="badge amber">未完成</span><div class="metric">现场</div><p>深色模式授权、屏保、锁屏仍需用户在场验收；本轮不记为通过。</p></div>
 </div>
-<p class="note"><strong>为什么正式名不换掉 SwitchPilot：</strong>调研发现好名字几乎都被占用（见下一节）；SwitchPilot 是少数在 macOS 菜单栏工具中没有直接同名冲突、含义准确的候选，同时保留现有 bundle id，<strong>不会重置你刚刚验证通过的 TCC 授权</strong>。正式化的是命名层级与品牌表述，而不是换一个会增加迁移成本的新词。</p></section>
+<p class="note"><strong>为什么正式名不换掉 SwitchPilot：</strong>调研发现好名字几乎都被占用（见下一节）；SwitchPilot 是少数在 macOS 菜单栏工具中没有直接同名冲突、含义准确的候选，同时保留现有 bundle id，减少因改名带来的额外迁移；但 ad-hoc 重新构建后 TCC 仍可能把应用视为新身份而要求重新授权。正式化的是命名层级与品牌表述，而不是换一个会增加迁移成本的新词。</p></section>
 
 <section id="naming"><h2>02 / 正式命名：候选与冲突</h2>
 <p>调研范围：macOS 菜单栏/工具类应用与常见命名冲突（网页检索，2026-10-18）。冲突判断以“同名或近同名、且同类产品”为主；个人自用不构成商标结论，正式分发前仍需专名检索。</p>
@@ -41,7 +41,7 @@
 <h3>命名规则（正式化）</h3>
 <ul>
 <li>产品名：<strong>SwitchPilot</strong>（一个词，首字母大写）；中文描述：「菜单栏开关」，仅作说明，不作为第二品牌。</li>
-<li>bundle id 保持 <code>local.personal.SwitchPilot</code>（避免 TCC 授权重置）；可执行文件与展示名保持 SwitchPilot。</li>
+<li>bundle id 保持 <code>local.personal.SwitchPilot</code>（减少迁移；ad-hoc 重建后 TCC 仍可能要求重新授权）；可执行文件与展示名保持 SwitchPilot。</li>
 <li>文档中不再出现“研究代号/正式名称未定”；分发/商标/域名可用性仍标记为未核验（个人自用阶段不阻塞）。</li>
 </ul></section>
 

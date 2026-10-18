@@ -22,6 +22,6 @@ python3 scripts/verify-app.py
 
 当前状态（v0.2.0）：保活已通过自动化验收；深色模式、屏保、锁屏已完成实现但需要用户在场完成 TCC 授权/屏幕状态相关的手动验收（`docs/TESTPLAN.md` M1–M3、M5、M7），未执行项不记为通过。用户已于 2026-10-18 口头确认 v0.1 初步验收可行（未逐项记录）。Night Shift 直接控制、合盖保活、显示器休眠等首版排除。
 
-命名：正式名 **SwitchPilot**，中文描述「菜单栏开关」；bundle id 保持 `local.personal.SwitchPilot` 以避免重置 TCC 授权。分发前的商标/域名检索未做。
+命名：正式名 **SwitchPilot**，中文描述「菜单栏开关」；bundle id 保持 `local.personal.SwitchPilot` 以减少迁移；ad-hoc 重建后 TCC 仍可能要求重新授权。分发前的商标/域名检索未做。
 
 原应用、分析数据库、工具和原始日志不入库。已安装工具与样本在保留的独立工作区 `/Users/pengxianghao/.codex/worktrees/97ec/oneswitch-rea`；应用构建只需要 CLT，不依赖该工作区。仅本地 Git，尚未配置远端备份。
