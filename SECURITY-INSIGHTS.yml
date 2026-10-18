@@ -38,7 +38,3 @@ repository:
         type: SAST
         version: 'v3'
         comment: 'Swift analysis workflow.'
-      - name: OpenSSF Scorecard
-        type: review
-        version: 'v2.4.0'
-        comment: 'Weekly supply-chain/security posture checks.'
