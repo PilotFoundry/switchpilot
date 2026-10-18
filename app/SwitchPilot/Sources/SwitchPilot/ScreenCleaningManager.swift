@@ -17,11 +17,12 @@ enum ScreenCleaningError: Error, CustomStringConvertible {
     }
 }
 
-/// Timed screen-cleaning mode. The keyboard is swallowed by a session event tap
-/// (requires the existing Accessibility grant), while the mouse/trackpad stays
-/// usable so the user can click the on-screen exit button. A timer is the
-/// safety fallback; keyboard is never used to exit. All state is released on
-/// stop and the event tap dies with the process if the app crashes.
+/// Screen-cleaning mode. The keyboard is swallowed by a session event tap
+/// (requires the existing Accessibility grant); the mouse remains usable so the
+/// user exits via the on-screen button. There is intentionally no countdown or
+/// automatic exit in normal use; an optional duration exists only for
+/// controlled tests (SWITCHPILOT_CLEAN_SCREEN_TEST_SECONDS). All state is
+/// released on stop and the tap dies with the process if the app crashes.
 @MainActor
 final class ScreenCleaningManager {
     var onStateChange: ((Bool, String) -> Void)?
@@ -34,8 +35,9 @@ final class ScreenCleaningManager {
     private var timer: Timer?
     private var assertion: PowerAssertion?
     private var remainingSeconds = 0
+    private var showsCountdown = false
 
-    func start(duration: Int = 60) throws {
+    func start(duration: Int? = nil) throws {
         guard !isActive else { return }
         guard Permissions.accessibilityTrusted() else {
             throw ScreenCleaningError.accessibilityRequired
@@ -66,14 +68,17 @@ final class ScreenCleaningManager {
         try? power.start()
         assertion = power
 
-        remainingSeconds = max(5, duration)
+        showsCountdown = duration != nil
+        remainingSeconds = max(1, duration ?? 0)
         buildOverlays()
         isActive = true
         updateCountdown()
         onStateChange?(true, "清洁模式进行中：键盘已暂停，鼠标点击退出")
 
-        timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
-            Task { @MainActor in self?.tick() }
+        if showsCountdown {
+            timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
+                Task { @MainActor in self?.tick() }
+            }
         }
     }
 
@@ -97,6 +102,7 @@ final class ScreenCleaningManager {
         overlays.removeAll()
         try? assertion?.stop()
         assertion = nil
+        showsCountdown = false
         let wasActive = isActive
         isActive = false
         if wasActive {
@@ -114,7 +120,7 @@ final class ScreenCleaningManager {
     }
 
     private func tick() {
-        guard isActive else { return }
+        guard isActive, showsCountdown else { return }
         remainingSeconds -= 1
         updateCountdown()
         if remainingSeconds <= 0 {
@@ -123,6 +129,7 @@ final class ScreenCleaningManager {
     }
 
     private func updateCountdown() {
+        guard showsCountdown else { return }
         for overlay in overlays {
             overlay.update(secondsRemaining: remainingSeconds)
         }
@@ -130,7 +137,7 @@ final class ScreenCleaningManager {
 
     private func buildOverlays() {
         for screen in NSScreen.screens {
-            let window = NSWindow(
+            let window = CleaningWindow(
                 contentRect: screen.frame,
                 styleMask: [.borderless],
                 backing: .buffered,
@@ -143,7 +150,9 @@ final class ScreenCleaningManager {
             window.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary, .stationary]
             let overlay = CleaningOverlayView(
                 frame: NSRect(origin: .zero, size: screen.frame.size),
-                manager: self)
+                manager: self,
+                showCountdown: showsCountdown)
+            overlay.autoresizingMask = [.width, .height]
             window.contentView = overlay
             window.makeKeyAndOrderFront(nil)
             window.orderFrontRegardless()
@@ -156,52 +165,74 @@ final class ScreenCleaningManager {
     @objc fileprivate func exitFromOverlay(_ sender: Any?) {
         stop()
     }
+
+    /// Offscreen preview of the overlay (no event tap/windows) for UI checks.
+    @MainActor
+    static func previewOverlay(size: NSSize) -> NSView {
+        let manager = ScreenCleaningManager()
+        let view = CleaningOverlayView(
+            frame: NSRect(origin: .zero, size: size),
+            manager: manager,
+            showCountdown: false)
+        view.layoutSubtreeIfNeeded()
+        return view
+    }
+}
+
+/// Borderless overlay windows must opt into key/main status so the mouse can
+/// interact with the exit button.
+private final class CleaningWindow: NSWindow {
+    override var canBecomeKey: Bool { true }
+    override var canBecomeMain: Bool { true }
 }
 
 private final class CleaningOverlayView: NSView {
     private weak var manager: ScreenCleaningManager?
+    private let titleLabel = NSTextField(labelWithString: "屏幕清洁模式")
+    private let instructionLabel = NSTextField(labelWithString: "")
     private let countdownLabel = NSTextField(labelWithString: "")
-    private let button: NSButton
+    private let exitControl: CleaningExitControl
+    private let showsCountdown: Bool
 
-    init(frame: NSRect, manager: ScreenCleaningManager) {
+    init(frame: NSRect, manager: ScreenCleaningManager, showCountdown: Bool) {
         self.manager = manager
-        self.button = NSButton(title: "退出清洁模式", target: manager, action: #selector(ScreenCleaningManager.exitFromOverlay(_:)))
+        self.showsCountdown = showCountdown
+        self.exitControl = CleaningExitControl(manager: manager)
         super.init(frame: frame)
         wantsLayer = true
         layer?.backgroundColor = NSColor.black.cgColor
 
-        let title = NSTextField(labelWithString: "屏幕清洁模式")
-        title.font = .systemFont(ofSize: 24, weight: .semibold)
-        title.textColor = .white
+        titleLabel.font = .systemFont(ofSize: 24, weight: .semibold)
+        titleLabel.textColor = .white
+        titleLabel.alignment = .center
+        titleLabel.isEditable = false
+        titleLabel.isBordered = false
+        titleLabel.drawsBackground = false
 
-        let instruction = NSTextField(labelWithString: "键盘输入已暂停；移动鼠标并点击按钮即可退出。若未点击，计时结束后自动退出。")
-        instruction.font = .systemFont(ofSize: 13)
-        instruction.textColor = NSColor(white: 0.78, alpha: 1)
-        instruction.alignment = .center
-        instruction.lineBreakMode = .byWordWrapping
-        instruction.maximumNumberOfLines = 2
+        instructionLabel.font = .systemFont(ofSize: 13)
+        instructionLabel.textColor = NSColor(white: 0.78, alpha: 1)
+        instructionLabel.alignment = .center
+        instructionLabel.lineBreakMode = .byWordWrapping
+        instructionLabel.maximumNumberOfLines = 2
+        instructionLabel.isEditable = false
+        instructionLabel.isBordered = false
+        instructionLabel.drawsBackground = false
+        instructionLabel.stringValue = showCountdown
+            ? "键盘输入已暂停；点击下方按钮退出。测试模式会在倒计时结束时自动退出。"
+            : "键盘输入已暂停；移动鼠标并点击下方按钮退出清洁模式。"
 
         countdownLabel.font = .monospacedDigitSystemFont(ofSize: 16, weight: .medium)
         countdownLabel.textColor = .white
         countdownLabel.alignment = .center
+        countdownLabel.isEditable = false
+        countdownLabel.isBordered = false
+        countdownLabel.drawsBackground = false
+        countdownLabel.isHidden = !showCountdown
 
-        button.bezelStyle = .rounded
-        button.controlSize = .large
-        button.keyEquivalent = ""
-        button.translatesAutoresizingMaskIntoConstraints = false
-
-        let stack = NSStackView(views: [title, instruction, countdownLabel, button])
-        stack.orientation = .vertical
-        stack.alignment = .centerX
-        stack.spacing = 16
-        stack.translatesAutoresizingMaskIntoConstraints = false
-        addSubview(stack)
-        NSLayoutConstraint.activate([
-            stack.centerXAnchor.constraint(equalTo: centerXAnchor),
-            stack.centerYAnchor.constraint(equalTo: centerYAnchor),
-            stack.leadingAnchor.constraint(greaterThanOrEqualTo: leadingAnchor, constant: 40),
-            stack.trailingAnchor.constraint(lessThanOrEqualTo: trailingAnchor, constant: -40),
-        ])
+        addSubview(titleLabel)
+        addSubview(instructionLabel)
+        addSubview(countdownLabel)
+        addSubview(exitControl)
     }
 
     required init?(coder: NSCoder) {
@@ -210,8 +241,56 @@ private final class CleaningOverlayView: NSView {
 
     override var acceptsFirstResponder: Bool { true }
 
+    override func layout() {
+        super.layout()
+        let width = bounds.width
+        let height = bounds.height
+        titleLabel.frame = NSRect(x: 40, y: height * 0.62, width: width - 80, height: 36)
+        instructionLabel.frame = NSRect(x: 60, y: height * 0.52, width: width - 120, height: 48)
+        countdownLabel.frame = NSRect(x: 60, y: height * 0.46, width: width - 120, height: 24)
+        exitControl.frame = NSRect(x: (width - 240) / 2, y: height * 0.34, width: 240, height: 54)
+    }
+
     func update(secondsRemaining: Int) {
-        countdownLabel.stringValue = "\(secondsRemaining) 秒后自动退出"
+        guard showsCountdown else { return }
+        countdownLabel.stringValue = "\(secondsRemaining) 秒后自动退出（测试模式）"
+    }
+}
+
+/// Custom-drawn exit control instead of NSButton: it renders reliably on the
+/// pure-black overlay and accepts the first mouse click.
+private final class CleaningExitControl: NSView {
+    private weak var manager: ScreenCleaningManager?
+    private let label = NSTextField(labelWithString: "退出清洁模式")
+
+    init(manager: ScreenCleaningManager) {
+        self.manager = manager
+        super.init(frame: .zero)
+        wantsLayer = true
+        layer?.backgroundColor = NSColor(white: 0.94, alpha: 1).cgColor
+        layer?.cornerRadius = 10
+        label.font = .systemFont(ofSize: 18, weight: .semibold)
+        label.textColor = NSColor(white: 0.08, alpha: 1)
+        label.alignment = .center
+        label.isEditable = false
+        label.isBordered = false
+        label.drawsBackground = false
+        addSubview(label)
+    }
+
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+
+    override func layout() {
+        super.layout()
+        label.frame = bounds.insetBy(dx: 12, dy: 12)
+    }
+
+    override func acceptsFirstMouse(for event: NSEvent?) -> Bool { true }
+
+    override func mouseDown(with event: NSEvent) {
+        manager?.exitFromOverlay(nil)
     }
 }
 

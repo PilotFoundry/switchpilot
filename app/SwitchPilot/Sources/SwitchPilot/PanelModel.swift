@@ -429,7 +429,11 @@ final class PanelModel: ObservableObject {
             return
         }
         do {
-            try screenCleaning.start(duration: 60)
+            // Normal mode has no timer/countdown; an env var is available only
+            // for controlled tests that need an automatic exit.
+            let testSeconds = ProcessInfo.processInfo.environment["SWITCHPILOT_CLEAN_SCREEN_TEST_SECONDS"]
+                .flatMap(Int.init)
+            try screenCleaning.start(duration: testSeconds)
         } catch {
             screenCleaningStatus = "\(error)"
         }

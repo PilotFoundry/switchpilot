@@ -261,7 +261,7 @@ struct PanelView: View {
                         } label: {
                             Label("取消静音", systemImage: "mic.fill")
                         }
-                        .buttonStyle(.borderedProminent)
+                        .buttonStyle(.bordered)
                         .controlSize(.small)
                         .help("取消麦克风静音")
                         .accessibilityLabel("取消麦克风静音")

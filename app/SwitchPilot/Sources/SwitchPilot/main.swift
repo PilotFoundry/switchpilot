@@ -84,6 +84,22 @@ func diagnoseRuntime() -> Int32 {
 }
 
 @MainActor
+func dumpCleanOverlay() -> Int32 {
+    let application = NSApplication.shared
+    application.setActivationPolicy(.prohibited)
+    let view = ScreenCleaningManager.previewOverlay(size: NSSize(width: 900, height: 600))
+    view.frame = NSRect(x: 0, y: 0, width: 900, height: 600)
+    view.layoutSubtreeIfNeeded()
+    guard let rep = view.bitmapImageRepForCachingDisplay(in: view.bounds) else { return 1 }
+    view.cacheDisplay(in: view.bounds, to: rep)
+    guard let data = rep.representation(using: .png, properties: [:]) else { return 1 }
+    let path = ProcessInfo.processInfo.environment["SWITCHPILOT_PANEL_DUMP"] ?? "/tmp/switchpilot-clean-overlay.png"
+    try? data.write(to: URL(fileURLWithPath: path))
+    print(path)
+    return 0
+}
+
+@MainActor
 func panelSize() -> Int32 {
     let application = NSApplication.shared
     application.setActivationPolicy(.prohibited)
@@ -146,6 +162,9 @@ if arguments.contains("--diagnose-runtime") {
 }
 if arguments.contains("--diagnose-permissions") {
     exit(MainActor.assumeIsolated { diagnosePermissions() })
+}
+if arguments.contains("--dump-clean-overlay") {
+    exit(MainActor.assumeIsolated { dumpCleanOverlay() })
 }
 if arguments.contains("--panel-size") {
     exit(MainActor.assumeIsolated { panelSize() })
