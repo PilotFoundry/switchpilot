@@ -297,7 +297,18 @@ def panel_click_path():
             "面板打开时必须激活 app，避免首次点击只激活窗口")
     require(".allowsHitTesting(false)" in panel_view,
             "边框 overlay 不得参与点击命中")
-    return "material click-through / border non-hit-testing / panel app activation"
+    settings = read("app/SwitchPilot/Sources/SwitchPilot/SettingsWindowController.swift")
+    require("private final class SettingsWindow: NSWindow" in settings,
+            "缺少处理 Cmd-W 的 SettingsWindow")
+    require("override func performKeyEquivalent(with event: NSEvent) -> Bool" in settings,
+            "SettingsWindow 缺少 performKeyEquivalent")
+    require("charactersIgnoringModifiers?.lowercased() == \"w\"" in settings,
+            "SettingsWindow 未匹配 Command-W")
+    require("performClose(nil)" in settings,
+            "SettingsWindow 未调用 performClose")
+    require("addLocalMonitorForEvents(matching: .keyDown)" in settings,
+            "Settings 窗口缺少 Command-W 事件监视回退")
+    return "material click-through / border non-hit-testing / panel activation / settings Cmd-W"
 
 
 # 14. 面板尺寸阈值（复用 --panel-size 离屏诊断，不显示 UI、不请求权限）。

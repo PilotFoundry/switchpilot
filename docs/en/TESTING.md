@@ -47,7 +47,7 @@ state. Do not record a check as passed if it was not executed.
 | Screen cleaning | Overlay, keyboard suspended, mouse exit, no countdown in normal mode, hidden timeout behavior |
 | Login item | Register/unregister, logout/reboot launch |
 | Hotkeys | Default off, enable, conflict error, disable, real key trigger |
-| Settings | Revoke disclosure, advanced reset confirmation, no automatic tccutil |
+| Settings | Revoke disclosure, advanced reset confirmation, no automatic tccutil; Command-W and Escape close the window |
 | UI | Light/dark, small display, larger text, VoiceOver labels |
 | Languages | Follow System + English, 简体中文, 繁體中文, 日本語; restart persistence |
 | Icons | Menu-bar template icon, app icon in Finder/System Settings |
@@ -56,7 +56,7 @@ state. Do not record a check as passed if it was not executed.
 ## Release artifact checks
 
 ```sh
-VERSION=0.7.4
+VERSION=0.7.5
 ZIP=dist/SwitchPilot-${VERSION}-macos-universal-adhoc.zip
 shasum -a 256 -c "$ZIP.sha256"
 unzip -q "$ZIP"

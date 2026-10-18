@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml)
 
-バージョン 0.7.4 · PilotFoundry が維持する、信頼できるいくつかのシステム操作に絞ったオープンソースでプライバシー重視の小さな macOS メニューバーユーティリティです。
+バージョン 0.7.5 · PilotFoundry が維持する、信頼できるいくつかのシステム操作に絞ったオープンソースでプライバシー重視の小さな macOS メニューバーユーティリティです。
 
 > このリポジトリは、初期の調査や受け入れ検証の記録を含む完全な開発履歴を保持しています。アプリのソースコードと現在の英語ドキュメントはルートにあり、過去の資料は `artifacts/`、`evidence/`、`tooling/` などのディレクトリにあります。詳しくは [docs/RESEARCH.md](docs/RESEARCH.md) をご覧ください。
 
@@ -64,14 +64,14 @@ SwitchPilot は 4 つの UI ローカライズを提供しています：
 [最新リリース](https://github.com/PilotFoundry/switchpilot/releases/latest) では、対応するタグのソースからビルドした universal（Apple Silicon + Intel）版 macOS アプリを配布しています。現在このプロジェクトには Developer ID 証明書がないため、**ad-hoc 署名・未公証** のビルドです。
 
 - 要件：macOS 14 以降
-- ファイル：`SwitchPilot-0.7.4-macos-universal-adhoc.zip`
+- ファイル：`SwitchPilot-0.7.5-macos-universal-adhoc.zip`
 - ダウンロードして展開し、`SwitchPilot.app` を `/Applications` に移動
 - 初回起動時に macOS にブロックされる場合：アプリを右クリック → **開く**
 - ターミナルを使う場合は、このアプリだけに限定して実行：
   `xattr -dr com.apple.quarantine /Applications/SwitchPilot.app`
 - Gatekeeper をシステム全体で無効にしないでください
 
-zip は `./scripts/build-release` でビルドされ、SHA-256 ファイルもリリースに添付されます（`SwitchPilot-0.7.4-macos-universal-adhoc.zip.sha256`）。これはダウンロード用の便宜的なビルドであり、Developer ID／公証済みの配布物ではありません。完全に信頼したい場合は、ソースから自分でビルドして署名してください。
+zip は `./scripts/build-release` でビルドされ、SHA-256 ファイルもリリースに添付されます（`SwitchPilot-0.7.5-macos-universal-adhoc.zip.sha256`）。これはダウンロード用の便宜的なビルドであり、Developer ID／公証済みの配布物ではありません。完全に信頼したい場合は、ソースから自分でビルドして署名してください。
 
 ## 動作環境
 
