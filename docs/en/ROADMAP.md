@@ -2,7 +2,7 @@
 
 ## Current baseline
 
-- Version: 0.7.0
+- Version: 0.7.1
 - Status: personal-use early release; not notarized, no distributed binaries.
 - Implemented: keep awake, dark mode, screen saver, lock screen, display sleep,
   microphone mute, screen cleaning, optional login item, fixed hotkeys, and

@@ -1,8 +1,9 @@
 # Core principles
 
-SwitchPilot is a personal-use, low-permission macOS menu bar app. Its goal is
-not to reproduce every One Switch feature; it is to make a few high-value system
-actions reliable and quick.
+SwitchPilot is an open-source, low-permission macOS menu bar app maintained by
+PilotFoundry. It began as a personal tool; its goal is not to reproduce every
+One Switch feature, but to make a few high-value system actions reliable and
+quick.
 
 ## Product rules
 

@@ -3,6 +3,16 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
+## [0.7.1] - 2026-10-18
+
+- Reword the About section for the open-source release: it now describes
+  SwitchPilot as an open-source macOS menu-bar utility maintained by
+  PilotFoundry under the MIT license, instead of describing it as a personal,
+  non-distributed One Switch replacement.
+- Change the About badge from "personal use" to "open source" in every locale.
+- Add an ad-hoc universal binary release asset and multilingual download
+  instructions (not notarized; right-click Open required on first launch).
+
 ## [0.7.0] - 2026-10-18
 
 - Add Traditional Chinese and Japanese UI localizations.

@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml)
 
-版本 0.7.0 · 一个小而克制的 macOS 菜单栏系统工具，只保留少数可靠、低权限的系统控制。SwitchPilot 是个人自用项目，不是 One Switch 的全量复刻，也与 One Switch 无隶属关系。
+版本 0.7.1 · 由 PilotFoundry 维护的开源、隐私优先 macOS 菜单栏工具，只保留少数可靠、低权限的系统控制。
 
 > 本仓库保留完整开发历史，包括早期研究、失败实验和现场验收记录。应用源码与当前英文文档位于根目录；历史材料在 `artifacts/`、`evidence/`、`tooling/` 等目录，详见 [docs/RESEARCH.md](docs/RESEARCH.md)。
 
@@ -64,7 +64,7 @@ SwitchPilot 提供四套 UI 本地化：
 Release 提供由对应 tag 源码构建的 universal（Apple Silicon + Intel）macOS 应用。当前项目没有 Developer ID 证书，因此它是 **ad-hoc 签名、未公证** 的版本。
 
 - 要求：macOS 14 或更高
-- 文件：`SwitchPilot-0.7.0-macos-universal-adhoc.zip`
+- 文件：`SwitchPilot-0.7.1-macos-universal-adhoc.zip`
 - 下载、解压后把 `SwitchPilot.app` 放到 `/Applications`
 - 首次打开可能被 macOS 拦截：右键点击应用 → **打开**
 - 如使用终端，只对该应用执行：
@@ -139,7 +139,7 @@ SwitchPilot 只在你主动使用需要权限的功能时才申请权限。
 
 ## 状态与测试
 
-这是早期个人自用项目。部分权限和硬件相关流程需要人工验收；没有自动化测试不代表已验证。CI 在 GitHub macOS runner 上构建应用并运行 smoke 检查，刻意不请求 TCC/TCC 周边权限。人工验收矩阵见 [docs/en/TESTING.md](docs/en/TESTING.md)。
+这是由 PilotFoundry 维护的早期开源项目。部分权限和硬件相关流程需要人工验收；没有自动化测试不代表已验证。CI 在 GitHub macOS runner 上构建应用并运行 smoke 检查，刻意不请求 TCC/TCC 周边权限。人工验收矩阵见 [docs/en/TESTING.md](docs/en/TESTING.md)。
 
 ## 仓库结构
 

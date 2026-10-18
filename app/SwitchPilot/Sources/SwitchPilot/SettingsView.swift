@@ -24,7 +24,7 @@ struct SettingsView: View {
 
             HStack {
                 Spacer()
-                Text("个人自用")
+                Text("开源")
                     .font(.caption)
                     .foregroundStyle(Color.secondaryInk)
             }
@@ -312,7 +312,7 @@ struct SettingsView: View {
                     .font(.caption)
                     .foregroundStyle(Color.secondaryInk)
             }
-            Text("个人自用菜单栏开关；不改原 One Switch，不做分发。")
+            Text("由 PilotFoundry 维护的开源 macOS 菜单栏小工具，遵循 MIT 许可证。")
                 .font(.caption)
                 .foregroundStyle(Color.secondaryInk)
         }

@@ -4,9 +4,8 @@
 
 [![CI](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml)
 
-Version 0.7.0 · A small, privacy-first macOS menu bar utility for a few reliable system
-controls. SwitchPilot is a personal-use project, not a full One Switch clone
-and not affiliated with One Switch.
+Version 0.7.1 · An open-source, privacy-first macOS menu bar utility for a few
+reliable system controls, maintained by PilotFoundry.
 
 > This repository preserves the complete development history, including its
 > original research and acceptance notes. The app source and current English
@@ -79,7 +78,7 @@ asset is a universal (Apple Silicon + Intel) macOS app built from the tagged sou
 does not currently have a Developer ID certificate.
 
 - Requirement: macOS 14 or later
-- Asset: `SwitchPilot-0.7.0-macos-universal-adhoc.zip`
+- Asset: `SwitchPilot-0.7.1-macos-universal-adhoc.zip`
 - Download, unzip, move `SwitchPilot.app` to `/Applications`
 - On first launch macOS may block it: **right-click the app → Open**
 - If you prefer a terminal command, limit it to this app:
@@ -87,7 +86,7 @@ does not currently have a Developer ID certificate.
 - Do not disable Gatekeeper system-wide
 
 The zip is built by `./scripts/build-release`; its SHA-256 checksum is published
-next to the asset (`SwitchPilot-0.7.0-macos-universal-adhoc.zip.sha256`). This is a convenience build, not a Developer ID/notarized
+next to the asset (`SwitchPilot-0.7.1-macos-universal-adhoc.zip.sha256`). This is a convenience build, not a Developer ID/notarized
 distribution. Build from source if you want to inspect or sign it yourself.
 
 ## Requirements
@@ -170,7 +169,7 @@ The cleaning overlay is local UI only and does not modify system settings.
 
 ## Status and testing
 
-This is an early, personal-use project. Some permission and hardware-dependent
+This is an early open-source project maintained by PilotFoundry. Some permission and hardware-dependent
 flows require manual acceptance; absence of an automated test does not mean a
 flow is verified. The CI workflow builds the app and runs a smoke check on a
 GitHub macOS runner; it deliberately does not request TCC/TCC-adjacent
