@@ -9,6 +9,7 @@ struct SettingsView: View {
             permissionSection
             hotKeySection
             loginItemSection
+            languageSection
             aboutSection
 
             if !model.message.isEmpty {
@@ -274,6 +275,30 @@ struct SettingsView: View {
                 .font(.caption)
                 .foregroundStyle(Color.secondaryInk)
                 .fixedSize(horizontal: false, vertical: true)
+        }
+    }
+
+    private var languageSection: some View {
+        section("语言", subtitle: "切换后需要重启应用生效。") {
+            HStack(spacing: 10) {
+                Picker("", selection: Binding(
+                    get: { model.language },
+                    set: { model.setLanguage($0) }
+                )) {
+                    ForEach(AppLanguage.allCases) { language in
+                        Text(language.displayName).tag(language)
+                    }
+                }
+                .labelsHidden()
+                .pickerStyle(.menu)
+                .frame(maxWidth: .infinity, alignment: .leading)
+
+                Button(L("退出并重新打开")) {
+                    model.restartApp()
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+            }
         }
     }
 

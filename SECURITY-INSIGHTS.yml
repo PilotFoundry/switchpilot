@@ -15,10 +15,10 @@ project:
   type: application
   license: MIT
   releases:
-    - name: v0.6.0
-      description: English localization and complete open-source history
+    - name: v0.7.0
+      description: Traditional Chinese, Japanese and in-app language selection
       created: '2026-10-18'
-      url: https://github.com/PilotFoundry/switchpilot/releases/tag/v0.6.0
+      url: https://github.com/PilotFoundry/switchpilot/releases/tag/v0.7.0
       type: source
 repository:
   url: https://github.com/PilotFoundry/switchpilot

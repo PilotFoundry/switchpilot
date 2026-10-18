@@ -3,6 +3,15 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
+## [0.7.0] - 2026-10-18
+
+- Add Traditional Chinese and Japanese UI localizations.
+- Add a Settings → Language selector (Follow System, English, 简体中文,
+  繁體中文, 日本語) with an explicit "Quit and Reopen" action so the bundle
+  localization and permission prompts reload consistently.
+- Add localized InfoPlist strings for Japanese and Traditional Chinese.
+- Keep English and Simplified Chinese behavior unchanged.
+
 ## [0.6.0] - 2026-10-18
 
 - Add system-language English localization for the app, permission prompts,

@@ -7,9 +7,11 @@ ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 swift build --package-path "$ROOT/app/SwitchPilot" --build-system native
 APP=$(/bin/sh "$ROOT/scripts/build-app" | tail -n 1)
 test -d "$APP"
-for lang in en zh-Hans; do
+for lang in en zh-Hans zh-Hant ja; do
     test -f "$APP/Contents/Resources/$lang.lproj/Localizable.strings"
 done
 test -f "$APP/Contents/Resources/en.lproj/InfoPlist.strings"
+test -f "$APP/Contents/Resources/ja.lproj/InfoPlist.strings"
+test -f "$APP/Contents/Resources/zh-Hant.lproj/InfoPlist.strings"
 python3 "$ROOT/scripts/check-contrast.py"
 printf '%s\n' "smoke: build, app bundle, and contrast checks passed"

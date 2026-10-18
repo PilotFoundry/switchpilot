@@ -209,3 +209,8 @@
 "%@ 秒后自动退出（测试模式）" = "Exits automatically in %@ s (test mode)";
 "%@ 保持亮屏 · %@ 启动屏保" = "%@ Keep Awake · %@ Start Screen Saver";
 "（%@）" = " (%@)";
+"语言" = "Language";
+"跟随系统" = "Follow System";
+"切换后需要重启应用生效。" = "Restart the app after changing the language.";
+"语言已保存，重启应用后生效。" = "Language saved. Restart the app to apply it.";
+"退出并重新打开" = "Quit and Reopen";

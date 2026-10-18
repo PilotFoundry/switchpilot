@@ -18,6 +18,7 @@ final class SettingsModel: ObservableObject {
 
     @Published private(set) var hotKeysEnabled = false
     @Published private(set) var hotKeyError = ""
+    @Published private(set) var language: AppLanguage = LanguagePreference.selected
 
     init(hotKeys: HotKeyManager? = nil) {
         self.hotKeys = hotKeys
@@ -32,7 +33,7 @@ final class SettingsModel: ObservableObject {
     }
 
     var version: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.6.0"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.7.0"
     }
 
     var hasAnyPermission: Bool {
@@ -210,6 +211,22 @@ final class SettingsModel: ObservableObject {
             hotKeyError = ""
             message = enabled ? L("全局快捷键已启用。") : L("全局快捷键已停用。")
         }
+    }
+
+    func setLanguage(_ language: AppLanguage) {
+        self.language = language
+        LanguagePreference.set(language)
+        message = L("语言已保存，重启应用后生效。")
+    }
+
+    func restartApp() {
+        let path = Bundle.main.bundlePath
+        let quoted = "'" + path.replacingOccurrences(of: "'", with: "'\\''") + "'"
+        let process = Process()
+        process.executableURL = URL(fileURLWithPath: "/bin/sh")
+        process.arguments = ["-c", "sleep 0.8; /usr/bin/open \(quoted)"]
+        try? process.run()
+        NSApp.terminate(nil)
     }
 
     func resetInAppPermissions() {

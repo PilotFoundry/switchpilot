@@ -44,6 +44,7 @@ state. Do not record a check as passed if it was not executed.
 | Hotkeys | Default off, enable, conflict error, disable, real key trigger |
 | Settings | Revoke disclosure, advanced reset confirmation, no automatic tccutil |
 | UI | Light/dark, small display, larger text, VoiceOver labels |
+| Languages | Follow System, English, 简体中文, 繁體中文, 日本語; reopen and verify panel/settings/permission prompt |
 | Icons | Menu-bar template icon, app icon in Finder/System Settings |
 
 ## Safety when testing screen cleaning
