@@ -107,6 +107,7 @@ SWITCHPILOT_SIGN_IDENTITY="Apple Development: Your Name (TEAMID)" ./scripts/buil
 ```sh
 make build   # 構建 Swift package
 make app     # 組裝 .app
+make release # 建置 universal ad-hoc zip（未公證）
 make smoke   # CI 安全構建 + 對比度檢查（不觸發 TCC）
 make install # 複製到 ~/Applications
 ```

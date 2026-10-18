@@ -132,6 +132,7 @@ stronger trust, build from source and sign it locally. See
 ```sh
 make build   # Swift package build
 make app     # assemble the .app
+make release # build the universal ad-hoc zip (not notarized)
 make smoke   # CI-safe build + contrast check (no TCC)
 make install # copy into ~/Applications
 ```

@@ -88,7 +88,8 @@ Release notes must include:
 
 - artifact name and architecture;
 - macOS requirement;
-- SHA-256;
+- a pointer to the attached `.sha256` file (or a hash updated after every
+  workflow rebuild);
 - ad-hoc/not-notarized warning;
 - right-click **Open** or scoped `xattr` command;
 - a statement that no Developer ID build exists.
@@ -96,6 +97,8 @@ Release notes must include:
 The automated path is `.github/workflows/release.yml`, triggered when a release
 is published or manually dispatched for an existing tag. It rebuilds and
 replaces the zip/checksum using the repository token. It does not notarize.
+Because a rerun can change the zip's hash, prefer linking the `.sha256` asset
+over hard-coding a hash in the release notes.
 
 ## 6. Gatekeeper wording
 
