@@ -228,17 +228,17 @@ open app/SwitchPilot/.build/SwitchPilot.app
 - `scripts/onsite-probe`：优先用运行中应用的 `switchpilot://diagnose` 写只读报告；移除会偶发挂起的 `sfltool dumpbtm`；TCC 日志限 5 分钟。
 - 验证：面板 380×637/710；设置窗口 523/774；普通重复启动保持一个实例；`open -n` 被 LS 禁止（诊断改走 URL）；verify-app 11/11、自检 12/12。
 
-## 15. v0.4.0：快捷键、显示器休眠、音量原型
+## 15. v0.5.0：麦克风静音、屏幕清洁与快捷动作
 
-- `HotKeyManager.swift`：Carbon `InstallEventHandler` + `RegisterEventHotKey`，固定 `⌃⌥⌘K`（保活切换）/`⌃⌥⌘S`（屏保）；启动时按 `UserDefaults switchpilot.hotKeysEnabled` 决定是否注册；默认关闭；注册失败时注销已注册项、回写关闭并返回可读错误；动作通过闭包调用 `PanelModel.toggleKeepAwake()`/`startScreenSaver()`，在 MainActor 执行。无 TCC；设置页开关绑定。
-- `DisplaySleep.swift`：`Process` 调 `/usr/bin/pmset displaysleepnow`；无 TCC、一次性动作；失败返回真实退出码/错误；`PanelModel.sleepDisplay()` 后台执行并更新状态。
-- `AudioOutput.swift`：CoreAudio 读取默认输出设备、名称、`kAudioDevicePropertyMute`/`kAudioDevicePropertyVolumeScalar` 能力与当前值；写入后由 UI 刷新读回；不支持时不显示可操作控件。原型不做设备变更监听，面板刷新/重开时重新探测。
-- `PanelModel`：新增 `toggleKeepAwake()`、`audioState/audioVolume/audioError`、`displaySleepStatus`；刷新时读取音频状态。
-- `SettingsModel`：持有 `HotKeyManager`，提供 enable/disable、组合说明、错误消息；`SettingsView` 新增快捷键区。
-- 自动化：`SwitchPilotChecks` 新增音频只读能力与 pmset 可用性检查（14/14）；verify-app 更新面板尺寸阈值（380×780/860）且保持 11/11。
-- 已知边界：快捷键真实按键分发、pmset 真实休眠/唤醒、音量在支持设备上的真实写入需现场；音量当前默认设备 unsupported。
-
-### 15.1 v0.4.1 音量卡交互修正
-
-- 用户截图反馈音量卡显示歧义；v0.4.1 将静音按钮改为动作文案（`取消静音`/`静音` + 对应图标），标题图标保留当前状态；静音时滑块 `.disabled` 并显示“已静音”，未静音显示百分比。
-- 增加 `audioVolume/audioMuted` 到运行诊断，便于现场核对 CoreAudio 状态；快捷键测试按用户要求并入长期收尾，不在本轮催测。
+- `Microphone.swift`：CoreAudio 读取默认输入设备、名称与 `kAudioDevicePropertyMute`（input scope）能力/当前值；`setMuted` 写入后 UI 刷新读回；不支持时不显示可操作控件。无新增 TCC；原型不做设备变更监听，刷新/重开面板时重新探测。
+- `PanelModel`：新增 `microphoneState/microphoneError/toggleMicrophoneMute/refreshMicrophone`；`startScreenCleaning` 调用清洁管理器并在失败时显示真实原因。
+- `ScreenCleaningManager.swift`：
+  - 需要既有 Accessibility；用 `CGEvent.tapCreate(.cgSessionEventTap, .defaultTap)` 拦截 `keyDown/keyUp/flagsChanged`，**不拦截鼠标事件**。
+  - 每个 `NSScreen` 建一个 borderless 黑色 `NSWindow`（`CGShieldingWindowLevel`），内含「退出清洁模式」`NSButton`、倒计时和说明；鼠标点击退出。
+  - 60 秒 `Timer` 自动退出；`PowerAssertion` 防显示器睡眠；`stop()` 幂等清理 tap/窗口/断言/定时器；事件 tap 被系统禁用时尝试 re-enable，失败则退出。
+  - 无 Accessibility/事件 tap 创建失败：返回明确错误，不创建遮罩。
+- `HotKeyManager.swift`：Carbon 固定组合快捷键（保活/屏保），默认关闭；注册失败回写关闭并报错；无 TCC。
+- `DisplaySleep.swift`：公开 pmset，一次性动作。
+- 删除 `AudioOutput.swift` 与面板输出音量卡；不再有 M11 音量验收。
+- 自动化：`SwitchPilotChecks` 14 项（麦克风只读能力、pmset 可用性）；verify-app 保持 11/11，面板尺寸阈值 380×840/900。
+- 已知边界：麦克风静音在真实支持设备上的写入、屏幕清洁真实键鼠行为需现场（M12/M13）；屏幕清洁会拦截键盘，自动化不启动它。
