@@ -47,6 +47,9 @@ notarization remain out of scope while no certificate is available.
     explain themselves. Do not add persistent copy for successful quick actions
     or for what a label already says; reserve text for permissions, failures,
     recovery and safety-critical exits.
+12. **Quick actions are fire-and-forget.** Screen saver, lock, display sleep and
+    screen cleaning do not keep a success history or completion status in the
+    panel. Errors surface; successful actions simply happen and disappear.
 
 ## Scope
 

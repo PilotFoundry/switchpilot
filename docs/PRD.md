@@ -1,6 +1,6 @@
 # Product requirements
 
-Status: current baseline **v0.7.7** (2026-10-18). English is the canonical
+Status: current baseline **v0.7.8** (2026-10-18). English is the canonical
 source for this document.
 
 ## 1. Problem
@@ -82,8 +82,8 @@ See [CORE.md](CORE.md) for the admission rules.
 - Permission-required actions are disabled or explained, never fake success.
 - Screen cleaning must show a visible mouse exit and must not offer a keyboard
   exit by design.
-- Do not add persistent copy for successful quick actions. Surface failures,
-  permission gaps and screen-cleaning recovery only.
+- Do not add persistent copy for successful quick actions. Surface failures and
+  permission gaps only; quick actions leave no success history.
 - Language names are shown in their own language; the current selection is
   visible; a **Quit and Reopen** action is available.
 

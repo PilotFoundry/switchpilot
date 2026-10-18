@@ -44,7 +44,7 @@ state. Do not record a check as passed if it was not executed.
 | Lock screen | Automation + Accessibility, lock, password unlock |
 | Display sleep | Screen sleeps; wake behavior follows system settings |
 | Microphone | Mute/unmute on supported input; unsupported explanation |
-| Screen cleaning | Overlay, keyboard suspended, mouse exit, no countdown in normal mode, hidden timeout behavior |
+| Screen cleaning | Overlay, keyboard suspended, mouse exit, no countdown in normal mode, hidden timeout behavior, no completion history line |
 | Login item | Register/unregister, logout/reboot launch |
 | Hotkeys | Default off, enable, conflict error, disable, real key trigger |
 | Settings | Revoke disclosure, advanced reset confirmation, no automatic tccutil; Command-W and Escape close the window |
@@ -56,7 +56,7 @@ state. Do not record a check as passed if it was not executed.
 ## Release artifact checks
 
 ```sh
-VERSION=0.7.7
+VERSION=0.7.8
 ZIP=dist/SwitchPilot-${VERSION}-macos-universal-adhoc.zip
 shasum -a 256 -c "$ZIP.sha256"
 unzip -q "$ZIP"

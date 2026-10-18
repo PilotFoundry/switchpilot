@@ -358,9 +358,9 @@ struct PanelView: View {
                     badge: nil,
                     action: { model.startScreenCleaning() })
             }
-            if !actionStatusLines.isEmpty {
+            if !actionErrorLines.isEmpty {
                 VStack(alignment: .leading, spacing: 2) {
-                    ForEach(actionStatusLines, id: \.self) { line in
+                    ForEach(actionErrorLines, id: \.self) { line in
                         Text(line)
                     }
                 }
@@ -389,7 +389,9 @@ struct PanelView: View {
         .background(cardBackground)
     }
 
-    private var actionStatusLines: [String] {
+    /// Quick actions are fire-and-forget: no success/history line. Only actual
+    /// failures are surfaced here; screen-cleaning failures have their own row.
+    private var actionErrorLines: [String] {
         var lines: [String] = []
         if model.screenSaverStatus != L("未执行") {
             lines.append(LF("屏保：%@", model.screenSaverStatus))
@@ -399,9 +401,6 @@ struct PanelView: View {
         }
         if model.displaySleepStatus != L("未执行") {
             lines.append(LF("显示器：%@", model.displaySleepStatus))
-        }
-        if model.screenCleaningError.isEmpty && model.screenCleaningStatus != L("未执行") {
-            lines.append(LF("清洁：%@", model.screenCleaningStatus))
         }
         return lines
     }
