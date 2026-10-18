@@ -107,6 +107,7 @@ SWITCHPILOT_SIGN_IDENTITY="Apple Development: Your Name (TEAMID)" ./scripts/buil
 ```sh
 make build   # Swift パッケージをビルド
 make app     # .app を組み立て
+make release # universal ad-hoc zip をビルド（未公証）
 make smoke   # TCC を必要としない CI 向けビルド＋コントラスト検査
 make install # ~/Applications にコピー
 ```
