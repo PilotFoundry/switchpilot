@@ -10,6 +10,7 @@ final class SettingsWindowController: NSWindowController {
         window.title = "SwitchPilot 设置"
         window.styleMask = [.titled, .closable]
         window.isReleasedWhenClosed = false
+        window.hidesOnDeactivate = false
         window.center()
         self.init(window: window)
     }
@@ -24,6 +25,7 @@ final class SettingsWindowController: NSWindowController {
         }
         window?.center()
         window?.makeKeyAndOrderFront(nil)
+        window?.orderFrontRegardless()
         NSApp.activate(ignoringOtherApps: true)
     }
 }

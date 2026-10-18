@@ -1,0 +1,10 @@
+#!/bin/sh
+# Remove the Finder-installed copy. TCC/login-item entries must be removed by
+# the user in System Settings; this script never edits TCC or login items.
+set -eu
+DEST_DIR="${SWITCHPILOT_INSTALL_DIR:-$HOME/Applications}"
+DEST="$DEST_DIR/SwitchPilot.app"
+pkill -f "$DEST/Contents/MacOS/SwitchPilot" 2>/dev/null || true
+rm -rf "$DEST"
+printf 'removed %s\n' "$DEST"
+printf 'note: revoke Automation/Accessibility and remove the login item in System Settings if present.\n'

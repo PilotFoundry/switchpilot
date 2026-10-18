@@ -116,6 +116,7 @@ python3 scripts/verify-app.py     # 自动化验收
 open app/SwitchPilot/.build/SwitchPilot.app
 ```
 
+- `scripts/install-app` 构建后把 `.app` 复制到 `~/Applications/SwitchPilot.app` 并注册 LaunchServices，便于 Finder 启动与稳定路径下的登录项；`scripts/uninstall-app` 仅删除该副本，不碰 TCC/登录项。
 - `build-app` 复制 Info.plist、构建产物到 `SwitchPilot.app`，执行 `codesign --force --sign - --options runtime --entitlements Entitlements.plist`，再用 `codesign --verify --strict` 校验。
 - 首次运行无权限提示；只有用户点击相关动作才会触发 Automation 提示或打开设置。
 - 重新构建会改变 ad-hoc cdhash，TCC 可能把新构建视为新应用而要求重新授权；个人使用可接受，正式分发需 Developer ID + 公证。

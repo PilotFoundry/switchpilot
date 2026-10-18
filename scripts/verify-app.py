@@ -69,7 +69,7 @@ def check_plists():
     entitlements = plistlib.loads((PKG / "Entitlements.plist").read_bytes())
     if info.get("CFBundleIdentifier") != "local.personal.SwitchPilot":
         raise RuntimeError("unexpected bundle id")
-    if info.get("CFBundleShortVersionString") != "0.3.0":
+    if info.get("CFBundleShortVersionString") != "0.3.1":
         raise RuntimeError(f"unexpected bundle version: {info.get('CFBundleShortVersionString')}")
     if info.get("LSUIElement") is not True:
         raise RuntimeError("LSUIElement must be true")
@@ -213,7 +213,7 @@ def check_static_scripts():
         result = run("/usr/bin/python3", "-m", "py_compile", str(script))
         if result.returncode != 0:
             raise RuntimeError(f"{script.name}: {result.stderr.strip()}")
-    for script in (ROOT / "scripts/build-app", ROOT / "scripts/rea"):
+    for script in (ROOT / "scripts/build-app", ROOT / "scripts/install-app", ROOT / "scripts/uninstall-app", ROOT / "scripts/rea"):
         result = run("/bin/sh", "-n", str(script))
         if result.returncode != 0:
             raise RuntimeError(f"{script.name}: {result.stderr.strip()}")
