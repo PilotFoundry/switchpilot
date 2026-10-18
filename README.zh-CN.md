@@ -1,8 +1,12 @@
 # <img src="assets/logo-512.png" width="72" align="left" alt="SwitchPilot logo"> SwitchPilot
 
-[English](README.md) · [核心理念](docs/en/CORE.md) · [架构](docs/en/ARCHITECTURE.md) · [测试](docs/en/TESTING.md)
+[English](README.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [核心理念](docs/en/CORE.md) · [架构](docs/en/ARCHITECTURE.md) · [测试](docs/en/TESTING.md) · [路线图](docs/en/ROADMAP.md)
 
-当前 0.7.0 · 一个小而克制的 macOS 菜单栏系统开关工具，个人自用项目，不是 One Switch 的全量复刻，也与 One Switch 无隶属关系。
+[![CI](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml)
+
+版本 0.7.0 · 一个小而克制的 macOS 菜单栏系统工具，只保留少数可靠、低权限的系统控制。SwitchPilot 是个人自用项目，不是 One Switch 的全量复刻，也与 One Switch 无隶属关系。
+
+> 本仓库保留完整开发历史，包括早期研究、失败实验和现场验收记录。应用源码与当前英文文档位于根目录；历史材料在 `artifacts/`、`evidence/`、`tooling/` 等目录，详见 [docs/RESEARCH.md](docs/RESEARCH.md)。
 
 <p align="center">
   <img src="docs/images/zh/panel-light.png" width="330" alt="SwitchPilot 面板浅色模式">
@@ -11,61 +15,139 @@
 
 ## 功能
 
-- 保持亮屏：15/30/60 分钟或无限期，带回倒计时/剩余时间。
-- 深色模式、启动屏保、锁定屏幕、关闭显示器。
-- 麦克风静音：按默认输入设备能力显示和切换，不支持时诚实提示。
-- 屏幕清洁：全屏遮罩，暂停键盘输入，鼠标点击退出；正常模式不显示倒计时，保留内部 5 分钟失效保护。
-- 登录时启动（可选）、固定全局快捷键（默认关闭）、单实例。
-- English / 简体中文 / 繁體中文 / 日本語；默认跟随系统，可在设置中覆盖并重启应用生效。
-- 无遥测、无网络、无私有 API、无后台自动化；不自动执行 `tccutil reset`。
+| 功能 | 行为 |
+|---|---|
+| 保持亮屏 | 15/30/60 分钟或无限期，显示剩余时间状态 |
+| 深色模式 | 通过 System Events 读取并切换系统外观 |
+| 启动屏保 | 启动系统屏幕保护程序 |
+| 锁定屏幕 | 发送系统锁屏快捷键；需要 Automation + 辅助功能 |
+| 关闭显示器 | 调用公开命令 `pmset displaysleepnow` |
+| 麦克风静音 | 按默认输入设备能力静音；不支持时诚实提示，不伪造状态 |
+| 屏幕清洁 | 全屏遮罩，暂停键盘输入，鼠标点击退出，内部保留最后兜底 |
+| 登录时启动 | 可选 `SMAppService` 登录项，由设置控制 |
+| 全局快捷键 | 固定 `⌃⌥⌘K` / `⌃⌥⌘S`，默认关闭 |
+| 多语言 | English、简体中文、繁體中文、日本語；默认跟随系统，也可在设置中覆盖并重启应用 |
 
-明确不做：输出音量、低电量模式、原彩显示、隐藏桌面、Night Shift、Wi-Fi/蓝牙控制、场景自动化。取舍原因见 [docs/en/CORE.md](docs/en/CORE.md)。
+<p align="center">
+  <img src="docs/images/zh/clean-overlay.png" width="720" alt="SwitchPilot 屏幕清洁遮罩">
+</p>
 
-## 仓库说明
+## 为什么做这个项目
 
-本仓库保留完整开发历史，包括早期研究、失败实验和现场验收记录；当前应用与英文/系统语言文档位于根目录，历史资料见 `artifacts/`、`evidence/`、`tooling/` 等目录。One Switch 是其各自权利人的产品，SwitchPilot 与其无隶属关系。
+原版 One Switch 功能很多，但日常最常用的只是少数系统状态。SwitchPilot 刻意保持很小：
 
-## 构建
+- **少而可靠**，而不是 30 个开关的仪表盘。
+- **不用私有 API、不加特权 helper、不做后台自动化。**
+- **没有遥测，也不访问网络。**
+- **权限诚实**：缺少 Automation/辅助功能授权时，相关动作不可用，而不是假装成功。
+- **状态可见**：麦克风静音和屏幕清洁会显示状态；屏幕清洁锁键盘时保留鼠标退出。
 
-要求 macOS 14+、Swift 6.x、Command Line Tools 或 Xcode。
+输出音量、低电量模式、原彩显示、隐藏桌面、Night Shift、Wi-Fi/蓝牙控制、场景自动化明确不在范围内。准入规则见 [docs/en/CORE.md](docs/en/CORE.md)，当前状态见 [docs/en/ROADMAP.md](docs/en/ROADMAP.md)。
+
+## 仓库标识
+
+README 标记、应用图标和 `assets/social-preview.png` 使用同一个 SwitchPilot 标记。社交预览图供仓库 owner 在 GitHub 设置中上传；应用图标仍是视觉源文件。
+
+## 语言
+
+SwitchPilot 提供四套 UI 本地化：
+
+- English
+- 简体中文
+- 繁體中文
+- 日本語
+
+默认是**跟随系统**。设置 → 语言可以强制选择其中一种；切换后应用会提示重新打开，使 AppKit、SwiftUI 和权限提示的本地化一起重新加载。
+
+## 环境要求
+
+- macOS 14 或更高（主要在 macOS 27 开发测试）
+- Swift 6.x
+- Apple Command Line Tools 或 Xcode
+- 有显示器的 Mac；屏幕清洁模式还需要辅助功能权限
+
+不需要任何第三方 Swift 依赖。
+
+## 构建与运行
 
 ```sh
 git clone https://github.com/PilotFoundry/switchpilot.git
 cd switchpilot
+
 swift build --package-path app/SwitchPilot --build-system native
 ./scripts/build-app
 ./scripts/install-app
 open ~/Applications/SwitchPilot.app
 ```
 
-默认使用 ad-hoc 签名，重建后代码身份会变化，macOS 可能重新询问权限。若要稳定本地签名：
+`scripts/build-app` 组装 `.app`，默认使用 **ad-hoc 签名**。ad-hoc 代码身份会随二进制变化，重建后 macOS 可能重新询问权限。如果希望稳定本地身份，可用自己的开发证书：
 
 ```sh
 SWITCHPILOT_SIGN_IDENTITY="Apple Development: Your Name (TEAMID)" ./scripts/build-app
 ```
 
-不要提交证书、签名材料或应用包。项目未公证，不提供分发二进制，建议本地构建使用。
+不要提交证书、签名材料或绕过 Gatekeeper 的配置。应用未公证，定位是本地构建自用，不是分发二进制。
+
+### Make targets
+
+```sh
+make build   # 构建 Swift package
+make app     # 组装 .app
+make smoke   # CI 安全构建 + 对比度检查（不触发 TCC）
+make install # 复制到 ~/Applications
+```
 
 ## 权限
 
-- **Automation → System Events**：深色模式、锁屏快捷键。
-- **辅助功能**：锁屏、屏幕清洁（键盘事件拦截）。
-- **登录项批准**：登录时启动。
+SwitchPilot 只在你主动使用需要权限的功能时才申请权限。
 
-应用只在用户主动操作时申请对应权限；未授权时相关功能不可用并显示真实原因。高级权限重置仅在显式确认后复制命令，不自动执行。
+| 权限 | 用途 | 说明 |
+|---|---|---|
+| Automation → System Events | 深色模式、锁屏快捷键 | 这些动作需要 |
+| 辅助功能 | 锁屏、屏幕清洁 | 屏幕清洁用它拦截键盘事件 |
+| 登录项批准 | 登录时启动 | 通过 `SMAppService` 和系统设置管理 |
+
+应用**不会**自行授权、修改 TCC 数据库、关闭 SIP，也不会自动执行 `tccutil reset`。高级重置面板只在用户显式确认后复制命令。撤销权限请在系统设置中操作。
 
 ## 屏幕清洁安全
 
-屏幕清洁会真正暂停键盘输入，鼠标仍可用；点击屏幕上的“退出清洁模式”退出。正常模式不提供键盘退出，也不显示倒计时；内部 5 分钟失效保护仅用于异常兜底。不要在无人操作鼠标的场景下使用。
+屏幕清洁不是简单盖一层黑窗口：它会通过 session event tap 真正暂停键盘事件，同时保留鼠标。点击屏幕上的**退出清洁模式**按钮离开；按设计不提供键盘退出。
 
-## 开发与测试
+隐藏的五分钟最后兜底会在鼠标或应用状态失效时释放会话，正常使用不显示倒计时。不要在操作者无法使用鼠标时运行该模式。清洁遮罩只影响本地 UI，不修改系统设置。
 
-```sh
-make smoke   # 构建 + .app 组装 + 对比度检查（不触发 TCC）
+## 隐私
+
+- 无分析、遥测、崩溃上传、网络请求或远程配置。
+- 设置只保存在本机 `UserDefaults`。
+- 诊断信息只在你显式调用时写入 `/tmp`。
+- 不录制麦克风音频，只读写静音属性。
+- 不访问 TCC 数据库、Keychain、Cookies 或无关文件。
+
+## 状态与测试
+
+这是早期个人自用项目。部分权限和硬件相关流程需要人工验收；没有自动化测试不代表已验证。CI 在 GitHub macOS runner 上构建应用并运行 smoke 检查，刻意不请求 TCC/TCC 周边权限。人工验收矩阵见 [docs/en/TESTING.md](docs/en/TESTING.md)。
+
+## 仓库结构
+
+```text
+app/SwitchPilot/             Swift package、应用和检查可执行文件
+  Sources/SwitchPilot/       AppKit + SwiftUI 菜单栏应用
+  Sources/SwitchPilotCore/   非 UI 系统集成
+  Sources/SwitchPilotChecks/ 非 XCTest 核心行为检查
+  Resources/                 应用图标源文件
+docs/                        设计原则、架构、测试、路线图
+docs/images/                 截图
+scripts/                     构建、安装、smoke 和对比度检查
 ```
 
-CI 只做构建和离屏静态/对比度检查，不申请 TCC 权限。TCC、真实锁屏/屏保/显示器休眠、登录项、麦克风真实写入、键盘拦截等仍需按 [docs/en/TESTING.md](docs/en/TESTING.md) 现场验证。
+## 贡献
+
+欢迎 issue 和 PR。先阅读 [CONTRIBUTING.md](CONTRIBUTING.md) 和 [CODE_OF_CONDUCT.md](CODE_OF_CONDUCT.md)。产品范围变更必须通过 CORE 准入规则；小修复不需要先讨论功能。
+
+安全报告请使用 GitHub 私有 [security advisory](https://github.com/PilotFoundry/switchpilot/security/advisories) 流程；详见 [SECURITY.md](SECURITY.md)。
 
 ## 许可证
 
 MIT © 2026 pengxianghao。详见 [LICENSE](LICENSE)。
+
+SwitchPilot 是独立项目。One Switch 是其各自权利人的产品；本仓库不包含 One Switch 代码、素材或分发二进制。
