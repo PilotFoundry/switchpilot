@@ -29,3 +29,5 @@ One Switch 1.35.4 (440) 的 OneSwitchXPC arm64 slice SHA-256 `8c322a725b0c1838fc
 - 若后续把此功能定为必须项，需要另立目标：接受私有接口维护成本，或接受功能降级；不能默认纳入首版等价承诺。
 
 官方文档入口：[Apple Developer macOS](https://developer.apple.com/macos/)。实际 SDK 与 Mach-O 路径是本轮私有/公开分类的主要可复核证据。
+
+复核完成：0x1000012c4 的反编译直接指向 `___lazy_storage___blueLight` 与 `CBBlueLightClient` class relocation；0x1000012ec 在缺少对象时 alloc/init 并缓存。4/4 XPC 批查询成功。因此 setter 的真实接收者可通过 helper/汇编关联到 blueLight client，而非盲信 setter 伪代码的 param_1。

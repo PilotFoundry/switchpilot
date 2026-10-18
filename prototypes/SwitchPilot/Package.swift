@@ -7,6 +7,6 @@ let package = Package(
     targets: [
         .target(name: "PilotCore"),
         .executableTarget(name: "SwitchPilot", dependencies: ["PilotCore"]),
-        .testTarget(name: "PilotCoreTests", dependencies: ["PilotCore"])
+        .executableTarget(name: "PilotChecks", dependencies: ["PilotCore"], path: "Checks")
     ]
 )
