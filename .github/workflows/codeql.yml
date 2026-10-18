@@ -1,0 +1,37 @@
+name: CodeQL
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  schedule:
+    - cron: '23 4 * * 1'
+  workflow_dispatch:
+
+permissions:
+  actions: read
+  contents: read
+  security-events: write
+  packages: read
+
+jobs:
+  analyze:
+    name: Analyze Swift
+    runs-on: macos-15
+    timeout-minutes: 30
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+
+      - name: Initialize CodeQL
+        uses: github/codeql-action/init@v3
+        with:
+          languages: swift
+          build-mode: manual
+
+      - name: Build Swift package
+        run: swift build --package-path app/SwitchPilot --build-system native
+
+      - name: Perform CodeQL analysis
+        uses: github/codeql-action/analyze@v3

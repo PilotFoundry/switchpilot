@@ -1,0 +1,17 @@
+SwitchPilot
+Copyright (c) 2026 pengxianghao
+
+The MIT license in LICENSE applies to the original SwitchPilot source code and
+documentation authored for this project.
+
+Historical research notes, evidence and acceptance records under artifacts/,
+evidence/, tooling/ and related paths are included for transparency. They are
+provided "as is" and may contain references to third-party applications, local
+paths or earlier local signing details. They do not contain One Switch binaries,
+assets or distribution code.
+
+One Switch is a product of its respective owner. SwitchPilot is an independent
+project and is not affiliated with, endorsed by, or sponsored by One Switch.
+
+Apple, macOS, Swift and related marks are trademarks of Apple Inc. Other
+trademarks are the property of their respective owners.

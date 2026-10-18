@@ -1,0 +1,47 @@
+name: Feature request
+description: Propose a new control or improvement
+title: "[feature] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        SwitchPilot deliberately keeps a small scope. Read
+        `docs/en/CORE.md` before proposing a feature. New controls must be a
+        system gap or high-frequency long chain, use public APIs, and have
+        visible/recoverable state.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What repeated task or system gap are you trying to solve?
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed behavior
+    validations:
+      required: true
+  - type: textarea
+    id: api
+    attributes:
+      label: API and permission impact
+      description: Which public API would this use? Does it require a new TCC permission, private framework, or Finder restart?
+    validations:
+      required: true
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+    validations:
+      required: false
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope check
+      options:
+        - label: This is not merely a duplicate of an existing menu-bar/Control Center control.
+          required: true
+        - label: This does not require private APIs, a privileged helper, or automatic TCC changes.
+          required: true
