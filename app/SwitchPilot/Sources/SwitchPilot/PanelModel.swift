@@ -19,11 +19,11 @@ final class PanelModel: ObservableObject {
     @Published private(set) var screenSaverStatus = "未执行"
     @Published private(set) var lockStatus = "未执行"
     @Published private(set) var displaySleepStatus = "未执行"
-    @Published private(set) var audioState = AudioOutputDevice(
-        deviceID: 0, name: "正在读取…", supportsVolume: false, supportsMute: false,
-        volume: nil, muted: nil, message: nil)
-    @Published private(set) var audioVolume: Double = 0
-    @Published private(set) var audioError = ""
+    @Published private(set) var microphoneState = MicrophoneDevice(
+        deviceID: 0, name: "正在读取…", supportsMute: false, muted: nil, message: nil)
+    @Published private(set) var microphoneError = ""
+    @Published private(set) var screenCleaningStatus = "未执行"
+    @Published private(set) var screenCleaningActive = false
     @Published private(set) var lockPermissions = LockPermissions(automation: .notDetermined, accessibilityTrusted: false)
     @Published private(set) var accessibilityTrusted = false
     @Published private(set) var permissionSetupMessage = ""
@@ -36,6 +36,7 @@ final class PanelModel: ObservableObject {
     var onContentSizeChanged: (() -> Void)?
 
     private let session = KeepAwakeSession()
+    private let screenCleaning = ScreenCleaningManager()
     private var didShutdown = false
 
     init() {
@@ -45,11 +46,17 @@ final class PanelModel: ObservableObject {
         session.onChange = { [weak self] in
             Task { @MainActor in self?.refreshKeepAwake() }
         }
+        screenCleaning.onStateChange = { [weak self] active, message in
+            Task { @MainActor in
+                self?.screenCleaningActive = active
+                self?.screenCleaningStatus = message
+            }
+        }
         refreshAsync()
     }
 
     var version: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.3.0"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.5.0"
     }
 
     var statusTitle: String {
@@ -83,7 +90,7 @@ final class PanelModel: ObservableObject {
         lockPermissions = LockScreen.permissions()
         accessibilityTrusted = Permissions.accessibilityTrusted()
         refreshKeepAwake()
-        refreshAudio()
+        refreshMicrophone()
     }
 
     /// AEDeterminePermissionToAutomateTarget may block; probe off the main thread
@@ -94,16 +101,15 @@ final class PanelModel: ObservableObject {
             let lock = LockScreen.permissions()
             let accessibility = Permissions.accessibilityTrusted()
             let dark = DarkMode.currentAppearanceIsDark()
-            let audio = AudioOutput.read()
+            let microphone = Microphone.read()
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 self.darkModePermission = automation
                 self.lockPermissions = lock
                 self.accessibilityTrusted = accessibility
                 self.systemIsDark = dark
-                self.audioState = audio
-                self.audioVolume = audio.volume ?? self.audioVolume
-                self.audioError = ""
+                self.microphoneState = microphone
+                self.microphoneError = ""
                 self.refreshKeepAwake()
                 completion?()
             }
@@ -292,12 +298,12 @@ final class PanelModel: ObservableObject {
         Permissions.openAccessibilitySettings()
     }
 
-    /// Preview-only helper for `--dump-panel`: does not touch audio hardware.
-    func previewSupportedAudio(muted: Bool) {
-        audioState = AudioOutputDevice(
-            deviceID: 1, name: "MacBook Pro 扬声器", supportsVolume: true,
-            supportsMute: true, volume: 0.28, muted: muted, message: nil)
-        audioVolume = 0.28
+
+    /// Preview-only helper for `--dump-panel`: does not touch microphone hardware.
+    func previewMicrophone(muted: Bool) {
+        microphoneState = MicrophoneDevice(
+            deviceID: 1, name: "MacBook Pro 麦克风", supportsMute: true,
+            muted: muted, message: nil)
     }
 
     // MARK: - Guide
@@ -389,40 +395,43 @@ final class PanelModel: ObservableObject {
         }
     }
 
-    // MARK: - Audio volume (capability-aware prototype)
+    // MARK: - Microphone mute
 
-    func refreshAudio() {
+    func refreshMicrophone() {
         DispatchQueue.global(qos: .userInitiated).async {
-            let state = AudioOutput.read()
+            let state = Microphone.read()
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
-                self.audioState = state
-                self.audioVolume = state.volume ?? self.audioVolume
-                self.audioError = ""
+                self.microphoneState = state
+                self.microphoneError = ""
             }
         }
     }
 
-    func setAudioVolume(_ value: Double) {
-        guard audioState.supportsVolume else { return }
-        let clamped = min(max(value, 0), 1)
-        audioVolume = clamped
-        if !AudioOutput.setVolume(clamped) {
-            audioError = "设置音量失败；输出设备可能已变化"
-            refreshAudio()
+    func toggleMicrophoneMute() {
+        guard microphoneState.supportsMute else { return }
+        let target = !(microphoneState.muted ?? false)
+        if Microphone.setMuted(target) {
+            refreshMicrophone()
         } else {
-            audioError = ""
-            refreshAudio()
+            microphoneError = "切换麦克风静音失败；输入设备可能已变化"
+            refreshMicrophone()
         }
     }
 
-    func toggleAudioMute() {
-        guard audioState.supportsMute else { return }
-        if AudioOutput.toggleMuted() {
-            refreshAudio()
-        } else {
-            audioError = "切换静音失败；输出设备可能已变化"
-            refreshAudio()
+    // MARK: - Screen cleaning
+
+    func startScreenCleaning() {
+        guard !screenCleaningActive else { return }
+        guard Permissions.accessibilityTrusted() else {
+            screenCleaningStatus = "需要辅助功能授权才能锁定键盘输入"
+            _ = Permissions.accessibilityPrompt()
+            return
+        }
+        do {
+            try screenCleaning.start(duration: 60)
+        } catch {
+            screenCleaningStatus = "\(error)"
         }
     }
 
@@ -449,6 +458,7 @@ final class PanelModel: ObservableObject {
     func shutdown() {
         guard !didShutdown else { return }
         didShutdown = true
+        screenCleaning.stop()
         session.stop()
     }
 

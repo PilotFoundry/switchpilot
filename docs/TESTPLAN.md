@@ -6,7 +6,7 @@
 
 - macOS 27.0.1 (26A434)，Apple Silicon arm64。
 - CLT Swift 6.4 / macOS 27.0 SDK；无完整 Xcode、无 XCTest。
-- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.4.1，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
+- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.5.0，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
 - 原应用：`/Applications/One Switch.app` 1.35.4 (440)，测试前后版本/hash/签名不变；不启动、不修改其数据。
 - 权限前提：未预先授予 Automation/Accessibility；不修改 TCC 数据库、不关闭 SIP、不重签原应用。
 
@@ -30,7 +30,7 @@
 | A13 | 原应用不变 | `scripts/verify-app.py` | 版本/hash 与基线一致；`codesign --verify --strict` 通过 |
 | A15 | 应用图标 | `verify-app.py` | Info.plist `CFBundleIconFile=AppIcon`；bundle 内 `AppIcon.icns` >10KB；`NSWorkspace` 可解析 |
 | A16 | 对比度 token | `scripts/check-contrast.py` | `secondaryInk/warningInk/successInk/errorInk` 在 light/dark panel/card/tile ≥4.5:1 |
-| A17 | 面板尺寸 | `--panel-size` | 宽 380；无 guide ≤780pt、有 guide ≤860pt（逻辑尺寸） |
+| A17 | 面板尺寸 | `--panel-size` | 宽 380；无 guide ≤840pt、有 guide ≤900pt（逻辑尺寸） |
 | A18 | 语义色静态检查 | `verify-app.py` | PanelView/SettingsView 中 `.foregroundStyle(.green/.orange/.red)` = 0 |
 | A19 | 单实例 | 启动冒烟/人工 | Info.plist `LSMultipleInstancesProhibited` + 运行时守卫；普通重复启动保持一个图标；`open -n` 仅供诊断 |
 | A14 | 静态质量 | `python3 -m py_compile`、`sh -n`、`git diff --check` | 退出 0；不声称运行不存在的 linter |
@@ -112,12 +112,21 @@
 2. 唤醒后面板状态显示“已请求关闭（鼠标/按键唤醒）”；失败时显示真实错误。
 3. 确认动作不触发锁屏/屏保语义混淆。
 
-### M11 输出音量原型（v0.4.0；v0.4.1 UI 修复，待复验）
+### M12 麦克风静音（v0.5.0）
 
-1. 当前默认输出若为外接显示器音频：卡显示“当前输出设备不支持系统音量/静音控制”，不出现无效滑块。
-2. 切换到支持音量的输出（内置扬声器/USB）后重新打开面板：出现滑块/静音按钮；调整后系统音量真实变化并读回。
-3. 切换设备后重新打开面板，能力/状态刷新，不残留旧设备值。
-4. 不支持设备上不显示假成功、不崩溃。
+1. 面板「麦克风」卡显示当前默认输入设备；支持 mute 时按钮为「静音麦克风」/「取消静音」。
+2. 点击静音 → 系统输入真实静音并读回，状态显示“麦克风已静音”；再点击取消 → 恢复，状态显示“麦克风已开启”。
+3. 切到不支持 mute 的输入设备（如部分耳机麦克风）→ 显示真实不支持说明，不出现假开关/假成功。
+4. 切换输入设备后重新打开面板，能力和状态刷新；不崩溃。
+5. 不新增 TCC 提示。
+
+### M13 屏幕清洁（v0.5.0）
+
+1. 有 Accessibility 时点「清洁屏幕」→ 所有显示器出现黑色遮罩、倒计时与「退出清洁模式」按钮；键盘输入被拦截，鼠标仍可用。
+2. 用鼠标点击「退出清洁模式」→ 立即恢复桌面/输入/光标；无残留遮罩或电源断言。
+3. 不点击 → 60 秒后自动退出；退出后状态更新。
+4. 没有 Accessibility 时点击 → 只显示授权引导，不进入“黑屏但输入未锁”的假清洁模式。
+5. 全程不修改系统设置、不隐藏鼠标、不需要键盘退出。
 
 ### M6 边界/恢复
 
@@ -136,7 +145,8 @@
 - [ ] M4 睡眠/唤醒后的保活与断言检查
 - [ ] M9 快捷键后台触发/停用/重启保持（用户指示与注销/重启等收尾测试一起做）
 - [ ] M10 关闭显示器真实休眠/唤醒
-- [ ] M11 音量在支持/不支持输出设备上的真实行为
+- [ ] M12 麦克风静音在支持/不支持输入设备上的真实行为
+- [ ] M13 屏幕清洁的键盘锁定/鼠标退出/60s 自动退出/无权限降级
 - [ ] M5 VoiceOver/键盘全路径、小屏/放大字体真机布局
 - [ ] M7 首次引导重新出现（需要清理 `switchpilot.hasSeenWelcome`）
 - [ ] v0.3.5 应用内重置的真实执行（破坏性，需用户明确同意）
