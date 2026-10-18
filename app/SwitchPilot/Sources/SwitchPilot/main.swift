@@ -72,6 +72,33 @@ func diagnosePermissions() -> Int32 {
 }
 
 @MainActor
+func diagnoseRuntime() -> Int32 {
+    let version = Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "unknown"
+    let icon = NSWorkspace.shared.icon(forFile: Bundle.main.bundlePath)
+    let iconSizes = icon.representations.map { "\($0.pixelsWide)x\($0.pixelsHigh)" }.joined(separator: ",")
+    let menuIcon = StatusIcon.make()
+    let seenWelcome = UserDefaults.standard.object(forKey: "switchpilot.hasSeenWelcome") as? Bool ?? false
+    let lines = [
+        "version=\(version)",
+        "bundleIdentifier=\(Bundle.main.bundleIdentifier ?? "nil")",
+        "bundlePath=\(Bundle.main.bundlePath)",
+        "macOS=\(ProcessInfo.processInfo.operatingSystemVersionString)",
+        "automationRaw=\(Permissions.automationStatus())",
+        "automationResolved=\(Permissions.automationStatusResolvingTarget())",
+        "systemEventsRunning=\(Permissions.systemEventsRunning())",
+        "accessibilityTrusted=\(Permissions.accessibilityTrusted())",
+        "loginItemState=\(LoginItem.state.description)",
+        "bundleIconRepresentations=\(icon.representations.count)",
+        "bundleIconSizes=\(iconSizes)",
+        "menuBarIconSize=\(Int(menuIcon.size.width))x\(Int(menuIcon.size.height))",
+        "menuBarIconTemplate=\(menuIcon.isTemplate)",
+        "hasSeenWelcome=\(seenWelcome)",
+    ].joined(separator: "\n") + "\n"
+    try? lines.write(toFile: "/tmp/switchpilot-runtime-diagnose.txt", atomically: true, encoding: .utf8)
+    return 0
+}
+
+@MainActor
 func panelSize() -> Int32 {
     let application = NSApplication.shared
     application.setActivationPolicy(.prohibited)
@@ -122,6 +149,9 @@ func dumpSettings() -> Int32 {
 let arguments = CommandLine.arguments
 if arguments.contains("--login-item-test") {
     exit(MainActor.assumeIsolated { loginItemTest() })
+}
+if arguments.contains("--diagnose-runtime") {
+    exit(MainActor.assumeIsolated { diagnoseRuntime() })
 }
 if arguments.contains("--diagnose-permissions") {
     exit(MainActor.assumeIsolated { diagnosePermissions() })
