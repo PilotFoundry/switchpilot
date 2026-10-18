@@ -16,6 +16,18 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
+## [0.7.3] - 2026-10-18
+
+- Fix panel buttons receiving no clicks:
+  - make the material `NSVisualEffectView` click-through;
+  - disable hit testing on the cosmetic border overlay;
+  - activate the accessory app and make the panel key when showing it, so the
+    first click performs the SwiftUI action.
+- Add a runtime `--panel-hit-test` regression probe and a QA source guard for
+  material click-through, border hit testing and panel activation.
+- `verify-app.py` now has 13 checks; `qa-regression.py` now has 14.
+- Keep the v0.7.2 panel animation, 90% menu material and magnet alignment.
+
 ## [0.7.2] - 2026-10-18
 
 - Replace the AppKit `NSPopover` with a custom borderless, non-activating

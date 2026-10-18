@@ -184,6 +184,9 @@ if arguments.contains("--dump-settings") {
 if arguments.contains("--dump-panel") {
     exit(MainActor.assumeIsolated { dumpPanel() })
 }
+if arguments.contains("--panel-hit-test") {
+    exit(MainActor.assumeIsolated { PanelWindowController.hitTestRegressionProbe() ? 0 : 1 })
+}
 
 let application = NSApplication.shared
 let delegate = AppDelegate()

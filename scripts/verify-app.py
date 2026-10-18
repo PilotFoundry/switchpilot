@@ -69,7 +69,7 @@ def check_plists():
     entitlements = plistlib.loads((PKG / "Entitlements.plist").read_bytes())
     if info.get("CFBundleIdentifier") != "io.github.pengxianghao21.SwitchPilot":
         raise RuntimeError("unexpected bundle id")
-    if info.get("CFBundleShortVersionString") != "0.7.2":
+    if info.get("CFBundleShortVersionString") != "0.7.3":
         raise RuntimeError(f"unexpected bundle version: {info.get('CFBundleShortVersionString')}")
     if info.get("LSUIElement") is not True:
         raise RuntimeError("LSUIElement must be true")
@@ -148,6 +148,13 @@ def check_launch_smoke():
     if "SwitchPilot" in assertions_text():
         raise RuntimeError("power assertion still present after app termination")
     return "process stayed alive >2s and exited without leaving assertions"
+
+
+def check_panel_hit_test():
+    result = run(str(APP_BIN), "--panel-hit-test")
+    if result.returncode != 0:
+        raise RuntimeError(result.stderr.strip() or "panel hit-test probe failed")
+    return "material view passes clicks through to SwiftUI content"
 
 
 def check_no_leftover_process():
@@ -243,6 +250,7 @@ check("plists", check_plists)
 check("signature", check_signature)
 check("core checks", check_core_checks)
 check("launch smoke", check_launch_smoke)
+check("panel hit-test", check_panel_hit_test)
 check("leftover process", check_no_leftover_process)
 check("original app unchanged", check_original_app)
 check("contrast tokens", check_contrast_tokens)

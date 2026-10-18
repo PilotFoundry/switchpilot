@@ -283,7 +283,24 @@ def contrast_tokens():
     return result.stdout.strip().splitlines()[-1]
 
 
-# 13. 面板尺寸阈值（复用 --panel-size 离屏诊断，不显示 UI、不请求权限）。
+# 13. 面板点击路径：材质必须 click-through，边框 overlay 不得吃点击，面板打开时激活 app。
+def panel_click_path():
+    controller = read("app/SwitchPilot/Sources/SwitchPilot/PanelWindowController.swift")
+    panel_view = read("app/SwitchPilot/Sources/SwitchPilot/PanelView.swift")
+    require("PassthroughVisualEffectView" in controller,
+            "缺少 click-through material view")
+    require("override func hitTest(_ point: NSPoint) -> NSView? { nil }" in controller,
+            "material view 的 hitTest 必须返回 nil")
+    require("materialView = PassthroughVisualEffectView()" in controller,
+            "实际使用的不是 click-through material view")
+    require("NSApp.activate(ignoringOtherApps: true)" in controller,
+            "面板打开时必须激活 app，避免首次点击只激活窗口")
+    require(".allowsHitTesting(false)" in panel_view,
+            "边框 overlay 不得参与点击命中")
+    return "material click-through / border non-hit-testing / panel app activation"
+
+
+# 14. 面板尺寸阈值（复用 --panel-size 离屏诊断，不显示 UI、不请求权限）。
 def panel_size():
     if not APP_BIN.is_file():
         raise Skip("未找到构建产物；请先由执行者运行 scripts/verify-app.py")
@@ -317,6 +334,7 @@ CHECKS = [
     ("bundle/权限边界", bundle_boundaries),
     ("单实例守卫", single_instance_guard),
     ("测试资产完整", test_harness_intact),
+    ("面板点击路径", panel_click_path),
     ("对比度 token", contrast_tokens),
     ("面板尺寸阈值", panel_size),
 ]

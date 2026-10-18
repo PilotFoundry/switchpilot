@@ -1,6 +1,6 @@
 # Technical design
 
-Status: current baseline **v0.7.2**. This is the implementation-level summary;
+Status: current baseline **v0.7.3**. This is the implementation-level summary;
 the module map and runtime details live in
 [en/ARCHITECTURE.md](en/ARCHITECTURE.md).
 

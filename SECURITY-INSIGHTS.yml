@@ -15,6 +15,11 @@ project:
   type: application
   license: MIT
   releases:
+    - name: v0.7.3
+      description: Panel click-path fix and automated hit-test regression guard
+      created: '2026-10-18'
+      url: https://github.com/PilotFoundry/switchpilot/releases/tag/v0.7.3
+      type: source
     - name: v0.7.2
       description: Custom NSPanel presentation, menu material, magnet alignment
       created: '2026-10-18'

@@ -56,7 +56,7 @@ state. Do not record a check as passed if it was not executed.
 ## Release artifact checks
 
 ```sh
-VERSION=0.7.2
+VERSION=0.7.3
 ZIP=dist/SwitchPilot-${VERSION}-macos-universal-adhoc.zip
 shasum -a 256 -c "$ZIP.sha256"
 unzip -q "$ZIP"

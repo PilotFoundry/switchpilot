@@ -1,6 +1,6 @@
 # Localization
 
-Status: current contract for **v0.7.2**. English is canonical for docs; the app
+Status: current contract for **v0.7.3**. English is canonical for docs; the app
 and its READMEs are localized into four languages.
 
 ## 1. Supported locales
