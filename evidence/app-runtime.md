@@ -83,3 +83,9 @@
 - 应用身份：可执行 SHA-256 `71a3db8f22117729cf5a6a022e808a161e12ee7cc9b7615834474a32da0e9b1d`，CDHash `322f452f00381553ef09afa69edfe7f2262f8ddc`。
 - 独立评审（`evidence/reviews/`）：UI P0×1/P1×6、UX P0×4/P1×8、QA 基线 8/8+10/10；v0.3 已修主要 P0/P1，评审报告注明"修复后未复评"，真机 TCC/登录/图标/菜单栏三态仍未验证。
 - 用户 2026-10-18 同意 SwitchPilot 转正；此前 v0.1 初步验收为口头确认，未逐项记录。
+
+## v0.3.1 修复（2026-10-18）
+
+- 修复：从设置页打开系统设置（自动化/辅助功能）后，返回或关闭系统设置窗口时，SwitchPilot 设置窗口会重新前置/保持可用；`SettingsWindowController` 设置 `hidesOnDeactivate=false` 并在应用重新激活时按标记重新 present；设置页打开系统设置前登记回调。权限仍需在系统设置中手动授予/确认，应用不代授。
+- 新增 `scripts/install-app` / `scripts/uninstall-app`：构建后复制到 `~/Applications/SwitchPilot.app` 并注册 LaunchServices，便于 Finder/Launchpad 启动与稳定路径下的登录项；不修改 TCC/登录项。
+- 版本 0.3.1；自动化 11/11、自检 12/12 复跑通过。

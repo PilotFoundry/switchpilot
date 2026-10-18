@@ -8,6 +8,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var model: PanelModel?
     private var settingsModel: SettingsModel?
     private var settingsWindow: SettingsWindowController?
+    private var settingsShouldReappear = false
     private var hosting: NSHostingController<PanelView>?
 
     @MainActor func applicationDidFinishLaunching(_ notification: Notification) {
@@ -37,6 +38,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.statusItem = statusItem
         self.popover = popover
 
+        if ProcessInfo.processInfo.environment["SWITCHPILOT_OPEN_SETTINGS"] == "1" {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) { [weak self] in
+                self?.openSettings()
+            }
+        }
+
         NotificationCenter.default.addObserver(
             forName: NSApplication.didBecomeActiveNotification,
             object: nil,
@@ -45,6 +52,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             Task { @MainActor in
                 self?.model?.refreshAsync()
                 self?.settingsModel?.refreshAsync()
+                if self?.settingsShouldReappear == true {
+                    self?.settingsShouldReappear = false
+                    self?.settingsWindow?.present()
+                }
             }
         }
     }
@@ -118,6 +129,9 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @MainActor func openSettings() {
         if settingsWindow == nil {
             let settingsModel = SettingsModel()
+            settingsModel.onExternalSettingsOpened = { [weak self] in
+                self?.settingsShouldReappear = true
+            }
             self.settingsModel = settingsModel
             settingsWindow = SettingsWindowController(model: settingsModel)
         }
