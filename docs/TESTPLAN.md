@@ -6,7 +6,7 @@
 
 - macOS 27.0.1 (26A434)，Apple Silicon arm64。
 - CLT Swift 6.4 / macOS 27.0 SDK；无完整 Xcode、无 XCTest。
-- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.9，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
+- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.4.0，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
 - 原应用：`/Applications/One Switch.app` 1.35.4 (440)，测试前后版本/hash/签名不变；不启动、不修改其数据。
 - 权限前提：未预先授予 Automation/Accessibility；不修改 TCC 数据库、不关闭 SIP、不重签原应用。
 
@@ -30,12 +30,12 @@
 | A13 | 原应用不变 | `scripts/verify-app.py` | 版本/hash 与基线一致；`codesign --verify --strict` 通过 |
 | A15 | 应用图标 | `verify-app.py` | Info.plist `CFBundleIconFile=AppIcon`；bundle 内 `AppIcon.icns` >10KB；`NSWorkspace` 可解析 |
 | A16 | 对比度 token | `scripts/check-contrast.py` | `secondaryInk/warningInk/successInk/errorInk` 在 light/dark panel/card/tile ≥4.5:1 |
-| A17 | 面板尺寸 | `--panel-size` | 宽 380；无 guide ≤680pt、有 guide ≤760pt（逻辑尺寸） |
+| A17 | 面板尺寸 | `--panel-size` | 宽 380；无 guide ≤780pt、有 guide ≤860pt（逻辑尺寸） |
 | A18 | 语义色静态检查 | `verify-app.py` | PanelView/SettingsView 中 `.foregroundStyle(.green/.orange/.red)` = 0 |
 | A19 | 单实例 | 启动冒烟/人工 | Info.plist `LSMultipleInstancesProhibited` + 运行时守卫；普通重复启动保持一个图标；`open -n` 仅供诊断 |
 | A14 | 静态质量 | `python3 -m py_compile`、`sh -n`、`git diff --check` | 退出 0；不声称运行不存在的 linter |
 
-记录：`evidence/app-runtime.md` + `evidence/raw/app/`（原始日志不入 Git）。v0.3 核心自检 12 项、自动化验收 11 项；独立评审见 `evidence/reviews/`。现场前置/模板见 `evidence/onsite/M1-M3-M8-2026-10-18.md`；只读探针 `scripts/onsite-probe`。
+记录：`evidence/app-runtime.md` + `evidence/raw/app/`（原始日志不入 Git）。v0.3/v0.4 核心自检 14 项、自动化验收 11 项；独立评审见 `evidence/reviews/`。现场前置/模板见 `evidence/onsite/M1-M3-M8-2026-10-18.md`；只读探针 `scripts/onsite-probe`。
 
 ## 3. 现场手动验收（需用户在场）
 
@@ -99,6 +99,26 @@
 9. 稳定签名身份：重建/重签/重装后，已授予的 Automation/Accessibility 不应失效；用 `--diagnose-permissions` 复核。
 10. v0.3.5 应用内重置（手动、破坏性，自动化不执行）：展开「终端命令（高级）」→「在应用内重置权限…」→ 取消应无变化；确认后两项 TCC 记录被重置、权限区回到未授权、可重新申请；确认框文案必须包含不可逆/需要重新授权/非官方 API/无 sudo/无 reset All。
 
+### M9 全局快捷键（v0.4.0）
+
+1. 设置 › 快捷键启用；若组合被占用应显示可读错误且保持关闭，不静默。
+2. 关闭设置/应用后台，按 `⌃⌥⌘K` 应切换保持亮屏；按 `⌃⌥⌘S` 应启动屏保。
+3. 停用后两个组合均不再响应；重启应用后保持停用状态（默认关闭）。
+4. 全程不应新增 Accessibility/Automation 提示。
+
+### M10 关闭显示器（v0.4.0）
+
+1. 点击「关闭显示器」→ 屏幕应休眠，无二次确认；移动鼠标/按键唤醒。
+2. 唤醒后面板状态显示“已请求关闭（鼠标/按键唤醒）”；失败时显示真实错误。
+3. 确认动作不触发锁屏/屏保语义混淆。
+
+### M11 输出音量原型（v0.4.0）
+
+1. 当前默认输出若为外接显示器音频：卡显示“当前输出设备不支持系统音量/静音控制”，不出现无效滑块。
+2. 切换到支持音量的输出（内置扬声器/USB）后重新打开面板：出现滑块/静音按钮；调整后系统音量真实变化并读回。
+3. 切换设备后重新打开面板，能力/状态刷新，不残留旧设备值。
+4. 不支持设备上不显示假成功、不崩溃。
+
 ### M6 边界/恢复
 
 1. 普通重复启动由 `LSMultipleInstancesProhibited` + 启动守卫限制为一个菜单栏图标；`open -n` 仅用于诊断。
@@ -114,6 +134,9 @@
 - [ ] M2 屏保真实启动/退出（交互已改为点击即执行）
 - [ ] M3 移除确认后真实锁定与解锁复测
 - [ ] M4 睡眠/唤醒后的保活与断言检查
+- [ ] M9 快捷键后台触发/停用/重启保持
+- [ ] M10 关闭显示器真实休眠/唤醒
+- [ ] M11 音量在支持/不支持输出设备上的真实行为
 - [ ] M5 VoiceOver/键盘全路径、小屏/放大字体真机布局
 - [ ] M7 首次引导重新出现（需要清理 `switchpilot.hasSeenWelcome`）
 - [ ] v0.3.5 应用内重置的真实执行（破坏性，需用户明确同意）

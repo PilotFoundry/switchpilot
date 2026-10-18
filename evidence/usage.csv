@@ -32,3 +32,4 @@ v03,model_tokens,unknown,tokens,no authoritative measurement
 v03,new_credit_purchases,0,cards,no new purchase
 v036,onsite_preflight,2026-10-18T12:44:24+08:00,timestamp,read-only onsite probe; no TCC or screen-state changes
 v039,expansion_eval,2026-10-18T13:25:00+08:00,timestamp,read-only expansion evaluation and API probes; no feature or system change
+v040,expansion_impl,2026-10-18T13:45:00+08:00,timestamp,implemented shortcuts/display sleep/audio volume prototype; read-only preflight only

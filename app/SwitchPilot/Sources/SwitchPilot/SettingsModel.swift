@@ -14,9 +14,21 @@ final class SettingsModel: ObservableObject {
     @Published private(set) var showsAdvancedTCCUtil = false
     @Published private(set) var tccutilCopied = false
     private var copyResetWorkItem: DispatchWorkItem?
+    private let hotKeys: HotKeyManager?
 
-    init() {
+    @Published private(set) var hotKeysEnabled = false
+    @Published private(set) var hotKeyError = ""
+
+    init(hotKeys: HotKeyManager? = nil) {
+        self.hotKeys = hotKeys
+        refreshHotKeys()
         refreshAsync()
+    }
+
+    var hotKeysAvailable: Bool { hotKeys != nil }
+
+    var hotKeyCombos: String {
+        "\(HotKeyManager.keepAwakeCombo) 保持亮屏 · \(HotKeyManager.screenSaverCombo) 启动屏保"
     }
 
     var version: String {
@@ -172,6 +184,32 @@ final class SettingsModel: ObservableObject {
 
     func toggleDiagnostic() {
         showsDiagnostic.toggle()
+    }
+
+    func refreshHotKeys() {
+        if let hotKeys {
+            hotKeysEnabled = hotKeys.isEnabled && hotKeys.hasRegisteredHotKeys
+            hotKeyError = hotKeys.lastError
+        } else {
+            hotKeysEnabled = UserDefaults.standard.bool(forKey: HotKeyManager.enabledDefaultsKey)
+            hotKeyError = ""
+        }
+    }
+
+    func setHotKeysEnabled(_ enabled: Bool) {
+        guard let hotKeys else {
+            hotKeyError = "设置窗口未连接快捷键服务"
+            return
+        }
+        if let error = hotKeys.setEnabled(enabled) {
+            hotKeysEnabled = false
+            hotKeyError = error
+            message = error
+        } else {
+            hotKeysEnabled = hotKeys.isEnabled
+            hotKeyError = ""
+            message = enabled ? "全局快捷键已启用。" : "全局快捷键已停用。"
+        }
     }
 
     func resetInAppPermissions() {

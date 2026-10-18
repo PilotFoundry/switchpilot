@@ -7,6 +7,7 @@ struct SettingsView: View {
     var body: some View {
         VStack(alignment: .leading, spacing: 16) {
             permissionSection
+            hotKeySection
             loginItemSection
             aboutSection
 
@@ -217,6 +218,35 @@ struct SettingsView: View {
         }
         if alert.runModal() == .alertSecondButtonReturn {
             model.resetInAppPermissions()
+        }
+    }
+
+    private var hotKeySection: some View {
+        section("快捷键", subtitle: "全局快捷键，应用在后台时也可触发；冲突或注册失败会显示错误。") {
+            HStack {
+                VStack(alignment: .leading, spacing: 2) {
+                    Text("启用全局快捷键")
+                    Text(model.hotKeyCombos)
+                        .font(.caption)
+                        .foregroundStyle(Color.secondaryInk)
+                }
+                Spacer()
+                Toggle("", isOn: Binding(get: { model.hotKeysEnabled }, set: { model.setHotKeysEnabled($0) }))
+                    .labelsHidden()
+                    .toggleStyle(.switch)
+                    .controlSize(.small)
+                    .disabled(!model.hotKeysAvailable)
+            }
+            if !model.hotKeyError.isEmpty {
+                Text(model.hotKeyError)
+                    .font(.caption)
+                    .foregroundStyle(Color.errorInk)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
+            Text("固定组合，后续再评估自定义录制；只触发保持亮屏与启动屏保，不会在后台请求 TCC。")
+                .font(.caption)
+                .foregroundStyle(Color.secondaryInk)
+                .fixedSize(horizontal: false, vertical: true)
         }
     }
 
