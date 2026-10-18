@@ -16,6 +16,17 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
+## [0.7.7] - 2026-10-18
+
+- Remove the persistent screen-cleaning exit hint. The action label and overlay
+  already explain the interaction; good UI should not narrate everything.
+- Suppress successful status lines for screen saver, lock screen and display
+  sleep. Failures and permission gaps still surface; screen-cleaning recovery
+  status remains visible.
+- Add a "self-evident over annotated" principle to the product/design docs.
+- Revert panel height docs to 709 pt (782 pt with the guide).
+- Refresh screenshots for the cleaner quick-actions card.
+
 ## [0.7.6] - 2026-10-18
 
 - Add a persistent in-panel hint explaining how to exit screen cleaning:

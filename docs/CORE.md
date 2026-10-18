@@ -1,6 +1,6 @@
 # Core principles
 
-Status: current baseline **v0.7.6**. This document defines SwitchPilot's product
+Status: current baseline **v0.7.7**. This document defines SwitchPilot's product
 boundary. The implementation-level admission checklist lives in
 [en/CORE.md](en/CORE.md).
 
@@ -45,6 +45,8 @@ not the product scope.
     login, hardware and release acceptance. Unexecuted manual checks stay
     pending.
 
+11. **Self-evident over annotated.** Controls, state and system behavior should explain themselves. Do not add persistent copy for successful quick actions or for what a label already says; reserve text for permissions, failures, recovery and safety-critical exits.
+
 ## Included scope
 
 - Keep awake, timed or unlimited
@@ -53,8 +55,8 @@ not the product scope.
 - Lock screen, gated by Automation and Accessibility
 - Display sleep through `pmset displaysleepnow`
 - Capability-aware microphone mute
-- Screen cleaning with a real keyboard event tap, a persistent in-panel exit
-  hint, mouse exit and hidden five-minute failsafe
+- Screen cleaning with a real keyboard event tap, mouse exit and hidden
+  five-minute failsafe
 - Optional login item through `SMAppService`
 - Fixed global hotkeys, disabled by default
 - English, Simplified Chinese, Traditional Chinese and Japanese UI, following

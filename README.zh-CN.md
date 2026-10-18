@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml)
 
-版本 0.7.6 · 由 PilotFoundry 维护的开源、隐私优先 macOS 菜单栏工具，只保留少数可靠、低权限的系统控制。
+版本 0.7.7 · 由 PilotFoundry 维护的开源、隐私优先 macOS 菜单栏工具，只保留少数可靠、低权限的系统控制。
 
 > 本仓库保留完整开发历史，包括早期研究、失败实验和现场验收记录。应用源码与当前英文文档位于根目录；历史材料在 `artifacts/`、`evidence/`、`tooling/` 等目录，详见 [docs/RESEARCH.md](docs/RESEARCH.md)。
 
@@ -23,7 +23,7 @@
 | 锁定屏幕 | 发送系统锁屏快捷键；需要 Automation + 辅助功能 |
 | 关闭显示器 | 调用公开命令 `pmset displaysleepnow` |
 | 麦克风静音 | 按默认输入设备能力静音；不支持时诚实提示，不伪造状态 |
-| 屏幕清洁 | 全屏遮罩，暂停键盘输入，面板内提示退出方式，鼠标点击退出，内部保留最后兜底 |
+| 屏幕清洁 | 全屏遮罩，暂停键盘输入，鼠标点击退出，内部保留最后兜底 |
 | 登录时启动 | 可选 `SMAppService` 登录项，由设置控制 |
 | 全局快捷键 | 固定 `⌃⌥⌘K` / `⌃⌥⌘S`，默认关闭 |
 | 多语言 | English、简体中文、繁體中文、日本語；默认跟随系统，也可在设置中覆盖并重启应用 |
@@ -64,7 +64,7 @@ SwitchPilot 提供四套 UI 本地化：
 Release 提供由对应 tag 源码构建的 universal（Apple Silicon + Intel）macOS 应用。当前项目没有 Developer ID 证书，因此它是 **ad-hoc 签名、未公证** 的版本。
 
 - 要求：macOS 14 或更高
-- 文件：`SwitchPilot-0.7.6-macos-universal-adhoc.zip`
+- 文件：`SwitchPilot-0.7.7-macos-universal-adhoc.zip`
 - 下载、解压后把 `SwitchPilot.app` 放到 `/Applications`
 - 首次打开可能被 macOS 拦截：右键点击应用 → **打开**
 - 如使用终端，只对该应用执行：

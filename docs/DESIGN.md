@@ -1,6 +1,6 @@
 # UI/UX design
 
-Status: current baseline **v0.7.6**. English is canonical. Screenshots live in
+Status: current baseline **v0.7.7**. English is canonical. Screenshots live in
 `docs/images/`; all UI must be readable in light and dark appearances.
 
 ## 1. Design principles
@@ -14,6 +14,9 @@ Status: current baseline **v0.7.6**. English is canonical. Screenshots live in
 - **Quiet by default.** The app is an `LSUIElement` agent with no Dock icon. The
   panel uses a short, restrained scale/fade anchored under the menu-bar icon;
   Reduce Motion removes the scale.
+- **Self-evident over annotated.** Prefer labels, state and system behavior that
+  explain themselves. Reserve persistent copy for permissions, failures,
+  recovery and safety-critical exits.
 - **Localizable by construction.** Copy must fit English, Simplified Chinese,
   Traditional Chinese and Japanese. Language names are shown natively.
 
@@ -38,8 +41,8 @@ Status: current baseline **v0.7.6**. English is canonical. Screenshots live in
 
 ## 3. Panel structure
 
-Width: 380 pt. Normal height: about 731 pt; with the permission guide: about
-804 pt. The panel is scroll-safe on smaller displays.
+Width: 380 pt. Normal height: about 709 pt; with the permission guide: about
+782 pt. The panel is scroll-safe on smaller displays.
 
 1. **Header** — app mark/name, version, current keep-awake summary.
 2. **Keep awake** — toggle, 15/30/60/unlimited picker, readback state.
@@ -47,8 +50,8 @@ Width: 380 pt. Normal height: about 731 pt; with the permission guide: about
    capability/state.
 4. **Quick actions** — screen saver, lock screen, display sleep, screen
    cleaning. Each tile has an icon, title, short subtitle and optional badge.
-   A persistent caption below the grid explains the cleaning-mode exit: pause
-   keyboard input, move the mouse and click **Exit cleaning mode**.
+   Successful quick actions are not narrated in a status line; errors and the
+   screen-cleaning recovery state remain visible.
 5. **Permissions** — only when needed; readiness summary, grant/recheck
    actions, diagnostics disclosure.
 6. **Footer** — How to use, Settings, Quit. Permission state stays in the
@@ -136,6 +139,8 @@ See [en/BRAND.md](en/BRAND.md) for naming and trademark boundaries.
 - Never claim success when state could not be verified.
 - Use "Follow System" for the language default, not "Auto".
 - Release/download copy must state that the binary is ad-hoc and not notarized.
+- Do not narrate successful quick actions in persistent copy; show failures,
+  permission gaps and recovery instead.
 - Keep the four READMEs aligned on user-visible facts.
 
 ## 10. Current screenshots
