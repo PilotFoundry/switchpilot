@@ -1,4 +1,4 @@
-# SwitchPilot（个人自用 v0.3.5）
+# SwitchPilot（个人自用 v0.3.6）
 
 原 One Switch 1.35.4 的个人自用最小菜单栏替代。**不是分发产品**；SwitchPilot 是 2026-10-18 确定并经用户同意转正的正式名（候选比较见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`），中文描述「菜单栏开关」。目标、面板与验收见 `docs/PRD.md`、`docs/DESIGN.md`、`docs/TECH.md`、`docs/TESTPLAN.md`。
 
@@ -14,6 +14,13 @@
 v0.3 面板：单一不透明表面、可读次级文字、状态胶囊、首启引导（可"申请全部权限/稍后再说/重新检查"）、保活进度、权限按缺失项给唯一 CTA、动作磁贴（系统 hover/pressed/focus）、设置窗口（权限/登录/关于）、状态项右键菜单（设置/使用说明/退出）。应用内不执行 tccutil reset；撤销授权请到系统设置或按 README 手动命令。设计见 `docs/DESIGN.md` 与 v0.3 报告。
 
 已知排除项：Night Shift 直接控制、合盖不休眠、显示器休眠、输出/麦克风/音量类开关、私有 API、修改原应用、后台自动控制。
+
+## 验收与诊断
+
+- M1/M3/M8 现场验收前置/步骤：`evidence/onsite/M1-M3-M8-2026-10-18.md`。
+- 只读探针：`scripts/onsite-probe [输出路径]`（打开一次诊断实例，收集版本、签名、权限、登录项、断言、TCC 摘要；不授权/不锁屏/不改外观）。
+- `--diagnose-runtime` 写 `/tmp/switchpilot-runtime-diagnose.txt`；`--diagnose-permissions` 写权限简表。
+- TCC/屏幕状态项必须用户在场；未执行项不标记通过。
 
 ## 构建与运行
 
