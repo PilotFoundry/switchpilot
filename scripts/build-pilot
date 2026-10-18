@@ -1,0 +1,14 @@
+#!/bin/sh
+set -eu
+PILOT_ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+PILOT_PACKAGE="$PILOT_ROOT/prototypes/SwitchPilot"
+# shortcut: CLT lacks XCTest; native SwiftPM is a local pilot fallback until full Xcode is available.
+swift build --package-path "$PILOT_PACKAGE" --build-system native --product SwitchPilot
+PILOT_BIN=$(swift build --package-path "$PILOT_PACKAGE" --build-system native --show-bin-path)
+PILOT_APP="$PILOT_PACKAGE/.build/SwitchPilot.app"
+mkdir -p "$PILOT_APP/Contents/MacOS"
+cp "$PILOT_BIN/SwitchPilot" "$PILOT_APP/Contents/MacOS/SwitchPilot"
+cp "$PILOT_PACKAGE/Info.plist" "$PILOT_APP/Contents/Info.plist"
+codesign --force --sign - --options runtime --entitlements "$PILOT_PACKAGE/Entitlements.plist" "$PILOT_APP"
+codesign --verify --strict "$PILOT_APP"
+printf '%s\n' "$PILOT_APP"
