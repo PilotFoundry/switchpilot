@@ -111,7 +111,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         // The status bar always keeps the SwitchPilot S icon; mute state is
         // exposed by the tooltip and the right-click action only.
         guard let button = statusItem?.button else { return }
-        button.toolTip = microphoneMuted ? "SwitchPilot · 麦克风已静音" : "SwitchPilot"
+        button.toolTip = microphoneMuted ? L("SwitchPilot · 麦克风已静音") : "SwitchPilot"
     }
 
     @MainActor @objc private func statusItemClicked(_ sender: Any?) {
@@ -125,20 +125,20 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     @MainActor private func showStatusMenu() {
         guard let statusItem else { return }
         let menu = NSMenu()
-        let settingsItem = NSMenuItem(title: "设置…", action: #selector(menuOpenSettings), keyEquivalent: ",")
+        let settingsItem = NSMenuItem(title: L("设置…"), action: #selector(menuOpenSettings), keyEquivalent: ",")
         settingsItem.target = self
         let microphoneItem = NSMenuItem(
-            title: microphoneMuted ? "取消麦克风静音" : "静音麦克风",
+            title: microphoneMuted ? L("取消麦克风静音") : L("静音麦克风"),
             action: #selector(menuToggleMicrophone),
             keyEquivalent: "")
         microphoneItem.target = self
         microphoneItem.isEnabled = model?.microphoneState.supportsMute == true
         if model?.microphoneState.supportsMute != true {
-            microphoneItem.title = "麦克风静音不可用"
+            microphoneItem.title = L("麦克风静音不可用")
         }
-        let guideItem = NSMenuItem(title: "使用说明", action: #selector(menuShowGuide), keyEquivalent: "")
+        let guideItem = NSMenuItem(title: L("使用说明"), action: #selector(menuShowGuide), keyEquivalent: "")
         guideItem.target = self
-        let quitItem = NSMenuItem(title: "退出 SwitchPilot", action: #selector(menuQuit), keyEquivalent: "q")
+        let quitItem = NSMenuItem(title: L("退出 SwitchPilot"), action: #selector(menuQuit), keyEquivalent: "q")
         quitItem.target = self
         menu.addItem(settingsItem)
         menu.addItem(microphoneItem)

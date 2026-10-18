@@ -5,7 +5,7 @@ import SwitchPilotCore
 @MainActor
 final class PanelModel: ObservableObject {
     @Published private(set) var keepAwakeActive = false
-    @Published private(set) var keepAwakeRemaining: String = "未开启"
+    @Published private(set) var keepAwakeRemaining: String = L("未开启")
     @Published private(set) var keepAwakeProgress: Double?
     @Published private(set) var keepAwakeError: String?
     @Published var preset: KeepAwakePreset = .unlimited
@@ -16,13 +16,13 @@ final class PanelModel: ObservableObject {
     @Published private(set) var darkModeError: String?
     @Published private(set) var darkModeBusy = false
 
-    @Published private(set) var screenSaverStatus = "未执行"
-    @Published private(set) var lockStatus = "未执行"
-    @Published private(set) var displaySleepStatus = "未执行"
+    @Published private(set) var screenSaverStatus = L("未执行")
+    @Published private(set) var lockStatus = L("未执行")
+    @Published private(set) var displaySleepStatus = L("未执行")
     @Published private(set) var microphoneState = MicrophoneDevice(
-        deviceID: 0, name: "正在读取…", supportsMute: false, muted: nil, message: nil)
+        deviceID: 0, name: L("正在读取…"), supportsMute: false, muted: nil, message: nil)
     @Published private(set) var microphoneError = ""
-    @Published private(set) var screenCleaningStatus = "未执行"
+    @Published private(set) var screenCleaningStatus = L("未执行")
     @Published private(set) var screenCleaningError = ""
     @Published private(set) var screenCleaningNeedsAccessibility = false
     @Published private(set) var screenCleaningActive = false
@@ -62,11 +62,11 @@ final class PanelModel: ObservableObject {
     }
 
     var version: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.5.0"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.6.0"
     }
 
     var statusTitle: String {
-        keepAwakeActive ? "保护中" : "保活关闭"
+        keepAwakeActive ? L("保护中") : L("保活关闭")
     }
 
     var guideVisible: Bool { !hasSeenWelcome || showGuide }
@@ -80,7 +80,7 @@ final class PanelModel: ObservableObject {
     }
 
     var permissionsSummary: String {
-        "权限：Automation \(darkModePermission.userFacingDescription) · 辅助功能 \(accessibilityTrusted ? "已授权" : "未授权")"
+        LF("权限：Automation %@ · 辅助功能 %@", darkModePermission.userFacingDescription, accessibilityTrusted ? L("已授权") : L("未授权"))
     }
 
     var allPermissionsReady: Bool {
@@ -128,11 +128,11 @@ final class PanelModel: ObservableObject {
         if let remaining = session.remainingSeconds {
             let minutes = remaining / 60
             let seconds = remaining % 60
-            keepAwakeRemaining = String(format: "剩余 %02d:%02d", minutes, seconds)
+            keepAwakeRemaining = LF("剩余 %02d:%02d", minutes, seconds)
         } else if session.isActive {
-            keepAwakeRemaining = "无限期 · 直到关闭或退出"
+            keepAwakeRemaining = L("无限期 · 直到关闭或退出")
         } else {
-            keepAwakeRemaining = "未开启"
+            keepAwakeRemaining = L("未开启")
         }
     }
 
@@ -172,16 +172,16 @@ final class PanelModel: ObservableObject {
         defer { darkModeBusy = false }
         darkModeError = nil
         guard darkModePermission == .allowed else {
-            darkModeStatus = "需要授权后才能切换"
+            darkModeStatus = L("需要授权后才能切换")
             return
         }
         do {
             try DarkMode.set(enabled)
             systemIsDark = enabled
-            darkModeStatus = enabled ? "已切换为深色模式" : "已切换为浅色模式"
+            darkModeStatus = enabled ? L("已切换为深色模式") : L("已切换为浅色模式")
         } catch {
             darkModeError = "\(error)"
-            darkModeStatus = "切换失败，系统外观未被确认修改"
+            darkModeStatus = L("切换失败，系统外观未被确认修改")
             systemIsDark = DarkMode.currentAppearanceIsDark()
         }
     }
@@ -190,7 +190,7 @@ final class PanelModel: ObservableObject {
     func requestDarkModeAuthorization() {
         guard !permissionBusy else { return }
         permissionBusy = true
-        permissionSetupMessage = "正在请求 Automation 授权…"
+        permissionSetupMessage = L("正在请求 Automation 授权…")
         DispatchQueue.global(qos: .userInitiated).async {
             var state = Permissions.requestAutomation()
             if state == .targetNotRunning {
@@ -213,7 +213,7 @@ final class PanelModel: ObservableObject {
     func requestAllPermissions() {
         guard !permissionBusy else { return }
         permissionBusy = true
-        permissionSetupMessage = "正在请求 Automation 授权…"
+        permissionSetupMessage = L("正在请求 Automation 授权…")
         DispatchQueue.global(qos: .userInitiated).async {
             let automation = Permissions.requestAutomation()
             DispatchQueue.main.async { [weak self] in
@@ -239,8 +239,8 @@ final class PanelModel: ObservableObject {
                 guard let self else { return }
                 self.permissionBusy = false
                 self.permissionSetupMessage = trusted
-                    ? "辅助功能已授权。"
-                    : "辅助功能仍未授权：请在系统设置 › 隐私与安全性 › 辅助功能中勾选 SwitchPilot。"
+                    ? L("辅助功能已授权。")
+                    : L("辅助功能仍未授权：请在系统设置 › 隐私与安全性 › 辅助功能中勾选 SwitchPilot。")
                 self.refreshAsync()
             }
         }
@@ -249,7 +249,7 @@ final class PanelModel: ObservableObject {
     func requestLockAutomation() {
         guard !permissionBusy else { return }
         permissionBusy = true
-        permissionSetupMessage = "正在请求 Automation 授权…"
+        permissionSetupMessage = L("正在请求 Automation 授权…")
         DispatchQueue.global(qos: .userInitiated).async {
             let state = LockScreen.requestAutomationPermission()
             DispatchQueue.main.async { [weak self] in
@@ -261,7 +261,7 @@ final class PanelModel: ObservableObject {
                 self.refreshAsync()
                 if state == .allowed {
                     self.permissionSetupMessage = self.accessibilityTrusted
-                        ? "锁定屏幕所需权限已就绪。"
+                        ? L("锁定屏幕所需权限已就绪。")
                         : "Automation 已授权；锁屏仍需要辅助功能授权。"
                 } else {
                     self.permissionSetupMessage = "Automation 未授权：\(state.userFacingDescription)。"
@@ -272,7 +272,7 @@ final class PanelModel: ObservableObject {
 
     private func updatePermissionMessage(automation: AutomationState) {
         if allPermissionsReady {
-            permissionSetupMessage = "所需权限已就绪。"
+            permissionSetupMessage = L("所需权限已就绪。")
         } else if !accessibilityTrusted {
             permissionSetupMessage = automation == .allowed
                 ? "Automation 已授权。请在系统提示或辅助功能设置中勾选 SwitchPilot，然后点“重新检查”。"
@@ -284,11 +284,11 @@ final class PanelModel: ObservableObject {
 
     func recheckPermissions() {
         permissionBusy = true
-        permissionSetupMessage = "正在检查权限…"
+        permissionSetupMessage = L("正在检查权限…")
         refreshAsync { [weak self] in
             guard let self else { return }
             self.permissionBusy = false
-            self.permissionSetupMessage = self.allPermissionsReady ? "所需权限已就绪。" : "权限仍未就绪：\(self.permissionsSummary)"
+            self.permissionSetupMessage = self.allPermissionsReady ? L("所需权限已就绪。") : LF("权限仍未就绪：%@", self.permissionsSummary)
         }
     }
 
@@ -308,7 +308,7 @@ final class PanelModel: ObservableObject {
     /// Preview-only helper for `--dump-panel`: does not touch microphone hardware.
     func previewMicrophone(muted: Bool) {
         microphoneState = MicrophoneDevice(
-            deviceID: 1, name: "MacBook Pro 麦克风", supportsMute: true,
+            deviceID: 1, name: L("MacBook Pro 麦克风"), supportsMute: true,
             muted: muted, message: nil)
     }
 
@@ -358,9 +358,9 @@ final class PanelModel: ObservableObject {
                 guard let self else { return }
                 switch result {
                 case .success:
-                    self.screenSaverStatus = ScreenSaver.isRunning() ? "已启动（进程可见）" : "已请求启动（未确认）"
+                    self.screenSaverStatus = ScreenSaver.isRunning() ? L("已启动（进程可见）") : L("已请求启动（未确认）")
                 case .failure(let error):
-                    self.screenSaverStatus = "失败：\(error)"
+                    self.screenSaverStatus = LF("失败：%@", String(describing: error))
                 }
             }
         }
@@ -384,7 +384,7 @@ final class PanelModel: ObservableObject {
 
     private func presentLockFlow(permissions: LockPermissions) {
         guard permissions.canAttempt else {
-            lockStatus = "未执行：缺少权限"
+            lockStatus = L("未执行：缺少权限")
             if permissions.automation != .allowed {
                 requestLockAutomation()
             } else {
@@ -397,17 +397,17 @@ final class PanelModel: ObservableObject {
         // shortcut's immediacy. Permission gating still happens above.
         do {
             try LockScreen.lock()
-            lockStatus = "已请求锁定，确认中…"
+            lockStatus = L("已请求锁定，确认中…")
             Task { @MainActor in
                 try? await Task.sleep(nanoseconds: 1_000_000_000)
                 if let locked = LockScreen.isLocked() {
-                    lockStatus = locked ? "已锁定" : "已请求锁定（读回未锁定）"
+                    lockStatus = locked ? L("已锁定") : L("已请求锁定（读回未锁定）")
                 } else {
-                    lockStatus = "已请求锁定（未确认）"
+                    lockStatus = L("已请求锁定（未确认）")
                 }
             }
         } catch {
-            lockStatus = "失败：\(error)"
+            lockStatus = LF("失败：%@", String(describing: error))
             lockPermissions = LockScreen.permissions()
         }
     }
@@ -431,7 +431,7 @@ final class PanelModel: ObservableObject {
         if Microphone.setMuted(target) {
             refreshMicrophone()
         } else {
-            microphoneError = "切换麦克风静音失败；输入设备可能已变化"
+            microphoneError = L("切换麦克风静音失败；输入设备可能已变化")
             refreshMicrophone()
         }
     }
@@ -443,8 +443,8 @@ final class PanelModel: ObservableObject {
         screenCleaningError = ""
         screenCleaningNeedsAccessibility = false
         guard Permissions.accessibilityTrusted() else {
-            screenCleaningStatus = "需要辅助功能授权才能锁定键盘输入"
-            screenCleaningError = "需要辅助功能授权；不会进入清洁模式"
+            screenCleaningStatus = L("需要辅助功能授权才能锁定键盘输入")
+            screenCleaningError = L("需要辅助功能授权；不会进入清洁模式")
             screenCleaningNeedsAccessibility = true
             _ = Permissions.accessibilityPrompt()
             return
@@ -465,16 +465,16 @@ final class PanelModel: ObservableObject {
     // MARK: - Display sleep
 
     func sleepDisplay() {
-        displaySleepStatus = "正在请求…"
+        displaySleepStatus = L("正在请求…")
         DispatchQueue.global(qos: .userInitiated).async {
             do {
                 try DisplaySleep.request()
                 DispatchQueue.main.async { [weak self] in
-                    self?.displaySleepStatus = "已请求关闭（鼠标/按键唤醒）"
+                    self?.displaySleepStatus = L("已请求关闭（鼠标/按键唤醒）")
                 }
             } catch {
                 DispatchQueue.main.async { [weak self] in
-                    self?.displaySleepStatus = "失败：\(error)"
+                    self?.displaySleepStatus = LF("失败：%@", String(describing: error))
                 }
             }
         }

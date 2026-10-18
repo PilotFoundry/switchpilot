@@ -10,9 +10,9 @@ enum ScreenCleaningError: Error, CustomStringConvertible {
     var description: String {
         switch self {
         case .accessibilityRequired:
-            return "需要辅助功能授权才能锁定键盘输入"
+            return L("需要辅助功能授权才能锁定键盘输入")
         case .eventTapUnavailable:
-            return "无法创建键盘拦截；请确认辅助功能授权后重试"
+            return L("无法创建键盘拦截；请确认辅助功能授权后重试")
         }
     }
 }
@@ -74,7 +74,7 @@ final class ScreenCleaningManager {
         buildOverlays()
         isActive = true
         updateCountdown()
-        onStateChange?(true, "清洁模式进行中：键盘已暂停，鼠标点击退出")
+        onStateChange?(true, L("清洁模式进行中：键盘已暂停，鼠标点击退出"))
 
         if showsCountdown {
             timer = Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { [weak self] _ in
@@ -113,7 +113,7 @@ final class ScreenCleaningManager {
         let wasActive = isActive
         isActive = false
         if wasActive {
-            onStateChange?(false, "已退出清洁模式")
+            onStateChange?(false, L("已退出清洁模式"))
             NSApp.activate(ignoringOtherApps: false)
         }
     }
@@ -195,7 +195,7 @@ private final class CleaningWindow: NSWindow {
 
 private final class CleaningOverlayView: NSView {
     private weak var manager: ScreenCleaningManager?
-    private let titleLabel = NSTextField(labelWithString: "屏幕清洁模式")
+    private let titleLabel = NSTextField(labelWithString: L("屏幕清洁模式"))
     private let instructionLabel = NSTextField(labelWithString: "")
     private let countdownLabel = NSTextField(labelWithString: "")
     private let exitControl: CleaningExitControl
@@ -225,8 +225,8 @@ private final class CleaningOverlayView: NSView {
         instructionLabel.isBordered = false
         instructionLabel.drawsBackground = false
         instructionLabel.stringValue = showCountdown
-            ? "键盘输入已暂停；点击下方按钮退出。测试模式会在倒计时结束时自动退出。"
-            : "键盘输入已暂停；移动鼠标并点击下方按钮退出清洁模式。"
+            ? L("键盘输入已暂停；点击下方按钮退出。测试模式会在倒计时结束时自动退出。")
+            : L("键盘输入已暂停；移动鼠标并点击下方按钮退出清洁模式。")
 
         countdownLabel.font = .monospacedDigitSystemFont(ofSize: 16, weight: .medium)
         countdownLabel.textColor = .white
@@ -260,7 +260,7 @@ private final class CleaningOverlayView: NSView {
 
     func update(secondsRemaining: Int) {
         guard showsCountdown else { return }
-        countdownLabel.stringValue = "\(secondsRemaining) 秒后自动退出（测试模式）"
+        countdownLabel.stringValue = LF("%@ 秒后自动退出（测试模式）", String(secondsRemaining))
     }
 }
 
@@ -268,7 +268,7 @@ private final class CleaningOverlayView: NSView {
 /// pure-black overlay and accepts the first mouse click.
 private final class CleaningExitControl: NSView {
     private weak var manager: ScreenCleaningManager?
-    private let label = NSTextField(labelWithString: "退出清洁模式")
+    private let label = NSTextField(labelWithString: L("退出清洁模式"))
 
     init(manager: ScreenCleaningManager) {
         self.manager = manager

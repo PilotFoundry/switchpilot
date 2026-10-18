@@ -1,0 +1,1 @@
+"NSAppleEventsUsageDescription" = "SwitchPilot 仅在你主动操作时，通过 System Events 读取/切换系统深色模式或发送锁定屏幕快捷键；不会在后台自动控制其他应用。";
