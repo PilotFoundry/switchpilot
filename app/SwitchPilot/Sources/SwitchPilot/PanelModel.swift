@@ -23,6 +23,8 @@ final class PanelModel: ObservableObject {
         deviceID: 0, name: "正在读取…", supportsMute: false, muted: nil, message: nil)
     @Published private(set) var microphoneError = ""
     @Published private(set) var screenCleaningStatus = "未执行"
+    @Published private(set) var screenCleaningError = ""
+    @Published private(set) var screenCleaningNeedsAccessibility = false
     @Published private(set) var screenCleaningActive = false
     @Published private(set) var lockPermissions = LockPermissions(automation: .notDetermined, accessibilityTrusted: false)
     @Published private(set) var accessibilityTrusted = false
@@ -50,6 +52,10 @@ final class PanelModel: ObservableObject {
             Task { @MainActor in
                 self?.screenCleaningActive = active
                 self?.screenCleaningStatus = message
+                if active {
+                    self?.screenCleaningError = ""
+                    self?.screenCleaningNeedsAccessibility = false
+                }
             }
         }
         refreshAsync()
@@ -423,8 +429,12 @@ final class PanelModel: ObservableObject {
 
     func startScreenCleaning() {
         guard !screenCleaningActive else { return }
+        screenCleaningError = ""
+        screenCleaningNeedsAccessibility = false
         guard Permissions.accessibilityTrusted() else {
             screenCleaningStatus = "需要辅助功能授权才能锁定键盘输入"
+            screenCleaningError = "需要辅助功能授权；不会进入清洁模式"
+            screenCleaningNeedsAccessibility = true
             _ = Permissions.accessibilityPrompt()
             return
         }
@@ -436,6 +446,8 @@ final class PanelModel: ObservableObject {
             try screenCleaning.start(duration: testSeconds)
         } catch {
             screenCleaningStatus = "\(error)"
+            screenCleaningError = "\(error)"
+            screenCleaningNeedsAccessibility = !Permissions.accessibilityTrusted()
         }
     }
 

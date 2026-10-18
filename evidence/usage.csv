@@ -34,3 +34,4 @@ v036,onsite_preflight,2026-10-18T12:44:24+08:00,timestamp,read-only onsite probe
 v039,expansion_eval,2026-10-18T13:25:00+08:00,timestamp,read-only expansion evaluation and API probes; no feature or system change
 v040,expansion_impl,2026-10-18T13:45:00+08:00,timestamp,implemented shortcuts/display sleep/audio volume prototype; read-only preflight only
 v050,mic_screen,2026-10-18T14:05:00+08:00,timestamp,removed output volume; implemented microphone mute and screen cleaning; preflight only
+v052,uiux_regression,2026-10-18T14:32:00+08:00,timestamp,compressed panel; mic status item; clean fallback; integrated policy regression (verify 12/12)

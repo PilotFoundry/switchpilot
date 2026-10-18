@@ -69,7 +69,7 @@ def check_plists():
     entitlements = plistlib.loads((PKG / "Entitlements.plist").read_bytes())
     if info.get("CFBundleIdentifier") != "local.personal.SwitchPilot":
         raise RuntimeError("unexpected bundle id")
-    if info.get("CFBundleShortVersionString") != "0.5.1":
+    if info.get("CFBundleShortVersionString") != "0.5.2":
         raise RuntimeError(f"unexpected bundle version: {info.get('CFBundleShortVersionString')}")
     if info.get("LSUIElement") is not True:
         raise RuntimeError("LSUIElement must be true")
@@ -187,15 +187,15 @@ def check_panel_sizes():
     if result.returncode != 0 or "x" not in result.stdout:
         raise RuntimeError(f"panel-size (no guide) failed: {result.stderr.strip()}")
     width, height = (int(v) for v in result.stdout.strip().split("x"))
-    if width != 380 or height > 840:
-        raise RuntimeError(f"panel without guide is {width}x{height}, expected 380x<=840")
+    if width != 380 or height > 760:
+        raise RuntimeError(f"panel without guide is {width}x{height}, expected 380x<=760")
     result = run(app, "--panel-size", env=guide)
     if result.returncode != 0 or "x" not in result.stdout:
         raise RuntimeError(f"panel-size (guide) failed: {result.stderr.strip()}")
     width, height = (int(v) for v in result.stdout.strip().split("x"))
-    if width != 380 or height > 900:
-        raise RuntimeError(f"panel with guide is {width}x{height}, expected 380x<=900")
-    return "panel sizes within 380x840 / 380x900"
+    if width != 380 or height > 840:
+        raise RuntimeError(f"panel with guide is {width}x{height}, expected 380x<=840")
+    return "panel sizes within 380x760 / 380x840"
 
 
 def check_no_raw_foreground_colors():
@@ -215,6 +215,15 @@ def check_no_raw_foreground_colors():
     if bad:
         raise RuntimeError("UI copy/color regressions: " + "; ".join(bad))
     return "no raw colors or stale confirmation copy"
+
+
+def check_policy_regression():
+    result = run("/usr/bin/python3", str(ROOT / "scripts/qa-regression.py"), timeout=120)
+    output = result.stdout + result.stderr
+    if result.returncode != 0:
+        raise RuntimeError(output.strip()[-1600:])
+    summary = [line for line in output.splitlines() if "checks passed" in line]
+    return summary[-1] if summary else "policy regression passed"
 
 
 def check_static_scripts():
@@ -239,6 +248,7 @@ check("original app unchanged", check_original_app)
 check("contrast tokens", check_contrast_tokens)
 check("panel sizes", check_panel_sizes)
 check("semantic text colors", check_no_raw_foreground_colors)
+check("policy regression", check_policy_regression)
 check("static scripts", check_static_scripts)
 
 failures = sum(1 for _, ok, _ in results if not ok)
