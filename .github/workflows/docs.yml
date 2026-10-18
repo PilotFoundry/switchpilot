@@ -1,0 +1,51 @@
+name: Docs
+
+# Documentation consistency check. This is intentionally not a
+# "feature PR must modify docs" gate: it validates links, version references,
+# the docs map and release-doc/workflow references without blocking legitimate
+# code-only changes.
+on:
+  pull_request:
+    paths:
+      - "**/*.md"
+      - "docs/**"
+      - ".github/pull_request_template.md"
+      - ".github/workflows/docs.yml"
+      - ".github/workflows/release.yml"
+      - "CHANGELOG.md"
+      - "SECURITY-INSIGHTS.yml"
+      - "app/SwitchPilot/Info.plist"
+      - "scripts/check-docs.py"
+      - "scripts/verify-app.py"
+  push:
+    branches: [main]
+    paths:
+      - "**/*.md"
+      - "docs/**"
+      - ".github/pull_request_template.md"
+      - ".github/workflows/docs.yml"
+      - ".github/workflows/release.yml"
+      - "CHANGELOG.md"
+      - "SECURITY-INSIGHTS.yml"
+      - "app/SwitchPilot/Info.plist"
+      - "scripts/check-docs.py"
+      - "scripts/verify-app.py"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: docs-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Validate docs and version consistency
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Check out
+        uses: actions/checkout@v4
+      - name: Check docs
+        run: python3 scripts/check-docs.py

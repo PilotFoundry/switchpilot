@@ -1,5 +1,7 @@
 ## [Unreleased]
 
+- Add a documentation consistency workflow and `make docs-check` (links,
+  versions, docs map, release references) plus a PR-template Docs impact field.
 - Rewrite the product docs (`CORE`, `PRD`, `DESIGN`, `TECH`, `TESTPLAN`,
   `EXPANSION`, `RESEARCH`) for the current open-source, four-language,
   ad-hoc-binary baseline.
