@@ -1,0 +1,25 @@
+[
+  {
+    "name": "open_binary",
+    "arguments": {
+      "path": "analysis/slices/OneSwitch.arm64",
+      "provider_id": "ghidra"
+    }
+  },
+  {
+    "name": "xrefs",
+    "arguments": {
+      "address": "0x100209de0"
+    }
+  },
+  {
+    "name": "xrefs",
+    "arguments": {
+      "address": "0x100209fc0"
+    }
+  },
+  {
+    "name": "close_binary",
+    "arguments": {}
+  }
+]
