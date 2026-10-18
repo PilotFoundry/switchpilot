@@ -367,6 +367,15 @@ struct PanelView: View {
                 .font(.caption2)
                 .foregroundStyle(Color.secondaryInk)
             }
+            HStack(alignment: .top, spacing: 6) {
+                Image(systemName: "cursorarrow.click")
+                    .font(.caption2)
+                    .foregroundStyle(Color.secondaryInk)
+                Text(L("清洁屏幕会暂停键盘输入；移动鼠标并点击「退出清洁模式」退出。"))
+                    .font(.caption2)
+                    .foregroundStyle(Color.secondaryInk)
+                    .fixedSize(horizontal: false, vertical: true)
+            }
             if !model.screenCleaningError.isEmpty {
                 HStack(alignment: .top, spacing: 6) {
                     Image(systemName: "xmark.octagon.fill")

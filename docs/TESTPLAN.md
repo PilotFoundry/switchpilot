@@ -1,6 +1,6 @@
 # Test plan
 
-Status: current baseline **v0.7.5**. English is canonical. Automated checks are
+Status: current baseline **v0.7.6**. English is canonical. Automated checks are
 not a substitute for manual TCC, hardware, login, screen-cleaning or release
 verification.
 
@@ -102,7 +102,7 @@ Expected:
 | Lock screen | Automation + Accessibility, lock, password unlock |
 | Display sleep | Screen sleeps; wake behavior follows system settings |
 | Microphone | Mute/unmute on supported input; unsupported explanation |
-| Screen cleaning | Overlay, keyboard suspended, mouse exit, hidden timeout, no normal countdown |
+| Screen cleaning | Overlay, keyboard suspended, mouse exit hint, mouse exit, hidden timeout, no normal countdown |
 | Login item | Register/unregister, logout/reboot launch |
 | Hotkeys | Default off, enable, conflict error, disable, real trigger |
 | Settings | Revoke disclosure, advanced reset confirmation, no automatic tccutil; Command-W/Escape close |

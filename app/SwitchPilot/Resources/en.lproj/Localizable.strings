@@ -214,3 +214,4 @@
 "退出并重新打开" = "Quit and Reopen";
 "开源" = "Open source";
 "由 PilotFoundry 维护的开源 macOS 菜单栏小工具，遵循 MIT 许可证。" = "An open-source macOS menu-bar utility by PilotFoundry. MIT licensed.";
+"清洁屏幕会暂停键盘输入；移动鼠标并点击「退出清洁模式」退出。" = "Cleaning mode pauses keyboard input. Move the mouse and click Exit Cleaning Mode to leave.";

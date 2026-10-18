@@ -16,6 +16,14 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
+## [0.7.6] - 2026-10-18
+
+- Add a persistent in-panel hint explaining how to exit screen cleaning:
+  move the mouse and click "Exit cleaning mode".
+- Update the panel height docs to 731 pt (804 pt with the permission guide).
+- Refresh the design/requirements/test docs and localized README feature tables.
+- Keep the v0.7.5 Settings Command-W fix and regression checks.
+
 ## [0.7.5] - 2026-10-18
 
 - Make the Settings window close with Command-W. The app is LSUIElement and
