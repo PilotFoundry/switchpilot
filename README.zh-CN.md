@@ -34,7 +34,7 @@
 
 ## 为什么做这个项目
 
-原版 One Switch 功能很多，但日常最常用的只是少数系统状态。SwitchPilot 刻意保持很小：
+SwitchPilot 受 One Switch 将常用系统控制放进菜单栏这一思路启发。它是一个刻意保持更小范围的独立项目：日常最常用的往往只是少数系统状态，因此 SwitchPilot 只保留很小的功能面：
 
 - **少而可靠**，而不是 30 个开关的仪表盘。
 - **不用私有 API、不加特权 helper、不做后台自动化。**
@@ -164,4 +164,4 @@ scripts/                     构建、安装、smoke 和对比度检查
 
 MIT © 2026 pengxianghao。详见 [LICENSE](LICENSE)。
 
-SwitchPilot 是独立项目。One Switch 是其各自权利人的产品；本仓库不包含 One Switch 代码、素材或分发二进制。
+SwitchPilot 是独立项目，与 One Switch 无隶属或背书关系。One Switch 是其各自权利人的产品；本仓库不包含 One Switch 代码、素材或分发二进制。

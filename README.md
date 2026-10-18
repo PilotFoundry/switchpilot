@@ -38,8 +38,10 @@ reliable system controls, maintained by PilotFoundry.
 
 ## Why this project exists
 
-Original One Switch is feature-rich, but most day-to-day use comes down to a
-handful of system states. SwitchPilot deliberately keeps a small surface:
+SwitchPilot was inspired by One Switch's menu-bar approach to everyday system
+controls. It is an independent project with a deliberately smaller scope: most
+day-to-day use comes down to a handful of system states, so SwitchPilot keeps a
+small surface:
 
 - **Few and reliable** instead of a 30-toggle dashboard.
 - **No private APIs, no privileged helper, no background automation.**
@@ -203,6 +205,6 @@ flow; see [SECURITY.md](SECURITY.md).
 
 MIT © 2026 pengxianghao. See [LICENSE](LICENSE).
 
-SwitchPilot is an independent project. One Switch is a product of its
-respective owner; this repository contains no One Switch code, assets or
-distribution binaries.
+SwitchPilot is an independent project, not affiliated with or endorsed by One
+Switch. One Switch is a product of its respective owner; this repository
+contains no One Switch code, assets or distribution binaries.
