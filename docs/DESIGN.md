@@ -1,6 +1,6 @@
 # UI/UX design
 
-Status: current baseline **v0.7.3**. English is canonical. Screenshots live in
+Status: current baseline **v0.7.4**. English is canonical. Screenshots live in
 `docs/images/`; all UI must be readable in light and dark appearances.
 
 ## 1. Design principles
@@ -38,8 +38,8 @@ Status: current baseline **v0.7.3**. English is canonical. Screenshots live in
 
 ## 3. Panel structure
 
-Width: 380 pt. Normal height: about 730 pt; with the permission guide: about
-803 pt. The panel is scroll-safe on smaller displays.
+Width: 380 pt. Normal height: about 709 pt; with the permission guide: about
+782 pt. The panel is scroll-safe on smaller displays.
 
 1. **Header** — app mark/name, version, current keep-awake summary.
 2. **Keep awake** — toggle, 15/30/60/unlimited picker, readback state.
@@ -49,7 +49,8 @@ Width: 380 pt. Normal height: about 730 pt; with the permission guide: about
    cleaning. Each tile has an icon, title, short subtitle and optional badge.
 5. **Permissions** — only when needed; readiness summary, grant/recheck
    actions, diagnostics disclosure.
-6. **Footer** — How to use, Settings, Quit.
+6. **Footer** — How to use, Settings, Quit. Permission state stays in the
+   permission card and Settings rather than duplicating a footer summary.
 
 Long localized labels wrap to at most two lines; the panel height may grow and
 is measured by `--panel-size`.

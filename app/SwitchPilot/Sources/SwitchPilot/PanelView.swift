@@ -523,28 +523,17 @@ struct PanelView: View {
     // MARK: - Footer
 
     private var footer: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 6) {
-                Image(systemName: "info.circle")
-                    .font(.caption2)
-                    .foregroundStyle(Color.secondaryInk)
-                Text(L(model.permissionsSummary))
-                    .font(.caption2)
-                    .foregroundStyle(Color.secondaryInk)
-                    .lineLimit(2)
-            }
-            HStack(spacing: 8) {
-                Button("使用说明") { model.toggleGuide() }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                Button("设置…") { model.openSettings() }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-                Spacer()
-                Button("退出") { model.quit() }
-                    .buttonStyle(.bordered)
-                    .controlSize(.small)
-            }
+        HStack(spacing: 8) {
+            Button("使用说明") { model.toggleGuide() }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+            Button("设置…") { model.openSettings() }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+            Spacer()
+            Button("退出") { model.quit() }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
         }
     }
 
