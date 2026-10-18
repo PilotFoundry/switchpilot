@@ -6,7 +6,7 @@
 
 - macOS 27.0.1 (26A434)，Apple Silicon arm64。
 - CLT Swift 6.4 / macOS 27.0 SDK；无完整 Xcode、无 XCTest。
-- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.6，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
+- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.7，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
 - 原应用：`/Applications/One Switch.app` 1.35.4 (440)，测试前后版本/hash/签名不变；不启动、不修改其数据。
 - 权限前提：未预先授予 Automation/Accessibility；不修改 TCC 数据库、不关闭 SIP、不重签原应用。
 
@@ -59,7 +59,7 @@
 ### M3 锁定屏幕
 
 1. 未授予 Accessibility 时点击"锁定屏幕" → 显示缺少辅助功能（及 Automation 状态），不发送按键、不锁屏。
-2. 按引导授予 Accessibility 与 Automation 后重试 → 确认后应锁定屏幕。
+2. 按引导授予 Accessibility 与 Automation 后重试 → **点击「锁定屏幕」应直接锁定，无二次确认弹窗**；记录是否成功与解锁方式。
 3. 解锁后检查面板读回：显示已锁定（若可读回）或"已请求，未确认"。
 4. 撤销权限后重试 → 应回到权限引导，不崩溃。
 
@@ -116,7 +116,7 @@ v0.1 收口标准：A1–A14 通过；M1–M3 由用户在场执行并记录（�
 
 - 原应用、其偏好与签名不做任何修改；测试前后比较 hash。
 - 深色模式：测试前记录当前外观，测试结束恢复并读回。
-- 屏保/锁屏：现场确认后执行；锁屏需用户可立即解锁。
+- 屏保：现场确认后执行；锁屏点击即执行（v0.3.7 起无二次确认，需用户可立即解锁）。
 - 权限：仅在用户主动操作时申请；撤销入口写在 README；不直接编辑 TCC 数据库。
 - 删除应用 = 删除 `app/SwitchPilot/.build/SwitchPilot.app`；不新增全局配置文件。
 

@@ -91,3 +91,9 @@
 - 只读探针确认当前 TCC：Automation 已授权、Accessibility 已授权、System Events 运行；登录项 `已开启`（BTM enabled/allowed/notified）；图标资源 32 个表示，菜单栏 S monogram template；无遗留电源断言。
 - 未执行：M1 深色切换、M3 真实锁屏、M8 注销/登录启动与图标目视（需用户在场；Screen Recording 不可用，无法代理截图）。**不记为通过。**
 - 步骤/记录模板：`evidence/onsite/M1-M3-M8-2026-10-18.md`；只读探针 `scripts/onsite-probe`。
+
+## v0.3.7 M3 锁屏交互修复（2026-10-18）
+
+- 用户现场：M1 通过、M8 简单测试通过；M3 点击锁定出现二次确认，反馈不应有。
+- 修复：v0.3.7 移除锁屏二次确认，保留权限门控；屏保确认不变；文档/README/TESTPLAN 同步。
+- 自动化 verify 11/11、自检 12/12；真实锁屏待用户复测，未记为通过。
