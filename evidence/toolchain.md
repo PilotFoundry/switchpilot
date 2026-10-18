@@ -43,3 +43,7 @@ REA 6.5.0 Ghidra launcher 使用 `-readOnly -deleteProject`，每次命令建立
 卸载仅需删除本轮 `.tools/`（约数 GB）及不再需要的 analysis/raw，不影响已有 Java、Node、Xcode。研究样本需按自己的保留决定处理，不自动删除。工具二进制、原包、批量反编译文本均不入 Git。
 
 官方参考：[安装说明](https://github.com/morluto/rea/blob/3b79af28e80785afce9f5998d8f03289402a1847/docs/installation.md)、[CLI](https://github.com/morluto/rea/blob/3b79af28e80785afce9f5998d8f03289402a1847/docs/cli.md)。
+
+## 减少重复导入
+
+`python3 scripts/rea-queries.py tooling/main-queries.json` / `tooling/feature-queries.json` 通过项目局部 stdio MCP 进程按已发现 schema 查询，不修改任何 agent 注册。一次主程序导入约 133 秒，之后同一会话的批反编译约 18–67 毫秒（本次小范围样本），大部分等待来自导入/自动分析。script 将结果保存在 evidence/raw/rea/；语法检查与真实 server 批查询完成，批结果 6/6、3/3、4/4 成功。未建立持久 Ghidra 项目。
