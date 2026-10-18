@@ -72,3 +72,10 @@
 - 修复：稳定自签名身份（SwitchPilot Local Signing）+ designated requirement `identifier + certificate leaf`；-600 自动启动 System Events 后重探测；设置页诊断行/`--diagnose-permissions`。
 - 已清理旧 bundle-scoped TCC 记录；清理后诊断 automation -1744、accessibility false，符合重置预期。
 - 待用户：用当前稳定签名版本重新授予 Automation + Accessibility，再验证设置页/「重新检查」；之后重建应保持授权（需下一次重建验证）。
+
+## v0.3.4 设置页撤销 IA（2026-10-18）
+
+- 权限成功态：移除「申请全部权限」；「如何撤销授权…」默认折叠，展开含系统设置深链 + 高级 tccutil 命令（仅复制）；三态 CTA/诊断仅在未就绪时出现。
+- 窗口高度随 disclosure 自动调整（544 → 711，实测）；键盘/VoiceOver 说明写入 DESIGN/TECH。
+- 稳定签名身份复核：重建 + 重装 + 重启后 Automation/辅助功能仍为已授权（diagnostic 输出 allowed/true）。
+- 自动化 verify 11/11、自检 12/12。

@@ -202,3 +202,12 @@ open app/SwitchPilot/.build/SwitchPilot.app
 - 设置页在权限未就绪时显示诊断行（应用路径、Automation 原始状态、辅助功能布尔值）和"若系统设置已开启仍显示未授权，通常是签名身份变化"的提示；`--diagnose-permissions` 可把同样的信息写到 `/tmp/switchpilot-permission-diagnose.txt`。
 - 已用 `tccutil reset AppleEvents local.personal.SwitchPilot` 与 `tccutil reset Accessibility local.personal.SwitchPilot` 清理旧 ad-hoc 授权记录（仅 SwitchPilot、当前用户），需要用户对稳定签名版本重新授权一次。
 - 版本 0.3.3；verify-app 11/11、自检 12/12。
+
+## 12. v0.3.4：设置页撤销授权 IA
+
+- `SettingsModel` 新增 `showsRevokeHelp` / `showsAdvancedTCCUtil` / `tccutilCopied` 与复制状态；全部 @Published，避免 SwiftUI `@State` 宏依赖。
+- `SettingsView.revokeDisclosure`：一级「如何撤销授权…」+ chevron 的 plain button；展开显示系统设置深链与二级「终端命令（高级）」；命令使用 `NSPasteboard` 复制，应用不执行。
+- 成功态移除「申请全部权限」主 CTA，改为状态行；未就绪态按缺失权限分支（automation denied → 打开自动化设置；部分缺失 → 对应 CTA）。
+- `SettingsWindowController` 改为 designated init，使用 Combine 订阅 `model.objectWillChange`，异步调用 `resizeToFit()`：`preferredContentSize` 变化时按内容调整窗口高度并保持顶边；展开实测 544 → 711。
+- 预览钩子（仅 DEV/dump）：`SWITCHPILOT_PREVIEW_AUTHORIZED=1` 模拟已授权，`SWITCHPILOT_EXPAND_REVOKE=1` 展开，`--dump-settings` 渲染两态；`SWITCHPILOT_DEV=1` 才允许自动打开设置窗口。
+- 验收：verify-app 11/11、自检 12/12；权限在重建/重签/重装后仍为 `已授权`（稳定签名身份实测）。

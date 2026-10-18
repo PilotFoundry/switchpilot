@@ -23,7 +23,7 @@ scripts/install-app        # 复制到 ~/Applications/SwitchPilot.app，便于 F
 open ~/Applications
 ```
 
-当前状态（v0.3.3）：保活已通过自动化验收；首启/设置权限流程、登录时启动、应用/菜单栏图标、对比度与按钮可见性已实现并自动验收（11/11）。TCC 允许/拒绝/撤销、真实登录启动、系统 UI 图标显示、睡眠唤醒、VoiceOver 与真机布局仍需用户现场（`docs/TESTPLAN.md` M1–M3、M5、M7、M8）。用户 2026-10-18 同意 SwitchPilot 转正，并口头确认 v0.1 初步验收可行（未逐项记录）。Night Shift 直接控制、合盖保活、显示器休眠等首版排除。
+当前状态（v0.3.4）：保活已通过自动化验收；首启/设置权限流程、登录时启动、应用/菜单栏图标、对比度与按钮可见性已实现并自动验收（11/11）。TCC 允许/拒绝/撤销、真实登录启动、系统 UI 图标显示、睡眠唤醒、VoiceOver 与真机布局仍需用户现场（`docs/TESTPLAN.md` M1–M3、M5、M7、M8）。用户 2026-10-18 同意 SwitchPilot 转正，并口头确认 v0.1 初步验收可行（未逐项记录）。Night Shift 直接控制、合盖保活、显示器休眠等首版排除。
 
 命名：正式名 **SwitchPilot**，中文描述「菜单栏开关」；bundle id 保持 `local.personal.SwitchPilot` 以减少迁移；ad-hoc 重建后 TCC 仍可能要求重新授权。分发前的商标/域名检索未做。
 
