@@ -29,7 +29,7 @@
 | 多語言 | English、簡體中文、繁體中文、日本語；預設跟隨系統，也可在設定中覆蓋並重啓應用程式 |
 
 <p align="center">
-  <img src="docs/images/clean-overlay.png" width="720" alt="SwitchPilot 螢幕清潔遮罩">
+  <img src="docs/images/clean-overlay-zh-Hant.png" width="720" alt="SwitchPilot 螢幕清潔遮罩">
 </p>
 
 ## 為什麼做這個專案
