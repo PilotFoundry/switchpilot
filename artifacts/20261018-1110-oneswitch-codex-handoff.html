@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>One Switch · Codex → DSH 接手核验报告</title>
+<style>
+:root{--bg:#f2f4ee;--paper:#fffefa;--ink:#1f3630;--muted:#5f7268;--line:#d7e0d5;--green:#1e6a4b;--soft:#e7f2e8;--amber:#7e5516;--warn:#fff2d8;--red:#9d3838;--redsoft:#f8e8e4}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}a{color:#276783;text-underline-offset:3px}.layout{max-width:1360px;margin:auto;padding:38px;display:grid;grid-template-columns:210px minmax(0,1fr);gap:36px}aside{position:sticky;top:30px;height:calc(100vh - 60px);overflow:auto}nav a{display:block;padding:7px 0;font-size:14px;text-decoration:none}.brand{font-weight:750;letter-spacing:1px}main{min-width:0}header{padding:8px 0 26px}h1{font-size:clamp(32px,4.2vw,52px);line-height:1.25;margin:14px 0}h1 span{color:var(--green)}h2{font-size:23px;line-height:1.45;margin:0 0 18px}h3{font-size:17px;margin:0 0 10px}.eyebrow{color:var(--green);font-size:12px;letter-spacing:2px;font-weight:750}.lead{font-size:19px;color:var(--muted)}section{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:27px;margin-bottom:22px}p{margin:8px 0 14px}.muted,small{font-size:13px;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.card{padding:18px;border:1px solid var(--line);border-radius:10px}.metric{font-size:27px;font-weight:750;color:var(--green);line-height:1.25}.badge{display:inline-block;font-size:12px;font-weight:650;background:var(--soft);color:var(--green);padding:2px 8px;border-radius:6px}.amber{background:var(--warn);color:var(--amber)}.red{background:var(--redsoft);color:var(--red)}.gray{background:#e9ece7;color:#52645c}.note{padding:15px 18px;border-left:4px solid var(--green);background:var(--soft);border-radius:0 8px 8px 0}.risk{border-color:var(--amber);background:var(--warn)}.stop{border-color:var(--red);background:var(--redsoft)}.table{overflow:auto}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:11px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}th{color:var(--muted);background:#eef3e9;font-size:12px}code,pre{font:12px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;color:#235f42}code{background:#eef3e9;padding:2px 4px;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf3e9;padding:16px;border-radius:8px}details{border:1px solid var(--line);border-radius:9px;margin:12px 0}summary{cursor:pointer;padding:12px 16px;font-weight:650}.detail{padding:0 16px 14px}.diagram{overflow:auto;border:1px solid var(--line);border-radius:10px;background:#fbfcf8;padding:6px 0}.diagram svg{min-width:760px;width:100%;height:auto;display:block}.diagram text{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}ul,ol{padding-left:23px}li{margin:6px 0}button,select,textarea{font:inherit;color:var(--ink)}button,select{min-height:44px;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:9px 14px;max-width:100%}button{cursor:pointer}button:hover{background:var(--soft)}textarea{width:100%;min-height:200px;margin:12px 0;padding:14px;border:1px solid var(--line);border-radius:8px;font-size:13px;background:#fafbf7}.controls{display:flex;gap:12px;flex-wrap:wrap;align-items:center}.checklist label{display:block;padding:6px 0}input[type=checkbox]{accent-color:var(--green);width:18px;height:18px;vertical-align:middle;margin-right:8px}:focus-visible{outline:3px solid #276783;outline-offset:3px}footer{padding:5px 0 30px;color:var(--muted);font-size:12px}@media(max-width:1050px){.layout{padding:25px;grid-template-columns:165px minmax(0,1fr);gap:23px}.grid{grid-template-columns:1fr 1fr}}@media(max-width:700px){.layout{display:block;padding:16px}aside{position:static;height:auto;margin-bottom:20px}nav{display:flex;overflow:auto;gap:16px}nav a{white-space:nowrap}section{padding:20px}.grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}th,td{min-width:120px}}@media print{aside,.controls,textarea,.checklist{display:none}.layout{display:block;padding:0}section{break-inside:avoid}body{background:white}}
+</style></head>
+<body><div class="layout">
+<aside><div class="brand">ONE SWITCH / HANDOFF</div>
+<p class="muted">接手核验报告 · 2026.10.18<br>Codex 会话 → DeepSeek Harness</p>
+<nav aria-label="目录"><a href="#summary">01 · 结论</a><a href="#session">02 · 会话记录</a><a href="#tasks">03 · 六步完成度</a><a href="#workspace">04 · 工作区核验</a><a href="#records">05 · 记录不一致</a><a href="#closeout">06 · 接手后动作</a><a href="#risks">07 · 风险与缺口</a><a href="#next">08 · 下一步选项</a><a href="#evidence">09 · 证据索引</a></nav>
+<p class="muted"><span class="badge">无阻塞接手</span><br><span class="badge amber">2 类记录已修正</span><br><span class="badge">收尾提交 505df81</span></p>
+</aside>
+<main>
+<header><div class="eyebrow">SESSION HANDOFF / REVIEW</div>
+<h1>Codex 停在收尾前一步。<br><span>状态可接手，缺口已补。</span></h1>
+<p class="lead">会话 <code>01a144ad-762d-7831-a131-fe237df10f0a</code> 的六步试验已完成第 1–5 步，第 6 步产物已写盘但未提交，原因不是分析失败，而是 2026-10-18 10:38 CST 的 GPT 用量限额中断。接手会话完成核验、修正记录不一致、补提交并把 pilot 分支快进合并到 main。</p>
+<p class="muted">核验时间 2026-10-18 11:08 CST · 核验对象：rollout 记录、Git 工作区、工具链、HTML 产物 · 结论：可基于该报告继续</p></header>
+
+<section id="summary"><h2>01 / 结论：可以接手，已完成收口</h2>
+<p class="note"><strong>没有发现需要暂停或重建工作的阻塞问题。</strong>样本未被修改、签名仍通过、工具链可复现、会话记录与工作区证据一致；唯一影响“工作是否真正完成”的是第 6 步收尾提交缺失，以及产物里两处与记录不符的表述。两者都已在 2026-10-18 11:09 的收尾提交 <code>505df81</code> 中处理。</p>
+<div class="grid">
+<div class="card"><span class="badge">会话状态</span><div class="metric">6 轮</div><p>前 4 轮为调研、工具对比、计划与 Git 规则交付；第 5–6 轮执行六步，两次被限额中断。10-18 执行窗口 09:49–10:38。</p></div>
+<div class="card"><span class="badge">任务状态</span><div class="metric">5.5 / 6</div><p>六步全部执行；第 5 步两条综合验收按计划保留未通过（深色授权、睡眠/唤醒），不是遗漏。</p></div>
+<div class="card"><span class="badge amber">记录问题</span><div class="metric">2 类</div><p>限额/重置卡表述与事实不符；计划与 HTML 状态陈旧。均已修正并在证据中留痕。</p></div>
+<div class="card"><span class="badge">收尾结果</span><div class="metric">505df81</div><p>7 个文件的能力矩阵、结果报告、usage 与计划同步提交；随后 main 快进合并，未改写历史。</p></div>
+</div>
+<p class="muted">注意：本报告说明“记录与工作区状态可安全继续”，不等于计划中每项动态验收都通过。深色模式授权、睡眠/唤醒、长时间稳定性仍是缺口。</p></section>
+
+<section id="session"><h2>02 / Codex 会话记录</h2>
+<div class="table"><table><tr><th>字段</th><th>值</th></tr>
+<tr><td>线程 ID</td><td><code>01a144ad-762d-7831-a131-fe237df10f0a</code>（即 <code>codex resume</code> 指向的 thread）</td></tr>
+<tr><td>CLI / 来源</td><td>Codex TUI 0.163.0 · source <code>vscode</code> · model provider <code>openai</code> · 推理强度 high · 审批 never · 沙箱 danger-full-access</td></tr>
+<tr><td>工作目录</td><td><code>/Users/pengxianghao/Documents/code/ai_debug/oneswitch-rea</code></td></tr>
+<tr><td>原始记录</td><td><code>~/.codex/sessions/2026/10/16/rollout-2026-10-16T20-26-21-01a144ad-762d-7831-a131-fe237df10f0a.jsonl</code><br>4,847,648 字节 · 1,159 行 · 最后写入 10:38；含 1 次上下文压缩（09:51）。</td></tr>
+<tr><td>local-agent-state 运行状态</td><td><code>local-agent-state/state/sessions/01a144ad-…/hud-state.json</code>、<code>local-agent-state/state/subagent-tracking.json</code>、<code>local-agent-state/metrics.json</code>（本地保留，不入 Git）</td></tr>
+<tr><td>子代理</td><td>会话内使用 local-agent-state 子代理收集证据：<code>rea_evidence</code>、<code>apple_evidence</code>、<code>decompiler_options</code>；对应 rollout 见证据索引。</td></tr>
+</table></div>
+<div class="diagram"><svg viewBox="0 0 900 230" role="img" aria-labelledby="tl"><title id="tl">Codex 会话时间线与两次限额中断</title>
+<path d="M45 65H860" stroke="#b6cfbd" stroke-width="4"/><path d="M45 155H860" stroke="#b6cfbd" stroke-width="4"/>
+<g fill="#1e6a4b"><circle cx="45" cy="65" r="8"/><circle cx="60" cy="155" r="8"/><circle cx="170" cy="155" r="8"/><circle cx="280" cy="155" r="8"/><circle cx="390" cy="155" r="8"/><circle cx="620" cy="155" r="8"/><circle cx="850" cy="155" r="8"/></g>
+<g fill="#a53b3b"><circle cx="500" cy="155" r="8"/><circle cx="730" cy="155" r="8"/></g>
+<g font-size="12" fill="#1f3630" text-anchor="middle">
+<text x="45" y="42" text-anchor="start">10-16 20:42 初始评估报告</text>
+<text x="45" y="88" fill="#5f7268" text-anchor="start">10-16 20:42–21:04 · 五问调研与首版报告</text>
+<text x="60" y="132">09:33 工具对比</text><text x="170" y="132">09:39 计划</text><text x="280" y="132">09:46 Git</text><text x="390" y="132">09:49 执行</text>
+<text x="500" y="132" fill="#9d3838">10:02 限额中断</text><text x="620" y="132">10:11 继续</text><text x="730" y="132" fill="#9d3838">10:38 限额中断</text><text x="850" y="132">11:08 接手</text>
+<text x="45" y="184" fill="#5f7268" text-anchor="start">第 1 步提交 09:54 · 第 2–5 步提交 10:13–10:32 · 结果报告初稿 10:34 · 收尾提交 505df81 于 11:09</text>
+</g></svg></div>
+<h3>用户指令（按本地时间）</h3>
+<div class="table"><table><tr><th>时间</th><th>指令</th><th>结果</th></tr>
+<tr><td>10-16 20:43</td><td>基于已安装 One Switch 与 REA，回答能否逆向、重写工期/token、流程与文档、macOS 27 规范、命名五问，出报告</td><td>产出 <code>20261016-2047-oneswitch-rea-assessment.html</code></td></tr>
+<tr><td>10-18 09:33</td><td>确认 REA 与 Ghidra 的关系，比较其他反编译工具</td><td>比较 Hopper / IDA / Binary Ninja / Cutter，不购买</td></tr>
+<tr><td>09:39</td><td>“可以，一步步来，你列执行计划吧。”</td><td>产出六步执行计划（Markdown + HTML）</td></tr>
+<tr><td>09:46</td><td>计划里代码相关资产需要 Git history 积累</td><td>本地建库，基线 <code>b1356af</code>、规则 <code>bc77aef</code>、写入 AGENTS.md</td></tr>
+<tr><td>09:49</td><td>开始执行；遇到 GPT 限额可选择使用现有充值卡</td><td>第 1–5 步执行；10:02 首次限额中断</td></tr>
+<tr><td>10:11</td><td>“继续”</td><td>第 2–5 步提交，第 6 步产物写盘；10:38 再次限额中断</td></tr>
+</table></div>
+<details><summary>两次限额中断的原始错误（会话记录原文）</summary><div class="detail"><pre>2026-10-18T02:02:03Z  task_complete  error: usage_limit_exceeded
+"You’ve hit your usage limit. Upgrade to Pro (…), visit …/usage to purchase more credits or try again at 2:33 PM."
+
+2026-10-18T02:38:05Z  task_complete  error: usage_limit_exceeded
+"You’ve hit your usage limit. Upgrade to Pro (…), visit …/usage to purchase more credits or try again at 3:12 PM."
+last_agent_message: null（该轮没有正常收尾消息）</pre><p class="muted">第二次中断前 1 分 13 秒，代理还在写“结果报告已写入工作区，结论是‘缩范围继续’……接下来检查报告展示、链接和代码审阅意见，再完成最后一组 Git 提交”。因此未提交属于中断后果，不是判断改变。</p></div></details></section>
+
+<section id="tasks"><h2>03 / 六步完成度与提交</h2>
+<div class="table"><table><tr><th>步骤</th><th>状态</th><th>提交 / 产物</th><th>保留缺口</th></tr>
+<tr><td>1 冻结样本与环境基线</td><td><span class="badge">完成</span></td><td><code>53a4d49</code>、<code>0b979df</code>；baseline.md、binary-manifest.json</td><td>ZIP 仍不存在，使用已安装样本；未全盘审计</td></tr>
+<tr><td>2 分析环境与冒烟</td><td><span class="badge">完成</span></td><td><code>5aecdfa</code>；toolchain.md、smoke.md</td><td>Ghidra 官方 ZIP 缺 macOS 反编译器，从同版源码本地编译；非持久 .gpr 重开</td></tr>
+<tr><td>3 常规保活分析</td><td><span class="badge">完成</span></td><td><code>218f96a</code>；features/keep-awake.md、usage.csv</td><td>原版运行行为未动态对照；timer 全参数与跨睡眠未验证</td></tr>
+<tr><td>4 深色模式与 Night Shift</td><td><span class="badge">完成</span></td><td><code>548f697</code>；features/dark-mode.md、features/night-shift.md</td><td>原脚本源码未恢复；Night Shift 无公开控制接口</td></tr>
+<tr><td>5 原型与有界验证</td><td><span class="badge amber">部分完成</span></td><td><code>6bf1ce7</code> 失败实验、<code>c3395ee</code>；prototypes/、runtime-cases.md、verification.md</td><td>深色授权/切换/恢复、睡眠/唤醒未测；CLT 无 XCTest；构建非零警告</td></tr>
+<tr><td>6 汇总决定</td><td><span class="badge amber">初稿 + 收尾</span></td><td>初稿 10:34；收尾 <code>505df81</code>；结果报告、capability-matrix.md、usage.csv</td><td>token/人工工时未知；重置卡消耗未知</td></tr>
+</table></div>
+<p><strong>结论：缩范围继续。</strong>普通保活可进入产品候选（4/4 自检组、5/5 进程用例，含三轮真实断言开关）；深色模式待真实 Automation 授权验收；Night Shift 直接开关与合盖保活首版排除。完整矩阵见 <a href="../evidence/capability-matrix.md">evidence/capability-matrix.md</a>。</p></section>
+
+<section id="workspace"><h2>04 / 工作区与环境核验</h2>
+<div class="two"><div class="card"><h3>接手时的 Git 状态</h3><ul>
+<li>主工作区 <code>main</code>：干净，停在 <code>bc77aef</code>，只含计划类文档。</li>
+<li>执行工作区：<code>/Users/pengxianghao/.codex/worktrees/97ec/oneswitch-rea</code>，分支 <code>pilot/2026-10-18</code>，停在 <code>c3395ee</code>，领先 main 7 个提交。</li>
+<li><strong>未提交：</strong>README.md、结果报告 HTML、能力矩阵（未跟踪）；usage.csv（修改）。这正是中断点。</li>
+<li>本地专用资产（被 .gitignore 排除、只在该工作区）：<code>.tools/</code> 2.1G、<code>samples/</code> 15M、<code>analysis/</code> 3M、<code>evidence/raw/</code> 39M。</li>
+</ul></div><div class="card"><h3>环境与样本</h3><ul>
+<li>macOS 27.0.1 (26A434)，arm64；One Switch 1.35.4 (440)。</li>
+<li>主程序 SHA-256 <code>ee4551f90014801f0252abea9787911a8ce04e9e6bae1207589eebf1584208fa</code>，与基线一致；<code>codesign --verify --strict</code> 通过。</li>
+<li>REA 6.5.0 / Ghidra 12.1.4 / Temurin JDK 21.0.12.1+1 均在项目局部目录；复跑 <code>scripts/rea doctor --provider ghidra</code> 返回 <code>healthy=true</code>，9 项 scope 检查通过。</li>
+<li>无 SwitchPilot 进程或电源断言残留；System Events 已退出；未见对原应用偏好的修改。</li>
+</ul></div></div>
+<h3>接手时追加的文档/HTML 核验</h3>
+<ul>
+<li>结果报告与执行计划 HTML：390 / 768 / 1440 视图宽度均无横向溢出，无 console / page 错误，内部链接与锚点完整，无外部资源请求；复制、导出、tab、折叠控件可用（Playwright + 本机 Chrome 实测）。</li>
+<li>CSV 五列结构校验通过；Markdown 相对链接全部可解析；<code>git diff --check</code> 无空白错误。</li>
+<li>原始应用与研究副本的已记录 hash、链接目标、签名复核无变化。</li>
+</ul></section>
+
+<section id="records"><h2>05 / 发现并修正的记录不一致</h2>
+<p class="note risk">这些是“记录表述与原始记录不一致”，不是分析结论被推翻。修正只涉及限额/重置卡事实和状态同步，不改变任何功能验收结论。</p>
+<div class="table"><table><tr><th>位置</th><th>中断前表述</th><th>记录中的事实</th><th>修正</th></tr>
+<tr><td>结果报告 §06、能力矩阵、verification.md</td><td>“未遇到 GPT 限额，未调用重置卡 / 重置卡使用 0”</td><td>rollout 有两次 <code>usage_limit_exceeded</code>（10:02、10:38 CST）；第一次后 9 分钟用户以“继续”恢复；重置卡是否被消耗本地无记录</td><td>改为两次中断的事实记录；重置卡标记 unknown，未新购额度</td></tr>
+<tr><td>执行计划 Markdown</td><td>“第六步进行中”、“计划产物当前尚不存在”、Task 6 未勾选</td><td>六步均已执行，产物已写盘，仅未提交</td><td>状态、勾选、产物路径、执行结论章节同步</td></tr>
+<tr><td>执行计划 HTML（读者版）</td><td>状态“第 6 步进行中”、footer“前两步完成”、产物路径占位符</td><td>同上；AGENTS.md 要求 HTML 与 Markdown 计划同步</td><td>状态、产物、来源链接与 footer 同步</td></tr>
+<tr><td>evidence/usage.csv</td><td>无限额/收尾记录；stage 3 的“no rate limit observed”容易被读成全轮结论</td><td>限额发生在第 5、6 轮，不在第 3 步</td><td>限定 stage 3 语义；新增两次中断、重置卡 unknown、收尾时间 4 行</td></tr>
+<tr><td>README.md</td><td>未跟踪，结果路径用通配符</td><td>属第 6 步交付物</td><td>纳入收尾提交，改为实际报告路径</td></tr>
+</table></div></section>
+
+<section id="closeout"><h2>06 / 接手后完成的动作</h2>
+<div class="table"><table><tr><th>动作</th><th>结果</th><th>验证</th></tr>
+<tr><td>记录修正与计划同步</td><td>结果报告、能力矩阵、verification、usage.csv、计划 MD/HTML、README 更新</td><td>HTML 检查、CSV 校验、链接检查、diff 审查</td></tr>
+<tr><td>收尾提交</td><td><code>505df81</code> docs: conclude pilot feasibility and next scope（7 个文件，+135/−13）</td><td><code>git diff --cached --check</code> 干净；提交正文含验证与缺口</td></tr>
+<tr><td>交接报告</td><td>本文件，作为收尾提交后的独立提交</td><td>单文件自包含；链接、锚点、响应式与交互自检</td></tr>
+<tr><td>合并到 main</td><td><code>git merge --ff-only pilot/2026-10-18</code>；main 与分支端点一致</td><td>无 merge commit、无 amend/squash/rebase；工作区干净</td></tr>
+</table></div>
+<p class="muted">收尾提交遵循仓库约定：显式暂存 7 个路径、提交前检查实际 diff 与敏感内容、正文写明原因/验证/已知缺口；没有把未来文件或未通过验收标成完成。</p></section>
+
+<section id="risks"><h2>07 / 风险与仍未验证的缺口</h2>
+<div class="two"><div><h3>能力相关</h3><ul>
+<li><strong>深色模式：</strong>两次无弹窗预检为 −600（目标不可用）与 −1744（需要授权）；setter 执行 0 次，真实允许/拒绝/撤销、写后读回与恢复均未验证。</li>
+<li><strong>Night Shift：</strong>原实现走私有 CoreBrightness / CBBlueLightClient；公开 SDK 未找到控制接口，首版不承诺直接开关。</li>
+<li><strong>保活边界：</strong>只验证显示器空闲保持，不阻止合盖/手动睡眠/低电量睡眠；睡眠唤醒、设备变化、重启、长时间稳定性未测。</li>
+<li><strong>发布形态：</strong>原型无 UI、无 Sandbox/公证/Developer ID 验收；ad-hoc 签名只用于本机试验。</li>
+</ul></div><div><h3>环境与记录</h3><ul>
+<li>完整 Xcode 许可未接受；CLT 缺 XCTest；SwiftPM native 构建已提示弃用，不是零警告。</li>
+<li>token、缓存、计费与人工工时无可信来源；41.1 分钟只是墙钟，不是人工工时。</li>
+<li>工具、样本、分析切片与原始证据只存在于 <code>~/.codex/worktrees/97ec/oneswitch-rea</code>；该路径被清理后需按 toolchain.md 重装/重建。</li>
+<li>仅本地 Git，无远端备份；若需要协作/备份要另配远端。</li>
+</ul></div></div>
+<p class="note stop"><strong>不能据此直接进入全量重写：</strong>本轮只到可行性结论；下一步必须先确认用户常用功能与个人/发布目标，再写 PRD / DESIGN / TECH / TESTPLAN。</p></section>
+
+<section id="next"><h2>08 / 下一步选项（需要用户选择）</h2>
+<p>按计划，本轮到可行性结论为止，不自动升级为产品重写。下面选项只生成下一会话提示，不执行任何命令或更改计划状态。</p>
+<label for="direction">优先方向</label>
+<select id="direction">
+<option value="A">A · 确认个人自用范围，写四份短文档与最小菜单栏面板</option>
+<option value="B">B · 先完成深色模式真实 Automation 授权/读回/恢复/撤销验收</option>
+<option value="C">C · 继续扩展反编译验证其他候选功能</option>
+<option value="D">D · 暂停重写，保留现有报告与证据</option>
+</select>
+<div class="checklist"><h3>若继续，优先功能草案（未验证，不代表已批准）</h3>
+<label><input type="checkbox" value="显示器保活" checked>显示器保活 <span class="badge">已验证</span></label>
+<label><input type="checkbox" value="系统深色模式" checked>系统深色模式 <span class="badge amber">待授权</span></label>
+<label><input type="checkbox" value="输出静音">输出静音 <span class="badge gray">未验证</span></label>
+<label><input type="checkbox" value="麦克风静音">麦克风静音 <span class="badge gray">未验证</span></label>
+<label><input type="checkbox" value="音量调节">音量调节 <span class="badge gray">未验证</span></label>
+<label><input type="checkbox" value="音频输出设备切换">音频输出设备切换 <span class="badge gray">未验证</span></label>
+<label><input type="checkbox" value="启动屏保">启动屏保 <span class="badge gray">未验证</span></label>
+<label><input type="checkbox" value="锁屏">锁屏 <span class="badge gray">未验证</span></label>
+</div>
+<label for="target">产品目标</label>
+<select id="target"><option>个人自用</option><option>公开分发（需追加签名、公证、Sandbox 验收）</option></select>
+<label for="prompt" class="muted">下一会话提示，可编辑</label>
+<textarea id="prompt"></textarea>
+<div class="controls"><button id="copy" type="button">Copy as prompt · 复制</button><button id="export" type="button">导出 TXT</button><span id="status" role="status" class="muted"></span></div>
+<p class="muted">当前工作目录已包含收尾后的 tracked 产物；深入分析需要的 <code>.tools/</code>、<code>samples/</code>、<code>analysis/</code>、<code>evidence/raw/</code> 仍在保留执行工作区。</p></section>
+
+<section id="evidence"><h2>09 / 证据索引</h2>
+<ul>
+<li><strong>会话原始记录：</strong><code>~/.codex/sessions/2026/10/16/rollout-2026-10-16T20-26-21-01a144ad-762d-7831-a131-fe237df10f0a.jsonl</code>（1,159 行）；子代理记录 <code>…-01a144bd-6f0a-…jsonl</code>、<code>…-01a144bd-94c3-…jsonl</code>。</li>
+<li><strong>local-agent-state 状态：</strong><code>local-agent-state/state/sessions/01a144ad-762d-7831-a131-fe237df10f0a/</code>、<code>local-agent-state/metrics.json</code>、<code>local-agent-state/logs/turns-2026-10-18.jsonl</code>（本地保留）。</li>
+<li><strong>Git 里程碑：</strong><code>b1356af</code> 基线 → <code>bc77aef</code> 规则 → <code>53a4d49</code> → <code>0b979df</code> → <code>5aecdfa</code> → <code>218f96a</code> → <code>548f697</code> → <code>6bf1ce7</code> → <code>c3395ee</code> → <code>505df81</code> 收尾；main 与 <code>pilot/2026-10-18</code> 端点一致。</li>
+<li><strong>交付物：</strong><a href="20261018-1034-oneswitch-pilot-results.html">结果报告</a> · <a href="20261018-0941-oneswitch-execution-plan.html">执行计划（读者版）</a> · <a href="../evidence/capability-matrix.md">能力矩阵</a> · <a href="../evidence/verification.md">验证与缺口</a> · <a href="../evidence/toolchain.md">工具链复现</a> · <a href="../README.md">仓库 README</a> · <a href="../local-agent-state/plans/2026-10-18-oneswitch-pilot.md">执行计划（Markdown）</a></li>
+<li><strong>复现命令：</strong><code>git -C .codex/worktrees/97ec/oneswitch-rea log --oneline bc77aef..HEAD</code>；<code>python3 scripts/verify-pilot.py</code>；<code>scripts/rea doctor --provider ghidra --format json</code>。</li>
+</ul>
+<p class="muted">本报告是接手时的核验快照；其后的提交与合并见 Git history。报告单文件自包含，无外部资源依赖。</p></section>
+<footer>Handoff review · 2026-10-18 11:10 CST · Codex thread 01a144ad-762d-7831-a131-fe237df10f0a → DSH session · 收尾提交 505df81</footer>
+</main></div>
+<script>
+const direction=document.getElementById('direction'),target=document.getElementById('target'),box=document.getElementById('prompt'),statusBox=document.getElementById('status');
+function updatePrompt(){const dirs={A:'确认个人自用范围，完成 PRD、DESIGN、TECH、TESTPLAN，并实现最小原生菜单栏面板。',B:'先做深色模式真实 Automation 授权验收（允许/拒绝/撤销、写后读回、恢复），再决定是否进入首版。',C:'继续用 REA + Ghidra 验证其余候选功能（输出静音、麦克风静音、音量、音频设备、屏保、锁屏）的公开入口、权限与恢复。',D:'暂停重写，保留现有报告与证据，不新增功能或购买工具。'};const sel=[...document.querySelectorAll('.checklist input:checked')].map(x=>x.value);box.value='继续 One Switch 可行性试验的下一阶段。先读取 README.md、evidence/capability-matrix.md、evidence/verification.md 和 artifacts/20261018-1110-oneswitch-codex-handoff.html，确认 Git history 与缺口。\n方向：'+dirs[direction.value]+'\n产品目标：'+target.value+'；功能草案：'+(sel.join('、')||'尚未选择')+'（均为待验证候选，不代表已批准）。\n已知边界：普通保活可进入候选；深色模式待真实 Automation 授权；Night Shift 直接控制与合盖保活首版排除；睡眠/唤醒未测。\n要求：不把反编译文本当自主源码，不改原 app 与数据；每步以验收证据判定完成；token/工时无法测量就标未知；每个可审阅里程碑保留 Git 提交；遵守 AGENTS.md 与 .gitignore。';statusBox.textContent='';}
+direction.addEventListener('change',updatePrompt);target.addEventListener('change',updatePrompt);document.querySelectorAll('.checklist input').forEach(x=>x.addEventListener('change',updatePrompt));
+document.getElementById('copy').addEventListener('click',async()=>{try{if(!navigator.clipboard)throw Error();await navigator.clipboard.writeText(box.value);statusBox.textContent='已复制';}catch{box.focus();box.select();let ok=false;try{ok=document.execCommand('copy');}catch{}statusBox.textContent=ok?'已复制':'已选中，请按 ⌘C / Ctrl+C';}});
+document.getElementById('export').addEventListener('click',()=>{const url=URL.createObjectURL(new Blob([box.value],{type:'text/plain;charset=utf-8'})),a=document.createElement('a');a.href=url;a.download='oneswitch-next-phase.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);});
+updatePrompt();
+</script>
+</body></html>
