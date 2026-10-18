@@ -1,3 +1,4 @@
+import AppKit
 import Foundation
 import IOKit.pwr_mgt
 import SwitchPilotCore
@@ -103,6 +104,18 @@ let checks: [(String, () throws -> Void)] = [
         try check(session.isActive, "indefinite session should be active")
         session.stop()
     }),
+    ("status icon and identity", {
+        let icon = StatusIcon.make()
+        try check(icon.size.width >= 16 && icon.size.height >= 16, "status icon is too small")
+        try check(icon.isTemplate, "status icon must be a template image")
+        try check((icon.tiffRepresentation?.count ?? 0) > 0, "status icon has no bitmap representation")
+        try check(!Permissions.bundleIdentifier.isEmpty, "bundle identifier is empty")
+    }),
+    ("login item state is readable", {
+        let state = LoginItem.state
+        print("  login item: \(state)")
+        try check(state.description.isEmpty == false, "login item state must describe itself")
+    }),
     ("lock screen refuses to run without permissions", {
         let permissions = LockScreen.permissions()
         print("  permissions: \(permissions.summary)")
@@ -121,6 +134,19 @@ let checks: [(String, () throws -> Void)] = [
         }
     })
 ]
+
+if ProcessInfo.processInfo.environment["SWITCHPILOT_ICON_DUMP"] != nil {
+    for size in [18.0, 72.0] {
+        let image = StatusIcon.make(size: CGFloat(size))
+        if let tiff = image.tiffRepresentation,
+           let rep = NSBitmapImageRep(data: tiff),
+           let png = rep.representation(using: .png, properties: [:]) {
+            let url = URL(fileURLWithPath: "evidence/raw/app/status-icon-\(Int(size)).png")
+            try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+            try? png.write(to: url)
+        }
+    }
+}
 
 var failures = 0
 for (name, body) in checks {

@@ -6,6 +6,7 @@ terminates it. No permission prompts, no screen saver, no lock screen, no change
 to the original One Switch application.
 """
 import hashlib
+import os
 import plistlib
 import subprocess
 import sys
@@ -68,12 +69,17 @@ def check_plists():
     entitlements = plistlib.loads((PKG / "Entitlements.plist").read_bytes())
     if info.get("CFBundleIdentifier") != "local.personal.SwitchPilot":
         raise RuntimeError("unexpected bundle id")
-    if info.get("CFBundleShortVersionString") != "0.2.0":
+    if info.get("CFBundleShortVersionString") != "0.3.0":
         raise RuntimeError(f"unexpected bundle version: {info.get('CFBundleShortVersionString')}")
     if info.get("LSUIElement") is not True:
         raise RuntimeError("LSUIElement must be true")
     if not info.get("NSAppleEventsUsageDescription"):
         raise RuntimeError("missing NSAppleEventsUsageDescription")
+    if info.get("CFBundleIconFile") != "AppIcon":
+        raise RuntimeError("missing CFBundleIconFile")
+    icon = APP / "Contents/Resources/AppIcon.icns"
+    if not icon.exists() or icon.stat().st_size < 10_000:
+        raise RuntimeError("missing or tiny AppIcon.icns in bundle")
     if entitlements.get("com.apple.security.automation.apple-events") is not True:
         raise RuntimeError("missing automation entitlement")
     for plist in (PKG / "Info.plist", PKG / "Entitlements.plist"):
@@ -113,8 +119,10 @@ def check_core_checks():
 
 
 def check_launch_smoke():
+    env = dict(os.environ)
+    env["SWITCHPILOT_SMOKE_TEST"] = "1"
     process = subprocess.Popen(
-        [str(APP_BIN)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True)
+        [str(APP_BIN)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, text=True, env=env)
     try:
         time.sleep(2.5)
         if process.poll() is not None:
@@ -157,6 +165,49 @@ def check_original_app():
     return f"{ORIGINAL_VERSION} hash/signature unchanged"
 
 
+def check_contrast_tokens():
+    result = run("/usr/bin/python3", str(ROOT / "scripts/check-contrast.py"))
+    if result.returncode != 0:
+        raise RuntimeError(result.stdout.strip()[-1200:])
+    return "all ink tokens >= 4.5:1 on panel/card/tile"
+
+
+def check_panel_sizes():
+    env = dict(os.environ)
+    app = str(APP_BIN)
+    no_guide = dict(env, SWITCHPILOT_HIDE_GUIDE="1")
+    guide = dict(env, SWITCHPILOT_FORCE_GUIDE="1")
+    result = run(app, "--panel-size", env=no_guide)
+    if result.returncode != 0 or "x" not in result.stdout:
+        raise RuntimeError(f"panel-size (no guide) failed: {result.stderr.strip()}")
+    width, height = (int(v) for v in result.stdout.strip().split("x"))
+    if width != 380 or height > 680:
+        raise RuntimeError(f"panel without guide is {width}x{height}, expected 380x<=680")
+    result = run(app, "--panel-size", env=guide)
+    if result.returncode != 0 or "x" not in result.stdout:
+        raise RuntimeError(f"panel-size (guide) failed: {result.stderr.strip()}")
+    width, height = (int(v) for v in result.stdout.strip().split("x"))
+    if width != 380 or height > 760:
+        raise RuntimeError(f"panel with guide is {width}x{height}, expected 380x<=760")
+    return "panel sizes within 380x680 / 380x760"
+
+
+def check_no_raw_foreground_colors():
+    files = [
+        ROOT / "app/SwitchPilot/Sources/SwitchPilot/PanelView.swift",
+        ROOT / "app/SwitchPilot/Sources/SwitchPilot/SettingsView.swift",
+    ]
+    bad = []
+    for path in files:
+        text = path.read_text()
+        for needle in (".foregroundStyle(.green)", ".foregroundStyle(.orange)", ".foregroundStyle(.red)"):
+            if needle in text:
+                bad.append(f"{path.name}: {needle}")
+    if bad:
+        raise RuntimeError("raw semantic foreground colors found: " + "; ".join(bad))
+    return "no raw green/orange/red foreground text"
+
+
 def check_static_scripts():
     for script in (ROOT / "scripts/rea-queries.py", ROOT / "scripts/verify-app.py"):
         result = run("/usr/bin/python3", "-m", "py_compile", str(script))
@@ -176,6 +227,9 @@ check("core checks", check_core_checks)
 check("launch smoke", check_launch_smoke)
 check("leftover process", check_no_leftover_process)
 check("original app unchanged", check_original_app)
+check("contrast tokens", check_contrast_tokens)
+check("panel sizes", check_panel_sizes)
+check("semantic text colors", check_no_raw_foreground_colors)
 check("static scripts", check_static_scripts)
 
 failures = sum(1 for _, ok, _ in results if not ok)
