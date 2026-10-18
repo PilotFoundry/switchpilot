@@ -1,5 +1,6 @@
 import AppKit
 import Carbon
+import SwitchPilotCore
 
 /// Two fixed global hotkeys that reuse existing panel actions. Carbon hotkeys do
 /// not require Accessibility or Automation; registration failure (usually a
@@ -84,7 +85,7 @@ final class HotKeyManager {
             userData,
             &eventHandlerRef)
         guard installStatus == noErr else {
-            return "快捷键事件处理注册失败（\(installStatus)）"
+            return LF("快捷键事件处理注册失败（%@）", String(installStatus))
         }
 
         let modifiers = UInt32(cmdKey | optionKey | controlKey)
@@ -92,7 +93,7 @@ final class HotKeyManager {
             id: 1,
             keyCode: UInt32(kVK_ANSI_K),
             modifiers: modifiers,
-            label: "保持亮屏"
+            label: L("保持亮屏")
         ) {
             stop()
             return error
@@ -101,7 +102,7 @@ final class HotKeyManager {
             id: 2,
             keyCode: UInt32(kVK_ANSI_S),
             modifiers: modifiers,
-            label: "启动屏保"
+            label: L("启动屏保")
         ) {
             stop()
             return error

@@ -47,7 +47,7 @@ struct PanelView: View {
             VStack(alignment: .leading, spacing: 1) {
                 Text("SwitchPilot")
                     .font(.system(size: 15, weight: .semibold))
-                Text("菜单栏开关 · v\(model.version)")
+                Text(LF("菜单栏开关 · v%@", model.version))
                     .font(.caption2)
                     .foregroundStyle(Color.secondaryInk)
             }
@@ -61,7 +61,7 @@ struct PanelView: View {
             Circle()
                 .fill(model.keepAwakeActive ? Color.successInk : Color.secondary.opacity(0.55))
                 .frame(width: 6, height: 6)
-            Text(model.statusTitle)
+            Text(L(model.statusTitle))
                 .font(.caption2.weight(.medium))
         }
         .padding(.horizontal, 8)
@@ -105,7 +105,7 @@ struct PanelView: View {
                     Button {
                         model.requestAllPermissions()
                     } label: {
-                        Label(model.permissionBusy ? "请求中…" : "申请全部权限", systemImage: "checkmark.shield")
+                        Label(model.permissionBusy ? L("请求中…") : L("申请全部权限"), systemImage: "checkmark.shield")
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.small)
@@ -135,7 +135,7 @@ struct PanelView: View {
                 .font(.caption2.weight(.bold))
                 .frame(width: 16, height: 16)
                 .background(Circle().fill(Color.accentColor.opacity(0.18)))
-            Text(text)
+            Text(L(text))
                 .font(.caption)
                 .foregroundStyle(Color.secondaryInk)
                 .fixedSize(horizontal: false, vertical: true)
@@ -155,7 +155,7 @@ struct PanelView: View {
                     .toggleStyle(.switch)
                     .controlSize(.small)
                     .accessibilityLabel("保持亮屏")
-                    .accessibilityValue(model.keepAwakeActive ? "已开启，\(model.keepAwakeRemaining)" : "已关闭")
+                    .accessibilityValue(model.keepAwakeActive ? LF("已开启，%@", model.keepAwakeRemaining) : L("已关闭"))
             }
             Picker("时长", selection: Binding(get: { model.preset }, set: { model.setPreset($0) })) {
                 ForEach(KeepAwakePreset.allCases) { preset in
@@ -174,7 +174,7 @@ struct PanelView: View {
                 Image(systemName: model.keepAwakeActive ? "checkmark.circle.fill" : "minus.circle")
                     .font(.caption2)
                     .foregroundStyle(model.keepAwakeActive ? Color.successInk : Color.secondary)
-                Text(model.keepAwakeRemaining)
+                Text(L(model.keepAwakeRemaining))
                     .font(.caption)
                     .foregroundStyle(Color.secondaryInk)
             }
@@ -213,18 +213,18 @@ struct PanelView: View {
                     Image(systemName: model.darkModePermission == .allowed ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
                         .font(.caption2)
                         .foregroundStyle(model.darkModePermission == .allowed ? Color.successInk : permissionColor)
-                    Text(model.systemIsDark ? "系统当前：深色" : "系统当前：浅色")
+                    Text(model.systemIsDark ? L("系统当前：深色") : L("系统当前：浅色"))
                         .font(.caption)
                         .foregroundStyle(Color.secondaryInk)
                     Text("·").foregroundStyle(Color.secondaryInk)
-                    Text(permissionText)
+                    Text(L(permissionText))
                         .font(.caption)
                         .foregroundStyle(.primary)
                 }
                 if let error = model.darkModeError {
                     Text(error).font(.caption2).foregroundStyle(Color.errorInk)
                 } else if !model.darkModeStatus.isEmpty {
-                    Text(model.darkModeStatus).font(.caption2).foregroundStyle(Color.secondaryInk)
+                    Text(L(model.darkModeStatus)).font(.caption2).foregroundStyle(Color.secondaryInk)
                 }
             }
             Spacer()
@@ -234,7 +234,7 @@ struct PanelView: View {
                 .controlSize(.small)
                 .disabled(model.darkModeBusy)
                 .accessibilityLabel("深色模式")
-                .accessibilityValue(model.systemIsDark ? "系统当前为深色" : "系统当前为浅色")
+                .accessibilityValue(model.systemIsDark ? L("系统当前为深色") : L("系统当前为浅色"))
         }
     }
 
@@ -247,18 +247,18 @@ struct PanelView: View {
                 Text("麦克风")
                     .font(.system(size: 14, weight: .medium))
                 if !model.microphoneState.isAvailable {
-                    Text(model.microphoneState.message ?? "未找到输入设备")
+                    Text(L(model.microphoneState.message ?? "未找到输入设备"))
                         .font(.caption)
                         .foregroundStyle(Color.secondaryInk)
                 } else if model.microphoneState.supportsMute {
-                    Text(model.microphoneState.muted == true ? "麦克风已静音" : "麦克风已开启")
+                    Text(model.microphoneState.muted == true ? L("麦克风已静音") : L("麦克风已开启"))
                         .font(.caption.weight(.medium))
                         .foregroundStyle(model.microphoneState.muted == true ? Color.errorInk : Color.secondaryInk)
                     Text(model.microphoneState.name)
                         .font(.caption2)
                         .foregroundStyle(Color.secondaryInk)
                 } else {
-                    Text(model.microphoneState.message ?? "当前输入设备不支持系统静音控制")
+                    Text(L(model.microphoneState.message ?? "当前输入设备不支持系统静音控制"))
                         .font(.caption)
                         .foregroundStyle(Color.secondaryInk)
                         .fixedSize(horizontal: false, vertical: true)
@@ -278,19 +278,19 @@ struct PanelView: View {
                 Button {
                     model.toggleMicrophoneMute()
                 } label: {
-                    Text(model.microphoneState.muted == true ? "取消静音" : "静音麦克风")
+                    Text(model.microphoneState.muted == true ? L("取消静音") : L("静音麦克风"))
                 }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
-                .help(model.microphoneState.muted == true ? "取消麦克风静音" : "静音麦克风")
-                .accessibilityLabel(model.microphoneState.muted == true ? "取消麦克风静音" : "静音麦克风")
+                .help(model.microphoneState.muted == true ? L("取消麦克风静音") : L("静音麦克风"))
+                .accessibilityLabel(model.microphoneState.muted == true ? L("取消麦克风静音") : L("静音麦克风"))
             }
         }
     }
 
     private var permissionText: String {
-        if model.darkModePermission == .allowed { return "已授权" }
-        if model.darkModePermission == .targetNotRunning || model.darkModePermission == .notDetermined { return "待授权" }
+        if model.darkModePermission == .allowed { return L("已授权") }
+        if model.darkModePermission == .targetNotRunning || model.darkModePermission == .notDetermined { return L("待授权") }
         return model.darkModePermission.userFacingDescription
     }
 
@@ -326,7 +326,7 @@ struct PanelView: View {
                     title: "锁定屏幕",
                     subtitle: "锁定 · 密码解锁",
                     systemImage: "lock",
-                    badge: model.lockNeedsPermission ? "需授权" : nil,
+                    badge: model.lockNeedsPermission ? L("需授权") : nil,
                     action: { model.lockScreen() })
                 actionTile(
                     title: "关闭显示器",
@@ -355,7 +355,7 @@ struct PanelView: View {
                     Image(systemName: "xmark.octagon.fill")
                         .font(.caption2)
                         .foregroundStyle(Color.errorInk)
-                    Text(model.screenCleaningError)
+                    Text(L(model.screenCleaningError))
                         .font(.caption2)
                         .foregroundStyle(.primary)
                         .fixedSize(horizontal: false, vertical: true)
@@ -374,17 +374,17 @@ struct PanelView: View {
 
     private var actionStatusLines: [String] {
         var lines: [String] = []
-        if model.screenSaverStatus != "未执行" {
-            lines.append("屏保：\(model.screenSaverStatus)")
+        if model.screenSaverStatus != L("未执行") {
+            lines.append(LF("屏保：%@", model.screenSaverStatus))
         }
-        if model.lockStatus != "未执行" {
-            lines.append("锁屏：\(model.lockStatus)")
+        if model.lockStatus != L("未执行") {
+            lines.append(LF("锁屏：%@", model.lockStatus))
         }
-        if model.displaySleepStatus != "未执行" {
-            lines.append("显示器：\(model.displaySleepStatus)")
+        if model.displaySleepStatus != L("未执行") {
+            lines.append(LF("显示器：%@", model.displaySleepStatus))
         }
-        if model.screenCleaningError.isEmpty && model.screenCleaningStatus != "未执行" {
-            lines.append("清洁：\(model.screenCleaningStatus)")
+        if model.screenCleaningError.isEmpty && model.screenCleaningStatus != L("未执行") {
+            lines.append(LF("清洁：%@", model.screenCleaningStatus))
         }
         return lines
     }
@@ -404,18 +404,18 @@ struct PanelView: View {
                         .foregroundStyle(.primary)
                     Spacer()
                     if let badge {
-                        Text(badge)
+                        Text(L(badge))
                             .font(.caption2.weight(.semibold))
                             .foregroundStyle(.primary)
-                            .accessibilityLabel("需要授权")
+                            .accessibilityLabel(L("需要授权"))
                             .padding(.horizontal, 5)
                             .padding(.vertical, 2)
                             .background(Capsule().fill(Color.orange.opacity(0.20)))
                     }
                 }
-                Text(title)
+                Text(L(title))
                     .font(.system(size: 13, weight: .semibold))
-                Text(subtitle)
+                Text(L(subtitle))
                     .font(.caption2)
                     .foregroundStyle(Color.secondaryInk)
                     .fixedSize(horizontal: false, vertical: true)
@@ -426,8 +426,8 @@ struct PanelView: View {
         }
         .buttonStyle(.bordered)
         .controlSize(.regular)
-        .accessibilityLabel(title)
-        .accessibilityHint(subtitle)
+        .accessibilityLabel(L(title))
+        .accessibilityHint(L(subtitle))
     }
 
     // MARK: - Permission panel
@@ -438,7 +438,7 @@ struct PanelView: View {
             Image(systemName: "xmark.octagon.fill")
                 .font(.caption2)
                 .foregroundStyle(Color.errorInk)
-            Text(message)
+            Text(L(message))
                 .font(.caption2)
                 .foregroundStyle(.primary)
                 .fixedSize(horizontal: false, vertical: true)
@@ -450,10 +450,10 @@ struct PanelView: View {
     private var missingPermissionLabels: [String] {
         var labels: [String] = []
         if model.darkModePermission != .allowed {
-            labels.append("Automation（深色模式、锁屏）")
+            labels.append(L("Automation（深色模式、锁屏）"))
         }
         if !model.accessibilityTrusted {
-            labels.append("辅助功能（锁屏）")
+            labels.append(L("辅助功能（锁屏）"))
         }
         return labels
     }
@@ -468,7 +468,7 @@ struct PanelView: View {
                     .font(.system(size: 13, weight: .semibold))
                 Spacer()
             }
-            Text("缺少：\(missingPermissionLabels.joined(separator: "、"))。未授权时相关操作不会执行；保持亮屏和启动屏保不受影响。")
+            Text(LF("缺少：%@。未授权时相关操作不会执行；保持亮屏和启动屏保不受影响。", missingPermissionLabels.joined(separator: L("、"))))
                 .font(.caption)
                 .foregroundStyle(Color.secondaryInk)
                 .fixedSize(horizontal: false, vertical: true)
@@ -508,7 +508,7 @@ struct PanelView: View {
                 Image(systemName: "info.circle")
                     .font(.caption2)
                     .foregroundStyle(Color.secondaryInk)
-                Text(model.permissionsSummary)
+                Text(L(model.permissionsSummary))
                     .font(.caption2)
                     .foregroundStyle(Color.secondaryInk)
                     .lineLimit(2)

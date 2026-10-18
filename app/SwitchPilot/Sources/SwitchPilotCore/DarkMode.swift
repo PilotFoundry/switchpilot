@@ -10,10 +10,10 @@ public enum DarkModeError: Error, CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case .permission(let state): return "需要 System Events 自动化授权：\(state.description)"
-        case .script(let message): return "AppleScript 失败：\(message)"
-        case .readbackMismatch: return "写入后读回与请求值不一致"
-        case .unexpectedResult(let type): return "AppleScript 返回了非布尔结果（descriptor type \(type)）"
+        case .permission(let state): return LF("需要 System Events 自动化授权：%@", state.description)
+        case .script(let message): return LF("AppleScript 失败：%@", message)
+        case .readbackMismatch: return L("写入后读回与请求值不一致")
+        case .unexpectedResult(let type): return LF("AppleScript 返回了非布尔结果（descriptor type %@）", String(describing: type))
         }
     }
 }
@@ -66,7 +66,7 @@ public enum DarkMode {
             throw DarkModeError.permission(state)
         }
         guard let script = NSAppleScript(source: source) else {
-            throw DarkModeError.script("无法创建 AppleScript")
+            throw DarkModeError.script(L("无法创建 AppleScript"))
         }
         var error: NSDictionary?
         let result = script.executeAndReturnError(&error)

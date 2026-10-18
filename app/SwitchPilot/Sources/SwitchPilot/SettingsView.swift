@@ -45,14 +45,14 @@ struct SettingsView: View {
                 state: model.accessibilityTrusted)
 
             if model.permissionsReady {
-                Button("重新检查") { model.recheck() }
+                Button(L("重新检查")) { model.recheck() }
                     .buttonStyle(.bordered)
                     .controlSize(.small)
                     .disabled(model.busy)
             } else {
                 HStack(spacing: 8) {
                     if model.automation == .denied {
-                        Button("打开自动化设置") { model.openAutomationSettings() }
+                        Button(L("打开自动化设置")) { model.openAutomationSettings() }
                             .buttonStyle(.borderedProminent)
                     } else if model.automation != .allowed {
                         Button {
@@ -63,19 +63,19 @@ struct SettingsView: View {
                         .buttonStyle(.borderedProminent)
                     }
                     if !model.accessibilityTrusted && model.automation == .allowed {
-                        Button("去授权辅助功能") { model.requestAccessibilityPrompt() }
+                        Button(L("去授权辅助功能")) { model.requestAccessibilityPrompt() }
                             .buttonStyle(.borderedProminent)
                     } else if !model.accessibilityTrusted && model.automation == .denied {
-                        Button("去授权辅助功能") { model.requestAccessibilityPrompt() }
+                        Button(L("去授权辅助功能")) { model.requestAccessibilityPrompt() }
                             .buttonStyle(.bordered)
                     }
-                    Button("重新检查") { model.recheck() }
+                    Button(L("重新检查")) { model.recheck() }
                         .buttonStyle(.bordered)
                 }
                 .controlSize(.small)
                 .disabled(model.busy)
 
-                Button(model.showsDiagnostic ? "收起诊断详情" : "诊断详情") {
+                Button(model.showsDiagnostic ? L("收起诊断详情") : L("诊断详情")) {
                     model.toggleDiagnostic()
                 }
                 .buttonStyle(.plain)
@@ -123,7 +123,7 @@ struct SettingsView: View {
             .frame(maxWidth: .infinity, alignment: .leading)
             .contentShape(Rectangle())
             .accessibilityLabel("如何撤销授权")
-            .accessibilityValue(model.showsRevokeHelp ? "已展开" : "已收起")
+            .accessibilityValue(model.showsRevokeHelp ? L("已展开") : L("已收起"))
             .accessibilityHint("显示在系统设置中撤销授权的步骤，以及可复制的终端命令")
 
             if model.showsRevokeHelp {
@@ -133,10 +133,10 @@ struct SettingsView: View {
                         .foregroundStyle(Color.secondaryInk)
                         .fixedSize(horizontal: false, vertical: true)
                     HStack(spacing: 8) {
-                        Button("打开自动化设置") { model.openAutomationSettings() }
+                        Button(L("打开自动化设置")) { model.openAutomationSettings() }
                             .buttonStyle(.bordered)
                             .controlSize(.small)
-                        Button("打开辅助功能设置") { model.openAccessibilitySettings() }
+                        Button(L("打开辅助功能设置")) { model.openAccessibilitySettings() }
                             .buttonStyle(.bordered)
                             .controlSize(.small)
                     }
@@ -155,7 +155,7 @@ struct SettingsView: View {
                     .frame(maxWidth: .infinity, alignment: .leading)
                     .contentShape(Rectangle())
                     .accessibilityLabel("终端命令（高级）")
-                    .accessibilityValue(model.showsAdvancedTCCUtil ? "已展开" : "已收起")
+                    .accessibilityValue(model.showsAdvancedTCCUtil ? L("已展开") : L("已收起"))
 
                     if model.showsAdvancedTCCUtil {
                         VStack(alignment: .leading, spacing: 6) {
@@ -167,7 +167,7 @@ struct SettingsView: View {
                                 .frame(maxWidth: .infinity, alignment: .leading)
                                 .background(RoundedRectangle(cornerRadius: 6).fill(Color.primary.opacity(0.06)))
                             HStack(spacing: 8) {
-                                Button(model.tccutilCopied ? "已复制" : "复制命令") {
+                                Button(model.tccutilCopied ? L("已复制") : L("复制命令")) {
                                     model.copyTCCUtilResetCommands()
                                 }
                                 .buttonStyle(.bordered)
@@ -208,11 +208,11 @@ struct SettingsView: View {
 
     private func confirmInAppReset() {
         let alert = NSAlert()
-        alert.messageText = "在应用内重置 SwitchPilot 的权限？"
-        alert.informativeText = "将执行系统自带的 tccutil，仅重置本应用（Automation + 辅助功能）的授权记录。此操作不可撤销，重置后需要重新授权；系统弹窗不保证再次出现，可能需要在系统设置中手动添加。SwitchPilot 不会使用 sudo，也不会执行 reset All。"
+        alert.messageText = L("在应用内重置 SwitchPilot 的权限？")
+        alert.informativeText = L("将执行系统自带的 tccutil，仅重置本应用（Automation + 辅助功能）的授权记录。此操作不可撤销，重置后需要重新授权；系统弹窗不保证再次出现，可能需要在系统设置中手动添加。SwitchPilot 不会使用 sudo，也不会执行 reset All。")
         alert.alertStyle = .warning
-        alert.addButton(withTitle: "取消")
-        alert.addButton(withTitle: "重置两项权限")
+        alert.addButton(withTitle: L("取消"))
+        alert.addButton(withTitle: L("重置两项权限"))
         if let resetButton = alert.buttons.last {
             resetButton.hasDestructiveAction = true
         }
@@ -267,7 +267,7 @@ struct SettingsView: View {
                     .disabled(model.busy)
             }
             if model.loginState == .requiresApproval {
-                Button("打开系统设置 › 登录项") { model.openLoginItemsSettings() }
+                Button(L("打开系统设置 › 登录项")) { model.openLoginItemsSettings() }
                     .buttonStyle(.bordered)
             }
             Text("由 macOS 服务管理注册；如果系统拒绝会显示真实错误，个人构建可能需要在系统设置中批准。")
@@ -299,8 +299,8 @@ struct SettingsView: View {
                 .font(.caption)
                 .foregroundStyle(state ? Color.successInk : Color.warningInk)
             VStack(alignment: .leading, spacing: 1) {
-                Text(title).font(.caption.weight(.medium))
-                Text(detail).font(.caption).foregroundStyle(Color.secondaryInk)
+                Text(L(title)).font(.caption.weight(.medium))
+                Text(L(detail)).font(.caption).foregroundStyle(Color.secondaryInk)
             }
             Spacer()
         }
@@ -312,11 +312,11 @@ struct SettingsView: View {
         @ViewBuilder content: () -> Content
     ) -> some View {
         VStack(alignment: .leading, spacing: 8) {
-            Text(title)
+            Text(L(title))
                 .font(.caption.weight(.semibold))
                 .foregroundStyle(Color.secondaryInk)
             if let subtitle {
-                Text(subtitle)
+                Text(L(subtitle))
                     .font(.caption)
                     .foregroundStyle(Color.secondaryInk)
                     .fixedSize(horizontal: false, vertical: true)

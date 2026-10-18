@@ -192,7 +192,7 @@ application.run()
 @MainActor
 func enforceSingleInstance() {
     guard ProcessInfo.processInfo.environment["SWITCHPILOT_SMOKE_TEST"] != "1" else { return }
-    let running = NSRunningApplication.runningApplications(withBundleIdentifier: "local.personal.SwitchPilot")
+    let running = NSRunningApplication.runningApplications(withBundleIdentifier: "io.github.pengxianghao21.SwitchPilot")
         .filter { $0.processIdentifier != getpid() }
     guard let existing = running.first else { return }
     NSApplication.shared.setActivationPolicy(.accessory)

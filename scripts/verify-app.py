@@ -67,9 +67,9 @@ def check_build():
 def check_plists():
     info = plistlib.loads((PKG / "Info.plist").read_bytes())
     entitlements = plistlib.loads((PKG / "Entitlements.plist").read_bytes())
-    if info.get("CFBundleIdentifier") != "local.personal.SwitchPilot":
+    if info.get("CFBundleIdentifier") != "io.github.pengxianghao21.SwitchPilot":
         raise RuntimeError("unexpected bundle id")
-    if info.get("CFBundleShortVersionString") != "0.5.3":
+    if info.get("CFBundleShortVersionString") != "0.6.0":
         raise RuntimeError(f"unexpected bundle version: {info.get('CFBundleShortVersionString')}")
     if info.get("LSUIElement") is not True:
         raise RuntimeError("LSUIElement must be true")

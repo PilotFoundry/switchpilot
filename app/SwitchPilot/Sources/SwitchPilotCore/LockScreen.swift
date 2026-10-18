@@ -17,7 +17,7 @@ public struct LockPermissions: Equatable {
     }
 
     public var summary: String {
-        "自动化：\(automation.description)；辅助功能：\(accessibilityTrusted ? "已授权" : "未授权")"
+        LF("自动化：%@；辅助功能：%@", automation.description, accessibilityTrusted ? L("已授权") : L("未授权"))
     }
 }
 
@@ -27,8 +27,8 @@ public enum LockScreenError: Error, CustomStringConvertible {
 
     public var description: String {
         switch self {
-        case .permissions(let permissions): return "缺少权限：\(permissions.summary)"
-        case .script(let message): return "锁屏脚本失败：\(message)"
+        case .permissions(let permissions): return LF("缺少权限：%@", permissions.summary)
+        case .script(let message): return LF("锁屏脚本失败：%@", message)
         }
     }
 }
@@ -83,7 +83,7 @@ public enum LockScreen {
 
     private static func runScript(_ source: String) throws -> NSAppleEventDescriptor {
         guard let script = NSAppleScript(source: source) else {
-            throw LockScreenError.script("无法创建 AppleScript")
+            throw LockScreenError.script(L("无法创建 AppleScript"))
         }
         var error: NSDictionary?
         let result = script.executeAndReturnError(&error)
