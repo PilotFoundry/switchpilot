@@ -243,7 +243,7 @@ struct SettingsView: View {
                     .foregroundStyle(Color.errorInk)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            Text("固定组合，后续再评估自定义录制；只触发保持亮屏与启动屏保，不会在后台请求 TCC。")
+            Text("固定组合，不提供自定义录制；实验项默认关闭，只触发保持亮屏与启动屏保，不会在后台请求 TCC。")
                 .font(.caption)
                 .foregroundStyle(Color.secondaryInk)
                 .fixedSize(horizontal: false, vertical: true)

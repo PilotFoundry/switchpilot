@@ -13,13 +13,12 @@ struct PanelView: View {
             if !model.hasSeenWelcome || model.showGuide {
                 guideCard
             }
-            keepAwakeCard
-            appearanceCard
-            microphoneCard
-            quickActionsCard
             if !model.allPermissionsReady && !model.guideVisible {
                 permissionsNeededCard
             }
+            keepAwakeCard
+            systemCard
+            quickActionsCard
             footer
         }
         .padding(16)
@@ -190,44 +189,103 @@ struct PanelView: View {
         .background(cardBackground)
     }
 
-    // MARK: - Appearance
+    // MARK: - System controls
 
-    private var appearanceCard: some View {
-        VStack(alignment: .leading, spacing: 9) {
-            HStack {
-                Text("深色模式")
-                    .font(.system(size: 14, weight: .medium))
-                Spacer()
-                Toggle("", isOn: Binding(get: { model.systemIsDark }, set: { model.setDarkMode($0) }))
-                    .labelsHidden()
-                    .toggleStyle(.switch)
-                    .controlSize(.small)
-                    .disabled(model.darkModeBusy)
-                    .accessibilityLabel("深色模式")
-                    .accessibilityValue(model.systemIsDark ? "系统当前为深色" : "系统当前为浅色")
-            }
-            HStack(spacing: 5) {
-                Image(systemName: model.darkModePermission == .allowed ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
-                    .font(.caption2)
-                    .foregroundStyle(model.darkModePermission == .allowed ? Color.successInk : permissionColor)
-                Text(model.systemIsDark ? "系统当前：深色" : "系统当前：浅色")
-                    .font(.caption)
-                    .foregroundStyle(Color.secondaryInk)
-                Text("·").foregroundStyle(Color.secondaryInk)
-                Text(permissionText)
-                    .font(.caption)
-                    .foregroundStyle(.primary)
-            }
-            if let error = model.darkModeError {
-                inlineError(error)
-            } else if !model.darkModeStatus.isEmpty {
-                Text(model.darkModeStatus)
-                    .font(.caption2)
-                    .foregroundStyle(Color.secondaryInk)
-            }
+    private var systemCard: some View {
+        VStack(spacing: 10) {
+            darkModeRow
+            Divider().opacity(0.45)
+            microphoneRow
         }
         .padding(12)
         .background(cardBackground)
+    }
+
+    private var darkModeRow: some View {
+        HStack(spacing: 10) {
+            Image(systemName: model.systemIsDark ? "moon.fill" : "sun.max")
+                .font(.system(size: 14, weight: .medium))
+                .frame(width: 18)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("深色模式")
+                    .font(.system(size: 14, weight: .medium))
+                HStack(spacing: 4) {
+                    Image(systemName: model.darkModePermission == .allowed ? "checkmark.circle.fill" : "exclamationmark.circle.fill")
+                        .font(.caption2)
+                        .foregroundStyle(model.darkModePermission == .allowed ? Color.successInk : permissionColor)
+                    Text(model.systemIsDark ? "系统当前：深色" : "系统当前：浅色")
+                        .font(.caption)
+                        .foregroundStyle(Color.secondaryInk)
+                    Text("·").foregroundStyle(Color.secondaryInk)
+                    Text(permissionText)
+                        .font(.caption)
+                        .foregroundStyle(.primary)
+                }
+                if let error = model.darkModeError {
+                    Text(error).font(.caption2).foregroundStyle(Color.errorInk)
+                } else if !model.darkModeStatus.isEmpty {
+                    Text(model.darkModeStatus).font(.caption2).foregroundStyle(Color.secondaryInk)
+                }
+            }
+            Spacer()
+            Toggle("", isOn: Binding(get: { model.systemIsDark }, set: { model.setDarkMode($0) }))
+                .labelsHidden()
+                .toggleStyle(.switch)
+                .controlSize(.small)
+                .disabled(model.darkModeBusy)
+                .accessibilityLabel("深色模式")
+                .accessibilityValue(model.systemIsDark ? "系统当前为深色" : "系统当前为浅色")
+        }
+    }
+
+    private var microphoneRow: some View {
+        HStack(spacing: 10) {
+            Image(systemName: microphoneIcon)
+                .font(.system(size: 14, weight: .medium))
+                .frame(width: 18)
+            VStack(alignment: .leading, spacing: 2) {
+                Text("麦克风")
+                    .font(.system(size: 14, weight: .medium))
+                if !model.microphoneState.isAvailable {
+                    Text(model.microphoneState.message ?? "未找到输入设备")
+                        .font(.caption)
+                        .foregroundStyle(Color.secondaryInk)
+                } else if model.microphoneState.supportsMute {
+                    Text(model.microphoneState.muted == true ? "麦克风已静音" : "麦克风已开启")
+                        .font(.caption.weight(.medium))
+                        .foregroundStyle(model.microphoneState.muted == true ? Color.errorInk : Color.secondaryInk)
+                    Text(model.microphoneState.name)
+                        .font(.caption2)
+                        .foregroundStyle(Color.secondaryInk)
+                } else {
+                    Text(model.microphoneState.message ?? "当前输入设备不支持系统静音控制")
+                        .font(.caption)
+                        .foregroundStyle(Color.secondaryInk)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Text(model.microphoneState.name)
+                        .font(.caption2)
+                        .foregroundStyle(Color.secondaryInk)
+                    Text("可在系统设置 › 声音中调整输入设备。")
+                        .font(.caption2)
+                        .foregroundStyle(Color.secondaryInk)
+                }
+                if !model.microphoneError.isEmpty {
+                    Text(model.microphoneError).font(.caption2).foregroundStyle(Color.errorInk)
+                }
+            }
+            Spacer()
+            if model.microphoneState.supportsMute {
+                Button {
+                    model.toggleMicrophoneMute()
+                } label: {
+                    Text(model.microphoneState.muted == true ? "取消静音" : "静音麦克风")
+                }
+                .buttonStyle(.bordered)
+                .controlSize(.small)
+                .help(model.microphoneState.muted == true ? "取消麦克风静音" : "静音麦克风")
+                .accessibilityLabel(model.microphoneState.muted == true ? "取消麦克风静音" : "静音麦克风")
+            }
+        }
     }
 
     private var permissionText: String {
@@ -243,69 +301,6 @@ struct PanelView: View {
         }
     }
 
-    // MARK: - Microphone
-
-    private var microphoneCard: some View {
-        VStack(alignment: .leading, spacing: 8) {
-            HStack(spacing: 8) {
-                Image(systemName: microphoneIcon)
-                    .font(.system(size: 14, weight: .medium))
-                    .foregroundStyle(.primary)
-                Text("麦克风")
-                    .font(.system(size: 14, weight: .medium))
-                Spacer()
-                if model.microphoneState.supportsMute {
-                    if model.microphoneState.muted == true {
-                        Button {
-                            model.toggleMicrophoneMute()
-                        } label: {
-                            Label("取消静音", systemImage: "mic.fill")
-                        }
-                        .buttonStyle(.bordered)
-                        .controlSize(.small)
-                        .help("取消麦克风静音")
-                        .accessibilityLabel("取消麦克风静音")
-                    } else {
-                        Button {
-                            model.toggleMicrophoneMute()
-                        } label: {
-                            Label("静音麦克风", systemImage: "mic.slash.fill")
-                        }
-                        .buttonStyle(.bordered)
-                        .controlSize(.small)
-                        .help("静音麦克风")
-                        .accessibilityLabel("静音麦克风")
-                    }
-                }
-            }
-            if !model.microphoneState.isAvailable {
-                Text(model.microphoneState.message ?? "未找到输入设备")
-                    .font(.caption)
-                    .foregroundStyle(Color.secondaryInk)
-            } else if model.microphoneState.supportsMute {
-                Text(model.microphoneState.muted == true ? "麦克风已静音" : "麦克风已开启")
-                    .font(.caption.weight(.medium))
-                    .foregroundStyle(model.microphoneState.muted == true ? Color.errorInk : Color.secondaryInk)
-                Text(model.microphoneState.name)
-                    .font(.caption2)
-                    .foregroundStyle(Color.secondaryInk)
-            } else {
-                Text(model.microphoneState.message ?? "当前输入设备不支持系统静音控制")
-                    .font(.caption)
-                    .foregroundStyle(Color.secondaryInk)
-                    .fixedSize(horizontal: false, vertical: true)
-                Text(model.microphoneState.name)
-                    .font(.caption2)
-                    .foregroundStyle(Color.secondaryInk)
-            }
-            if !model.microphoneError.isEmpty {
-                inlineError(model.microphoneError)
-            }
-        }
-        .padding(12)
-        .background(cardBackground)
-    }
-
     private var microphoneIcon: String {
         model.microphoneState.muted == true ? "mic.slash.fill" : "mic.fill"
     }
@@ -317,7 +312,10 @@ struct PanelView: View {
             Text("快速动作")
                 .font(.caption2.weight(.semibold))
                 .foregroundStyle(Color.secondaryInk)
-            HStack(spacing: 8) {
+            LazyVGrid(columns: [
+                GridItem(.flexible(), spacing: 8),
+                GridItem(.flexible(), spacing: 8),
+            ], spacing: 8) {
                 actionTile(
                     title: "启动屏保",
                     subtitle: "启动 · 鼠标退出",
@@ -332,44 +330,63 @@ struct PanelView: View {
                     action: { model.lockScreen() })
                 actionTile(
                     title: "关闭显示器",
-                    subtitle: "休眠 · 鼠标唤醒",
+                    subtitle: "休眠 · 唤醒看系统",
                     systemImage: "display",
                     badge: nil,
                     action: { model.sleepDisplay() })
+                actionTile(
+                    title: "清洁屏幕",
+                    subtitle: "锁键盘 · 鼠标退出",
+                    systemImage: "sparkles",
+                    badge: nil,
+                    action: { model.startScreenCleaning() })
             }
-            VStack(alignment: .leading, spacing: 2) {
-                Text("屏保：\(model.screenSaverStatus)")
-                Text("锁屏：\(model.lockStatus)")
-                Text("显示器：\(model.displaySleepStatus)")
-                Text("清洁：\(model.screenCleaningStatus)")
-            }
-            .font(.caption2)
-            .foregroundStyle(Color.secondaryInk)
-            Button {
-                model.startScreenCleaning()
-            } label: {
-                HStack(spacing: 8) {
-                    Image(systemName: "sparkles")
-                        .font(.system(size: 14, weight: .medium))
-                    VStack(alignment: .leading, spacing: 1) {
-                        Text("清洁屏幕")
-                            .font(.system(size: 12, weight: .medium))
-                        Text("锁定键盘输入；鼠标点击退出")
-                            .font(.caption2)
-                            .foregroundStyle(Color.secondaryInk)
+            if !actionStatusLines.isEmpty {
+                VStack(alignment: .leading, spacing: 2) {
+                    ForEach(actionStatusLines, id: \.self) { line in
+                        Text(line)
                     }
-                    Spacer()
                 }
-                .contentShape(Rectangle())
+                .font(.caption2)
+                .foregroundStyle(Color.secondaryInk)
             }
-            .buttonStyle(.bordered)
-            .controlSize(.small)
-            .disabled(model.screenCleaningActive)
-            .accessibilityLabel("清洁屏幕")
-            .accessibilityHint("锁定键盘输入，屏幕上点击按钮或等待计时结束退出")
+            if !model.screenCleaningError.isEmpty {
+                HStack(alignment: .top, spacing: 6) {
+                    Image(systemName: "xmark.octagon.fill")
+                        .font(.caption2)
+                        .foregroundStyle(Color.errorInk)
+                    Text(model.screenCleaningError)
+                        .font(.caption2)
+                        .foregroundStyle(.primary)
+                        .fixedSize(horizontal: false, vertical: true)
+                    Spacer()
+                    if model.screenCleaningNeedsAccessibility {
+                        Button("打开辅助功能设置") { model.openAccessibilitySettings() }
+                            .buttonStyle(.bordered)
+                            .controlSize(.small)
+                    }
+                }
+            }
         }
         .padding(12)
         .background(cardBackground)
+    }
+
+    private var actionStatusLines: [String] {
+        var lines: [String] = []
+        if model.screenSaverStatus != "未执行" {
+            lines.append("屏保：\(model.screenSaverStatus)")
+        }
+        if model.lockStatus != "未执行" {
+            lines.append("锁屏：\(model.lockStatus)")
+        }
+        if model.displaySleepStatus != "未执行" {
+            lines.append("显示器：\(model.displaySleepStatus)")
+        }
+        if model.screenCleaningError.isEmpty && model.screenCleaningStatus != "未执行" {
+            lines.append("清洁：\(model.screenCleaningStatus)")
+        }
+        return lines
     }
 
     private func actionTile(
@@ -380,10 +397,10 @@ struct PanelView: View {
         action: @escaping () -> Void
     ) -> some View {
         Button(action: action) {
-            VStack(alignment: .leading, spacing: 6) {
+            VStack(alignment: .leading, spacing: 5) {
                 HStack {
                     Image(systemName: systemImage)
-                        .font(.system(size: 16, weight: .medium))
+                        .font(.system(size: 15, weight: .medium))
                         .foregroundStyle(.primary)
                     Spacer()
                     if let badge {
@@ -391,7 +408,7 @@ struct PanelView: View {
                             .font(.caption2.weight(.semibold))
                             .foregroundStyle(.primary)
                             .accessibilityLabel("需要授权")
-                            .padding(.horizontal, 6)
+                            .padding(.horizontal, 5)
                             .padding(.vertical, 2)
                             .background(Capsule().fill(Color.orange.opacity(0.20)))
                     }
@@ -403,7 +420,7 @@ struct PanelView: View {
                     .foregroundStyle(Color.secondaryInk)
                     .fixedSize(horizontal: false, vertical: true)
             }
-            .padding(10)
+            .padding(9)
             .frame(maxWidth: .infinity, alignment: .leading)
             .contentShape(Rectangle())
         }

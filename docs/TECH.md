@@ -228,7 +228,7 @@ open app/SwitchPilot/.build/SwitchPilot.app
 - `scripts/onsite-probe`：优先用运行中应用的 `switchpilot://diagnose` 写只读报告；移除会偶发挂起的 `sfltool dumpbtm`；TCC 日志限 5 分钟。
 - 验证：面板 380×637/710；设置窗口 523/774；普通重复启动保持一个实例；`open -n` 被 LS 禁止（诊断改走 URL）；verify-app 11/11、自检 12/12。
 
-## 15. v0.5.0：麦克风静音、屏幕清洁与快捷动作
+## 15. v0.5.x：麦克风静音、屏幕清洁与快捷动作
 
 - `Microphone.swift`：CoreAudio 读取默认输入设备、名称与 `kAudioDevicePropertyMute`（input scope）能力/当前值；`setMuted` 写入后 UI 刷新读回；不支持时不显示可操作控件。无新增 TCC；原型不做设备变更监听，刷新/重开面板时重新探测。
 - `PanelModel`：新增 `microphoneState/microphoneError/toggleMicrophoneMute/refreshMicrophone`；`startScreenCleaning` 调用清洁管理器并在失败时显示真实原因。
@@ -238,7 +238,11 @@ open app/SwitchPilot/.build/SwitchPilot.app
   - 普通模式不显示倒计时、不自动退出；仅测试时通过 `SWITCHPILOT_CLEAN_SCREEN_TEST_SECONDS` 启用定时自动退出。`PowerAssertion` 防显示器睡眠；`stop()` 幂等清理 tap/窗口/断言/定时器；事件 tap 被系统禁用时尝试 re-enable，失败则退出。
   - 无 Accessibility/事件 tap 创建失败：返回明确错误，不创建遮罩。
 - `HotKeyManager.swift`：Carbon 固定组合快捷键（保活/屏保），默认关闭；注册失败回写关闭并报错；无 TCC。
+- `StatusIcon.make(size:microphoneMuted:)`：静音时画 S+斜线 template 变体；`AppDelegate` 订阅 `PanelModel.$microphoneState` 更新状态项图标/tooltip，右键菜单提供“取消麦克风静音/静音麦克风”，不新增权限。
+- 面板压缩（v0.5.2）：深色模式与麦克风合并为 system card；快速动作改 2×2，清洁进入磁贴；仅显示非默认动作状态；权限卡缺失时置顶。
+- 屏幕清洁：普通模式无倒计时/不自动退出；隐藏 5 分钟失效 Timer 只用于鼠标失效兜底，不展示；测试环境变量可启用可见倒计时。
+- 回归门禁：`scripts/qa-regression.py`（13 组政策/边界断言）已接入 `verify-app.py` 作为第 12 步；verify-app 12/12。
 - `DisplaySleep.swift`：公开 pmset，一次性动作。
 - 删除 `AudioOutput.swift` 与面板输出音量卡；不再有 M11 音量验收。
-- 自动化：`SwitchPilotChecks` 14 项（麦克风只读能力、pmset 可用性）；verify-app 保持 11/11，面板尺寸阈值 380×840/900。
+- 自动化：`SwitchPilotChecks` 14 项（麦克风只读能力、pmset 可用性）；`qa-regression.py` 13 项政策断言；verify-app 12/12，面板尺寸阈值 380×760/840。
 - 已知边界：麦克风静音在真实支持设备上的写入、屏幕清洁真实键鼠行为需现场（M12/M13）；屏幕清洁会拦截键盘，自动化不启动它。

@@ -33,6 +33,7 @@ final class ScreenCleaningManager {
     private var eventTap: CFMachPort?
     private var runLoopSource: CFRunLoopSource?
     private var timer: Timer?
+    private var failsafeTimer: Timer?
     private var assertion: PowerAssertion?
     private var remainingSeconds = 0
     private var showsCountdown = false
@@ -80,12 +81,18 @@ final class ScreenCleaningManager {
                 Task { @MainActor in self?.tick() }
             }
         }
+        // Hidden last-resort recovery if the mouse fails; never shown in normal UI.
+        failsafeTimer = Timer.scheduledTimer(withTimeInterval: 300, repeats: false) { [weak self] _ in
+            Task { @MainActor in self?.stop() }
+        }
     }
 
     func stop() {
         guard isActive || eventTap != nil || !windows.isEmpty else { return }
         timer?.invalidate()
         timer = nil
+        failsafeTimer?.invalidate()
+        failsafeTimer = nil
         if let eventTap {
             CGEvent.tapEnable(tap: eventTap, enable: false)
         }
