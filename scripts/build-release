@@ -1,0 +1,52 @@
+#!/bin/sh
+# Build a universal (arm64 + x86_64) macOS release app and an ad-hoc-signed zip.
+# This is the "download, then right-click Open" distribution path. True
+# one-click Gatekeeper acceptance requires Developer ID signing + notarization.
+set -eu
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+PKG="$ROOT/app/SwitchPilot"
+DIST="$ROOT/dist"
+APP="$DIST/SwitchPilot.app"
+ARM="/tmp/switchpilot-release-arm"
+X86="/tmp/switchpilot-release-x86"
+
+VERSION=$(/usr/bin/plutil -extract CFBundleShortVersionString raw "$PKG/Info.plist")
+mkdir -p "$DIST"
+rm -rf "$APP" "$ARM" "$X86"
+mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
+
+/usr/bin/swift build --package-path "$PKG" -c release \
+    --triple arm64-apple-macosx14.0 --scratch-path "$ARM"
+/usr/bin/swift build --package-path "$PKG" -c release \
+    --triple x86_64-apple-macosx14.0 --scratch-path "$X86"
+
+/usr/bin/lipo -create \
+    "$ARM/release/SwitchPilot" \
+    "$X86/release/SwitchPilot" \
+    -output "$APP/Contents/MacOS/SwitchPilot"
+
+/usr/bin/ditto "$PKG/Info.plist" "$APP/Contents/Info.plist"
+if [ -f "$PKG/Resources/AppIcon.icns" ]; then
+    /usr/bin/ditto "$PKG/Resources/AppIcon.icns" "$APP/Contents/Resources/AppIcon.icns"
+fi
+for lproj in "$PKG"/Resources/*.lproj; do
+    [ -d "$lproj" ] || continue
+    /usr/bin/ditto "$lproj" "$APP/Contents/Resources/$(basename "$lproj")"
+done
+
+# Distribution builds are intentionally ad-hoc. Never ship a personal signing
+# identity or its certificate in a release.
+/usr/bin/codesign --force --sign - --options runtime \
+    --entitlements "$PKG/Entitlements.plist" "$APP"
+/usr/bin/codesign --verify --strict --verbose=2 "$APP"
+
+ZIP="$DIST/SwitchPilot-${VERSION}-macos-universal-adhoc.zip"
+rm -f "$ZIP" "$ZIP.sha256"
+/usr/bin/ditto -c -k --keepParent "$APP" "$ZIP"
+/usr/bin/shasum -a 256 "$ZIP" > "$ZIP.sha256"
+
+printf '%s\n' "version=$VERSION"
+/usr/bin/lipo -info "$APP/Contents/MacOS/SwitchPilot"
+/usr/bin/codesign -dv --verbose=4 "$APP" 2>&1 | grep -E 'Authority|TeamIdentifier|Signature' || true
+printf 'artifact=%s\n' "$ZIP"
+printf 'sha256=%s\n' "$(cut -d' ' -f1 "$ZIP.sha256")"

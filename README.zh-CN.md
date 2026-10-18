@@ -59,6 +59,20 @@ SwitchPilot 提供四套 UI 本地化：
 
 默认是**跟随系统**。设置 → 语言可以强制选择其中一种；切换后应用会提示重新打开，使 AppKit、SwiftUI 和权限提示的本地化一起重新加载。
 
+## 下载（ad-hoc 预览版）
+
+Release 提供由对应 tag 源码构建的 universal（Apple Silicon + Intel）macOS 应用。当前项目没有 Developer ID 证书，因此它是 **ad-hoc 签名、未公证** 的版本。
+
+- 要求：macOS 14 或更高
+- 文件：`SwitchPilot-0.7.0-macos-universal-adhoc.zip`
+- 下载、解压后把 `SwitchPilot.app` 放到 `/Applications`
+- 首次打开可能被 macOS 拦截：右键点击应用 → **打开**
+- 如使用终端，只对该应用执行：
+  `xattr -dr com.apple.quarantine /Applications/SwitchPilot.app`
+- 不要全局关闭 Gatekeeper
+
+zip 由 `./scripts/build-release` 构建，SHA-256 会随 release 一起提供。它是方便下载的构建，不是 Developer ID/公证分发；如需完全可信，请自行从源码构建并签名。
+
 ## 环境要求
 
 - macOS 14 或更高（主要在 macOS 27 开发测试）

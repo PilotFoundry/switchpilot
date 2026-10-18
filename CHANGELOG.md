@@ -11,6 +11,8 @@ semantic versioning while it is pre-1.0.
   localization and permission prompts reload consistently.
 - Add localized InfoPlist strings for Japanese and Traditional Chinese.
 - Keep English and Simplified Chinese behavior unchanged.
+- Add an optional ad-hoc universal release zip for download convenience; it is
+  not notarized and still requires the macOS right-click Open step.
 
 ## [0.6.0] - 2026-10-18
 
