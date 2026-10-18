@@ -1,0 +1,232 @@
+<!doctype html>
+<html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>SwitchPilot · 正式命名与 macOS 27 面板重设计</title>
+<style>
+:root{--bg:#f2f4ee;--paper:#fffefa;--ink:#1f3630;--muted:#5f7268;--line:#d7e0d5;--green:#1e6a4b;--soft:#e7f2e8;--amber:#7e5516;--warn:#fff2d8;--red:#9d3838;--redsoft:#f8e8e4;--blue:#276783;--bluesoft:#e6eff3}*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.8 -apple-system,BlinkMacSystemFont,"PingFang SC",sans-serif}a{color:var(--blue);text-underline-offset:3px}.layout{max-width:1360px;margin:auto;padding:38px;display:grid;grid-template-columns:215px minmax(0,1fr);gap:36px}aside{position:sticky;top:30px;height:calc(100vh - 60px);overflow:auto}nav a{display:block;padding:7px 0;font-size:14px;text-decoration:none}.brand{font-weight:750;letter-spacing:1px}main{min-width:0}header{padding:8px 0 26px}h1{font-size:clamp(32px,4.2vw,52px);line-height:1.25;margin:14px 0}h1 span{color:var(--green)}h2{font-size:23px;line-height:1.45;margin:0 0 18px}h3{font-size:17px;margin:0 0 10px}.eyebrow{color:var(--green);font-size:12px;letter-spacing:2px;font-weight:750}.lead{font-size:19px;color:var(--muted)}section{background:var(--paper);border:1px solid var(--line);border-radius:15px;padding:27px;margin-bottom:22px}p{margin:8px 0 14px}.muted,small{font-size:13px;color:var(--muted)}.grid{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.card{padding:18px;border:1px solid var(--line);border-radius:10px}.metric{font-size:27px;font-weight:750;color:var(--green);line-height:1.25}.badge{display:inline-block;font-size:12px;font-weight:650;background:var(--soft);color:var(--green);padding:2px 8px;border-radius:6px}.amber{background:var(--warn);color:var(--amber)}.red{background:var(--redsoft);color:var(--red)}.gray{background:#e9ece7;color:#52645c}.blue{background:var(--bluesoft);color:var(--blue)}.note{padding:15px 18px;border-left:4px solid var(--green);background:var(--soft);border-radius:0 8px 8px 0}.risk{border-color:var(--amber);background:var(--warn)}.stop{border-color:var(--red);background:var(--redsoft)}.table{overflow:auto}table{width:100%;border-collapse:collapse;font-size:14px}th,td{padding:11px 12px;text-align:left;vertical-align:top;border-bottom:1px solid var(--line)}th{color:var(--muted);background:#eef3e9;font-size:12px}code,pre{font:12px/1.7 ui-monospace,SFMono-Regular,Menlo,monospace;color:#235f42}code{background:#eef3e9;padding:2px 4px;overflow-wrap:anywhere}pre{white-space:pre-wrap;overflow-wrap:anywhere;background:#edf3e9;padding:16px;border-radius:8px}details{border:1px solid var(--line);border-radius:9px;margin:12px 0}summary{cursor:pointer;padding:12px 16px;font-weight:650}.detail{padding:0 16px 14px}.two{display:grid;grid-template-columns:1fr 1fr;gap:18px}ul,ol{padding-left:23px}li{margin:6px 0}button,select{font:inherit;color:var(--ink)}button,select{min-height:40px;border:1px solid var(--line);background:var(--paper);border-radius:8px;padding:7px 12px;max-width:100%}button{cursor:pointer}button:hover{background:var(--soft)}.controls{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.preview-wrap{display:grid;grid-template-columns:minmax(0,380px) minmax(0,1fr);gap:24px;align-items:start}.preview-toolbar{display:flex;gap:10px;flex-wrap:wrap;align-items:center;margin-bottom:14px}.preview{width:100%;max-width:360px;border-radius:18px;padding:16px;font-size:13px;line-height:1.45;box-shadow:0 18px 50px rgba(20,40,30,.18);transition:background .2s,color .2s;background:#f7f7f4;color:#1f1f1f;border:1px solid rgba(0,0,0,.08)}.preview.dark{background:#1f2022;color:#f2f2f2;border-color:rgba(255,255,255,.12)}.preview .ph{display:flex;align-items:center;gap:9px}.preview .mark{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:rgba(120,140,130,.18);font-size:15px}.preview .ptitle{font-size:14px;font-weight:650;line-height:1.2}.preview .psub{font-size:10.5px;opacity:.58;line-height:1.3}.preview .pstatus{margin-left:auto;font-size:10px;font-weight:600;padding:3px 7px;border-radius:99px;background:rgba(120,140,130,.14)}.preview .pstatus.on{background:rgba(30,160,90,.18);color:#1e8a4e}.preview.dark .pstatus.on{color:#67d99a}.preview .pcard{margin-top:10px;border-radius:11px;background:rgba(120,140,130,.10);padding:10px}.preview.dark .pcard{background:rgba(255,255,255,.07)}.preview .pguide{background:rgba(60,120,200,.12)}.preview .prow{display:flex;align-items:center;gap:8px}.preview .grow{flex:1;min-width:0}.preview .plabel{font-size:12.5px;font-weight:600}.preview .pnote{font-size:10.5px;opacity:.6;margin-top:3px}.preview .pbtn{border:1px solid rgba(120,140,130,.34);border-radius:7px;background:transparent;padding:3px 8px;font-size:10.5px}.preview.dark .pbtn{border-color:rgba(255,255,255,.24);color:#f2f2f2}button.ptoggle{width:38px;height:22px;border-radius:99px;background:rgba(120,140,130,.35);border:none;position:relative;padding:0;transition:background .15s;flex:0 0 auto}button.ptoggle::after{content:"";position:absolute;width:18px;height:18px;border-radius:50%;background:#fff;top:2px;left:2px;transition:left .15s;box-shadow:0 1px 2px rgba(0,0,0,.25)}button.ptoggle.on{background:#2fae69}button.ptoggle.on::after{left:18px}.preview .pseg{display:flex;gap:4px;margin-top:8px}.preview .pseg button{flex:1;border:1px solid rgba(120,140,130,.28);background:transparent;border-radius:7px;padding:3px 0;font-size:10.5px;min-height:0}.preview .pseg button.active{background:rgba(120,140,130,.22);font-weight:650}.preview .pbar{height:4px;border-radius:99px;background:rgba(120,140,130,.20);margin-top:8px;overflow:hidden}.preview .pbar i{display:block;height:100%;width:70%;background:#2fae69;border-radius:99px}.preview .phint{font-size:10.5px;opacity:.6;margin-top:5px}.preview .perr{color:#c14444;font-size:10.5px;margin-top:5px}.preview.dark .perr{color:#ff8a8a}.preview .ptiles{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:8px}.preview .ptile{border-radius:9px;background:rgba(120,140,130,.10);padding:8px;text-align:left;border:none;font-size:11px}.preview.dark .ptile{background:rgba(255,255,255,.07);color:#f2f2f2}.preview .ptile b{display:block;font-size:11.5px;margin-top:4px}.preview .ptile span{font-size:9.5px;opacity:.58}.preview .pfoot{display:flex;gap:8px;align-items:center;margin-top:10px;font-size:10px;opacity:.65}.preview .pfoot .sp{flex:1}.preview .pperm{font-size:10px;opacity:.62;margin-top:5px}.preview .pguide-row{display:flex;gap:6px;margin-top:5px;font-size:10.5px;opacity:.75}.preview .pguide-row b{width:14px;height:14px;border-radius:50%;display:grid;place-items:center;background:rgba(80,130,200,.2);font-size:9px;flex:0 0 auto;margin-top:2px}footer{padding:5px 0 30px;color:var(--muted);font-size:12px}@media(max-width:1050px){.layout{padding:25px;grid-template-columns:170px minmax(0,1fr);gap:23px}.grid{grid-template-columns:1fr 1fr}.preview-wrap{grid-template-columns:1fr}}@media(max-width:700px){.layout{display:block;padding:16px}aside{position:static;height:auto;margin-bottom:20px}nav{display:flex;overflow:auto;gap:16px}nav a{white-space:nowrap}section{padding:20px}.grid{grid-template-columns:1fr}.two{grid-template-columns:1fr}th,td{min-width:120px}}@media print{aside,.controls,.preview-toolbar{display:none}.layout{display:block;padding:0}section{break-inside:avoid}body{background:white}}
+</style></head>
+<body><div class="layout">
+<aside><div class="brand">SWITCHPILOT / DESIGN</div>
+<p class="muted">命名 + macOS 27 面板重设计<br>2026.10.18 · v0.2</p>
+<nav aria-label="目录"><a href="#decision">01 · 结论</a><a href="#naming">02 · 正式命名</a><a href="#macos27">03 · macOS 27 依据</a><a href="#redesign">04 · 面板重设计</a><a href="#preview">05 · 交互预览</a><a href="#states">06 · 状态与上手</a><a href="#implementation">07 · 实现与验收</a><a href="#next">08 · 下一步</a></nav>
+<p class="muted"><span class="badge">正式名确定</span><br><span class="badge">v0.2 已构建</span><br><span class="badge amber">现场验收待补</span></p>
+</aside>
+<main>
+<header><div class="eyebrow">NAMING + UI/UX REDESIGN</div>
+<h1>名字定下来，面板变轻。<br><span>第一次打开就知道怎么用。</span></h1>
+<p class="lead">正式名确定为 <strong>SwitchPilot</strong>：调研后它是少数在 macOS 菜单栏工具里没有直接同名冲突、且能描述用途的候选；同时按 macOS 27 Golden Gate 的克制风格重做面板，把首次使用引导、权限状态和状态层级放进界面本身。</p>
+<p class="muted">正式名 SwitchPilot · 中文描述「菜单栏开关」· v0.2.0 · 仅个人自用 · 保留研究历史</p></header>
+
+<section id="decision"><h2>01 / 结论</h2>
+<div class="grid">
+<div class="card"><span class="badge">正式名</span><div class="metric">SwitchPilot</div><p>从候选转为正式产品名；中文描述用「菜单栏开关」，不再称研究代号。</p></div>
+<div class="card"><span class="badge">设计方向</span><div class="metric">轻、静、直</div><p>减少装饰图标与玻璃层，功能优先、状态可见、首次使用有引导。</p></div>
+<div class="card"><span class="badge">实现状态</span><div class="metric">v0.2</div><p>面板与引导已重做并构建；自动化 8/8、自检 10/10。</p></div>
+<div class="card"><span class="badge amber">未完成</span><div class="metric">现场</div><p>深色模式授权、屏保、锁屏仍需用户在场验收；本轮不记为通过。</p></div>
+</div>
+<p class="note"><strong>为什么正式名不换掉 SwitchPilot：</strong>调研发现好名字几乎都被占用（见下一节）；SwitchPilot 是少数在 macOS 菜单栏工具中没有直接同名冲突、含义准确的候选，同时保留现有 bundle id，<strong>不会重置你刚刚验证通过的 TCC 授权</strong>。正式化的是命名层级与品牌表述，而不是换一个会增加迁移成本的新词。</p></section>
+
+<section id="naming"><h2>02 / 正式命名：候选与冲突</h2>
+<p>调研范围：macOS 菜单栏/工具类应用与常见命名冲突（网页检索，2026-10-18）。冲突判断以“同名或近同名、且同类产品”为主；个人自用不构成商标结论，正式分发前仍需专名检索。</p>
+<div class="table"><table><tr><th>候选</th><th>含义/理由</th><th>冲突/问题</th><th>结论</th></tr>
+<tr><td><strong>SwitchPilot</strong></td><td>“开关的领航员”；菜单栏管理开关；中文描述「菜单栏开关」</td><td>未发现直接同名的 macOS 菜单栏工具；检索到 Nintendo Switch 自动化项目使用相似词，但平台/领域不同</td><td><span class="badge">采用（正式名）</span></td></tr>
+<tr><td>Tack</td><td>“钉住、改变航向”；短</td><td>已有 macOS 应用 “Tack – Keep it in sight”</td><td><span class="badge gray">排除</span></td></tr>
+<tr><td>Perch</td><td>“栖息在菜单栏”；意象好</td><td>已有 macOS 菜单栏提醒应用 “Perch: Menu Bar Reminders”</td><td><span class="badge gray">排除</span></td></tr>
+<tr><td>Sill</td><td>“窗台/上沿”；简洁</td><td>已有 Mac 应用 “Sill”（窗口串流）</td><td><span class="badge gray">排除</span></td></tr>
+<tr><td>Tact</td><td>“得体、触感”；短</td><td>已有 macOS iCloud 聊天应用 “Tact”</td><td><span class="badge gray">排除</span></td></tr>
+<tr><td>Switchbar</td><td>菜单栏 + 开关</td><td>已有原生 macOS 菜单栏工具 Switchbar</td><td><span class="badge gray">排除</span></td></tr>
+<tr><td>BarKeep</td><td>“菜单栏管家”</td><td>已有 macOS 菜单栏图标管理工具 Barkeep</td><td><span class="badge gray">排除</span></td></tr>
+<tr><td>MenuSwitch / OneBar / Flick / Switchlet</td><td>各类开关/菜单栏意象</td><td>均检索到 Mac 应用或同名项目</td><td><span class="badge gray">排除</span></td></tr>
+</table></div>
+<p class="muted">参考（外部链接，非页面渲染依赖）：<a href="https://appagg.com/macos/utilities/tack-keep-it-in-sight-42557373.html">Tack</a> · <a href="https://indieappcatalog.com/app/3496?platform=mac">Perch</a> · <a href="https://news.lavx.hu/article/sill-streams-mac-windows-to-iphone-and-ipad-without-servers">Sill</a> · <a href="https://www.ifun.de/tact-einfacher-icloud-chat-fuer-mac-iphone-und-ipad-241280/">Tact</a> · <a href="https://github.com/Yukaii/Switchbar">Switchbar</a> · <a href="https://github.com/iannuttall/barkeep">Barkeep</a> · <a href="https://ips.gizmolord.com/topic/74-menuswitch/">MenuSwitch</a> · <a href="https://apps.apple.com/jp/app/onebar-hide-menu-notch/id1591163653">OneBar</a> · <a href="https://codeberg.org/kleinschmidt/flick">Flick</a> · <a href="https://aur.archlinux.org/packages/switchlet-bin">Switchlet</a> · <a href="https://github.com/carimatics/switch-pilot-core">SwitchPilot 同名近似项目</a>。</p>
+<h3>命名规则（正式化）</h3>
+<ul>
+<li>产品名：<strong>SwitchPilot</strong>（一个词，首字母大写）；中文描述：「菜单栏开关」，仅作说明，不作为第二品牌。</li>
+<li>bundle id 保持 <code>local.personal.SwitchPilot</code>（避免 TCC 授权重置）；可执行文件与展示名保持 SwitchPilot。</li>
+<li>文档中不再出现“研究代号/正式名称未定”；分发/商标/域名可用性仍标记为未核验（个人自用阶段不阻塞）。</li>
+</ul></section>
+
+<section id="macos27"><h2>03 / macOS 27 风格依据</h2>
+<p>macOS 27（Golden Gate）延续并收敛了 Liquid Glass：减少装饰性菜单图标、降低玻璃分层强度、统一圆角与更简化的视觉层级。对菜单栏小面板的落点是：<strong>少即是多</strong>——只保留有功能意义的图标，用系统材质/语义色/清晰排版建立层级，而不是堆装饰。</p>
+<div class="table"><table><tr><th>依据</th><th>对本设计的影响</th></tr>
+<tr><td>macOS 27 移除大量菜单项图标，HIG 建议图标“sparingly and with purpose”</td><td>面板里图标只用于快速动作与状态提示，不给每个标签配装饰图标</td></tr>
+<tr><td>降低 Liquid Glass 强度、统一圆角/简化视觉</td><td>面板保持系统 popover 材质；内部只用低对比卡片底色与分隔线，不做多层毛玻璃</td></tr>
+<tr><td>系统语义色与 SF Symbols</td><td>成功/进行中/失败用系统绿/橙/红；动作图标用 SF Symbols</td></tr>
+<tr><td>菜单栏 extras 的紧凑与低干扰</td><td>宽 360，单列分区；默认不弹窗；只有破坏性动作才确认</td></tr>
+</table></div>
+<p class="muted">外部参考：<a href="https://www.macrumors.com/2026/06/11/macos-27-golden-gate-menu-items/">MacRumors：macOS 27 缩减菜单图标</a> · <a href="https://www.theverge.com/tech/946567/apple-macos-27-golden-gate-dev-beta-hands-on">The Verge：Apple 收敛 Liquid Glass</a> · <a href="https://developer.apple.com/design/human-interface-guidelines/menus">Apple HIG：Menus</a> · <a href="https://developer.apple.com/design/human-interface-guidelines/">Apple HIG</a>。外部文章为二手信息，实施以本机 macOS 27 实际渲染与官方 HIG 为准。</p></section>
+
+<section id="redesign"><h2>04 / 面板重设计：从“开关列表”到“状态 + 动作”</h2>
+<div class="two"><div class="card"><h3>旧版（v0.1）问题</h3><ul>
+<li>所有功能同权重：保活、深色、两个动作混在一起，缺少优先级。</li>
+<li>权限状态只靠一行小字，用户不知道下一步该做什么。</li>
+<li>深色/锁屏缺权限时弹窗解释，打断且不便于回看。</li>
+<li>没有首次使用说明；不知道屏保/锁屏会影响屏幕。</li>
+<li>进度只有文字，缺少可感知的剩余时间。</li>
+</ul></div><div class="card"><h3>新版（v0.2）结构</h3><ul>
+<li><strong>Header</strong>：产品身份 + 状态胶囊（保护中/空闲）。</li>
+<li><strong>首次引导卡</strong>：三条规则 + “知道了”，写入 UserDefaults 后不再出现。</li>
+<li><strong>保活区</strong>：主开关 + 时长 + 进度条 + 剩余时间 + 边界说明。</li>
+<li><strong>外观区</strong>：深色开关 + 当前外观 + 权限状态 + 行内授权按钮。</li>
+<li><strong>快速动作</strong>：两个动作磁贴；锁屏缺权限时磁贴带“需授权”，行内给出授权路径。</li>
+<li><strong>Footer</strong>：权限摘要 + 使用说明入口 + 退出。</li>
+</ul></div></div>
+<h3>设计 token</h3>
+<div class="table"><table><tr><th>项目</th><th>值</th></tr>
+<tr><td>宽度 / 内边距</td><td>360 pt / 16 pt；区块间距 14 pt；卡片圆角 10–12 pt（continuous）</td></tr>
+<tr><td>字号</td><td>标题 15 semibold；行标题 14 medium；正文 13；说明 12；辅助 11</td></tr>
+<tr><td>颜色</td><td>系统语义色：绿=保护中、橙=需授权、红=被拒绝/失败；卡片底色用 primary opacity 0.05，适配深浅外观</td></tr>
+<tr><td>图标</td><td>仅功能图标：动作磁贴、状态点、信息；无装饰性 icon wall</td></tr>
+<tr><td>交互</td><td>开关即时生效；屏保/锁屏确认后执行；权限只由用户点击请求，不在启动时弹窗</td></tr>
+<tr><td>无障碍</td><td>标准 Toggle/Button/Picker；accessibilityLabel/Value；状态不只靠颜色；键盘焦点可见</td></tr>
+</table></div></section>
+
+<section id="preview"><h2>05 / 交互预览（设计稿，不执行系统操作）</h2>
+<p>下面是可以点击的静态预览，用来看状态与布局；它不会锁定屏幕、启动屏保或切换系统外观。实现版为 SwiftUI 原生控件。</p>
+<div class="preview-toolbar">
+<label class="muted" for="permissionSelect">预览权限状态：</label>
+<select id="permissionSelect"><option value="pending">Automation 待授权</option><option value="allowed">Automation 已授权</option><option value="denied">Automation 被拒绝 (-1743)</option></select>
+<button id="themeBtn" type="button">切换预览外观</button>
+<button id="guideBtn" type="button">显示/隐藏首次引导</button>
+<span id="previewStatus" class="muted" role="status"></span>
+</div>
+<div class="preview-wrap">
+<div id="previewPanel" class="preview">
+  <div class="ph"><div class="mark">⇄</div><div><div class="ptitle">SwitchPilot</div><div class="psub">菜单栏开关 · v0.2.0</div></div><div id="pStatus" class="pstatus">空闲</div></div>
+  <div id="pGuide" class="pcard pguide">
+    <div class="prow"><div class="grow plabel">开始使用</div><button class="pbtn" id="pGuideClose" type="button">知道了</button></div>
+    <div class="pguide-row"><b>1</b><span>「保持亮屏」开启后，系统不会因空闲而熄灭屏幕。</span></div>
+    <div class="pguide-row"><b>2</b><span>「深色模式」首次使用需要授权 Automation。</span></div>
+    <div class="pguide-row"><b>3</b><span>「屏保/锁屏」会先确认；锁屏还需要辅助功能。</span></div>
+  </div>
+  <div class="pcard">
+    <div class="prow"><div class="grow plabel">保持亮屏</div><button id="pAwake" class="ptoggle" type="button" aria-pressed="false"></button></div>
+    <div class="pseg" id="pSeg"><button class="active" type="button">15 分钟</button><button type="button">30 分钟</button><button type="button">60 分钟</button><button type="button">无限期</button></div>
+    <div id="pBar" class="pbar" hidden><i></i></div>
+    <div id="pAwakeNote" class="pnote">未开启 · 不阻止合盖、手动睡眠或低电量睡眠</div>
+  </div>
+  <div class="pcard">
+    <div class="prow"><div class="grow plabel">深色模式</div><button id="pDark" class="ptoggle" type="button" aria-pressed="false"></button></div>
+    <div id="pDarkNote" class="pnote">系统当前：浅色 · 首次操作会请求授权</div>
+    <div id="pDarkActions" class="prow" style="margin-top:6px"><button class="pbtn" type="button" data-mock="dark">请求授权…</button><button class="pbtn" type="button" data-mock="settings">打开系统设置</button></div>
+  </div>
+  <div class="pcard">
+    <div class="plabel">快速动作</div>
+    <div class="ptiles">
+      <button class="ptile" type="button" data-mock="saver">▶<b>启动屏保</b><span>确认后启动</span></button>
+      <button class="ptile" type="button" data-mock="lock">🔒<b>锁定屏幕</b><span>需 Automation + 辅助功能</span></button>
+    </div>
+    <div id="pActionNote" class="pnote">屏保：未执行 · 锁屏：未执行</div>
+  </div>
+  <div class="pfoot"><span>⇅</span><span class="pperm" id="pPerm">Automation：待授权 · 辅助功能：未授权</span><span class="sp"></span><button class="pbtn" type="button">使用说明</button><button class="pbtn" type="button">退出</button></div>
+</div>
+<div class="card"><h3>预览说明</h3>
+<ul>
+<li>开关「保持亮屏」后：状态胶囊变为“保护中”，出现进度条与剩余时间。</li>
+<li>权限设为“已授权”后，深色开关才会真正在预览里切换；待授权/被拒绝时点开关会回弹并显示原因。</li>
+<li>权限设为“待授权”时，锁屏磁贴显示需授权，点它只更新行内说明，不会真的锁屏。</li>
+<li>首次引导可用“知道了”隐藏；“显示/隐藏首次引导”可重新查看。</li>
+</ul>
+<p class="muted">真实应用里：屏保/锁屏会先用 NSAlert 二次确认；所有系统写操作都读回或显示“未确认”。</p></div>
+</div></section>
+
+<section id="states"><h2>06 / 状态与上手路径</h2>
+<div class="table"><table><tr><th>用户第一次打开</th><th>界面反馈</th><th>用户下一步</th></tr>
+<tr><td>看到引导卡</td><td>三条规则解释四个控件与权限</td><td>点“知道了”开始使用；说明入口保留在 footer</td></tr>
+<tr><td>点“保持亮屏”</td><td>开关亮、状态胶囊“保护中”、进度条与剩余时间</td><td>可选时长；关闭/到时自动释放</td></tr>
+<tr><td>点“深色模式”</td><td>未授权：开关回弹、出现“需要授权”与请求按钮</td><td>点“请求授权…” → 系统提示 → 允许后再切换</td></tr>
+<tr><td>点“启动屏保/锁定屏幕”</td><td>确认框说明影响；锁屏缺权限时只显示授权引导</td><td>确认/授权后执行；读不到状态时显示“未确认”</td></tr>
+<tr><td>权限被拒绝/撤销</td><td>对应行显示红色错误码与设置入口，不假成功</td><td>在系统设置修改或保持禁用</td></tr>
+</table></div>
+<p class="note risk">不把“界面上看起来成功”当作验收：只有 OS 读回或明确状态才显示开启；屏保/锁屏读不到状态时会显示“未确认”。</p></section>
+
+<section id="implementation"><h2>07 / 实现与验收</h2>
+<ul>
+<li>应用版本 <code>0.2.0</code>；bundle id 不变；SwiftUI 面板重写为 <code>PanelView</code>，首次引导状态存入 <code>UserDefaults("switchpilot.hasSeenWelcome")</code>。</li>
+<li>新增保活进度：<code>KeepAwakeSession.fractionRemaining</code>；自检新增“限时进度/无限期无进度”检查，核心自检 <strong>10/10</strong>。</li>
+<li>深色模式权限、锁屏权限从弹窗改为行内说明与按钮；只有屏保/锁屏执行前保留系统确认框。</li>
+<li>自动化验收：<code>scripts/verify-app.py</code> <strong>8/8</strong>（构建、plist、签名、自检、启动冒烟、无新增残留进程、原应用不变、脚本语法）。</li>
+<li>版本 0.2.0 可执行 SHA-256 <code>f3185f00fc8185aad1008a60c809028df10f4832677c1a6d05da3f7685ea76a7</code>，CDHash <code>01e7ecb4…</code>。</li>
+</ul>
+<p class="muted">仍待用户现场验收：深色模式真实授权/切换/拒绝/撤销（M1）、屏保真实启动（M2）、锁屏授权/锁定/解锁（M3）、UI 视觉/VoiceOver/键盘（M5）、首次引导与多实例等 M6/M7。以上未执行项不记为通过。</p></section>
+
+<section id="next"><h2>08 / 下一步</h2>
+<p>建议：先用 v0.2 重新过一遍初步验收（面板、引导、保活、权限门控），再做 M1/M3；确认手感后，再决定是否继续扩展开关或进入分发准备。</p>
+<div class="controls">
+<label for="nextSelect" class="muted">下一步方向</label>
+<select id="nextSelect"><option value="A">A · 按新面板重新验收，有问题就修</option><option value="B">B · 继续打磨视觉细节（图标/间距/深浅外观）</option><option value="C">C · 扩展新开关或快捷键</option><option value="D">D · 进入签名/公证与分发准备</option></select>
+<span id="copyStatus" class="muted" role="status"></span>
+<button id="copyPrompt" type="button">Copy as prompt · 复制</button>
+</div>
+<p class="muted">提示词会写入剪贴板，可直接粘贴到下一会话。</p></section>
+
+<footer>SwitchPilot 正式命名 + macOS 27 面板重设计 · 2026-10-18 11:38 CST · v0.2.0 · 自动化 8/8、核心自检 10/10 · 单文件离线可读，无外部资源依赖</footer>
+</main></div>
+<script>
+const $ = (id) => document.getElementById(id);
+const state = { awake: false, dark: false, permission: 'pending', guide: true, darkPreview: false, systemDark: false };
+const permissionSelect = $('permissionSelect');
+
+function permissionText() {
+  if (state.permission === 'allowed') return '已授权';
+  if (state.permission === 'denied') return '被拒绝 (-1743)';
+  return '待授权';
+}
+function render() {
+  $('pStatus').textContent = state.awake ? '保护中' : '空闲';
+  $('pStatus').className = 'pstatus' + (state.awake ? ' on' : '');
+  const awake = $('pAwake');
+  awake.classList.toggle('on', state.awake);
+  awake.setAttribute('aria-pressed', String(state.awake));
+  $('pBar').hidden = !state.awake;
+  $('pAwakeNote').textContent = state.awake ? '剩余 12:30 · 不阻止合盖、手动睡眠或低电量睡眠' : '未开启 · 不阻止合盖、手动睡眠或低电量睡眠';
+  $('pGuide').style.display = state.guide ? '' : 'none';
+  $('pDark').classList.toggle('on', state.darkPreview);
+  $('pDark').setAttribute('aria-pressed', String(state.darkPreview));
+  $('pDarkNote').textContent = '系统当前：' + (state.darkPreview ? '深色' : '浅色') + ' · ' + (state.permission === 'allowed' ? '已授权' : permissionText());
+  $('pDarkActions').style.display = state.permission === 'allowed' ? 'none' : 'flex';
+  $('pPerm').textContent = 'Automation：' + permissionText() + ' · 辅助功能：未授权';
+  $('previewPanel').classList.toggle('dark', state.systemDark);
+}
+$('pAwake').addEventListener('click', () => { state.awake = !state.awake; render(); });
+document.querySelectorAll('#pSeg button').forEach(btn => btn.addEventListener('click', () => {
+  document.querySelectorAll('#pSeg button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  if (state.awake) { state.awake = false; setTimeout(() => { state.awake = true; render(); }, 30); }
+  render();
+}));
+$('pDark').addEventListener('click', () => {
+  if (state.permission !== 'allowed') {
+    state.dark = false;
+    $('pDarkNote').textContent = '需要授权后才能切换 · ' + permissionText();
+    $('previewStatus').textContent = '预览：已阻止未授权的深色切换';
+    render();
+    return;
+  }
+  state.darkPreview = !state.darkPreview;
+  state.dark = state.darkPreview;
+  render();
+});
+$('permissionSelect').addEventListener('change', (e) => {
+  state.permission = e.target.value;
+  if (state.permission !== 'allowed') state.darkPreview = false;
+  $('previewStatus').textContent = '预览权限：' + permissionText();
+  render();
+});
+$('pGuideClose').addEventListener('click', () => { state.guide = false; render(); });
+$('guideBtn').addEventListener('click', () => { state.guide = !state.guide; render(); $('previewStatus').textContent = '首次引导：' + (state.guide ? '显示' : '隐藏'); });
+$('themeBtn').addEventListener('click', () => { state.systemDark = !state.systemDark; render(); });
+document.querySelectorAll('[data-mock]').forEach(el => el.addEventListener('click', () => {
+  const kind = el.dataset.mock;
+  if (kind === 'lock') { $('pActionNote').textContent = '锁屏：未执行（缺少权限时不会发送按键）'; }
+  if (kind === 'saver') { $('pActionNote').textContent = '屏保：确认框将出现（真实应用里才会执行）'; }
+  if (kind === 'dark') { $('previewStatus').textContent = '预览：真实应用会在这里请求 Automation 授权'; }
+  if (kind === 'settings') { $('previewStatus').textContent = '预览：真实应用会打开系统设置'; }
+}));
+$('copyPrompt').addEventListener('click', async () => {
+  const map = { A: '按新版面板重新做初步验收，发现问题先修复', B: '继续打磨视觉细节（图标/间距/深浅外观）', C: '评估扩展新开关或快捷键', D: '进入签名/公证与分发准备' };
+  const text = '继续 SwitchPilot v0.2 的下一步。先读 README.md、docs/DESIGN.md、docs/TECH.md、evidence/app-runtime.md 和 artifacts/20261018-1138-oneswitch-naming-ui-redesign.html。\n方向：' + map[$('nextSelect').value] + '。\n已确认：正式名 SwitchPilot；v0.2 面板与首次引导已实现；自动化 8/8、自检 10/10。\n边界：深色模式需 Automation，锁屏需 Automation+辅助功能；屏保/锁屏运行时验收需用户在场；未执行项不得记为通过；不改原 app 与数据；每个可审阅里程碑保留 Git 提交。';
+  try { await navigator.clipboard.writeText(text); $('copyStatus').textContent = '已复制'; } catch (e) { $('copyStatus').textContent = '复制失败，请手动选择'; }
+});
+render();
+</script>
+</body></html>
