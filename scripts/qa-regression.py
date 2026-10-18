@@ -78,7 +78,7 @@ def check(name, function):
 # 1. CORE 边界文档存在且被项目约定引用（AGENTS/README）。
 def core_doc():
     core = read("docs/en/CORE.md")
-    for needle in ("personal-use", "low-permission", "not planned", "Manual acceptance"):
+    for needle in ("open-source", "low-permission", "not planned", "Manual acceptance"):
         require(needle in core, f"docs/en/CORE.md is missing boundary text: {needle}")
     for ref in ("AGENTS.md", "README.md"):
         require("docs/en/CORE.md" in read(ref), f"{ref} does not reference docs/en/CORE.md")

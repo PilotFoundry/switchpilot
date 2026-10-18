@@ -1,8 +1,8 @@
 # Repository guidance
 
-Read `docs/en/CORE.md` before changing the product scope. SwitchPilot is a
-personal-use, low-permission macOS menu bar app with a deliberately small set
-of reliable controls.
+Read `docs/en/CORE.md` before changing the product scope. SwitchPilot is an
+open-source, low-permission macOS menu bar app maintained by PilotFoundry, with
+a deliberately small set of reliable controls.
 
 ## Product rules
 
