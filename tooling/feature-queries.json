@@ -1,0 +1,51 @@
+[
+  {
+    "name": "open_binary",
+    "arguments": {
+      "path": "analysis/slices/OneSwitch.arm64",
+      "provider_id": "ghidra"
+    }
+  },
+  {
+    "name": "analyze_function",
+    "arguments": {
+      "procedure": "0x100007d80"
+    }
+  },
+  {
+    "name": "batch_decompile",
+    "arguments": {
+      "addresses": [
+        "0x1000365ac",
+        "0x10004fd18",
+        "0x100056058"
+      ]
+    }
+  },
+  {
+    "name": "open_binary",
+    "arguments": {
+      "path": "analysis/slices/OneSwitchXPC.arm64",
+      "provider_id": "ghidra"
+    }
+  },
+  {
+    "name": "list_procedures",
+    "arguments": {}
+  },
+  {
+    "name": "batch_decompile",
+    "arguments": {
+      "addresses": [
+        "0x1000012c4",
+        "0x1000012ec",
+        "0x100001350",
+        "0x1000014e0"
+      ]
+    }
+  },
+  {
+    "name": "close_binary",
+    "arguments": {}
+  }
+]

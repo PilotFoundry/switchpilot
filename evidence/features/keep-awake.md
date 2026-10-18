@@ -40,3 +40,5 @@
 结论：**可用公开 API 独立实现普通保活；原程序的完整定时/异常行为不视为已动态复现。** 运行证据将在步骤 5 单列。原版合盖功能不纳入原型。
 
 批查询补证：`tooling/main-queries.json` 经同一本地 MCP 进程复用导入，6/6 指定函数得到伪代码，主程序 list_procedures 返回 12,543 项（含 external/thunk）。初次 timer 查询地址 0x100035cf0 被工具解析为所属函数入口 0x100035ce4，重现清单改用明确入口。未知项：原版强退恢复未动态测试、定时参数全部枚举及跨睡眠行为未验证。
+
+补齐 timer 回调：调度闭包 0x100039778 转入 0x1000365ac；REA 反编译显示 terminate process、清空引用、state=0、发送 needsStateUpdateSubject、将 kEnableKeepAwakeKey 写 false。至此定时结束的静态路径已追到关闭动作；这不替代跨睡眠/崩溃运行测试。
