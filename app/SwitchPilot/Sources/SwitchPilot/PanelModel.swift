@@ -18,6 +18,12 @@ final class PanelModel: ObservableObject {
 
     @Published private(set) var screenSaverStatus = "未执行"
     @Published private(set) var lockStatus = "未执行"
+    @Published private(set) var displaySleepStatus = "未执行"
+    @Published private(set) var audioState = AudioOutputDevice(
+        deviceID: 0, name: "正在读取…", supportsVolume: false, supportsMute: false,
+        volume: nil, muted: nil, message: nil)
+    @Published private(set) var audioVolume: Double = 0
+    @Published private(set) var audioError = ""
     @Published private(set) var lockPermissions = LockPermissions(automation: .notDetermined, accessibilityTrusted: false)
     @Published private(set) var accessibilityTrusted = false
     @Published private(set) var permissionSetupMessage = ""
@@ -77,6 +83,7 @@ final class PanelModel: ObservableObject {
         lockPermissions = LockScreen.permissions()
         accessibilityTrusted = Permissions.accessibilityTrusted()
         refreshKeepAwake()
+        refreshAudio()
     }
 
     /// AEDeterminePermissionToAutomateTarget may block; probe off the main thread
@@ -87,12 +94,16 @@ final class PanelModel: ObservableObject {
             let lock = LockScreen.permissions()
             let accessibility = Permissions.accessibilityTrusted()
             let dark = DarkMode.currentAppearanceIsDark()
+            let audio = AudioOutput.read()
             DispatchQueue.main.async { [weak self] in
                 guard let self else { return }
                 self.darkModePermission = automation
                 self.lockPermissions = lock
                 self.accessibilityTrusted = accessibility
                 self.systemIsDark = dark
+                self.audioState = audio
+                self.audioVolume = audio.volume ?? self.audioVolume
+                self.audioError = ""
                 self.refreshKeepAwake()
                 completion?()
             }
@@ -128,6 +139,10 @@ final class PanelModel: ObservableObject {
             keepAwakeError = "\(error)"
         }
         refreshKeepAwake()
+    }
+
+    func toggleKeepAwake() {
+        setKeepAwake(!keepAwakeActive)
     }
 
     func setPreset(_ value: KeepAwakePreset) {
@@ -363,6 +378,61 @@ final class PanelModel: ObservableObject {
         } catch {
             lockStatus = "失败：\(error)"
             lockPermissions = LockScreen.permissions()
+        }
+    }
+
+    // MARK: - Audio volume (capability-aware prototype)
+
+    func refreshAudio() {
+        DispatchQueue.global(qos: .userInitiated).async {
+            let state = AudioOutput.read()
+            DispatchQueue.main.async { [weak self] in
+                guard let self else { return }
+                self.audioState = state
+                self.audioVolume = state.volume ?? self.audioVolume
+                self.audioError = ""
+            }
+        }
+    }
+
+    func setAudioVolume(_ value: Double) {
+        guard audioState.supportsVolume else { return }
+        let clamped = min(max(value, 0), 1)
+        audioVolume = clamped
+        if !AudioOutput.setVolume(clamped) {
+            audioError = "设置音量失败；输出设备可能已变化"
+            refreshAudio()
+        } else {
+            audioError = ""
+            refreshAudio()
+        }
+    }
+
+    func toggleAudioMute() {
+        guard audioState.supportsMute else { return }
+        if AudioOutput.toggleMuted() {
+            refreshAudio()
+        } else {
+            audioError = "切换静音失败；输出设备可能已变化"
+            refreshAudio()
+        }
+    }
+
+    // MARK: - Display sleep
+
+    func sleepDisplay() {
+        displaySleepStatus = "正在请求…"
+        DispatchQueue.global(qos: .userInitiated).async {
+            do {
+                try DisplaySleep.request()
+                DispatchQueue.main.async { [weak self] in
+                    self?.displaySleepStatus = "已请求关闭（鼠标/按键唤醒）"
+                }
+            } catch {
+                DispatchQueue.main.async { [weak self] in
+                    self?.displaySleepStatus = "失败：\(error)"
+                }
+            }
         }
     }
 

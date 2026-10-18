@@ -11,6 +11,8 @@ func writeRuntimeDiagnostics(to path: String = "/tmp/switchpilot-runtime-diagnos
     let iconSizes = icon.representations.map { "\($0.pixelsWide)x\($0.pixelsHigh)" }.joined(separator: ",")
     let menuIcon = StatusIcon.make()
     let seenWelcome = UserDefaults.standard.object(forKey: "switchpilot.hasSeenWelcome") as? Bool ?? false
+    let audio = AudioOutput.read()
+    let hotKeys = HotKeyManager.current
     let lines = [
         "version=\(version)",
         "bundleIdentifier=\(Bundle.main.bundleIdentifier ?? "nil")",
@@ -26,6 +28,13 @@ func writeRuntimeDiagnostics(to path: String = "/tmp/switchpilot-runtime-diagnos
         "menuBarIconSize=\(Int(menuIcon.size.width))x\(Int(menuIcon.size.height))",
         "menuBarIconTemplate=\(menuIcon.isTemplate)",
         "hasSeenWelcome=\(seenWelcome)",
+        "displaySleepAvailable=\(DisplaySleep.isAvailable)",
+        "audioDevice=\(audio.name)",
+        "audioSupportsVolume=\(audio.supportsVolume)",
+        "audioSupportsMute=\(audio.supportsMute)",
+        "hotKeysEnabled=\(hotKeys?.isEnabled ?? false)",
+        "hotKeysRegistered=\(hotKeys?.hasRegisteredHotKeys ?? false)",
+        "hotKeyError=\(hotKeys?.lastError ?? "")",
     ].joined(separator: "\n") + "\n"
     try? lines.write(toFile: path, atomically: true, encoding: .utf8)
 }

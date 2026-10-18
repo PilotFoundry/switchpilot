@@ -15,6 +15,7 @@ struct PanelView: View {
             }
             keepAwakeCard
             appearanceCard
+            audioCard
             quickActionsCard
             if !model.allPermissionsReady && !model.guideVisible {
                 permissionsNeededCard
@@ -242,6 +243,71 @@ struct PanelView: View {
         }
     }
 
+    // MARK: - Output volume
+
+    private var audioCard: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            HStack(spacing: 8) {
+                Image(systemName: audioIcon)
+                    .font(.system(size: 14, weight: .medium))
+                    .foregroundStyle(.primary)
+                Text("输出音量")
+                    .font(.system(size: 14, weight: .medium))
+                Spacer()
+                if model.audioState.supportsMute {
+                    Button {
+                        model.toggleAudioMute()
+                    } label: {
+                        Image(systemName: model.audioState.muted == true ? "speaker.slash.fill" : "speaker.wave.2.fill")
+                    }
+                    .buttonStyle(.bordered)
+                    .controlSize(.small)
+                    .accessibilityLabel(model.audioState.muted == true ? "取消静音" : "静音输出")
+                }
+            }
+            if !model.audioState.isAvailable {
+                Text(model.audioState.message ?? "未找到输出设备")
+                    .font(.caption)
+                    .foregroundStyle(Color.secondaryInk)
+            } else if model.audioState.supportsVolume {
+                HStack(spacing: 8) {
+                    Slider(value: Binding(
+                        get: { model.audioVolume },
+                        set: { model.setAudioVolume($0) }), in: 0...1)
+                        .accessibilityLabel("输出音量")
+                    Text("\(Int((model.audioVolume * 100).rounded()))%")
+                        .font(.caption2.monospacedDigit())
+                        .foregroundStyle(Color.secondaryInk)
+                        .frame(width: 34, alignment: .trailing)
+                }
+                Text(model.audioState.name)
+                    .font(.caption2)
+                    .foregroundStyle(Color.secondaryInk)
+            } else {
+                Text(model.audioState.message ?? "当前输出不支持系统音量控制")
+                    .font(.caption)
+                    .foregroundStyle(Color.secondaryInk)
+                    .fixedSize(horizontal: false, vertical: true)
+                Text(model.audioState.name)
+                    .font(.caption2)
+                    .foregroundStyle(Color.secondaryInk)
+            }
+            if !model.audioError.isEmpty {
+                inlineError(model.audioError)
+            }
+        }
+        .padding(12)
+        .background(cardBackground)
+    }
+
+    private var audioIcon: String {
+        if model.audioState.muted == true { return "speaker.slash" }
+        if model.audioState.supportsVolume {
+            return model.audioVolume < 0.05 ? "speaker.wave.1" : "speaker.wave.2"
+        }
+        return "speaker"
+    }
+
     // MARK: - Quick actions
 
     private var quickActionsCard: some View {
@@ -249,23 +315,30 @@ struct PanelView: View {
             Text("快速动作")
                 .font(.caption2.weight(.semibold))
                 .foregroundStyle(Color.secondaryInk)
-            HStack(spacing: 10) {
+            HStack(spacing: 8) {
                 actionTile(
                     title: "启动屏保",
-                    subtitle: "点击启动 · 鼠标退出",
+                    subtitle: "启动 · 鼠标退出",
                     systemImage: "play.rectangle",
                     badge: nil,
                     action: { model.startScreenSaver() })
                 actionTile(
                     title: "锁定屏幕",
-                    subtitle: "点击锁定 · 密码解锁",
+                    subtitle: "锁定 · 密码解锁",
                     systemImage: "lock",
                     badge: model.lockNeedsPermission ? "需授权" : nil,
                     action: { model.lockScreen() })
+                actionTile(
+                    title: "关闭显示器",
+                    subtitle: "休眠 · 鼠标唤醒",
+                    systemImage: "display",
+                    badge: nil,
+                    action: { model.sleepDisplay() })
             }
             VStack(alignment: .leading, spacing: 2) {
                 Text("屏保：\(model.screenSaverStatus)")
                 Text("锁屏：\(model.lockStatus)")
+                Text("显示器：\(model.displaySleepStatus)")
             }
             .font(.caption2)
             .foregroundStyle(Color.secondaryInk)

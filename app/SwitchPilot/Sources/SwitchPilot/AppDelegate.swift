@@ -12,6 +12,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var sawSystemSettingsFrontmost = false
     private var externalWatchStartedAt: Date?
     private var hosting: NSHostingController<PanelView>?
+    private var hotKeys: HotKeyManager?
 
     @MainActor func application(_ application: NSApplication, open urls: [URL]) {
         guard urls.contains(where: { $0.scheme == "switchpilot" && $0.host == "diagnose" }) else { return }
@@ -23,6 +24,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         self.model = model
         model.onOpenSettings = { [weak self] in self?.openSettings() }
         model.onContentSizeChanged = { [weak self] in self?.resizePopover() }
+
+        let hotKeys = HotKeyManager()
+        hotKeys.onKeepAwakeToggle = { [weak model] in model?.toggleKeepAwake() }
+        hotKeys.onScreenSaver = { [weak model] in model?.startScreenSaver() }
+        hotKeys.startIfEnabled()
+        self.hotKeys = hotKeys
 
         let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem.button {
@@ -213,7 +220,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @MainActor func openSettings() {
         if settingsWindow == nil {
-            let settingsModel = SettingsModel()
+            let settingsModel = SettingsModel(hotKeys: hotKeys)
             self.settingsModel = settingsModel
             let controller = SettingsWindowController(model: settingsModel)
             controller.onClose = { [weak self] in self?.stopExternalSettingsWatch() }
@@ -226,6 +233,7 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @MainActor func applicationWillTerminate(_ notification: Notification) {
         externalSettingsWatch?.invalidate()
+        hotKeys?.stop()
         model?.shutdown()
     }
 }
