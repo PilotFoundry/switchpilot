@@ -44,7 +44,7 @@ ZIP="$DIST/SwitchPilot-${VERSION}-macos-universal-adhoc.zip"
 rm -f "$ZIP" "$ZIP.sha256"
 /usr/bin/xattr -cr "$APP"
 COPYFILE_DISABLE=1 /usr/bin/ditto --norsrc -c -k --keepParent "$APP" "$ZIP"
-/usr/bin/shasum -a 256 "$ZIP" > "$ZIP.sha256"
+(cd "$DIST" && /usr/bin/shasum -a 256 "$(basename "$ZIP")" > "$(basename "$ZIP").sha256")
 
 printf '%s\n' "version=$VERSION"
 /usr/bin/lipo -info "$APP/Contents/MacOS/SwitchPilot"
