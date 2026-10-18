@@ -1,6 +1,6 @@
 # Product requirements
 
-Status: current baseline **v0.7.3** (2026-10-18). English is the canonical
+Status: current baseline **v0.7.4** (2026-10-18). English is the canonical
 source for this document.
 
 ## 1. Problem
@@ -72,8 +72,8 @@ See [CORE.md](CORE.md) for the admission rules.
 
 ## 6. UX requirements
 
-- Panel width 380 pt; normal height about 730 pt, guided/permission state up to
-  about 803 pt.
+- Panel width 380 pt; normal height about 709 pt, guided/permission state up to
+  about 782 pt.
 - Settings is a separate window about 460 pt wide.
 - Controls use standard AppKit/SwiftUI buttons, toggles, pickers and menus.
 - Light and dark mode meet the contrast tokens checked by `make smoke`.

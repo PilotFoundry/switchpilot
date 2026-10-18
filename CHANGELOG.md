@@ -16,6 +16,15 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
+## [0.7.4] - 2026-10-18
+
+- Remove the duplicate permission status line from the panel footer. Missing
+  permissions remain visible in the permission card; full status remains in
+  Settings.
+- Reduce the normal panel height to about 709 pt (782 pt with the permission
+  guide).
+- Keep the v0.7.3 click-path fixes and regression checks.
+
 ## [0.7.3] - 2026-10-18
 
 - Fix panel buttons receiving no clicks:
