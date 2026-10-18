@@ -1,4 +1,5 @@
 import AppKit
+import Combine
 import SwiftUI
 import SwitchPilotCore
 
@@ -13,6 +14,8 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var externalWatchStartedAt: Date?
     private var hosting: NSHostingController<PanelView>?
     private var hotKeys: HotKeyManager?
+    private var microphoneMuted = false
+    private var microphoneCancellable: AnyCancellable?
 
     @MainActor func application(_ application: NSApplication, open urls: [URL]) {
         guard urls.contains(where: { $0.scheme == "switchpilot" && $0.host == "diagnose" }) else { return }
@@ -30,6 +33,13 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         hotKeys.onScreenSaver = { [weak model] in model?.startScreenSaver() }
         hotKeys.startIfEnabled()
         self.hotKeys = hotKeys
+
+        microphoneCancellable = model.$microphoneState
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] state in
+                self?.microphoneMuted = state.muted == true
+                self?.updateMicrophoneStatusItem()
+            }
 
         let statusItem = NSStatusBar.system.statusItem(withLength: NSStatusItem.variableLength)
         if let button = statusItem.button {
@@ -97,6 +107,12 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         }
     }
 
+    @MainActor private func updateMicrophoneStatusItem() {
+        guard let button = statusItem?.button else { return }
+        button.image = StatusIcon.make(size: 18, microphoneMuted: microphoneMuted)
+        button.toolTip = microphoneMuted ? "SwitchPilot · 麦克风已静音" : "SwitchPilot"
+    }
+
     @MainActor @objc private func statusItemClicked(_ sender: Any?) {
         if let event = NSApp.currentEvent, event.type == .rightMouseUp {
             showStatusMenu()
@@ -110,11 +126,21 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         let menu = NSMenu()
         let settingsItem = NSMenuItem(title: "设置…", action: #selector(menuOpenSettings), keyEquivalent: ",")
         settingsItem.target = self
+        let microphoneItem = NSMenuItem(
+            title: microphoneMuted ? "取消麦克风静音" : "静音麦克风",
+            action: #selector(menuToggleMicrophone),
+            keyEquivalent: "")
+        microphoneItem.target = self
+        microphoneItem.isEnabled = model?.microphoneState.supportsMute == true
+        if model?.microphoneState.supportsMute != true {
+            microphoneItem.title = "麦克风静音不可用"
+        }
         let guideItem = NSMenuItem(title: "使用说明", action: #selector(menuShowGuide), keyEquivalent: "")
         guideItem.target = self
         let quitItem = NSMenuItem(title: "退出 SwitchPilot", action: #selector(menuQuit), keyEquivalent: "q")
         quitItem.target = self
         menu.addItem(settingsItem)
+        menu.addItem(microphoneItem)
         menu.addItem(guideItem)
         menu.addItem(.separator())
         menu.addItem(quitItem)
@@ -125,6 +151,10 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @MainActor @objc private func menuOpenSettings() {
         openSettings()
+    }
+
+    @MainActor @objc private func menuToggleMicrophone() {
+        model?.toggleMicrophoneMute()
     }
 
     @MainActor @objc private func menuShowGuide() {

@@ -6,7 +6,7 @@
 
 - macOS 27.0.1 (26A434)，Apple Silicon arm64。
 - CLT Swift 6.4 / macOS 27.0 SDK；无完整 Xcode、无 XCTest。
-- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.5.1，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
+- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.5.2，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
 - 原应用：`/Applications/One Switch.app` 1.35.4 (440)，测试前后版本/hash/签名不变；不启动、不修改其数据。
 - 权限前提：未预先授予 Automation/Accessibility；不修改 TCC 数据库、不关闭 SIP、不重签原应用。
 
@@ -30,12 +30,13 @@
 | A13 | 原应用不变 | `scripts/verify-app.py` | 版本/hash 与基线一致；`codesign --verify --strict` 通过 |
 | A15 | 应用图标 | `verify-app.py` | Info.plist `CFBundleIconFile=AppIcon`；bundle 内 `AppIcon.icns` >10KB；`NSWorkspace` 可解析 |
 | A16 | 对比度 token | `scripts/check-contrast.py` | `secondaryInk/warningInk/successInk/errorInk` 在 light/dark panel/card/tile ≥4.5:1 |
-| A17 | 面板尺寸 | `--panel-size` | 宽 380；无 guide ≤840pt、有 guide ≤900pt（逻辑尺寸） |
+| A17 | 面板尺寸 | `--panel-size` | 宽 380；无 guide ≤760pt、有 guide ≤840pt（逻辑尺寸） |
 | A18 | 语义色静态检查 | `verify-app.py` | PanelView/SettingsView 中 `.foregroundStyle(.green/.orange/.red)` = 0 |
 | A19 | 单实例 | 启动冒烟/人工 | Info.plist `LSMultipleInstancesProhibited` + 运行时守卫；普通重复启动保持一个图标；`open -n` 仅供诊断 |
+| A20 | 政策回归 | `scripts/qa-regression.py` | CORE/音量移除/私有 API/tccutil/麦克风/清洁/快捷键/单实例/计数等 13 项；已并入 verify-app |
 | A14 | 静态质量 | `python3 -m py_compile`、`sh -n`、`git diff --check` | 退出 0；不声称运行不存在的 linter |
 
-记录：`evidence/app-runtime.md` + `evidence/raw/app/`（原始日志不入 Git）。v0.3/v0.4 核心自检 14 项、自动化验收 11 项；独立评审见 `evidence/reviews/`。现场前置/模板见 `evidence/onsite/M1-M3-M8-2026-10-18.md`；只读探针 `scripts/onsite-probe`。
+记录：`evidence/app-runtime.md` + `evidence/raw/app/`（原始日志不入 Git）。v0.3/v0.4 核心自检 14 项、自动化验收 12 项（含 policy regression）；独立评审见 `evidence/reviews/`。现场前置/模板见 `evidence/onsite/M1-M3-M8-2026-10-18.md`；只读探针 `scripts/onsite-probe`。
 
 ## 3. 现场手动验收（需用户在场）
 
@@ -112,15 +113,16 @@
 2. 唤醒后面板状态显示“已请求关闭（鼠标/按键唤醒）”；失败时显示真实错误。
 3. 确认动作不触发锁屏/屏保语义混淆。
 
-### M12 麦克风静音（v0.5.1；用户 2026-10-18 自测通过，不支持设备待补）
+### M12 麦克风静音（v0.5.2；用户 2026-10-18 自测通过，不支持设备待补）
 
 1. 面板「麦克风」卡显示当前默认输入设备；支持 mute 时按钮为「静音麦克风」/「取消静音」。
 2. 点击静音 → 系统输入真实静音并读回，状态显示“麦克风已静音”；再点击取消 → 恢复，状态显示“麦克风已开启”。
 3. 切到不支持 mute 的输入设备（如部分耳机麦克风）→ 显示真实不支持说明，不出现假开关/假成功。
 4. 切换输入设备后重新打开面板，能力和状态刷新；不崩溃。
 5. 不新增 TCC 提示。
+6. 关闭面板：状态项在静音时显示 S+斜线变体，tooltip 显示“麦克风已静音”，右键菜单可取消静音（v0.5.2 新增人工点）。
 
-### M13 屏幕清洁（v0.5.1；退出按钮修复，待复测）
+### M13 屏幕清洁（v0.5.2；用户 2026-10-18 自测步骤 1–3 通过）
 
 1. 有 Accessibility 时点「清洁屏幕」→ 所有显示器出现黑色遮罩、醒目的「退出清洁模式」按钮（普通模式无倒计时）；键盘输入被拦截，鼠标仍可用。
 2. 用鼠标点击「退出清洁模式」→ 立即恢复桌面/输入/光标；无残留遮罩或电源断言。
