@@ -15,3 +15,8 @@ stage,measurement,value,unit,qualification
 5,core_check_groups,4/4,groups,three real assertion cycles included
 5,process_cases,5/5,cases,timer x3 plus TERM and KILL
 5,dark_switch_cycles,0,cycles,blocked by permission-needed -1744
+mvp,baseline_read,2026-10-18T11:14:46+08:00,timestamp,start of personal v0.1 milestone
+mvp,automated_verify,2026-10-18T11:23:43+08:00,timestamp,scripts/verify-app.py 8/8 after build+checks+smoke
+mvp,wall_clock,8.9,minutes,baseline read to automated verification; excludes docs writing and manual TCC checks
+mvp,model_tokens,unknown,tokens,no authoritative measurement
+mvp,new_credit_purchases,0,cards,no new purchase; reset-card authorization not exercised this round
