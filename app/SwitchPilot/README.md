@@ -1,6 +1,6 @@
-# SwitchPilot（个人自用 v0.2）
+# SwitchPilot（个人自用 v0.3）
 
-原 One Switch 1.35.4 的个人自用最小菜单栏替代。**不是分发产品**；SwitchPilot 是 2026-10-18 确定的正式名（候选比较见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`），中文描述「菜单栏开关」。目标、面板与验收见 `docs/PRD.md`、`docs/DESIGN.md`、`docs/TECH.md`、`docs/TESTPLAN.md`。
+原 One Switch 1.35.4 的个人自用最小菜单栏替代。**不是分发产品**；SwitchPilot 是 2026-10-18 确定并经用户同意转正的正式名（候选比较见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`），中文描述「菜单栏开关」。目标、面板与验收见 `docs/PRD.md`、`docs/DESIGN.md`、`docs/TECH.md`、`docs/TESTPLAN.md`。
 
 ## 当前状态
 
@@ -11,7 +11,7 @@
 | 启动屏保 | 已完成（确认后执行） | ⏳ 静态验证；运行时需用户在场（M2） |
 | 锁定屏幕 | 已完成（权限门控 + 确认） | ⏳ 需 Automation + Accessibility；未发送过按键（M3） |
 
-v0.2 面板：状态胶囊、首次使用引导（可关闭、可从 footer 重新打开）、保活进度条、权限状态行内化、动作磁贴、权限摘要。设计说明见命名/UI 报告与 `docs/DESIGN.md`。
+v0.3 面板：单一不透明表面、可读次级文字、状态胶囊、首启引导（可"申请全部权限/稍后再说/重新检查"）、保活进度、权限按缺失项给唯一 CTA、动作磁贴（系统 hover/pressed/focus）、设置窗口（权限/登录/关于）、状态项右键菜单（设置/使用说明/退出）。应用内不执行 tccutil reset；撤销授权请到系统设置或按 README 手动命令。设计见 `docs/DESIGN.md` 与 v0.3 报告。
 
 已知排除项：Night Shift 直接控制、合盖不休眠、显示器休眠、输出/麦克风/音量类开关、私有 API、修改原应用、后台自动控制。
 
@@ -20,10 +20,10 @@ v0.2 面板：状态胶囊、首次使用引导（可关闭、可从 footer 重�
 ```sh
 scripts/build-app
 open app/SwitchPilot/.build/SwitchPilot.app
-python3 scripts/verify-app.py    # 自动化验收（8 项）
+python3 scripts/verify-app.py    # 自动化验收（11 项）
 ```
 
-CLT 无 XCTest，使用独立 `SwitchPilotChecks` 可执行文件做真实断言与进度自检（10 项）；构建使用 `--build-system native` 回退，Swift 6.4 已提示该构建系统 deprecated。CLT + native SwiftPM 缺少 SwiftUI 宏插件，因此面板状态放在 PanelModel 而不是 `@State`/`@AppStorage`。
+CLT 无 XCTest，使用独立 `SwitchPilotChecks` 可执行文件做真实断言与进度自检（12 项）；构建使用 `--build-system native` 回退，Swift 6.4 已提示该构建系统 deprecated。CLT + native SwiftPM 缺少 SwiftUI 宏插件，因此面板状态放在 PanelModel 而不是 `@State`/`@AppStorage`。
 
 ## 权限
 
@@ -32,7 +32,7 @@ CLT 无 XCTest，使用独立 `SwitchPilotChecks` 可执行文件做真实断言
 - **Automation（System Events）**：深色模式读写、锁屏按键注入。系统弹出提示时选择允许，或在“系统设置 › 隐私与安全性 › 自动化”中管理。
 - **辅助功能（Accessibility）**：仅锁屏按键注入需要。在“系统设置 › 隐私与安全性 › 辅助功能”中勾选 SwitchPilot。
 
-撤销权限后相关功能会显示缺失原因且不发送操作；应用不会修改 TCC 数据库、不关闭 SIP、不重签原应用。ad-hoc 签名在重新构建后可能被系统视为新应用，需要重新授权（个人使用可接受）；正式名和 bundle id 未变。
+撤销权限后相关功能会显示缺失原因且不发送操作；应用不会修改 TCC 数据库、不关闭 SIP、不重签原应用。ad-hoc 签名在重新构建后可能被系统视为新应用，需要重新授权（个人使用可接受）；bundle id 未变。登录时启动使用 SMAppService，可在设置中开启；需要批准时打开系统设置登录项。
 
 ## 行为边界
 
@@ -40,8 +40,8 @@ CLT 无 XCTest，使用独立 `SwitchPilotChecks` 可执行文件做真实断言
 - 深色模式是系统持久设置，不会在退出时自动恢复。
 - 屏保/锁屏会立即改变屏幕状态，执行前有确认对话框；可读回状态读不到时显示“未确认”。
 - 无网络、无后台定时动作、不修改原 One Switch 的 app/数据/偏好。
-- 单实例未强制：重复启动会出现多个菜单栏图标。
-- 首次引导只记录“是否已看过”，不做其他持久化。
+- 重复启动会被单实例保护提示并退出；自动化冒烟用 `SWITCHPILOT_SMOKE_TEST=1` 绕过。
+- 首次引导只记录“是否已看过”，不做其他持久化；设置窗口不做持久化（登录项状态由系统保存）。
 
 ## 卸载
 

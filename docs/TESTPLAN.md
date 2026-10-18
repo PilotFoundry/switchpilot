@@ -1,4 +1,4 @@
-# TESTPLAN：SwitchPilot 个人自用菜单栏应用 v0.2
+# TESTPLAN：SwitchPilot 个人自用菜单栏应用 v0.3
 
 日期：2026-10-18；对象：`app/SwitchPilot`；规格：`docs/PRD.md`、`docs/DESIGN.md`、`docs/TECH.md`。
 
@@ -6,7 +6,7 @@
 
 - macOS 27.0.1 (26A434)，Apple Silicon arm64。
 - CLT Swift 6.4 / macOS 27.0 SDK；无完整 Xcode、无 XCTest。
-- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.2.0，bundle id `local.personal.SwitchPilot`，ad-hoc Hardened Runtime 签名。
+- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.0，bundle id `local.personal.SwitchPilot`，ad-hoc Hardened Runtime 签名。
 - 原应用：`/Applications/One Switch.app` 1.35.4 (440)，测试前后版本/hash/签名不变；不启动、不修改其数据。
 - 权限前提：未预先授予 Automation/Accessibility；不修改 TCC 数据库、不关闭 SIP、不重签原应用。
 
@@ -28,9 +28,14 @@
 | A11 | 启动冒烟 | `scripts/verify-app.py` | 应用进程存活 ≥2s，`LSUIElement` 生效（无 Dock 图标不强制自动验证） |
 | A12 | 退出清理 | `scripts/verify-app.py` | 终止应用后无 `SwitchPilot` 电源断言残留 |
 | A13 | 原应用不变 | `scripts/verify-app.py` | 版本/hash 与基线一致；`codesign --verify --strict` 通过 |
+| A15 | 应用图标 | `verify-app.py` | Info.plist `CFBundleIconFile=AppIcon`；bundle 内 `AppIcon.icns` >10KB；`NSWorkspace` 可解析 |
+| A16 | 对比度 token | `scripts/check-contrast.py` | `secondaryInk/warningInk/successInk/errorInk` 在 light/dark panel/card/tile ≥4.5:1 |
+| A17 | 面板尺寸 | `--panel-size` | 宽 380；无 guide ≤680pt、有 guide ≤760pt（逻辑尺寸） |
+| A18 | 语义色静态检查 | `verify-app.py` | PanelView/SettingsView 中 `.foregroundStyle(.green/.orange/.red)` = 0 |
+| A19 | 单实例 | 启动冒烟/人工 | 第二个实例提示后退出；`SWITCHPILOT_SMOKE_TEST=1` 仅供测试 |
 | A14 | 静态质量 | `python3 -m py_compile`、`sh -n`、`git diff --check` | 退出 0；不声称运行不存在的 linter |
 
-记录：`evidence/app-runtime.md` + `evidence/raw/app/`（原始日志不入 Git）。本轮核心自检共 10 项。
+记录：`evidence/app-runtime.md` + `evidence/raw/app/`（原始日志不入 Git）。v0.3 核心自检 12 项、自动化验收 11 项；独立评审见 `evidence/reviews/`。
 
 ## 3. 现场手动验收（需用户在场）
 
@@ -81,6 +86,15 @@
 5. 锁屏缺权限时磁贴显示“需授权”，点它只显示行内说明，不锁屏、不发按键。
 6. 浅色/深色系统外观下检查对比度与文字可读性；缩放窗口/不同分辨率下不截断。
 
+### M8 设置、登录启动与图标（v0.3）
+
+1. 面板 footer「设置…」与状态项右键「设置…」都能打开设置窗口；关闭后再次打开状态已刷新。
+2. 设置 › 权限：申请全部权限（允许/拒绝各一遍）状态真实；重新检查可用；撤销说明指向系统设置，不自动 reset。
+3. 设置 › 登录：开启后系统设置 › 通用 › 登录项出现 SwitchPilot；注销/重启验证自动启动；需要批准时按钮可打开登录项设置；关闭后登录项消失。
+4. 状态项右键菜单：设置… / 使用说明 / 退出均可用；左键仍打开面板。
+5. Finder Get Info / 系统设置隐私列表 / 登录项 / TCC 提示显示自定义图标（非通用图标）；菜单栏图标为 S monogram 且浅/深/选中状态可辨。
+6. 小屏（1280×800）/放大字体下，首启 guide 面板完整可见、底部按钮不裁切；`--panel-size` 已做逻辑尺寸断言，但真机 popover 需目视。
+
 ### M6 边界/恢复
 
 1. 重复启动应用的行为（多实例/多图标）记录为已知限制。
@@ -109,4 +123,4 @@ v0.1 收口标准：A1–A14 通过；M1–M3 由用户在场执行并记录（�
 
 ## 7. 本轮明确未执行项
 
-深色模式真实授权与切换、屏保真实启动、锁屏真实锁定、睡眠/唤醒、VoiceOver、多实例、首次引导交互手测、长时间稳定性、分发签名/公证/Sandbox。以上不得在 README 或能力矩阵中记为通过。
+深色模式真实授权与切换、屏保真实启动、锁屏真实锁定、睡眠/唤醒、VoiceOver、多实例、首次引导交互手测、设置/登录项/图标现场项、长时间稳定性、分发签名/公证/Sandbox。以上不得在 README 或能力矩阵中记为通过。
