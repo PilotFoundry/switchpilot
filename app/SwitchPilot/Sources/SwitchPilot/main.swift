@@ -95,6 +95,12 @@ func dumpSettings() -> Int32 {
     let application = NSApplication.shared
     application.setActivationPolicy(.prohibited)
     let model = SettingsModel()
+    if ProcessInfo.processInfo.environment["SWITCHPILOT_PREVIEW_AUTHORIZED"] != nil {
+        model.previewAuthorizedPermissions()
+    }
+    if ProcessInfo.processInfo.environment["SWITCHPILOT_EXPAND_REVOKE"] != nil {
+        model.previewExpandRevoke()
+    }
     let hosting = NSHostingController(rootView: SettingsView(model: model))
     let view = hosting.view
     view.frame = NSRect(x: 0, y: 0, width: 460, height: 900)

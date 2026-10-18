@@ -49,6 +49,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
                         self?.settingsModel?.openAutomationSettings()
                     }
                 }
+                if ProcessInfo.processInfo.environment["SWITCHPILOT_EXPAND_REVOKE"] == "1" {
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 1.2) { [weak self] in
+                        self?.settingsModel?.previewExpandRevoke()
+                    }
+                }
             }
         }
 

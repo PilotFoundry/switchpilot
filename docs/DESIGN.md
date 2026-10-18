@@ -184,3 +184,16 @@ v0.2 仍只有单面板：不提供设置窗口、偏好页、快捷键与登录
 ### 10.5 面板尺寸
 
 - 无 guide ≤680pt、有 guide ≤760pt（逻辑）；AppDelegate 按屏幕 visibleFrame 约束 popover 高度。
+
+## 11. v0.3.4 设置页权限区：撤销授权渐进披露
+
+- 成功态：两项权限显示 ✓，下方一行「✓ 全部权限已授权」，仅保留小号「重新检查」；**不再显示蓝色「申请全部权限」**（避免与已授权状态矛盾）。
+- 低频的撤销说明从一级移入**默认收起**的 inline disclosure，一级标签为「如何撤销授权…」+ chevron；整行可点，`.plain` 文字样式、`secondaryInk`，不用 destructive/强调按钮。
+- 展开后：
+  1. 一句「撤销需在系统设置中手动完成；SwitchPilot 不会自动修改 TCC。」；
+  2. `打开自动化设置` / `打开辅助功能设置` 两个小号深链按钮（系统设置路径，可恢复）；
+  3. 二级「终端命令（高级）」默认收起，展开后显示 bundle-scoped `tccutil reset` 命令（等宽、可选中）、「复制命令」按钮与风险提示（仅本应用、不要 sudo、勿用 reset All、重置后需重新授权）。应用绝不自动执行。
+- 未就绪态：按三态给 CTA——两项缺失时「申请全部权限」；部分缺失时只给缺失项入口；已被拒绝时只给「打开系统设置」。诊断块仅在未就绪时展示。
+- 撤销 disclosure 只在至少一项已授权时出现；外部撤销后刷新会导致其自动隐藏。
+- 状态保存在 `SettingsModel`（CLT 无 SwiftUI 宏，不能用 `@State`）；`SettingsWindowController` 监听 `objectWillChange` 自动调整窗口高度，展开/收起不裁切。
+- 验收：`--dump-settings` 折叠/展开两态（含 `SWITCHPILOT_PREVIEW_AUTHORIZED`、`SWITCHPILOT_EXPAND_REVOKE` 预览钩子）；键盘/VoiceOver 可操作；展开后窗口高度由 544 增至 711（实测）。
