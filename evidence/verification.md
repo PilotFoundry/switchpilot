@@ -85,3 +85,9 @@
 - 应用内重置入口位于高级命令区，带确认框；范围固定本应用 Automation + Accessibility，无 sudo/reset All，后台执行，完成后刷新并提示重新授权。
 - 自动化只验证构建/命令可用性与 UI；真实重置未在用户授权上执行，列为 M8 手动破坏性项。
 - verify 11/11、自检 12/12；版本 0.3.5。
+
+## v0.3.6 M1/M3/M8 前置（2026-10-18）
+
+- 只读探针确认当前 TCC：Automation 已授权、Accessibility 已授权、System Events 运行；登录项 `已开启`（BTM enabled/allowed/notified）；图标资源 32 个表示，菜单栏 S monogram template；无遗留电源断言。
+- 未执行：M1 深色切换、M3 真实锁屏、M8 注销/登录启动与图标目视（需用户在场；Screen Recording 不可用，无法代理截图）。**不记为通过。**
+- 步骤/记录模板：`evidence/onsite/M1-M3-M8-2026-10-18.md`；只读探针 `scripts/onsite-probe`。

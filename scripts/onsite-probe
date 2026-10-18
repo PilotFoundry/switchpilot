@@ -1,0 +1,32 @@
+#!/bin/sh
+# Read-only onsite acceptance snapshot for SwitchPilot.
+# Opens the app once with --diagnose-runtime (does not grant/revoke TCC, lock,
+# launch the screen saver, or change appearance) and writes a sanitized log.
+set -eu
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+APP="${SWITCHPILOT_APP:-$HOME/Applications/SwitchPilot.app}"
+STAMP=$(date +%Y%m%d-%H%M%S)
+OUT="${1:-$ROOT/evidence/raw/app/onsite-$STAMP.log}"
+mkdir -p "$(dirname "$OUT")"
+{
+    printf '# SwitchPilot onsite probe %s\n' "$(date '+%Y-%m-%d %H:%M:%S %Z')"
+    printf 'app=%s\n' "$APP"
+    printf '\n## build\n'
+    /usr/bin/plutil -extract CFBundleShortVersionString raw "$APP/Contents/Info.plist" 2>/dev/null || true
+    codesign -d -r- "$APP" 2>&1 | tail -1 || true
+    shasum -a 256 "$APP/Contents/MacOS/SwitchPilot" 2>/dev/null || true
+    printf '\n## process\n'
+    pgrep -fl "SwitchPilot.app/Contents/MacOS/SwitchPilot" || true
+    printf '\n## runtime diagnostic\n'
+    rm -f /tmp/switchpilot-runtime-diagnose.txt
+    open -n "$APP" --args --diagnose-runtime || true
+    sleep 3
+    cat /tmp/switchpilot-runtime-diagnose.txt 2>/dev/null || echo 'diagnostic missing'
+    printf '\n## login item BTM\n'
+    sfltool dumpbtm 2>/dev/null | grep -A12 -i 'Name: SwitchPilot' | head -16 || true
+    printf '\n## assertions\n'
+    pmset -g assertions 2>/dev/null | grep -i SwitchPilot || echo 'no SwitchPilot assertions'
+    printf '\n## TCC log tail (SwitchPilot, 30m)\n'
+    log show --last 30m --predicate 'subsystem == "com.apple.TCC"' 2>/dev/null | grep -i 'SwitchPilot' | tail -40 || true
+} > "$OUT"
+printf '%s\n' "$OUT"

@@ -1,6 +1,6 @@
 # 个人自用 v0.1 应用运行验收
 
-日期：2026-10-18。对象：`app/SwitchPilot/.build/SwitchPilot.app`（bundle id `local.personal.SwitchPilot`，ad-hoc Hardened Runtime）。规格：`docs/PRD.md`、`docs/TECH.md`、`docs/TESTPLAN.md`。原始日志：`evidence/raw/app/`（不入 Git）。
+日期：2026-10-18。本文件按时间累积；当前构建见 v0.3.6 节。对象：`~/Applications/SwitchPilot.app`（bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime；早期节保留历史 ad-hoc 哈希）。规格：`docs/PRD.md`、`docs/TECH.md`、`docs/TESTPLAN.md`。原始日志：`evidence/raw/app/`（不入 Git）。
 
 ## 构建产物
 
@@ -123,3 +123,10 @@
 - 定位：默认路径仍是系统设置手动撤销；应用内重置是高级/unsupported 选项（Apple 无正式 revoke API），不是推荐主路径。
 - 验证：verify 11/11、自检 12/12；用不存在 bundle id 试跑 tccutil 返回 `No such bundle identifier (-10814)`，未触碰真实授权。真实重置需用户在确认框触发，列为 M8 手动项（自动化不执行破坏性操作）。
 - 版本 0.3.5。
+
+## v0.3.6：M1/M3/M8 现场验收前置（2026-10-18）
+
+- 构建/版本 0.3.6；本地身份 `SwitchPilot Local Signing`，designated requirement `identifier + certificate leaf = H"02f684b1…"`；可执行 SHA-256 `4b9e34563dfec54f8d245e06da3751776694e9f80059d345c54f34be09bbdf71`。
+- 只读探针（`scripts/onsite-probe /tmp/onsite-baseline.log`）：`automationRaw/Resolved=已授权`、`accessibilityTrusted=true`、`systemEventsRunning=true`、`loginItemState=已开启`；BTM `enabled, allowed, notified`；应用图标 32 个表示（16–2048）、菜单栏 S monogram 18×18 template；`pmset` 无遗留断言；`hasSeenWelcome=true`。
+- Screen Recording 在本机不可用（`screencapture` 失败），菜单栏/Finder/TCC 提示的图标显示仍需用户目视；M1 深色切换、M3 真实锁屏、M8 注销/登录启动均未执行，按边界不记为通过。
+- 现场前置/步骤/记录模板：`evidence/onsite/M1-M3-M8-2026-10-18.md`。自动化 verify-app 11/11、自检 12/12。

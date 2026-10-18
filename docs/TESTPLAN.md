@@ -6,7 +6,7 @@
 
 - macOS 27.0.1 (26A434)，Apple Silicon arm64。
 - CLT Swift 6.4 / macOS 27.0 SDK；无完整 Xcode、无 XCTest。
-- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.5，bundle id `local.personal.SwitchPilot`，ad-hoc Hardened Runtime 签名。
+- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.6，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
 - 原应用：`/Applications/One Switch.app` 1.35.4 (440)，测试前后版本/hash/签名不变；不启动、不修改其数据。
 - 权限前提：未预先授予 Automation/Accessibility；不修改 TCC 数据库、不关闭 SIP、不重签原应用。
 
@@ -35,7 +35,7 @@
 | A19 | 单实例 | 启动冒烟/人工 | 第二个实例提示后退出；`SWITCHPILOT_SMOKE_TEST=1` 仅供测试 |
 | A14 | 静态质量 | `python3 -m py_compile`、`sh -n`、`git diff --check` | 退出 0；不声称运行不存在的 linter |
 
-记录：`evidence/app-runtime.md` + `evidence/raw/app/`（原始日志不入 Git）。v0.3 核心自检 12 项、自动化验收 11 项；独立评审见 `evidence/reviews/`。
+记录：`evidence/app-runtime.md` + `evidence/raw/app/`（原始日志不入 Git）。v0.3 核心自检 12 项、自动化验收 11 项；独立评审见 `evidence/reviews/`。现场前置/模板见 `evidence/onsite/M1-M3-M8-2026-10-18.md`；只读探针 `scripts/onsite-probe`。
 
 ## 3. 现场手动验收（需用户在场）
 
@@ -86,10 +86,10 @@
 5. 锁屏缺权限时磁贴显示“需授权”，点它只显示行内说明，不锁屏、不发按键。
 6. 浅色/深色系统外观下检查对比度与文字可读性；缩放窗口/不同分辨率下不截断。
 
-### M8 设置、登录启动与图标（v0.3）
+### M8 设置、登录启动与图标（v0.3+）
 
 1. 面板 footer「设置…」与状态项右键「设置…」都能打开设置窗口；关闭后再次打开状态已刷新。
-2. 设置 › 权限：申请全部权限（允许/拒绝各一遍）状态真实；重新检查可用；撤销说明指向系统设置，不自动 reset。
+2. 设置 › 权限：申请全部权限（允许/拒绝各一遍）状态真实；重新检查可用；撤销说明默认折叠、推荐系统设置路径；高级「终端命令（高级）」/「在应用内重置权限…」仅在用户确认后执行，不自动 reset。
 3. 设置 › 登录：开启后系统设置 › 通用 › 登录项出现 SwitchPilot；注销/重启验证自动启动；需要批准时按钮可打开登录项设置；关闭后登录项消失。
 4. 状态项右键菜单：设置… / 使用说明 / 退出均可用；左键仍打开面板。
 5. Finder Get Info / 系统设置隐私列表 / 登录项 / TCC 提示显示自定义图标（非通用图标）；菜单栏图标为 S monogram 且浅/深/选中状态可辨。
