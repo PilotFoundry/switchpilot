@@ -1,6 +1,6 @@
 # <img src="assets/logo-512.png" width="72" align="left" alt="SwitchPilot logo"> SwitchPilot
 
-[English](README.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [核心理念](docs/en/CORE.md) · [架构](docs/en/ARCHITECTURE.md) · [测试](docs/en/TESTING.md) · [路线图](docs/en/ROADMAP.md)
+[English](README.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [文档](docs/README.md) · [核心理念](docs/en/CORE.md) · [架构](docs/en/ARCHITECTURE.md) · [测试](docs/en/TESTING.md) · [路线图](docs/en/ROADMAP.md)
 
 [![CI](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml)
 
@@ -100,7 +100,7 @@ open ~/Applications/SwitchPilot.app
 SWITCHPILOT_SIGN_IDENTITY="Apple Development: Your Name (TEAMID)" ./scripts/build-app
 ```
 
-不要提交证书、签名材料或绕过 Gatekeeper 的配置。应用未公证，定位是本地构建自用，不是分发二进制。
+不要提交证书、签名材料或绕过 Gatekeeper 的配置。应用未公证；项目会发布 universal ad-hoc 便利包，但如需更高信任，请自行从源码构建并签名。详见 [docs/en/RELEASE.md](docs/en/RELEASE.md)。
 
 ### Make targets
 

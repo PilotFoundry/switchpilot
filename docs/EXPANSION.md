@@ -1,83 +1,79 @@
-# SwitchPilot 扩展评估：新开关 vs 快捷键（2026-10-18）
+# Expansion evaluation
 
-- 状态：**评估，不是已批准需求**。当前产品基线 v0.3.9；M1/M2/M3 用户自测通过，M8 简单测试通过，M8-3 注销/重启登录启动为长期待办。
-- 目标：判断下一轮应扩展开关还是快捷键，给出可实施的最小切片、风险与验收。
-- 输入：`docs/PRD.md` 非目标/范围、`evidence/capability-matrix.md` 候选池、`evidence/features/night-shift.md`、`evidence/expansion-api-probe.md`、当前面板/设置实现。
-- 边界：不自动执行 tccutil reset；TCC 允许/拒绝/撤销、真实登录启动、菜单栏/系统图标显示仍需用户在场；未批准不实现。
+Status: current baseline **v0.7.1**. This document is a decision record for
+proposed scope changes; it is not a promise that a candidate will ship.
 
-## 1. 结论（推荐顺序）
+## 1. Current boundary
 
-1. **首选：全局快捷键，先覆盖无 TCC 的两个动作**——保持亮屏开关、启动屏保；固定组合、设置里可启用/停用、显示冲突。理由：Carbon `RegisterEventHotKey` 本机验证可用（status 0），不需要 Accessibility/Automation；复用已验证能力；不新增系统状态或权限面。
-2. **次选：关闭显示器快速动作**——`pmset displaysleepnow` 是公开命令、无 TCC、实现极小；作为独立快速动作，不与“锁定屏幕”合并，避免语义混淆。真实动作需现场执行。
-3. **再评估：输出静音/音量**——CoreAudio 公开 API、无需 TCC；但本机默认输出（外接显示器音频）**不支持 mute/volume**，内置扬声器/USB 设备支持，必须先做 capability detection、readback 与 unsupported 降级；不作为下一轮首选。
-4. **延后：音频输出设备切换、麦克风静音**——公开 API 可行但 UI/设备差异与维护面更大；麦克风还涉及隐私语义。
-5. **不纳入：Night Shift 直接控制**——私有 CoreBrightness；原有证据已覆盖；`DND/Wi-Fi/蓝牙/隐藏桌面图标`等同样不建议进入本轮。
-6. **场景组合/自动规则**不做；先把快捷入口做可靠。
+SwitchPilot intentionally covers a small set of reliable controls:
 
-## 2. 候选矩阵
+- keep awake
+- dark mode
+- screen saver
+- lock screen
+- display sleep
+- microphone mute
+- screen cleaning
+- optional login item
+- fixed global hotkeys
+- four-language UI with an in-app override
 
-| 候选 | 公开入口/证据 | TCC/权限 | 可逆/反馈 | UI 成本 | 风险 | 结论 |
-|---|---|---|---|---|---|---|
-| 全局快捷键（保活/屏保） | Carbon `RegisterEventHotKey`，本机 status 0 | 不需要 Accessibility/Automation | 可随时停用/注销；状态由现有面板展示 | 中：设置新增快捷键区、固定组合/冲突提示 | 组合冲突、后台触发缺少反馈 | **推荐，Phase 1** |
-| 全局快捷键（深色/锁屏） | 同一机制；动作本身已有权限门控 | 需要已有 Automation/Accessibility | 失败时需面板/提示反馈 | 中 | 后台触发 TCC 拒绝时用户无感 | 可作为 Phase 1 可选，默认不绑定 |
-| 关闭显示器 | `pmset displaysleepnow`（公开 man） | 无 | 输入唤醒；动作一次 | 低：快速动作磁贴 | 与锁屏语义混淆；实际执行未验 | **推荐，Phase 2** |
-| 输出静音/音量 | CoreAudio mute/volume 属性 | 无 | 可读回；设备可能不支持 | 中：设备能力/降级、音量控件 | 默认设备 unsupported；设备切换时状态变化 | 暂缓，Phase 3 |
-| 音频输出设备切换 | CoreAudio default output 属性 | 无 | 可读回/切回 | 中高：设备列表、AirPods 等 | 设备热插拔、命名/排序 | 延后 |
-| 麦克风静音 | CoreAudio input mute/volume | 无 | 可读回；部分设备不支持 | 中 | 隐私语义、设备差异 | 延后 |
-| Night Shift | 私有 CoreBrightness | 无公开 API | — | — | 私有接口/升级风险 | 不纳入 |
-| DND/蓝牙/Wi-Fi/桌面图标 | 私有/entitlement/AppleScript | 额外 TCC 或 entitlement | — | — | 高 | 不纳入 |
+The product is open source and ships an ad-hoc universal binary. Distribution
+improvements, not additional toggles, are the active engineering candidates.
 
-## 3. Phase 1 最小切片（建议实现）
+## 2. Admission rubric
 
-- **设置 › 快捷键**：启用开关；显示 2 个固定组合（保活、屏保）；每项可勾选启用；注册失败时显示“组合被占用/注册失败”，不静默。
-- 初始组合候选：`⌃⌥⌘K` 切换保持亮屏；`⌃⌥⌘S` 启动屏保。均为四修饰键，降低冲突；实现时逐个注册并检查 `eventHotKeyExistsErr`。
-- 全局热键只调用现有 `PanelModel` 动作；不新增权限路径；不打开面板、不做后台 TCC 请求。
-- 失败/不可用反馈：菜单栏图标 tooltip 或短暂的状态文本；不引入通知权限。
-- 无障碍：设置页显示组合文本供 VoiceOver；保留按钮路径。
-- 不做自定义录制器（复杂度高）；后续按需加。
+A candidate must satisfy all of the following:
 
-## 4. Phase 2 最小切片（若选择关闭显示器）
+1. It fills a real system gap or shortens a frequent multi-step workflow; it is
+   not merely a duplicate of a menu-bar/Control Center control.
+2. It can be implemented with public frameworks and no new private API.
+3. It does not add an unnecessary TCC permission surface.
+4. It has honest readback, visible state and a recovery path.
+5. It fits the compact panel and can be localized without breaking layout.
+6. It can be tested manually; CI-only evidence is insufficient for
+   TCC/hardware behavior.
+7. It does not weaken the safety model for screen cleaning, permissions or
+   automation.
 
-- 快速动作新增「关闭显示器」；文案明确“立即让显示器休眠，移动鼠标/按键唤醒”，与锁定分开。
-- 实现候选：`/usr/bin/pmset displaysleepnow`（公开 CLI）；执行结果/失败记录，不做 TCC。
-- 需用户现场确认真实休眠与唤醒；不自动触发。
+## 3. Candidates and decisions
 
-## 5. Phase 3 输出音量（条件）
+| Candidate | Decision | Rationale |
+|---|---|---|
+| Improve microphone device-change refresh | Candidate | Real usability gap; public CoreAudio APIs; needs manual hardware testing |
+| More login/reboot and menu-bar icon manual coverage | Candidate | Existing features need evidence, not new surface |
+| VoiceOver and larger-text audit | Candidate | Accessibility hardening within existing scope |
+| Automated release workflow | Implemented | Reproducible universal ad-hoc artifacts; no notarization |
+| Developer ID signing + notarization | Blocked | Requires Apple Developer Program, Developer ID certificate and notary credentials |
+| Developer ID distribution / sandbox / App Store | Not planned now | Larger operational and security commitment than current project scope |
+| Output volume | Not planned | System menu bar/Control Center already covers it |
+| Low-power mode / True Tone | Not planned | Public API or product-fit constraints; macOS already handles them |
+| Night Shift, Wi-Fi/Bluetooth, desktop icons | Not planned | Private/preference hacks or duplication |
+| Audio-device switching, scenes, custom hotkey recorder | Not planned | Scope expansion without a matching high-frequency gap |
+| Background automation, privileged helper | Never | Violates product and security boundaries |
+| Telemetry, network features, remote config | Never | Violates privacy positioning |
 
-- 先做 capability detection：默认输出是否支持 mute/volume；不支持则按钮显示 unsupported，不假装成功。
-- 设备切换/热插拔时刷新能力；音量读写后读回；不使用 AppleScript，避免 Automation。
-- 当前默认输出为外接显示器音频且不支持 mute/volume，作为首个现场样本必须覆盖。
+## 4. Distribution expansion
 
-## 6. 验收要点
+The current release is an ad-hoc universal zip. The next distribution milestone
+would be:
 
-- 快捷键：注册/注销无残留；冲突检测有可读错误；后台触发正确动作；停用后不再响应；无新增 TCC 提示；设置页键盘/VoiceOver 可达。
-- 关闭显示器：真实休眠/唤醒现场验证；失败有错误；不误触发锁屏。
-- 输出音量（若后续）：支持/不支持两类设备均有正确状态；切换设备后刷新；不出现假成功。
-- 文档/证据：所有新动作仍按“未执行不写通过”的规则记录。
+- Developer ID Application signing
+- hardened runtime verification
+- notarization and stapling
+- `spctl` acceptance on a clean Mac
+- a signed `.dmg` or zip with the same four locales
 
-## 7. 需要用户决定
+This is blocked on credentials and should not be implied by the README until it
+actually exists. The current caveat, checksum and manual verification steps are
+defined in [en/RELEASE.md](en/RELEASE.md).
 
-- A：先做快捷键（推荐）——仅保活 + 屏保，固定组合；
-- B：先做关闭显示器快速动作（更小、但需现场验证休眠/唤醒）；
-- C：输出音量的可行性原型（先解决设备 unsupported/降级）；
-- D：暂不扩展，先做收尾/长期测试。
+## 5. Decision log
 
-> 本文件不构成范围批准；选择后再更新 PRD/DESIGN/TECH/TESTPLAN 并实现。
-
-## 8. 实施状态（2026-10-18）
-
-用户回复“ABCD 你都来吧”，全部方向进入 v0.4.0：A 快捷键、B 关闭显示器、C 音量原型已实现并完成只读/注册前置检查；D 收尾项（M8-3 注销重启、M8-4 图标、M5 无障碍/小屏）继续 backlog。现场真实按键、休眠/唤醒、音量写入见 `evidence/onsite/expansion-v040-2026-10-18.md`，未执行不记通过。
-
-## 9. 现场反馈（2026-10-18 13:35）
-
-- A 快捷键：用户认为测试复杂，与注销/重启类似，**并入长期统一测试**；功能默认关闭，不阻塞其余迭代。
-- B 关闭显示器：用户自测通过（鼠标唤醒）。
-- C 音量：用户截图指出静音态显示歧义；v0.4.1 已改为动作按钮（取消静音/静音）、静音时禁用滑块并显示“已静音”，待复验真实写入。
-
-## 10. 重新定界（v0.5.0）
-
-- **输出音量移出**：系统菜单栏/控制中心已有等价控制，且设备能力复杂，不符合“系统缺口/长链”标准。
-- **麦克风静音进入并实现**：长链 + 隐私 + 公开 CoreAudio；需能力感知、状态显眼。
-- **屏幕清洁进入并实现**：系统缺口型刚需；采用全屏遮罩 + 键盘拦截 + **鼠标点击退出**，普通模式不自动退出（自动退出仅测试模式）；不实现键盘退出；无 Accessibility 不进入锁输入状态。
-- **低电量不做**：系统电池菜单已有，且属于系统电源管理。
-- 详见 `docs/CORE.md` 与 `evidence/onsite/v050-mic-screen-2026-10-18.md`。
+- v0.7.0: four languages and in-app language selection shipped.
+- v0.7.1: About/README positioning corrected for the open-source release; About
+  no longer describes the app as personal-use-only or mentions One Switch.
+- v0.7.1: ad-hoc universal binary published with checksum and Gatekeeper
+  instructions.
+- Next: documentation consistency, release workflow, manual test evidence; no
+  new toggle is approved by this document.

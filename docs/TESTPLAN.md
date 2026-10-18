@@ -1,179 +1,132 @@
-# TESTPLAN：SwitchPilot 个人自用菜单栏应用 v0.3
+# Test plan
 
-日期：2026-10-18；对象：`app/SwitchPilot`；规格：`docs/PRD.md`、`docs/DESIGN.md`、`docs/TECH.md`。
+Status: current baseline **v0.7.1**. English is canonical. Automated checks are
+not a substitute for manual TCC, hardware, login, screen-cleaning or release
+verification.
 
-## 1. 测试环境与身份
+## 1. Scope
 
-- macOS 27.0.1 (26A434)，Apple Silicon arm64。
-- CLT Swift 6.4 / macOS 27.0 SDK；无完整 Xcode、无 XCTest。
-- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.5.3，bundle id `local.personal.SwitchPilot`，本地自签名 Hardened Runtime 签名（designated requirement 含 certificate leaf；重建保持 TCC 匹配）。
-- 原应用：`/Applications/One Switch.app` 1.35.4 (440)，测试前后版本/hash/签名不变；不启动、不修改其数据。
-- 权限前提：未预先授予 Automation/Accessibility；不修改 TCC 数据库、不关闭 SIP、不重签原应用。
+Verify:
 
-## 2. 自动化检查（本轮可执行）
+- build and app bundle integrity;
+- core non-UI behavior in `SwitchPilotChecks`;
+- light/dark contrast and panel sizing;
+- all four UI locales and language persistence;
+- ad-hoc universal release artifact structure, signature and checksum;
+- regression boundaries for permissions, private APIs and screen cleaning.
 
-| 编号 | 检查 | 方法 | 通过标准 |
-|---|---|---|---|
-| A1 | 构建 | `scripts/build-app` | 退出 0，输出 `.app` 路径 |
-| A2 | Bundle/plist | `plutil -lint`、`plutil -p` | Info.plist/Entitlements 合法；LSUIElement=true；bundle id/usage description 存在 |
-| A3 | 签名 | `codesign --verify --strict` | 退出 0；ad-hoc + runtime |
-| A4 | 时长解析 | `SwitchPilotChecks` | 拒绝 0/负数/NaN/inf/非数字；接受合法值 |
-| A5 | 真实断言生命周期 | `SwitchPilotChecks` | 三轮 Create/读回/Release；重复 start 幂等；stop 后可读回不存在；deinit 释放 |
-| A6 | 定时释放 | `SwitchPilotChecks` | 短时长会话到时自动释放，OS 断言消失 |
-| A6b | 进度模型 | `SwitchPilotChecks` | 限时会话暴露 0–1 进度；无限期会话不显示进度 |
-| A7 | 权限映射 | `SwitchPilotChecks` | 0/-1743/-1744/-600 映射到正确状态且不崩溃 |
-| A8 | 屏保引擎解析 | `SwitchPilotChecks` | 可解析 `com.apple.ScreenSaver.Engine` 路径；不存在时状态为 unavailable |
-| A9 | 锁屏权限快照 | `SwitchPilotChecks` | 只读返回 Automation/Accessibility 状态；未授权时不发送按键 |
-| A10 | 深色模式只读外观 | `SwitchPilotChecks` | 全局 `AppleInterfaceStyle` 读出深/浅色，不修改系统 |
-| A11 | 启动冒烟 | `scripts/verify-app.py` | 应用进程存活 ≥2s，`LSUIElement` 生效（无 Dock 图标不强制自动验证） |
-| A12 | 退出清理 | `scripts/verify-app.py` | 终止应用后无 `SwitchPilot` 电源断言残留 |
-| A13 | 原应用不变 | `scripts/verify-app.py` | 版本/hash 与基线一致；`codesign --verify --strict` 通过 |
-| A15 | 应用图标 | `verify-app.py` | Info.plist `CFBundleIconFile=AppIcon`；bundle 内 `AppIcon.icns` >10KB；`NSWorkspace` 可解析 |
-| A16 | 对比度 token | `scripts/check-contrast.py` | `secondaryInk/warningInk/successInk/errorInk` 在 light/dark panel/card/tile ≥4.5:1 |
-| A17 | 面板尺寸 | `--panel-size` | 宽 380；无 guide ≤760pt、有 guide ≤840pt（逻辑尺寸） |
-| A18 | 语义色静态检查 | `verify-app.py` | PanelView/SettingsView 中 `.foregroundStyle(.green/.orange/.red)` = 0 |
-| A19 | 单实例 | 启动冒烟/人工 | Info.plist `LSMultipleInstancesProhibited` + 运行时守卫；普通重复启动保持一个图标；`open -n` 仅供诊断 |
-| A20 | 政策回归 | `scripts/qa-regression.py` | CORE/音量移除/私有 API/tccutil/麦克风/清洁/快捷键/单实例/计数等 13 项；已并入 verify-app |
-| A14 | 静态质量 | `python3 -m py_compile`、`sh -n`、`git diff --check` | 退出 0；不声称运行不存在的 linter |
+Not covered by CI:
 
-记录：`evidence/app-runtime.md` + `evidence/raw/app/`（原始日志不入 Git）。v0.3/v0.4 核心自检 14 项、自动化验收 12 项（含 policy regression）；独立评审见 `evidence/reviews/`。现场前置/模板见 `evidence/onsite/M1-M3-M8-2026-10-18.md`；只读探针 `scripts/onsite-probe`。
+- real TCC grants/revocations;
+- real login/reboot launch;
+- microphone hardware behavior;
+- screen saver/lock/display sleep on physical displays;
+- VoiceOver quality;
+- Gatekeeper first launch on a clean Mac;
+- notarization (not available).
 
-## 3. 现场手动验收（需用户在场）
+## 2. Test levels
 
-以下项目**不在自动化中执行**，因为会改变屏幕状态、触发 TCC 系统弹窗或需要用户授权；必须在用户知情且可解锁屏幕时进行。
+| Level | Tool | Scope |
+|---|---|---|
+| Core | `SwitchPilotChecks` | Assertions, presets, permission mapping, screen saver, microphone, display sleep |
+| Build | `scripts/build-app` | Compile, bundle, plist, resources, ad-hoc/local signature |
+| Smoke | `make smoke` | Build, bundle, contrast, four `.lproj` tables |
+| Verification | `scripts/verify-app.py` | 12-step bundle/app/launch/policy check |
+| Policy | `scripts/qa-regression.py` | 13 checks for scope, TCC, APIs and safety boundaries |
+| Release | `scripts/build-release` | Universal build, ad-hoc signature, zip, checksum |
+| Manual | this document | TCC, hardware, UI, localization, Gatekeeper |
 
-### M1 深色模式
+## 3. Automated commands
 
-1. 打开面板 → 深色模式行应显示"需要授权"与入口，点击开关不改变系统外观。
-2. 点击"请求授权…" → 系统 Automation 提示出现；选择"允许"后重试开关。
-3. 开关到深色/浅色各 3 次，每次确认面板状态与系统外观一致（读回）。
-4. 在系统设置撤销授权 → 再次操作应显示被拒绝/需要授权，且不显示成功。
-5. 结束：把系统外观恢复为测试前状态并确认。
+```sh
+make smoke
+./scripts/verify-app.py
+./scripts/qa-regression.py
+```
 
-### M2 启动屏保（用户 2026-10-18 自测通过）
+`verify-app.py` also runs `SwitchPilotChecks` and checks plist/signature,
+launch smoke, original app integrity, contrast, panel sizes, semantic colors and
+static scripts. CI runs the CI-safe subset and does not request TCC.
 
-1. 点击"启动屏保" → **直接启动**（v0.3.8 起无二次确认）；记录是否出现系统密码解锁提示。
-2. 移动鼠标/按键退出屏保；确认面板状态显示“已启动/已请求”。
-3. 记录是否出现密码提示；退出后界面显示"已请求启动"或真实错误。
-4. 失败/行为不符时记录系统版本与具体现象，不把静态线索算作通过。
+## 4. Localization test matrix
 
-### M3 锁定屏幕（用户 2026-10-18 自测通过）
+For each locale:
 
-1. 未授予 Accessibility 时点击"锁定屏幕" → 显示缺少辅助功能（及 Automation 状态），不发送按键、不锁屏。
-2. 按引导授予 Accessibility 与 Automation 后重试 → **点击「锁定屏幕」应直接锁定，无二次确认弹窗**；记录是否成功与解锁方式。
-3. 解锁后检查面板读回：显示已锁定（若可读回）或"已请求，未确认"。
-4. 撤销权限后重试 → 应回到权限引导，不崩溃。
+- follow system / forced locale;
+- panel header, features, quick actions, permissions, footer;
+- Settings: permissions, hotkeys, login, language, About;
+- language change persists after a restart;
+- permission prompts use the localized `InfoPlist.strings`;
+- no clipping/ellipsis on normal panel size;
+- format placeholders in diagnostics/errors remain intact.
 
-### M4 保活扩展
+| Locale | Required checks |
+|---|---|
+| Follow System | System locale selects a supported table; fallback is readable |
+| English | Full panel/settings/about; format strings intact |
+| 简体中文 | Full panel/settings/about; language selector labels |
+| 繁體中文 | Taiwan macOS vocabulary; panel action titles fit |
+| 日本語 | macOS Japanese vocabulary; long subtitles wrap at most two lines |
 
-1. 15/30/60 分钟与无限期各验证一次开启/读回/关闭；到时自动释放。
-2. 面板最小化/重新打开后状态保持正确。
-3. 正常退出、强退（`kill`）后 `pmset -g assertions` 无本应用断言。
-4. 有条件时做一次睡眠/唤醒后状态检查；无法安全完成的标成未验证。
+## 5. Release artifact checks
 
-### M5 UI/无障碍
+For a tagged release:
 
-1. 菜单栏图标点击开合面板；点击面板外关闭。
-2. 键盘 Tab 聚焦全部控件，Space/Return 可操作；无鼠标歧义。
-3. VoiceOver 读数：控件名称、状态、错误可理解（不要求全路径完美）。
-4. 浅色/深色外观下文字对比度可读。
+```sh
+gh release download <tag> -p '*universal-adhoc*'
+shasum -a 256 -c *.sha256
+unzip SwitchPilot-*-macos-universal-adhoc.zip
+lipo -info SwitchPilot.app/Contents/MacOS/SwitchPilot
+codesign --verify --strict SwitchPilot.app
+ls SwitchPilot.app/Contents/Resources/*.lproj
+```
 
-### M7 首次引导与新面板（v0.2）
+Expected:
 
-1. 首次打开面板应出现“开始使用”三条规则；点“知道了”后关闭，重启应用不再自动出现。
-2. 点 footer“使用说明”可重新打开引导卡；“收起说明”可关闭。
-3. 保活开启后显示进度条与剩余时间；无限期不显示进度条。
-4. 深色模式未授权时点开关应回弹并显示行内授权入口，不弹系统设置或改变外观。
-5. 锁屏缺权限时磁贴显示“需授权”，点它只显示行内说明，不锁屏、不发按键。
-6. 浅色/深色系统外观下检查对比度与文字可读性；缩放窗口/不同分辨率下不截断。
+- `shasum` passes;
+- architecture is `x86_64 arm64`;
+- signature verifies as ad-hoc (`Signature=adhoc`);
+- all four `.lproj` directories exist;
+- no `._*` AppleDouble files in the zip;
+- `spctl --assess` rejects the ad-hoc app (expected, not a regression);
+- first launch on a clean Mac requires right-click **Open**.
 
-### M8 设置、登录启动与图标（v0.3+）
+## 6. Manual test matrix
 
-1. 面板 footer「设置…」与状态项右键「设置…」都能打开设置窗口；关闭后再次打开状态已刷新。
-2. 设置 › 权限：申请全部权限（允许/拒绝各一遍）状态真实；重新检查可用；撤销说明默认折叠、推荐系统设置路径；高级「终端命令（高级）」/「在应用内重置权限…」仅在用户确认后执行，不自动 reset。
-3. 设置 › 登录：开启后系统设置 › 通用 › 登录项出现 SwitchPilot；需要批准时按钮可打开登录项设置；关闭后登录项消失。**注销/重启验证自动启动：长期待办（用户 2026-10-18 指示：操作较重，留到功能收尾时与其余测试一起验证）。**
-4. 状态项右键菜单：设置… / 使用说明 / 退出均可用；左键仍打开面板。
-5. Finder Get Info / 系统设置隐私列表 / 登录项 / TCC 提示显示自定义图标（非通用图标）；菜单栏图标为 S monogram 且浅/深/选中状态可辨。
-6. 单实例：运行中再次双击/`open` 只保留一个菜单栏图标；`open -n` 是诊断专用，不纳入普通用户路径。
-7. 小屏（1280×800）/放大字体下，首启 guide 面板完整可见、底部按钮不裁切；`--panel-size` 已做逻辑尺寸断言，但真机 popover 需目视。
-8. 权限区：已授权时无「申请全部权限」；「如何撤销授权」默认收起，展开含系统设置深链、「终端命令（高级）」与不可逆的重置操作；窗口随内容增高（v0.3.9 实测约 523→774pt），键盘 Space/Return 可切换、VoiceOver 读展开状态；复制命令不改变系统。
-9. 稳定签名身份：重建/重签/重装后，已授予的 Automation/Accessibility 不应失效；用 `--diagnose-permissions` 复核。
-10. v0.3.5 应用内重置（手动、破坏性，自动化不执行）：展开「终端命令（高级）」→「在应用内重置权限…」→ 取消应无变化；确认后两项 TCC 记录被重置、权限区回到未授权、可重新申请；确认框文案必须包含不可逆/需要重新授权/非官方 API/无 sudo/无 reset All。
+| Area | Check |
+|---|---|
+| Keep awake | Timed/indefinite toggle, real assertion, auto-release, progress |
+| Dark mode | Allow/deny Automation, toggle, readback |
+| Screen saver | Real activation and exit |
+| Lock screen | Automation + Accessibility, lock, password unlock |
+| Display sleep | Screen sleeps; wake behavior follows system settings |
+| Microphone | Mute/unmute on supported input; unsupported explanation |
+| Screen cleaning | Overlay, keyboard suspended, mouse exit, hidden timeout, no normal countdown |
+| Login item | Register/unregister, logout/reboot launch |
+| Hotkeys | Default off, enable, conflict error, disable, real trigger |
+| Settings | Revoke disclosure, advanced reset confirmation, no automatic tccutil |
+| UI | Light/dark, small display, larger text, VoiceOver labels |
+| Languages | Follow System + four locales; restart persistence |
+| Icons | Menu-bar template icon; app icon in Finder/System Settings |
+| Release | Download, checksum, right-click Open, permission prompts |
 
-### M9 全局快捷键（v0.4.0；用户 2026-10-18 指示并入长期统一测试）
+## 7. Safety
 
-1. 设置 › 快捷键启用；若组合被占用应显示可读错误且保持关闭，不静默。
-2. 关闭设置/应用后台，按 `⌃⌥⌘K` 应切换保持亮屏；按 `⌃⌥⌘S` 应启动屏保。
-3. 停用后两个组合均不再响应；重启应用后保持停用状态（默认关闭）。
-4. 全程不应新增 Accessibility/Automation 提示。
+Screen cleaning intentionally suspends keyboard input. Keep the mouse available,
+verify the exit control is visible before starting, and use the hidden
+five-minute failsafe only as a last resort. Do not continue on a machine you
+cannot recover.
 
-### M10 关闭显示器（v0.4.0；用户 2026-10-18 自测通过：鼠标唤醒）
+## 8. Acceptance criteria
 
-1. 点击「关闭显示器」→ 屏幕应休眠，无二次确认；移动鼠标/按键唤醒。
-2. 唤醒后面板状态显示“已请求关闭（鼠标/按键唤醒）”；失败时显示真实错误。
-3. 确认动作不触发锁屏/屏保语义混淆。
+- Automated checks pass.
+- Manual checks that were executed are recorded; unexecuted checks remain
+  unverified.
+- Release artifact checks pass.
+- No new private API, permission surface, telemetry, network access or automatic
+  TCC change is introduced.
+- Documentation and changelog are updated together with behavior.
 
-### M12 麦克风静音（v0.5.3；用户 2026-10-18 自测通过，不支持设备待补）
-
-1. 面板「麦克风」卡显示当前默认输入设备；支持 mute 时按钮为「静音麦克风」/「取消静音」。
-2. 点击静音 → 系统输入真实静音并读回，状态显示“麦克风已静音”；再点击取消 → 恢复，状态显示“麦克风已开启”。
-3. 切到不支持 mute 的输入设备（如部分耳机麦克风）→ 显示真实不支持说明，不出现假开关/假成功。
-4. 切换输入设备后重新打开面板，能力和状态刷新；不崩溃。
-5. 不新增 TCC 提示。
-6. 关闭面板：状态栏图标保持 SP 的 S 不变；tooltip 可显示“麦克风已静音”；右键菜单可取消静音（v0.5.3 按用户要求固定图标）。
-
-### M13 屏幕清洁（v0.5.3；用户 2026-10-18 自测步骤 1–3 通过）
-
-1. 有 Accessibility 时点「清洁屏幕」→ 所有显示器出现黑色遮罩、醒目的「退出清洁模式」按钮（普通模式无倒计时）；键盘输入被拦截，鼠标仍可用。
-2. 用鼠标点击「退出清洁模式」→ 立即恢复桌面/输入/光标；无残留遮罩或电源断言。
-3. 不点击时保持清洁，鼠标可随时退出；自动退出仅测试模式。
-4. 没有 Accessibility 时点击 → 只显示授权引导，不进入“黑屏但输入未锁”的假清洁模式。
-5. 全程不修改系统设置、不隐藏鼠标、不需要键盘退出。
-
-### M6 边界/恢复
-
-1. 普通重复启动由 `LSMultipleInstancesProhibited` + 启动守卫限制为一个菜单栏图标；`open -n` 仅用于诊断。
-2. 系统设置中撤销自动化/辅助功能后，应用不崩溃、不假成功。
-3. 卸载：删除 `.app` 即可；TCC 中残留条目可手动删除（记录步骤，不自动改 TCC）。
-
-## 3.1 收尾/长期测试 backlog
-
-用户 2026-10-18 指示：注销/重启等较重操作留到功能迭代接近收尾时，与其余现场测试一起做。以下**未执行**，不得标记通过：
-
-- [ ] M8-3 注销/重启后登录项真实自动启动（长期待办）
-- [ ] M8-4 图标目视：Finder Get Info / 系统设置隐私列表 / 登录项 / TCC 提示 / 菜单栏浅深选中状态（如“简单测试”未覆盖）
-- [ ] M2 屏保真实启动/退出（交互已改为点击即执行）
-- [ ] M3 移除确认后真实锁定与解锁复测
-- [ ] M4 睡眠/唤醒后的保活与断言检查
-- [ ] M9 快捷键后台触发/停用/重启保持（用户指示与注销/重启等收尾测试一起做）
-- [ ] M10 关闭显示器真实休眠/唤醒
-- [ ] M12 麦克风静音在支持/不支持输入设备上的真实行为
-- [ ] M13 屏幕清洁的键盘锁定/鼠标退出/无权限降级（自动退出仅测试模式）
-- [ ] M5 VoiceOver/键盘全路径、小屏/放大字体真机布局
-- [ ] M7 首次引导重新出现（需要清理 `switchpilot.hasSeenWelcome`）
-- [ ] v0.3.5 应用内重置的真实执行（破坏性，需用户明确同意）
-- [ ] 长时间稳定性、重建/重装后的 TCC/登录项保持（已做短周期复核）
-
-## 4. 验收判定
-
-- **通过**：自动化 A1–A14 全绿，且该功能对应的现场手动项按预期执行并有记录。
-- **部分/未验证**：代码与静态证据存在，但现场项未执行；文档与 UI 必须明确标注，不得写"完成"。
-- **失败**：动作返回错误或与实际系统状态不符；记录真实错误码并回退界面状态。
-
-v0.1 收口标准：A1–A14 通过；M1–M3 由用户在场执行并记录（未执行则保持"待授权/待现场验证"）；M4 至少完成正常退出与强退后的无残留检查，睡眠/唤醒可留缺口。
-
-## 5. 恢复与回退
-
-- 原应用、其偏好与签名不做任何修改；测试前后比较 hash。
-- 深色模式：测试前记录当前外观，测试结束恢复并读回。
-- 屏保/锁屏均点击即执行（v0.3.8/v0.3.7 起无二次确认，需用户可立即解锁/退出屏保）。
-- 权限：仅在用户主动操作时申请；撤销入口写在 README；不直接编辑 TCC 数据库。
-- 删除应用 = 删除 `app/SwitchPilot/.build/SwitchPilot.app`；不新增全局配置文件。
-
-## 6. 记录模板
-
-每次验收记录：日期/时间、应用构建哈希（`codesign -dv` 或 `shasum`）、功能、操作、期望、实际、OSStatus/错误、是否恢复、截图/日志路径（原始日志放 `evidence/raw/`，不入 Git）。
-
-## 7. 本轮明确未执行项
-
-深色模式真实授权与切换、屏保真实启动、锁屏真实锁定、睡眠/唤醒、VoiceOver、多实例、首次引导交互手测、设置/登录项/图标现场项、长时间稳定性、分发签名/公证/Sandbox。以上不得在 README 或能力矩阵中记为通过。
+Detailed commands and the current manual matrix are in
+[en/TESTING.md](en/TESTING.md).

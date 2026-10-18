@@ -1,6 +1,6 @@
 # <img src="assets/logo-512.png" width="72" align="left" alt="SwitchPilot logo"> SwitchPilot
 
-[简体中文](README.zh-CN.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [Design principles](docs/en/CORE.md) · [Architecture](docs/en/ARCHITECTURE.md) · [Testing](docs/en/TESTING.md) · [Roadmap](docs/en/ROADMAP.md)
+[简体中文](README.zh-CN.md) · [繁體中文](README.zh-Hant.md) · [日本語](README.ja.md) · [Docs](docs/README.md) · [Design principles](docs/en/CORE.md) · [Architecture](docs/en/ARCHITECTURE.md) · [Testing](docs/en/TESTING.md) · [Roadmap](docs/en/ROADMAP.md)
 
 [![CI](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml)
 
@@ -123,8 +123,9 @@ SWITCHPILOT_SIGN_IDENTITY="Apple Development: Your Name (TEAMID)" ./scripts/buil
 ```
 
 Never commit certificates, signing material or a Gatekeeper workaround. The app
-is not notarized and is intended to be built and run locally; it is not a
-distributed binary.
+is not notarized. A universal ad-hoc binary is published as a convenience; for
+stronger trust, build from source and sign it locally. See
+[docs/en/RELEASE.md](docs/en/RELEASE.md).
 
 ### Make targets
 

@@ -1,3 +1,14 @@
+## [Unreleased]
+
+- Rewrite the product docs (`CORE`, `PRD`, `DESIGN`, `TECH`, `TESTPLAN`,
+  `EXPANSION`, `RESEARCH`) for the current open-source, four-language,
+  ad-hoc-binary baseline.
+- Add canonical engineering specs for localization, release engineering and
+  brand/attribution.
+- Correct stale personal-use/no-distribution wording in SECURITY, SUPPORT,
+  CONTRIBUTING, AGENTS, SECURITY-INSIGHTS, README and the issue/PR templates.
+- Add an automated release workflow for the universal ad-hoc artifact.
+
 # Changelog
 
 All notable user-visible changes are recorded here. This project follows

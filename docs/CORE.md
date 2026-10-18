@@ -1,92 +1,89 @@
-# SwitchPilot 核心理念与产品边界
+# Core principles
 
-- 状态：2026-10-18；当前基线 v0.5.3；本文件是范围与取舍的最高层依据。
-- 产品：个人自用 macOS 菜单栏系统开关；不做分发。
-- 需求准入先读本文件，再看 `docs/PRD.md`、`docs/DESIGN.md`、`docs/TECH.md`、`docs/TESTPLAN.md`。
+Status: current baseline **v0.7.1**. This document defines SwitchPilot's product
+boundary. The implementation-level admission checklist lives in
+[en/CORE.md](en/CORE.md).
 
-## 1. 一句话定位
+## Positioning
 
-**SwitchPilot 是一个个人自用、低权限、少而可靠的 macOS 菜单栏系统开关：用一次点击完成每天真正高频的几件事，而不是复刻一个 30+ 开关的工具箱。**
+SwitchPilot is an open-source, privacy-first macOS menu-bar utility maintained
+by [PilotFoundry](https://github.com/PilotFoundry). It was inspired by One
+Switch's approach of putting everyday system controls in the menu bar, but it is
+an independent project with a deliberately smaller scope. It is not affiliated
+with or endorsed by One Switch, and contains no One Switch code, assets or
+distribution binaries.
 
-## 2. 初心
+The project is not a personal-use-only prototype any more: source, releases,
+documentation and issue tracking are public. That changes the maintenance bar,
+not the product scope.
 
-- 原 One Switch 能力很多，但个人日常高频的只有少数系统状态/动作；不需要为了“像原版”而全量复刻。
-- 不为功能接私有 API、提高权限面或引入后台自动化；原 app 与其数据保持不动。
-- 目标是减少 System Settings 的来回点击和权限摩擦，而不是做自动化平台、场景引擎或分发产品。
-- 能自动验证的自动验证；必须用户在场的（TCC、真实登录、锁屏、显示器休眠、菜单栏/图标视觉）现场验证；**未执行不写通过**。
+## Product rules
 
-## 3. 核心原则
+1. **Small and reliable.** Prefer a small set of understandable controls over a
+   crowded dashboard.
+2. **System gap or long chain.** A new control must fill a real system gap or
+   shorten a frequent, multi-step workflow. Mirroring an existing menu-bar or
+   Control Center control is not enough.
+3. **One clear action.** Clearly labelled, common and reversible actions run on
+   click. Only irreversible or high-risk operations require confirmation.
+4. **Minimum permission surface.** Use public APIs. Prefer an existing
+   permission over adding a new TCC service. Explain missing permissions and
+   unsupported devices instead of pretending success.
+5. **Readback, not optimism.** Reflect system state from a real readback
+   (assertions, appearance, lock state, mute capability) rather than from a
+   click having happened.
+6. **Visible state.** Privacy- and input-related state, especially microphone
+   mute and screen cleaning, must be visible and understandable.
+7. **Recoverable.** A mode that changes input state needs an explicit exit and a
+   failure-safe path. Screen cleaning keeps the mouse as its exit and has a
+   hidden last-resort timeout.
+8. **No private APIs or automatic TCC changes.** No privileged helper, private
+   frameworks, automatic `tccutil reset`, or modification of another app's data.
+9. **Quiet native UI.** Follow macOS conventions: readable contrast, standard
+   controls, minimal decoration and a compact menu-bar panel.
+10. **Evidence over claims.** Automated checks are separate from manual TCC,
+    login, hardware and release acceptance. Unexecuted manual checks stay
+    pending.
 
-1. **少而准**：只收高频、明确、可解释的系统状态/动作。新增功能先过“日常是否真的更省事”。
-2. **系统缺口/长链优先**：新增能力必须满足其一：系统没有可用的一键等价入口，或显著缩短一个高频、多步、隐私相关的操作链。仅仅重复系统菜单栏/控制中心已有控制，不做。
-3. **一键直达**：标签明确、常用且可逆的动作点击即执行（保活、屏保、锁屏、关闭显示器、麦克风静音、清洁屏幕）；只有不可逆/高风险操作（应用内重置权限）保留确认。
-4. **权限最小、诚实降级**：优先公开 API；能用现有权限完成就不新增；缺权限/设备不支持时显示真实原因，不假装成功。
-5. **真实读回**：开关状态来自系统读回（断言/外观/锁屏/音量能力/麦克风 mute），不是“点过就算”。
-6. **状态必须可见**：尤其麦克风静音与屏幕清洁这类影响输入/隐私的模式，必须有清晰、持续可理解的可见状态；不能静默。
-7. **安全可恢复**：会改变输入/屏幕状态的动作必须有明确的退出路径。屏幕清洁锁定键盘但保留鼠标点击退出；自动退出仅作为测试/调试能力，不作为普通 UI 的明显兜底。
-8. **个人自用边界**：不做分发、不做后台自动控制、不修改原 app、不静默改 TCC；默认不自动执行 tccutil reset。
-9. **macOS 原生且安静**：遵循 macOS 27/HIG 的克制表达，可读对比度、系统控件、少装饰；不为“高级感”牺牲可理解性。
-10. **证据与评审**：UI/UX/QA 用同一清单复核；每个可审阅里程碑有 Git 记录、自动检查、未验项清单。
+## Included scope
 
-## 4. 新功能准入清单
+- Keep awake, timed or unlimited
+- Dark mode through System Events
+- System screen saver
+- Lock screen, gated by Automation and Accessibility
+- Display sleep through `pmset displaysleepnow`
+- Capability-aware microphone mute
+- Screen cleaning with a real keyboard event tap, mouse exit and hidden
+  five-minute failsafe
+- Optional login item through `SMAppService`
+- Fixed global hotkeys, disabled by default
+- English, Simplified Chinese, Traditional Chinese and Japanese UI, following
+  the system language by default with an in-app override
+- Ad-hoc universal macOS release binary, published with checksums
 
-新增任何能力前必须回答；否定项多则放候选或不做：
+## Explicitly out of scope
 
-1. 它属于“**系统缺口**”或“**高频长链**”，而不是重复系统已有的顶栏/控制中心操作吗？
-2. 有**公开 API**吗？会新增 TCC、私有依赖、后台常驻或特权 helper 吗？
-3. 动作是否**可理解、可逆/可恢复**？失败能否真实反馈？
-4. 状态是否**可见**（尤其隐私/输入类）？有没有误静音、误锁输入的风险与兜底？
-5. 是否破坏“菜单栏一键、少而稳”的主体验与面板紧凑性？
-6. 能否区分**自动验证**与**用户现场验证**，并接受未验项不写通过？
+- Output volume, low-power mode, True Tone, desktop-icon hiding, Night Shift,
+  Wi-Fi/Bluetooth toggles, audio-device switching, scenes and custom hotkey
+  recording
+- Private APIs, privileged helpers, background automation, telemetry,
+  automatic TCC resets, network access or remote configuration
+- Developer ID signing, notarization, sandboxing and App Store distribution
+  while the project has no Developer ID certificate
+- Branding that could imply endorsement by, or affiliation with, One Switch
 
-## 5. 明确不做
+## Distribution boundary
 
-- Night Shift 直接控制（私有 CoreBrightness）
-- 合盖不休眠/特权 helper
-- 输出音量控制（系统菜单栏/控制中心已提供，且设备能力复杂；v0.5.0 移出）
-- 低电量模式/电量控制（系统电池菜单已有；系统电源管理更合适）
-- 音频输出设备切换、麦克风输入设备切换（系统控制更合适/设备差异大）
-- DND、Wi-Fi、蓝牙、隐藏桌面图标
-- 场景组合/自动规则、后台自动触发
-- 自定义快捷键录制器（固定组合仍为默认关闭的实验项）
-- 分发签名/公证/沙盒适配、正式品牌与商业化
+Public source and an ad-hoc universal binary are intentional. The binary is a
+convenience build, not a notarized distribution: macOS may require the user to
+right-click **Open** on first launch. Users who need a higher trust level should
+build from source and sign it themselves. The exact artifact names, checksum,
+verification steps and future notarization path are defined in
+[en/RELEASE.md](en/RELEASE.md).
 
-## 6. 当前范围与状态
+## Decision rule
 
-### 保护核心（原有四项）
-
-- 保持亮屏（自动化已验证；M4 睡眠/唤醒待收尾）
-- 深色模式（M1 用户通过）
-- 启动屏保（M2 用户通过）
-- 锁定屏幕（M3 用户通过）
-
-### 后补能力
-
-- 关闭显示器（M10 用户通过，鼠标唤醒）
-- 屏幕清洁（v0.5.3：全屏遮罩、锁定键盘、鼠标点击退出；普通模式不显示倒计时/不自动退出，测试可用环境变量启用自动退出；M13 用户自测步骤 1–3 通过（无权限降级待补））
-- 麦克风静音（v0.5.3：能力感知；面板红字/右键菜单可感知；**状态栏图标固定为 SP 的 S，不因静音变化**；用户自测通过，不支持设备待补）
-- 设置/权限首启、撤销说明、稳定签名、单实例、图标资源（已实现；部分视觉/真实登录项待现场）
-- 登录时启动（注册/注销已验；真实注销/重启待收尾）
-- 全局快捷键（实现且默认关闭；测试并入长期统一测试）
-
-### 已移除
-
-- 输出音量：按“不重复系统控制”原则移出；面板卡已删除，M11 不再验收。
-
-### 待验收/收尾
-
-详见 `docs/TESTPLAN.md` §3.1；未执行项（M4/M5/M8-3/M8-4/M9/M12/M13，以及应用内重置真实执行、首次引导复现）不得写通过。
-
-## 7. 验收与变更规则
-
-- 自动检查（`scripts/verify-app.py`、`SwitchPilotChecks`、对比度/尺寸脚本）必须全绿。
-- TCC 允许/拒绝/撤销、真实锁屏/屏保/显示器休眠/麦克风静音写出、菜单栏/系统图标显示、注销/重启登录：用户在场执行并记录。
-- 每个里程碑保留 Git 提交；不 amend/rebase；证据写入 `evidence/`，未验项显式列出。
-- 新功能先更新本文件与 PRD/DESIGN/TECH/TESTPLAN，再实现。
-
-## 8. 相关文档
-
-- 规格：`docs/PRD.md`、`docs/DESIGN.md`、`docs/TECH.md`、`docs/TESTPLAN.md`
-- 验收：`evidence/app-runtime.md`、`evidence/verification.md`、`evidence/onsite/`
-- 扩展开关/快捷键评估：`artifacts/20261018-1325-oneswitch-expansion-eval.html`、`docs/EXPANSION.md`
-- 独立评审：`evidence/reviews/`
+If a proposal makes the product larger without making a frequent system action
+more reliable, faster or more understandable, it is probably out of scope. If it
+weakens permission honesty, state readback or recovery, it is out of scope
+regardless of demand.

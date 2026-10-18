@@ -1,241 +1,134 @@
-# DESIGN：SwitchPilot 菜单栏面板 v0.3
+# UI/UX design
 
-日期：2026-10-18；对应 PRD：`docs/PRD.md`；实现约束：`docs/TECH.md`；正式名与设计依据：`artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`。
+Status: current baseline **v0.7.1**. English is canonical. Screenshots live in
+`docs/images/`; all UI must be readable in light and dark appearances.
 
-## 1. 设计原则
+## 1. Design principles
 
-- **原生优先**：AppKit 状态项 + SwiftUI 面板 + SF Symbols；不做自定义皮肤、不做多层 Liquid Glass。
-- **状态可见、不假装成功**：每个功能都有明确状态（空闲/保护中/需授权/被拒绝/失败/未确认）与真实错误。
-- **少即是多（macOS 27 方向）**：macOS 27 缩减装饰性图标、收敛玻璃分层；本面板只保留有功能意义的图标（动作磁贴、状态点、说明），不给每个标签配图标。
-- **一次一事**：主操作（保持亮屏）视觉权重最高；外观与快速动作次之；权限与说明收在行内，不打断。
-- **首次可用**：第一次打开就有三条规则说明；引导关闭后可从 footer 重新打开。
-- **最小权限、默认安全**：启动不弹权限框；只有用户点击才请求；**屏保/锁屏点击即执行（无二次确认，按钮文案明确）**；锁屏缺权限时不发送按键。
-- **确认策略（v0.3.8）**：明确、常用、可逆的即时动作不二次确认；仅不可逆/高风险动作（应用内权限重置）保留确认。
+- **Native first.** AppKit status item, SwiftUI panel, standard controls, SF
+  Symbols. No custom chrome or multi-layer visual effects.
+- **State is visible.** Every action has an honest idle, active, permission,
+  denied, failure or unsupported state.
+- **One panel, few decisions.** The panel is a compact control surface, not a
+  dashboard. Settings holds configuration and permission explanations.
+- **Quiet by default.** The app is an `LSUIElement` agent with no Dock icon and
+  no decorative animation.
+- **Localizable by construction.** Copy must fit English, Simplified Chinese,
+  Traditional Chinese and Japanese. Language names are shown natively.
 
-## 2. 信息架构
+## 2. Menu-bar presence
 
-```
-菜单栏图标（NSStatusItem, switch.2）
-└── NSPopover（宽 360，transient）
-    └── PanelView
-        ├── Header：应用标识、名称、副标题、状态胶囊（保护中/空闲）
-        ├── 首次引导卡（首次显示，可重新打开）
-        │   ├── 1 保持亮屏：开启后防止空闲熄屏
-        │   ├── 2 深色模式：首次需要 Automation
-        │   └── 3 屏保/锁屏：点击即执行；锁屏还需辅助功能
-        ├── 保持亮屏（主操作）
-        │   ├── 开关
-        │   ├── 时长分段选择：15/30/60 分钟、无限期
-        │   ├── 进度条（限时会话）
-        │   ├── 状态行：剩余时间 / 无限期 / 未开启
-        │   └── 边界说明：不阻止合盖/手动睡眠/低电量睡眠
-        ├── 外观
-        │   ├── 深色模式开关
-        │   └── 系统当前外观 + 权限状态（绿=已授权、橙=待授权、红=被拒绝）
-        │       └── 缺权限时行内「请求授权…」「打开系统设置」
-        ├── 快速动作
-        │   ├── 磁贴：启动屏保（点击即执行）
-        │   └── 磁贴：锁定屏幕（缺权限时显示「需授权」徽标）
-        │       └── 缺权限时行内说明 + 请求 Automation / 打开辅助功能设置
-        └── Footer：权限摘要、使用说明入口、退出
-```
+- Template icon in the system menu bar; no color-only state.
+- Left click opens the panel; the status item follows standard macOS behavior.
+- Single instance. A second launch explains that SwitchPilot is already running.
+- The menu-bar app remains useful when permissions are missing, but gated
+  actions must explain what is unavailable.
 
-v0.2 仍只有单面板：不提供设置窗口、偏好页、快捷键与登录项。
+## 3. Panel structure
 
-## 3. 状态模型
+Width: 380 pt. Normal height: about 730 pt; with the permission guide: about
+803 pt. The panel is scroll-safe on smaller displays.
 
-| 状态 | 含义 | 呈现 |
-|---|---|---|
-| `idle` | 保活关闭且可操作 | 灰色状态点 + “空闲”胶囊 |
-| `active` | 保活已开启且有 OS 读回 | 绿色状态点 + “保护中”胶囊 + 进度/剩余 |
-| `pending` | 操作进行中 | 控件禁用 + 简短进行中文案 |
-| `needsPermission` | 缺少 Automation/Accessibility | 橙色文字 + 行内授权按钮；开关回弹 |
-| `denied` | 用户或系统拒绝 | 红色错误 + OSStatus + 设置入口；不重试 |
-| `unconfirmed` | 已请求但无法读回 | 明确显示“未确认”，不进入 active |
-| `failed` | 操作返回错误 | 红色错误文案（含 OSStatus/脚本错误） |
+1. **Header** — app mark/name, version, current keep-awake summary.
+2. **Keep awake** — toggle, 15/30/60/unlimited picker, readback state.
+3. **Dark mode / microphone** — system appearance status and microphone
+   capability/state.
+4. **Quick actions** — screen saver, lock screen, display sleep, screen
+   cleaning. Each tile has an icon, title, short subtitle and optional badge.
+5. **Permissions** — only when needed; readiness summary, grant/recheck
+   actions, diagnostics disclosure.
+6. **Footer** — How to use, Settings, Quit.
 
-规则：只有真实读回成功才进入 active；深色模式未授权时点开关会回弹并提示原因，绝不改变系统外观；屏保/锁屏执行后读不回状态时显示“已请求，未确认”。
+Long localized labels wrap to at most two lines; the panel height may grow and
+is measured by `--panel-size`.
 
-## 4. 关键交互
+## 4. Settings window
 
-### 4.1 保持亮屏（主操作）
+Width: about 460 pt; content is grouped into cards:
 
-- 开关 + 分段时长（15/30/60/无限期，默认无限期）。
-- 开启：创建公开 IOKit 显示器断言 → 读回 → 状态胶囊“保护中”；限时显示线性进度条与“剩余 mm:ss”。
-- 到时：自动释放并回到空闲；关闭/退出/错误路径同样释放。
-- 文案明确边界：不阻止合盖、手动睡眠、低电量睡眠。
+- Permissions: Automation, Accessibility, recheck, revoke guidance.
+- Hotkeys: fixed shortcuts, enable toggle, conflict/error explanation.
+- Login: optional `SMAppService` login item; honest registration state.
+- **Language**: Follow System / English / 简体中文 / 繁體中文 / 日本語, plus
+  **Quit and Reopen** because a language change requires a relaunch.
+- About: SwitchPilot, version, open-source/MIT positioning, and an
+  **Open source** badge. The About copy does not mention One Switch.
 
-### 4.2 系统深色模式
+Settings refreshes permission state when it opens or the app becomes active.
+Advanced TCC reset commands remain copy-only after explicit disclosure; the app
+never runs `tccutil reset` automatically.
 
-- 开关代表系统外观；当前值先从全局偏好只读展示（无权限也可显示深/浅）。
-- 已授权：执行 System Events set → 读回 → 更新开关与状态。
-- 未授权：开关回弹；状态行显示橙色“需要授权/首次操作会请求授权”，行内提供“请求授权…”“打开系统设置”。
-- 被拒绝：红色显示错误码与设置入口，不自动重试。
+## 5. Screen cleaning
 
-### 4.3 启动屏保
+- Full-screen overlays on all displays.
+- Session event tap suppresses keyboard input; mouse remains available.
+- Visible **Exit cleaning mode** button accepts the first mouse click.
+- No keyboard exit by design.
+- Hidden five-minute failsafe; no countdown in normal mode.
+- State must be visibly recoverable and cleaned up on app exit.
 
-- 磁贴按钮；点击后**直接启动**系统屏保（v0.3.8 起无二次确认；若系统唤醒需要密码，由系统提示解锁）。
-- 点击后直接启动系统 ScreenSaverEngine（v0.3.8 起无二次确认）；读不到状态显示“已请求启动（未确认）”；失败显示错误。
+This is a safety-critical surface. Do not change the exit model without an
+explicit product decision and a manual test.
 
-### 4.4 锁定屏幕
+## 6. Localization design
 
-- 磁贴按钮；缺权限时显示「需授权」徽标，下方行内说明与授权入口（请求 Automation / 打开辅助功能设置）；**不发送按键**。
-- 权限齐备时，点击**直接**发送与系统 Ctrl+Cmd+Q 等价的 System Events 按键（v0.3.7 起无二次确认；按钮标签「锁定屏幕」已明确表达动作）；1 秒后 best-effort 读回锁屏状态。
-- 不引入私有 API、不修改 TCC、不关闭 SIP。
+Supported locales:
 
-### 4.5 首次引导与帮助
+| Locale | Notes |
+|---|---|
+| English | Canonical README; default fallback for untranslated keys |
+| Simplified Chinese | Source strings are Chinese, so fallback is readable |
+| Traditional Chinese | Use Taiwan macOS vocabulary (設定、螢幕、選單列、權限) |
+| Japanese | Use macOS Japanese terms (メニューバー、スリープ防止、画面をロック) |
 
-- 首次启动显示三条规则卡；“知道了”写入 `UserDefaults("switchpilot.hasSeenWelcome")`，之后不再自动出现。
-- Footer 的“使用说明 / 收起说明”可随时重新打开引导卡。
-- 所有权限说明与安全边界可在面板内查看，不依赖外部文档。
+Rules:
 
-### 4.6 退出
+- Do not hide controls solely because a translation is longer; wrap or shorten
+  the copy instead.
+- Keep format placeholders unchanged.
+- Do not embed English-only abbreviations in user-facing text unless they are
+  product names or platform terminology.
+- Avoid putting critical warnings only in a tooltip; they must be visible.
+- After a language change, show the restart instruction and the restart action.
+- Localized permission prompts come from `InfoPlist.strings` and are loaded at
+  launch.
 
-- Footer“退出”调用 `NSApplication.terminate`；退出前释放保活断言、停止计时器。
+## 7. Accessibility and contrast
 
-## 5. 视觉规范（macOS 27 方向）
+- Use standard controls and labels; provide accessibility labels/hints where a
+  custom control or icon-only action is used.
+- Maintain at least 4.5:1 contrast for ink tokens on panel, card and tile
+  backgrounds in light and dark modes.
+- Do not use color as the sole indicator of state.
+- Respect larger text and VoiceOver; manual verification remains required.
 
-- **尺寸**：面板宽 360 pt；内边距 16；区块间距 14；卡片圆角 10–12（continuous）。
-- **字体**：系统字体；标题 15 semibold，行标题 14 medium，正文/说明 13/12，辅助 11；不使用超大标题。
-- **颜色**：系统语义色；绿=保护中/成功，橙=待授权，红=拒绝/失败；卡片底色 `Color.primary.opacity(0.05)`，自动适配深色外观。
-- **材质**：沿用 NSPopover 系统材质；内部不使用多层毛玻璃/强阴影，符合 Golden Gate 收敛方向。
-- **图标**：仅功能图标（动作磁贴、状态点、信息）；无装饰 icon 列；SF Symbols 与文字标签成对出现。
-- **布局**：单列纵向分区；分隔线低对比；开关右对齐，标签左对齐；磁贴两列等宽。
-- **动效**：无自定义动画；进度条随时间线性更新；尊重系统“减少动态效果”（无动画可关）。
+## 8. Visual identity
 
-## 6. 无障碍与键盘
+- Mark: the PilotFoundry helm; app icon and organization logo share the same
+  family. No green palette in the organization identity.
+- The menu-bar icon is monochrome/template.
+- Social-preview and organization assets live under `assets/org/` and
+  `assets/`.
+- One Switch may be named in README attribution and legal notice, but not in the
+  in-app About copy; the app is independent and does not use One Switch assets.
 
-- 使用 SwiftUI 标准 `Toggle`/`Button`/`Picker`，默认支持 Tab 聚焦与 Space/Return 激活。
-- 每个控件带中文 `accessibilityLabel`；开关带 `accessibilityValue`（如“已开启，剩余 12:30”）；状态不只靠颜色表达。
-- 菜单栏图标提供 `accessibilityDescription`。
-- 面板关闭：NSPopover `.transient`，点外部/再点图标关闭。
-- v0.2 仍未做 VoiceOver 全路径验收，列为 TESTPLAN M5/M7。
+See [en/BRAND.md](en/BRAND.md) for naming and trademark boundaries.
 
-## 7. 错误与日志
+## 9. Copy rules
 
-- 行内错误优先；模态弹窗只用于不可逆的应用内权限重置确认；屏保/锁屏不再二次确认。
-- 错误包含人类可读原因与 OSStatus（如有）；权限错误提供设置入口。
-- 日志使用 `os.Logger`（subsystem `local.personal.SwitchPilot`），不记录用户隐私内容。
+- Prefer short, direct, native sentences over literal translation.
+- Explain what is missing and what the user can do next.
+- Never claim success when state could not be verified.
+- Use "Follow System" for the language default, not "Auto".
+- Release/download copy must state that the binary is ad-hoc and not notarized.
+- Keep the four READMEs aligned on user-visible facts.
 
-## 8. 文本草图
+## 10. Current screenshots
 
-```
-┌────────────────────────────────────┐
-│ [⇄] SwitchPilot            ● 空闲  │
-│     菜单栏开关 · v0.2.0             │
-├────────────────────────────────────┤
-│ 开始使用                    知道了  │
-│ 1 保持亮屏：防止空闲熄屏            │
-│ 2 深色模式：首次需要 Automation     │
-│ 3 屏保/锁屏点击即执行 │
-├────────────────────────────────────┤
-│ 保持亮屏                      [开]  │
-│ [15 分钟][30 分钟][60 分钟][无限期] │
-│ ▓▓▓▓▓▓▓░░░  剩余 12:30             │
-│ 不阻止合盖、手动睡眠或低电量睡眠     │
-├────────────────────────────────────┤
-│ 外观                                │
-│ 深色模式                      [开]  │
-│ 系统当前：浅色 · 首次操作会请求授权  │
-│ [请求授权…] [打开系统设置]          │
-├────────────────────────────────────┤
-│ 快速动作                            │
-│ ┌──────────────┐ ┌──────────────┐  │
-│ │ ▶ 启动屏保    │ │ 🔒 锁定屏幕   │  │
-│ │ 点击即启动    │ │ 需授权        │  │
-│ └──────────────┘ └──────────────┘  │
-│ 屏保：未执行 · 锁屏：未执行          │
-├────────────────────────────────────┤
-│ Automation：待授权 · 辅助功能：未授权│
-│ 使用说明                      退出   │
-└────────────────────────────────────┘
-```
-
-## 9. 非目标
-
-设置窗口、快捷键、开机自启、多语言、图标状态变化定制、主题定制、菜单栏图标管理器、深色模式定时、保活合盖增强、分发视觉资产（正式图标/品牌稿）。
-
-## 10. v0.3 增量（权限/设置/品牌）
-
-### 10.1 首次授权引导
-
-- 首次打开：三条规则 + **申请全部权限** + 重新检查 + 稍后再说；引导可见时隐藏外观/锁屏的重复权限 callout（减少冗余）。
-- "申请全部权限"状态机：后台请求 Automation（系统弹窗）→ 若辅助功能未授权，调用 `AXIsProcessTrustedWithOptions(prompt)` 显示系统提示 → 用户到系统设置勾选 → 回面板"重新检查"。任一步拒绝都保留保持亮屏与启动屏保，并显示真实原因。
-- 拒绝后不重复弹窗；提供系统设置深链。检查权限时按钮显示"请求中…"，不显示假成功。
-
-### 10.2 设置窗口（460pt 单窗格）
-
-- 权限区：Automation / 辅助功能状态；申请全部权限、重新检查、去授权辅助功能、打开两个系统设置面板；说明"如何撤销授权"，不内置 tccutil 自动撤回。
-- 登录区：登录时启动开关（`SMAppService`），状态：未开启 / 已开启 / 需要批准 / 未找到；需要批准时给"打开登录项设置"。
-- 关于区：版本、个人自用说明。窗口打开/应用重新激活时自动刷新权限状态。
-
-### 10.3 菜单栏与图标
-
-- 菜单栏：自绘 template "S" monogram（SwitchPilot），不再使用 SF Symbol `switch.2`；单状态，不随保活变化。
-- 应用图标：1024 画布、824×824 内容居中（约 100pt 透明边距）、continuous squircle；深绿渐变 + 奶油色 S；导出 16–1024 全套 .icns。`CFBundleIconFile=AppIcon`，build 脚本复制。
-- 状态项右键菜单：设置… / 使用说明 / 退出；左键打开面板。
-
-### 10.4 表面与对比度
-
-- 面板使用单一不透明 `windowBackgroundColor`，不再叠多层材料（符合 macOS 27 收敛玻璃方向）。
-- 新增 `secondaryInk`（浅色 #5F5F5F / 深色 #A8A8A8）用于 12–13pt 说明；关键边界/权限说明用 primary。
-- `warningInk/successInk/errorInk` 只用于图标/填充；不把系统橙/绿/红当小字号正文。对比度脚本断言 light/dark panel/card/tile ≥4.5:1。
-- 磁贴改用系统 bordered 按钮，提供 hover/pressed/focus；卡片圆角统一 10/12。
-
-### 10.5 面板尺寸
-
-- 无 guide ≤680pt、有 guide ≤760pt（逻辑）；AppDelegate 按屏幕 visibleFrame 约束 popover 高度。
-
-## 11. v0.3.4 设置页权限区：撤销授权渐进披露
-
-- 成功态：两项权限显示 ✓，下方一行「✓ 全部权限已授权」，仅保留小号「重新检查」；**不再显示蓝色「申请全部权限」**（避免与已授权状态矛盾）。
-- 低频的撤销说明从一级移入**默认收起**的 inline disclosure，一级标签为「如何撤销授权…」+ chevron；整行可点，`.plain` 文字样式、`secondaryInk`，不用 destructive/强调按钮。
-- 展开后：
-  1. 一句「撤销需在系统设置中手动完成；SwitchPilot 不会自动修改 TCC。」；
-  2. `打开自动化设置` / `打开辅助功能设置` 两个小号深链按钮（系统设置路径，可恢复）；
-  3. 二级「终端命令（高级）」默认收起，展开后显示 bundle-scoped `tccutil reset` 命令（等宽、可选中）、「复制命令」按钮与风险提示（仅本应用、不要 sudo、勿用 reset All、重置后需重新授权）。应用绝不自动执行。
-- 未就绪态：按三态给 CTA——两项缺失时「申请全部权限」；部分缺失时只给缺失项入口；已被拒绝时只给「打开系统设置」。诊断块仅在未就绪时展示。
-- 撤销 disclosure 只在至少一项已授权时出现；外部撤销后刷新会导致其自动隐藏。
-- 状态保存在 `SettingsModel`（CLT 无 SwiftUI 宏，不能用 `@State`）；`SettingsWindowController` 监听 `objectWillChange` 自动调整窗口高度，展开/收起不裁切。
-- 验收：`--dump-settings` 折叠/展开两态（含 `SWITCHPILOT_PREVIEW_AUTHORIZED`、`SWITCHPILOT_EXPAND_REVOKE` 预览钩子）；键盘/VoiceOver 可操作；展开后窗口高度实测约 523 增至 774（v0.3.9；随内容状态变化）（实测）。
-
-## 12. v0.3.5：应用内高级撤销（显式、带确认）
-
-- 默认路径仍是「系统设置中手动撤销」（可恢复、可解释、Apple 支持），放在展开区最上方。
-- 展开区「终端命令（高级）」下新增 **「在应用内重置权限…」**（`.bordered` 小按钮，非主 CTA）。点击弹出 `NSAlert` 警告：
-  - 将调用系统自带 `tccutil`，仅重置本应用（Automation + 辅助功能）两项授权；
-  - 非 Apple 官方 API、不可撤销；重置后需要重新授权；系统弹窗不保证再次出现，可能需手动添加；
-  - 应用不会 sudo、不会 reset All、不会静默/自动执行。
-- 确认按钮为 destructive；取消为默认。确认后在后台依次执行 bundle-scoped 两项 reset，结果回主线程刷新权限区；只有至少一项已授权时才出现该高级入口。
-- 风险与定位：它是"高级"能力，不是推荐主路径；默认 UI 仍不鼓励使用，文案明确标注 unsupported/不可逆。
-
-## 13. v0.3.8：交互确认策略
-
-- 用户确认的产品原则：**已经明确告知、且属于常用操作的动作，不再增加二次确认的烦恼。**
-- 因此「启动屏保」「锁定屏幕」「保持亮屏」等清晰标注、可逆/可退出的即时动作点击即执行；权限门控仍保留（缺权限时不执行并给引导）。
-- 仅**不可逆/高风险**动作保留确认：应用内重置权限（Advanced Reset）继续使用警告 + destructive 按钮；TCC 授权请求由系统弹窗负责，不在应用内重复确认。
-- 该策略覆盖 v0.3.7 移除锁屏确认、v0.3.8 移除屏保确认；M2/M3 的真实执行仍需用户现场验证。
-
-## 14. v0.3.9：UI/UX 复评后的细节收敛
-
-- 2026-10-18 用同一清单对 v0.3.8 做 UI/UX 独立复评：无 P0；UI 遗留 1 项 P1、UX 4 项 P1（3 新 1 残留）。本轮落地：
-  - **文案与行为一致**：guide 第 3 条与屏保/锁屏磁贴副标题改为「点击即执行」及退出/解锁提示；不再出现"确认后/会先确认"。
-  - **单一权限卡**：删除外观卡与快速动作卡内的两个权限 callout，新增统一「需要授权」卡片；缺失项动态列出（Automation/辅助功能），CTA 按缺失/拒绝分流，保持亮屏/屏保始终可用。双缺时不再遗漏辅助功能。
-  - **设置页收敛**：成功态删除重复的"全部权限已授权"第三行；版本只在「关于」出现；原始诊断收进默认收起的「诊断详情」；disclosure 去掉省略号、chevron 对 VoiceOver 隐藏；应用内重置移入「不可逆操作」块，按钮含"不可撤销"并 tint red；登录项状态在刷新完成后按真实状态生成消息。
-  - **单实例**：Info.plist 增加 `LSMultipleInstancesProhibited`，同时保留启动时同 bundle 实例守卫；普通重复启动保持一个菜单栏图标；`open -n` 仅供诊断（新 URL scheme `switchpilot://diagnose` 供运行中应用输出只读诊断）。
-  - **尺寸实测**：面板 380×637（无 guide）/380×710（guide）；设置窗口 523（成功折叠）/774（展开）pt。
-- 未处理/延后：小屏 ScrollView、高对比/降低透明度/VoiceOver（M5 现场）、S monogram 变体与菜单栏三态（真机）、术语统一；M2/M3 真实动作与 M8 登录/图标仍待现场/收尾。
-
-## 15. v0.5.x：麦克风静音、屏幕清洁与快捷动作
-
-- 面板结构（v0.5.2）：保持亮屏卡、合并的「深色模式 + 麦克风」系统卡、4 个 2×2 快速动作磁贴（屏保/锁屏/关闭显示器/清洁屏幕）、权限单卡（缺失时置顶）、footer。已移除输出音量卡（v0.5.0）。
-- **系统卡（深色模式 + 麦克风）**：单卡双行，减少垂直堆叠。麦克风行显示当前默认输入设备；支持 mute 时显示状态（已开启/已静音）和普通 bordered 动作按钮（静音麦克风/取消静音），静音态只用 errorInk 文字强调，不再用蓝色主按钮；不支持 mute 的设备显示说明与“可在系统设置 › 声音中调整”。
-- **快速动作（v0.5.2）**：2×2 磁贴网格（屏保/锁屏/关闭显示器/清洁屏幕），点击即执行；默认「未执行」状态行不再常驻，仅显示非默认状态或错误，降低高度。清洁磁贴副标题“锁键盘 · 鼠标退出”。
-- **屏幕清洁模式**：
-  - 全屏黑色遮罩覆盖所有显示器，显示标题、说明和醒目的自定义绘制「退出清洁模式」按钮；普通模式不显示倒计时。
-  - 键盘事件被 session event tap 拦截；**鼠标保留**，移动并点击按钮退出。普通模式不自动退出；内部 5 分钟失效保护只用于鼠标失效兜底，不显示倒计时；测试环境变量可启用短倒计时。
-  - 启动时创建防显示器睡眠断言；退出时移除事件 tap、关闭所有遮罩、释放断言、恢复输入。
-  - 无 Accessibility（或事件 tap 创建失败）时只显示授权引导/错误，不进入“看着像清洁但其实没锁输入”的状态。
-  - 不做键盘退出（用户明确要求鼠标退出），不隐藏鼠标，不修改系统设置。
-- **快捷键设置区**（v0.4.0）：固定组合，默认关闭，注册失败显示错误；测试并入长期统一测试。
-- 面板尺寸（v0.5.2 离屏实测）：无 guide 约 730pt、有 guide 约 803pt；权限已授权时权限卡隐藏会更矮；仍受屏幕 visibleFrame 约束，`verify-app` 阈值收紧为 380×760/840。交互确认策略不变。
+- English: `docs/images/panel-light.png`, `panel-dark.png`
+- Simplified Chinese: `docs/images/zh/panel-light.png`, `zh/panel-dark.png`
+- Traditional Chinese: `docs/images/panel-zh-Hant.png`,
+  `panel-dark-zh-Hant.png`
+- Japanese: `docs/images/panel-ja.png`, `panel-dark-ja.png`
+- Settings/language examples: `docs/images/settings-en.png`,
+  `settings-ja.png`, `settings-zh-Hant.png`

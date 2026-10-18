@@ -1,108 +1,147 @@
-# PRD：SwitchPilot（个人自用菜单栏开关）v0.3
+# Product requirements
 
-日期：2026-10-18；状态：正式名已确定并经用户同意转正；v0.3 完成权限首启流程、设置、登录启动、品牌图标与对比度修复；用户已于 2026-10-18 初步验收 v0.1 可用；依据：`evidence/capability-matrix.md`、`evidence/verification.md`、`artifacts/20261018-1110-oneswitch-codex-handoff.html`。
+Status: current baseline **v0.7.1** (2026-10-18). English is the canonical
+source for this document.
 
-## 1. 背景与目标
+## 1. Problem
 
-原 One Switch 1.35.4 长期未更新，在本机 macOS 27.0.1 上可用但不符合当前维护预期。前一轮已完成 REA + Ghidra 可行性验证：普通保活可用公开 IOKit 独立实现；深色模式依赖 Automation；Night Shift 与合盖保活首版排除。
+macOS exposes many useful system controls, but several everyday actions still
+require a chain of menu-bar, System Settings or terminal steps. Existing
+all-in-one switch utilities can be large, closed or heavier than necessary.
+SwitchPilot focuses on a few high-value controls and keeps their real state
+visible.
 
-本轮目标是给**单个使用者（本人）**做一个最小、原生、可维护的菜单栏开关面板：日常能用、状态可读回、失败不伪装成功、权限边界清楚、第一次打开就知道怎么用。不追求与原版全功能等价，不做分发与商业化。
+The project began as a personal investigation and is now open source under
+PilotFoundry. It is inspired by One Switch's menu-bar idea but is an independent
+project; it does not include One Switch code, assets or binaries and is not
+affiliated with or endorsed by One Switch.
 
-正式名：**SwitchPilot**（2026-10-18 确定；候选与冲突比较见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`）。中文描述「菜单栏开关」，bundle id 保持 `local.personal.SwitchPilot` 以减少迁移；ad-hoc 重建后 TCC 仍可能要求重新授权。
+## 2. Audience
 
-## 2. 用户与场景
+- People who want a small, native menu-bar utility for a few recurring macOS
+  actions.
+- Users who care about permission transparency, no telemetry and no background
+  automation.
+- Developers who want a readable MIT-licensed Swift/AppKit/SwiftUI example and
+  are comfortable building or inspecting the source.
+- Users on macOS 14 or later, on Apple Silicon or Intel. The release binary is
+  universal; the project is primarily developed on Apple Silicon.
 
-- 用户：本机唯一使用者，Apple Silicon / macOS 27.0.1，日常活跃于图形会话。
-- 典型场景：演示/下载/渲染时需要屏幕不空闲休眠；需要快速切换系统深浅外观；临时手动启动屏保；离开工位前锁定屏幕。
-- 使用环境：菜单栏常驻，低频操作；不要求快捷键、场景组合、开机自启（v0.1 非目标）。
+## 3. Goals
 
-## 3. 首版范围
+1. Make keep-awake, screen saver, display sleep, lock, dark mode, microphone
+   mute and screen cleaning reachable in one or two clicks.
+2. Never report success without a real readback when a readback is possible.
+3. Keep the permission surface small and explain missing permissions honestly.
+4. Remain a compact, quiet native menu-bar app.
+5. Ship an open-source release that users can download, verify and build.
+6. Provide equivalent English, Simplified Chinese, Traditional Chinese and
+   Japanese UI, with a clear language override and restart behavior.
 
-| 优先级 | 功能 | 形态 | 当前证据状态 | 首版验收口径 |
-|---|---|---|---|---|
-| P0 | 显示器保活 | 开关 + 时长（15/30/60 分钟、无限期）+ 进度 | 公开 IOKit 断言已验证（4/4 自检、5/5 进程用例、三轮真实开关） | 开关后 OS 断言可读回；到时/关闭/退出释放；失败显示真实错误 |
-| P1 | 系统深色模式 | 开关（权限门控） | AppleScript + System Events 路径已静态验证；真实授权与切换未测（−1744 闸门） | 未授权时明确显示"需要授权"且不假装切换成功；授权后切换并读回，拒绝/撤销有明确错误 |
-| P2 | 启动屏保 | 一次性动作（点击即执行） | 原版存在 `ScreenSaverEngine` 与 `EnableScreensaveSwitch` 线索；系统 `/System/Library/CoreServices/ScreenSaverEngine.app` 存在且 LaunchServices 可解析 | 动作入口存在；点击即启动（v0.3.8 起无二次确认）；启动失败有错误；运行时验收需用户在场手动执行 |
-| P3 | 锁定屏幕 | 一次性动作（点击即执行 + 权限门控） | 原版 `LockScreenSwitch` + System Events `keystroke "q" using {command down, control down}` 线索；需 Automation + Accessibility | 缺少权限时不发送按键、给出授权引导；授权后执行并做 best-effort 锁屏读回；运行时验收需用户在场 |
+## 4. Non-goals
 
-范围说明：
+- A full One Switch clone or a 30-toggle dashboard.
+- Output volume, low-power mode, True Tone, Night Shift, Wi-Fi/Bluetooth,
+  desktop-icon hiding, audio-device switching, scenes or custom hotkey
+  recording.
+- Telemetry, analytics, network access, remote configuration or automatic
+  updates.
+- Private frameworks, privileged helpers, background automation or automatic
+  TCC resets.
+- Developer ID signing, notarization, sandboxing, App Store distribution or
+  paid support while the project has no Developer ID certificate.
 
-- 保活只阻止"用户空闲导致的显示器休眠"，**不阻止合盖、手动睡眠、低电量睡眠**；原版"合盖不休眠"是另一条特权路径，不在首版。
-- 深色模式是系统级持久设置，不做"退出自动恢复"；每次写入后读回，拒绝时保留原状态并显示错误。
-- **交互确认策略（v0.3.8）**：明确标注、常用且可逆的即时动作（保持亮屏、启动屏保、锁定屏幕）不二次确认；仅不可逆/高风险动作（应用内权限重置）保留确认。屏保/锁屏仍不自动执行、不后台定时触发。
-- 锁屏不引入私有 API、不修改 TCC 数据库、不关闭 SIP。首版不实现"显示器休眠"（原版独立功能）以免与锁屏语义混淆。
-- UI/UX（v0.2）：首次打开显示三条使用规则；权限状态与授权入口行内呈现，不用弹窗打断；保活是视觉主操作；状态用系统语义色 + 可读文案；遵循 macOS 27 克制风格（少装饰图标、系统材质、统一圆角）。
+See [CORE.md](CORE.md) for the admission rules.
 
-## 4. 非目标
+## 5. Functional requirements
 
-- Night Shift 直接控制、合盖保活、特权 helper、**输出音量控制（系统已有）**、低电量模式/电量控制（系统电池菜单已有）、音频输出/输入设备切换、屏保设置、DND、场景组合、正式分发/沙盒适配。麦克风静音与屏幕清洁已进入范围。
-- 全量还原原版 30+ 开关；替换原应用或修改其数据、偏好、签名。
-- 公开分发、Developer ID 签名、公证、Sandbox 适配、自动更新、收费、正式命名与品牌。
-- 睡眠/唤醒、设备切换、长时间稳定性、跨账户、VoiceOver 全路径验收（v0.1 标为缺口）。
+| ID | Requirement | Acceptance |
+|---|---|---|
+| FR-1 | Keep awake, 15/30/60 minutes or unlimited | Real IOKit assertion; remaining time visible; auto-release at timeout |
+| FR-2 | Dark mode | Read and toggle system appearance through System Events; honest denied state |
+| FR-3 | Screen saver | Start the system screen saver; report failure |
+| FR-4 | Lock screen | Send the system lock shortcut; require Automation + Accessibility |
+| FR-5 | Display sleep | Run public `pmset displaysleepnow`; no private API |
+| FR-6 | Microphone mute | Capability-aware default input mute; unsupported state is honest |
+| FR-7 | Screen cleaning | Full-screen overlay, keyboard event tap, mouse exit, hidden five-minute failsafe |
+| FR-8 | Login at start | Optional `SMAppService` login item controlled in Settings |
+| FR-9 | Global hotkeys | Fixed `⌃⌥⌘K` / `⌃⌥⌘S`; disabled by default |
+| FR-10 | Languages | Four locales; Follow System default; Settings override; restart required |
+| FR-11 | About | Open-source positioning, version and MIT license; no One Switch claim inside the app |
+| FR-12 | Distribution | Universal ad-hoc zip, SHA-256, clear Gatekeeper instructions; no notarization claim |
 
-## 5. 关键用户流程
+## 6. UX requirements
 
-1. 启动应用：菜单栏出现图标，无 Dock 图标；首次打开面板显示三条规则引导（可关闭、可在 footer 重新打开）。
-2. 保活：打开开关（可选时长）→ OS 断言创建并读回 → 面板显示进度与剩余时间；关闭/到时/退出时释放。
-3. 深色模式：点击开关 → 已授权则切换并读回；未授权则显示原因与"请求授权/打开系统设置"，不改变系统外观。
-4. 启动屏保：点击 → 直接启动系统屏保（v0.3.8 起无二次确认；按钮文案已明确）。
-5. 锁屏：点击 → 若缺少 Automation/Accessibility，显示授权引导且不执行；权限齐备时直接发送 Ctrl+Cmd+Q 等价按键（无二次确认）→ 尽力读回锁屏状态。
-6. 退出：菜单/面板退出按钮；释放保活断言。
+- Panel width 380 pt; normal height about 730 pt, guided/permission state up to
+  about 803 pt.
+- Settings is a separate window about 460 pt wide.
+- Controls use standard AppKit/SwiftUI buttons, toggles, pickers and menus.
+- Light and dark mode meet the contrast tokens checked by `make smoke`.
+- The menu-bar icon is a template image and does not use color as the only
+  state indicator.
+- Permission-required actions are disabled or explained, never fake success.
+- Screen cleaning must show a visible mouse exit and must not offer a keyboard
+  exit by design.
+- Language names are shown in their own language; the current selection is
+  visible; a **Quit and Reopen** action is available.
 
-## 6. 成功指标与验收
+Detailed UI rules are in [DESIGN.md](DESIGN.md).
 
-- 构建：`scripts/build-app` 在 CLT + macOS 27 SDK 下成功；ad-hoc Hardened Runtime 签名通过；plist 校验通过。
-- 自动化：核心自检全部通过（时长解析、真实断言生命周期、权限映射、屏保存在性、锁屏权限快照、定时释放）。
-- 进程：应用可启动并常驻 >2 秒，退出后无残留保活断言；原应用版本、hash、签名与基线一致。
-- 文档：PRD/DESIGN/TECH/TESTPLAN 与证据一致；未测项逐条列出，不写成通过。
-- 用户价值：至少"保活"可日常使用；深色模式、屏保、锁屏在当前权限状态下给出可理解状态而不是假成功。
-- 上手：首次使用不阅读外部文档也能在面板内理解四个控件、权限何时出现、破坏性动作会发生什么。
+## 7. Localization requirements
 
-## 7. 风险与假设
+- Supported locales: `en`, `zh-Hans`, `zh-Hant`, `ja`.
+- Default follows the system; Settings can force one locale.
+- The app must restart after a language change so AppKit, SwiftUI and
+  `InfoPlist.strings` reload consistently.
+- All user-facing keys must exist in all four tables; format placeholders must
+  be preserved.
+- Japanese and Traditional Chinese copy must fit the existing panel; if it does
+  not, layout and copy are reviewed together.
+- The four README files must document the same download, build, permission and
+  release facts.
 
-- 系统深色模式依赖 System Events AppleScript，属于 Automation/TCC 风险项；Apple 未提供全局外观 setter 公开 API。
-- 锁屏依赖 UI 脚本按键模拟（与原版一致），需要 Accessibility；Apple 可能在未来系统变更中限制该路径。
-- 屏保通过启动系统 ScreenSaverEngine 实现，属于"启动系统应用"而非公开 API；系统版本升级可能改变行为。
-- ad-hoc 签名身份在重新构建后可能变化，TCC 授权可能需要重新授予（个人使用可接受，见 TECH）。
-- 无完整 Xcode：只用 CLT + SwiftPM，CLT 缺 XCTest；构建非零警告。
+The implementation contract is [en/LOCALIZATION.md](en/LOCALIZATION.md).
 
-## 8. 开放问题（需要用户确认或后续决定）
+## 8. Permissions and privacy
 
-1. 是否愿意为深色模式授予 Automation、为锁屏授予 Accessibility？若不接受，对应功能降级为"只显示状态/打开系统设置"。
-2. 屏保/锁屏的现场运行验收何时进行（需要用户在场，避免打断当前工作）。
-3. 发布目标与是否继续扩展其他开关（不属于 v0.2）；正式名已确定为 SwitchPilot，分发前的商标/域名检索仍未做。
+Required permissions:
 
-## 9. v0.3 增量范围（2026-10-18 用户反馈）
+- Automation → System Events for dark mode and lock.
+- Accessibility for lock and screen-cleaning keyboard suppression.
+- Login-item approval through macOS service management.
 
-用户反馈（编号对应实现）：
+The app must not request permissions on launch without a user action, must not
+modify TCC automatically, must not read unrelated files, must not record audio,
+and must not perform network requests. See [SECURITY.md](../SECURITY.md).
 
-1. **命名**：同意 SwitchPilot 转正（正式名 + 中文描述「菜单栏开关」）。
-2. **首次授权**：第一次打开可"申请全部权限"——Automation 走系统 TCC 弹窗，Accessibility 使用系统提示并打开设置让用户勾选；拒绝任何权限仍可使用保持亮屏、启动屏保；设置页保留"申请全部权限/重新检查"入口。
-3. **批量撤回**：研究结论为技术上可用 `tccutil reset AppleEvents|Accessibility <bundle>`（仅当前用户；sudo 才影响所有账户；`reset All` 会清空所有应用决定），但属于开发/测试工具且无恢复 API。**默认路径为系统设置手动撤销；应用内不自动执行**。v0.3.5 起在高级区提供显式确认的「在应用内重置权限…」（bundle-scoped、两项、无 sudo/reset All、不可撤销），作为高级选项而非推荐路径；README/报告同时给出手动命令。
-4. **登录时启动**：设置页新增开关，使用 `SMAppService.mainApp.register()/unregister()`；状态机覆盖未注册/已开启/需要批准/未找到；失败显示真实错误并给登录项设置入口。
-5. **品牌图标**：新增应用图标（.icns，符合 macOS 图标网格、含小尺寸可辨）与自绘菜单栏 template 图标（S monogram），替换 SF Symbol `switch.2`。
-6. **配色/按钮**：浅色次级说明对比度 ≥4.5:1；橙色/红色不再作为小字号正文颜色；所有可点击项使用系统 bordered/prominent 按钮或明确的磁贴；磁贴有 hover/pressed/focus 反馈。
-7. **评审模式**：引入独立 UI、UX、QA 三个评审角色（见 `evidence/reviews/`），评审结论与修复状态进入验收证据，而不是逐项依赖用户点击。
+## 9. Distribution requirements
 
-范围变化：v0.2 把"设置窗口、登录自启、正式图标/品牌稿"列为非目标；v0.3 已将**设置窗口、登录时启动、应用/菜单栏图标**纳入个人自用范围。仍不做分发签名/公证、沙盒、自动更新、正式品牌资产与商业化。
+- Provide universal (Apple Silicon + Intel) release binaries for convenience.
+- Ad-hoc sign the released app; never embed a personal signing identity.
+- Publish the zip and SHA-256 together.
+- State clearly that the binary is not notarized and that first launch may need
+  right-click **Open**.
+- Keep source builds and local signing possible.
+- Add a reproducible release workflow; Developer ID signing/notarization is a
+  future enhancement blocked on credentials.
 
-新增验收：
+See [en/RELEASE.md](en/RELEASE.md).
 
-- 首启"申请全部权限"流程在允许/拒绝两条路径下状态真实（不显示假成功）；保留基本功能可用。
-- 设置页可再次申请/检查权限、切换登录启动、查看版本；默认不自动调用 tccutil reset，仅高级确认后执行。
-- 应用图标出现在 Finder/系统 UI（需用户现场确认），菜单栏图标非 SF Symbol 且小尺寸可辨。
-- 浅色/深色渲染对比度脚本通过（≥4.5:1）；面板尺寸 guide ≤760pt、无 guide ≤680pt（逻辑尺寸）。
-- 自动化验收扩展为 11 项（含对比度、面板尺寸、语义色静态检查）。
+## 10. Success criteria
 
-## 10. v0.4/v0.5 扩展（用户选择 A/B/C/D，2026-10-18）
+- A new user can understand the permission boundary and the download caveat
+  from the README without opening an issue.
+- All four locales can be selected, persisted and restored after relaunch.
+- A release artifact passes architecture, signature, checksum and locale
+  resource checks.
+- CI is green for builds, smoke checks and static policy checks.
+- Manual TCC, login-item, hardware and Gatekeeper checks remain explicitly
+  marked as manual or unverified.
 
-- **A 全局快捷键（v0.4.0）**：固定 `⌃⌥⌘K`（保持亮屏）/`⌃⌥⌘S`（屏保）；默认关闭、冲突报错；Carbon 注册，不需要 TCC。测试按用户要求并入长期统一测试。
-- **B 关闭显示器（v0.4.0）**：公开 `pmset displaysleepnow`；无 TCC、无二次确认；M10 用户自测通过（鼠标唤醒）。
-- **C 输出音量（v0.4.0 原型，v0.5.0 移除）**：系统菜单栏/控制中心已有等价控制且设备能力复杂，按“不重复系统控制”原则移出；删除面板音量卡，不再验收。
-- **D 收尾测试**：长期统一测试项见 TESTPLAN §3.1；未执行不记通过。
+## 11. Current limitations
 
-### 10.1 v0.5.0：麦克风静音与屏幕清洁
-
-- **麦克风静音**：面板「麦克风」卡；CoreAudio 读取默认输入设备，能力感知；支持 mute 时提供静音/取消静音，状态显著显示；设备不支持时显示真实原因，不假静默。无新增 TCC。
-- **屏幕清洁**：快速动作「清洁屏幕」；全屏黑色遮罩覆盖所有显示器；**锁定键盘输入**但保留鼠标，鼠标点击屏幕按钮退出；普通模式不显示倒计时/不自动退出（测试可用环境变量启用）；无 Accessibility 时只显示授权引导、不进入锁模式；不新增私有 API/后台常驻。M13 现场待验。
-- 二者都不在后台自动触发；屏幕清洁只在用户点击后进入，退出后恢复输入/光标/断言。
+- The release is ad-hoc, not notarized.
+- TCC behavior, login/reboot, audio hardware, VoiceOver and Gatekeeper first-run
+  behavior require a human at a Mac.
+- The project is primarily tested on macOS 27 / Apple Silicon; macOS 14+
+  remains the stated minimum.
