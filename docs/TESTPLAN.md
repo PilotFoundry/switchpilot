@@ -6,7 +6,7 @@
 
 - macOS 27.0.1 (26A434)，Apple Silicon arm64。
 - CLT Swift 6.4 / macOS 27.0 SDK；无完整 Xcode、无 XCTest。
-- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.1，bundle id `local.personal.SwitchPilot`，ad-hoc Hardened Runtime 签名。
+- 被测应用：`app/SwitchPilot/.build/SwitchPilot.app` v0.3.2，bundle id `local.personal.SwitchPilot`，ad-hoc Hardened Runtime 签名。
 - 原应用：`/Applications/One Switch.app` 1.35.4 (440)，测试前后版本/hash/签名不变；不启动、不修改其数据。
 - 权限前提：未预先授予 Automation/Accessibility；不修改 TCC 数据库、不关闭 SIP、不重签原应用。
 

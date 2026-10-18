@@ -89,3 +89,11 @@
 - 修复：从设置页打开系统设置（自动化/辅助功能）后，返回或关闭系统设置窗口时，SwitchPilot 设置窗口会重新前置/保持可用；`SettingsWindowController` 设置 `hidesOnDeactivate=false` 并在应用重新激活时按标记重新 present；设置页打开系统设置前登记回调。权限仍需在系统设置中手动授予/确认，应用不代授。
 - 新增 `scripts/install-app` / `scripts/uninstall-app`：构建后复制到 `~/Applications/SwitchPilot.app` 并注册 LaunchServices，便于 Finder/Launchpad 启动与稳定路径下的登录项；不修改 TCC/登录项。
 - 版本 0.3.1；自动化 11/11、自检 12/12 复跑通过。
+
+## v0.3.2（2026-10-18，视频复现修复）
+
+- 用户调试视频（iShot 2026-10-18 12.18.14）复现：在 SP 设置页打开系统设置（自动化）→ 授权/关闭系统设置后，SP 设置窗口被其他窗口盖住，看起来消失，用户需重新点菜单栏才能继续；授权刚完成时也无法立刻“重新检查”。
+- 根因：只依赖“应用重新激活”通知；关闭系统设置时若前台回到浏览器/其它应用，SP 不会激活，设置窗口不会回前台。
+- 修复：打开系统设置时轮询前台应用；检测到系统设置曾在前台、随后离开（关闭/切换/退出）后，自动把 SP 设置窗口前置并刷新真实权限状态；180 秒超时自动停止。app activation 路径保留为兜底。
+- 修复：持久轮询（设置窗口存在期间）+ `NSWorkspace.didActivateApplicationNotification` / `didTerminateApplicationNotification` 观察者；系统设置关闭/切换/退出后自动前置 SP 设置窗口并刷新权限；设置窗口关闭时停止观察。
+- 版本 0.3.2；build/verify 复跑 11/11、自检 12/12；`--dev` 窗口自动打开钩子仅由 `SWITCHPILOT_DEV=1` 启用。
