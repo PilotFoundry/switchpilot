@@ -348,10 +348,9 @@ final class PanelModel: ObservableObject {
             }
             return
         }
-        guard confirm(
-            title: "锁定屏幕？",
-            message: "屏幕将立即锁定；如果系统要求密码，需要输入密码解锁。",
-            confirmTitle: "锁定") else { return }
+        // The tile is already an explicit action with a clear label; the user
+        // asked to drop the extra confirmation so locking matches the system
+        // shortcut's immediacy. Permission gating still happens above.
         do {
             try LockScreen.lock()
             lockStatus = "已请求锁定，确认中…"
