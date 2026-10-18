@@ -14,4 +14,6 @@
 
 ## Current plan
 
-Follow `local-agent-state/plans/2026-10-18-oneswitch-pilot.md`. Keep its HTML reader version in `artifacts/20261018-0941-oneswitch-execution-plan.html` consistent when updating the plan. Research, installation, and prototype tasks are not completed merely because planning documents were committed.
+The 2026-10-18 six-step pilot is complete; its research record is `local-agent-state/plans/2026-10-18-oneswitch-pilot.md` with HTML reader `artifacts/20261018-0941-oneswitch-execution-plan.html` (keep them consistent if the pilot record is ever updated).
+
+The current product milestone is the personal-use v0.1 menu bar app. Follow `docs/PRD.md`, `docs/DESIGN.md`, `docs/TECH.md`, and `docs/TESTPLAN.md`; implementation lives in `app/SwitchPilot/` and its runtime evidence in `evidence/app-runtime.md`. Acceptance is evidence-based: automated checks pass, manual TCC/screen-state items stay marked pending until the user runs them, and no feature is claimed complete without readback or explicit evidence.
