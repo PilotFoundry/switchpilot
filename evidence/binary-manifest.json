@@ -1,0 +1,1919 @@
+{
+  "captured_at": "2026-10-18T09:52:56.387329+08:00",
+  "source": "/Applications/One Switch.app",
+  "research_copy": "samples/One Switch.app",
+  "version": "1.35.4",
+  "build": "440",
+  "bundle_id": "studio.fireball.OneSwitch",
+  "copy_matches_source": true,
+  "entries": [
+    {
+      "path": "Contents/CodeResources",
+      "type": "file",
+      "size": 2199,
+      "sha256": "81a8dbe7c66ae45dfe78a7fd1f75f9ccd25119c12e3350fe87b7507066fa90ea"
+    },
+    {
+      "path": "Contents/Frameworks/DFRFoundation.framework/DFRFoundation",
+      "type": "symlink",
+      "target": "Versions/Current/DFRFoundation"
+    },
+    {
+      "path": "Contents/Frameworks/DFRFoundation.framework/Resources",
+      "type": "symlink",
+      "target": "Versions/Current/Resources"
+    },
+    {
+      "path": "Contents/Frameworks/DFRFoundation.framework/Versions/A/DFRFoundation",
+      "type": "file",
+      "size": 84192,
+      "sha256": "1582cfb99f48d918ae907be6543312cdf269640cbd289fa3b27d37ca8e8ee6fc"
+    },
+    {
+      "path": "Contents/Frameworks/DFRFoundation.framework/Versions/A/Resources/Info.plist",
+      "type": "file",
+      "size": 1480,
+      "sha256": "5a94f1a5a920e154470b95ed636c21b7accfc5f3bbc9f5caa2499fc314f59616"
+    },
+    {
+      "path": "Contents/Frameworks/DFRFoundation.framework/Versions/A/Resources/framework.sb",
+      "type": "file",
+      "size": 520,
+      "sha256": "36737e2ab247c12d12e28f0c507eb775060cb02d5252b068241786e0659fe727"
+    },
+    {
+      "path": "Contents/Frameworks/DFRFoundation.framework/Versions/A/Resources/touch@2x.png",
+      "type": "file",
+      "size": 5321,
+      "sha256": "9fcf1fe9285a9d20da0fff52ac5eb48b055d24141155f547d2803e28749a9c33"
+    },
+    {
+      "path": "Contents/Frameworks/DFRFoundation.framework/Versions/A/Resources/version.plist",
+      "type": "file",
+      "size": 525,
+      "sha256": "caa8a927b57fbba902f2ca76b10303acd624456b6973c507c63d5e043b3c4912"
+    },
+    {
+      "path": "Contents/Frameworks/DFRFoundation.framework/Versions/A/_CodeSignature/CodeResources",
+      "type": "file",
+      "size": 3134,
+      "sha256": "b6b06d5a99017f16ec23264f8ebe8c9c714db31bb75e8a72b98f8715e934c3e0"
+    },
+    {
+      "path": "Contents/Frameworks/DFRFoundation.framework/Versions/Current",
+      "type": "symlink",
+      "target": "A"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Paddle",
+      "type": "symlink",
+      "target": "Versions/Current/Paddle"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Resources",
+      "type": "symlink",
+      "target": "Versions/Current/Resources"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Paddle",
+      "type": "file",
+      "size": 1588496,
+      "sha256": "bc8781603727173d4905257f486499a7c4e8e5fc5da91a55fb9b9de985fa2b5b"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/Base.lproj/PADActivateWindow.nib",
+      "type": "file",
+      "size": 27225,
+      "sha256": "6931651e6d77126f0af5b2c5b8c5296b6979703da6f1aa7e2b4e24baf87b2ad5"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/Base.lproj/PADCheckoutWindow.nib",
+      "type": "file",
+      "size": 13081,
+      "sha256": "8f2117ddd384a8399e16ec845cc8f393a40f8d2ef307e7233a00eafb93f93674"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/Base.lproj/PADProductNoTrialWindow.nib/keyedobjects-101300.nib",
+      "type": "file",
+      "size": 22310,
+      "sha256": "0959034b1eb6ded77c2ab72eac0ee86f0ccfc8188c40274f255277f98fa6f64b"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/Base.lproj/PADProductNoTrialWindow.nib/keyedobjects.nib",
+      "type": "file",
+      "size": 29145,
+      "sha256": "6092148dd033e5146a514b802c7bbfec421fcf91cca274d63733e5474e2e3f8b"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/Base.lproj/PADProductWindow.nib/keyedobjects-101300.nib",
+      "type": "file",
+      "size": 23856,
+      "sha256": "e4432eb646208a58b276d1d9be29de50bf03866e3e37a94a4b8d5a4606d07b66"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/Base.lproj/PADProductWindow.nib/keyedobjects.nib",
+      "type": "file",
+      "size": 31219,
+      "sha256": "dfa0d65679e4880f57a421ffeb033bfe547f4206f64829aac8bc3654c1e71f29"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/Info.plist",
+      "type": "file",
+      "size": 1438,
+      "sha256": "ca059f009f65d3af7bb6e55dbfe8c38e03add697ad7718598ca73d1ed01ec95d"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/PADWebPopWindowController.nib",
+      "type": "file",
+      "size": 3687,
+      "sha256": "5cd64af777ca8f4eca19cdb7814d28485d111fac0e3158a9b9bd07924e19c832"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/de.lproj/Localizable.strings",
+      "type": "file",
+      "size": 8043,
+      "sha256": "f61ed26ab9471c80794d5c6f941e0ef3bd5d8db3cb72806b89dc6b9250a257c1"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/de.lproj/PADActivateWindow.strings",
+      "type": "file",
+      "size": 1304,
+      "sha256": "e562cd44b184d310f23d9c84157824cf81051d650e6dbe97fa21c55b61da5469"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/de.lproj/PADCheckoutWindow.strings",
+      "type": "file",
+      "size": 455,
+      "sha256": "c4884b03aa4ccbdce22bdfbd7161a1a7133127ad95429216349f3795d909ecb1"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/de.lproj/PADProductNoTrialWindow.strings",
+      "type": "file",
+      "size": 1698,
+      "sha256": "8e72044ed34b831e378b3353506baf7e83b84ab477a451b96987a28253d10d80"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/de.lproj/PADProductWindow.strings",
+      "type": "file",
+      "size": 1829,
+      "sha256": "738c6390ba29e8e1e7b6f1f951aeeee98f2e5145bc2850a451182eff57902886"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/en.lproj/Localizable.strings",
+      "type": "file",
+      "size": 6214,
+      "sha256": "deffe9db2420859597292f7f0b1b2e99decfed89eb10ea7f9b67ba9a0d90840e"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/en.lproj/PADActivateWindow.strings",
+      "type": "file",
+      "size": 1216,
+      "sha256": "c2d4e669329d38857c1874c483efab918db784ad7dc2110046b9c174a53a179f"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/en.lproj/PADCheckoutWindow.strings",
+      "type": "file",
+      "size": 446,
+      "sha256": "5c0cf84d09accaff53f22e7739ca9447d7100b7cc5d15e6f34dc36bd94f33ef7"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/en.lproj/PADProductNoTrialWindow.strings",
+      "type": "file",
+      "size": 1677,
+      "sha256": "e7d2cfc6db05b50882c688b6c71e4b166222b47c660e76cca3d09ad4ae93a555"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/en.lproj/PADProductWindow.strings",
+      "type": "file",
+      "size": 1808,
+      "sha256": "7415b0e3e12f52d00e85fa4570051e470cbe2ea411c9bd68f7ae9dcc39bd98a2"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/error.html",
+      "type": "file",
+      "size": 18953,
+      "sha256": "bb21eba42160068efc360f2e115d36c2e6bb3df7d30675721c6f567bc1088fa7"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/es.lproj/Localizable.strings",
+      "type": "file",
+      "size": 7972,
+      "sha256": "d0fd1e4c047ca6aa10ebc6b1024f4badb2b484af832ff919cf91e24bcff4eb40"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/es.lproj/PADActivateWindow.strings",
+      "type": "file",
+      "size": 1328,
+      "sha256": "a4e721acc92238f4c7fc5ac480b281e3b5baa100c4703fa939926ee812459034"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/es.lproj/PADCheckoutWindow.strings",
+      "type": "file",
+      "size": 453,
+      "sha256": "05f7e33b77209959618863e0fcdf66752fd0044b4d8dcba37111f377859ff538"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/es.lproj/PADProductNoTrialWindow.strings",
+      "type": "file",
+      "size": 1700,
+      "sha256": "ad895785a562e6a708de1867ae5117304732dd504c530869f730ea7d61931a3f"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/es.lproj/PADProductWindow.strings",
+      "type": "file",
+      "size": 1831,
+      "sha256": "f12038ba62ec9319ed727a443102b79c8f6a9e7593b94e38f5577e84798e2f86"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/fr.lproj/Localizable.strings",
+      "type": "file",
+      "size": 8013,
+      "sha256": "b77104424b1cf2a50d28d16bdf5383243d9c34710d1911f6b9defa8bfb90c5e5"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/fr.lproj/PADActivateWindow.strings",
+      "type": "file",
+      "size": 1311,
+      "sha256": "47b786b92fc136acdafdf2ac0984b1a594ac18a9e4fe10d867ab7ca4c429adb7"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/fr.lproj/PADCheckoutWindow.strings",
+      "type": "file",
+      "size": 448,
+      "sha256": "a867e6f2267c6f8f7ce63a70dbb5981b4d718d6c208a34b79a117adfd443fdb7"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/fr.lproj/PADProductNoTrialWindow.strings",
+      "type": "file",
+      "size": 1706,
+      "sha256": "71db1c0e0cc722d9a0dc52372003b19a98513f35adcadc4546b441796358098a"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/fr.lproj/PADProductWindow.strings",
+      "type": "file",
+      "size": 1837,
+      "sha256": "237f5d06a4333cf2665611ae36bb118b18d55aee3e87a118f9bdfd59fe2c62b8"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/it.lproj/Localizable.strings",
+      "type": "file",
+      "size": 7838,
+      "sha256": "dac8da1caf070c5dc4be8d8457aa9b9a17e7b8c585be45fe3892d028096d4147"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/it.lproj/PADActivateWindow.strings",
+      "type": "file",
+      "size": 1307,
+      "sha256": "fced067edb310c02d3eac811a6dc306dee6db5fa26cefd46c3d6add058714e98"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/it.lproj/PADCheckoutWindow.strings",
+      "type": "file",
+      "size": 466,
+      "sha256": "7a3e4898467147e67849da7015cba4f291a41cfc9f75110fcb7faea092494a57"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/it.lproj/PADProductNoTrialWindow.strings",
+      "type": "file",
+      "size": 1686,
+      "sha256": "42d26493efc45d656c548f46cb588510d8ea80d4762d4e7f7dfc76ecd45e9c0c"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/it.lproj/PADProductWindow.strings",
+      "type": "file",
+      "size": 1817,
+      "sha256": "8d86ffac00f85cc4f6d4052c68ab4a592aef5ff1f53beee0e722aa8115e5f1d7"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/ja.lproj/Localizable.strings",
+      "type": "file",
+      "size": 8633,
+      "sha256": "ef9123111873b440b6c8c31e1a3f88456154db22321788b7ee2dcac3c5c28dca"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/ja.lproj/PADActivateWindow.strings",
+      "type": "file",
+      "size": 1405,
+      "sha256": "236f51d8865af55d739a0b4657b1f6fa192c326e677ac6ce245f8aa014b456b9"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/ja.lproj/PADCheckoutWindow.strings",
+      "type": "file",
+      "size": 483,
+      "sha256": "2923081909dbb2da31634366d800017826d29409a14d242a0a09e6f1a87f859a"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/ja.lproj/PADProductNoTrialWindow.strings",
+      "type": "file",
+      "size": 1730,
+      "sha256": "051c694bff75450091228447b7b91683ef8411250e22bc3b1f3111d29b630302"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/ja.lproj/PADProductWindow.strings",
+      "type": "file",
+      "size": 1861,
+      "sha256": "fc5a3ddff1bb92123a9c0b5596eae826fcb84c1a8dc0605fd952ba91b2741ede"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/nl.lproj/Localizable.strings",
+      "type": "file",
+      "size": 6531,
+      "sha256": "8944cad56d8f71aebdb0fc397104b35ee1a5ed3b5daf60811d5d340e7c68e354"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/nl.lproj/PADActivateWindow.strings",
+      "type": "file",
+      "size": 1223,
+      "sha256": "66287c55b4dd6e8953acfe5b3e45cb681612ddeb43c71644a68a0e8399a5c340"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/nl.lproj/PADCheckoutWindow.strings",
+      "type": "file",
+      "size": 420,
+      "sha256": "db8b94acc94610341a3d1deab47c33dff757854f693d875f5a7aeedd3ef3b890"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/nl.lproj/PADProductNoTrialWindow.strings",
+      "type": "file",
+      "size": 1691,
+      "sha256": "a71f6afb93f7c407aee73d616bef86373f2c659f7dfcda6c786cda8d8af78a7c"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/nl.lproj/PADProductWindow.strings",
+      "type": "file",
+      "size": 1822,
+      "sha256": "86f209d5154647133138f3ac445068c09c58b26cd50f22785237dd2dab0f1614"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/pl.lproj/Localizable.strings",
+      "type": "file",
+      "size": 7722,
+      "sha256": "fa8db3999f85f9d7ea527eb7c95287dcb5df4e38847f2b5689eb43ec94b9049a"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/pl.lproj/PADActivateWindow.strings",
+      "type": "file",
+      "size": 1295,
+      "sha256": "4207634e57a1ddc87d7789ac7edcc651c2999e37c8d89873df83f1eb2cf2bcc2"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/pl.lproj/PADCheckoutWindow.strings",
+      "type": "file",
+      "size": 453,
+      "sha256": "d2d536a86af8f9df73a2f31e346fbebba300be417f65662c07e4ea04979696e1"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/pl.lproj/PADProductNoTrialWindow.strings",
+      "type": "file",
+      "size": 1698,
+      "sha256": "c35c6b5a979214116c5da3a81dcfb7e9ddef711bd3b1d83f8aa646a05f870f67"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/pl.lproj/PADProductWindow.strings",
+      "type": "file",
+      "size": 1829,
+      "sha256": "696416ff0efa4744451b07f1a04d1d1095c7f238daa1cc1a9b40b8ee52e493e0"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/pt.lproj/Localizable.strings",
+      "type": "file",
+      "size": 7931,
+      "sha256": "f4d04808233f5bcbf62c7c3501de7bc49a58113d40c523f0c350b1c151c28f6e"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/pt.lproj/PADActivateWindow.strings",
+      "type": "file",
+      "size": 1314,
+      "sha256": "9c32b3ef60c05bac0d98fefbb073206c9ff4b0da1ba690dd211251bea74ecf72"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/pt.lproj/PADCheckoutWindow.strings",
+      "type": "file",
+      "size": 454,
+      "sha256": "549f223ae011c7e61ddc687e93896449b2a91f921f87db6c77bc312dc8674578"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/pt.lproj/PADProductNoTrialWindow.strings",
+      "type": "file",
+      "size": 1701,
+      "sha256": "937024ba872f4839ad75c7765f3663924ed732b62f9268d0284413ddf16be2b8"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/pt.lproj/PADProductWindow.strings",
+      "type": "file",
+      "size": 1832,
+      "sha256": "3b41a5472df2d1dc60f9aa548bcce1daf0ce62af0cd8d93cadd180e2de4c4a8b"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/ru.lproj/Localizable.strings",
+      "type": "file",
+      "size": 9945,
+      "sha256": "7a6f8867f8cc735d6f10721d63e6ad01400b851c044e06e0a44d5e98c9179b3e"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/ru.lproj/PADActivateWindow.strings",
+      "type": "file",
+      "size": 1443,
+      "sha256": "496e41255aaf07d5ff762d1f62fba238869298a49c1bc0af9958f54102f5a652"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/ru.lproj/PADCheckoutWindow.strings",
+      "type": "file",
+      "size": 509,
+      "sha256": "ad0bba1dab5e57a8facc208fce6c2faf6dc395b99d7051568d55835fddeeac52"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/ru.lproj/PADProductNoTrialWindow.strings",
+      "type": "file",
+      "size": 1807,
+      "sha256": "a724b23d33ed436eaed7a47766f6adbea1c0fb39ba3cf97333e2c7d4e58126e7"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/ru.lproj/PADProductWindow.strings",
+      "type": "file",
+      "size": 1938,
+      "sha256": "b7c8b0e90132a27f248948ee5532976b223e60fc02c6f012565c6d96326ff438"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/zh-Hans.lproj/Localizable.strings",
+      "type": "file",
+      "size": 7299,
+      "sha256": "c97429784077b59d7ea426e6b1ab70355417e509624719fc6924e15b227db73b"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/zh-Hans.lproj/PADActivateWindow.strings",
+      "type": "file",
+      "size": 1288,
+      "sha256": "90809a409d3098f9206acdbd5b4cb44d2503761fbfbf31ac6eb9d1e7264d148c"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/zh-Hans.lproj/PADCheckoutWindow.strings",
+      "type": "file",
+      "size": 441,
+      "sha256": "3b3327d0d06c549da70d448d01046ee95be51cfbc01ac7d85a1022defd282001"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/zh-Hans.lproj/PADProductNoTrialWindow.strings",
+      "type": "file",
+      "size": 1691,
+      "sha256": "88d6978abaaac9ed473bed226f9692140fc392182d67eddb04775b9f66b298ff"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/zh-Hans.lproj/PADProductWindow.strings",
+      "type": "file",
+      "size": 1822,
+      "sha256": "96741d9fda8e4adb31cb34252f3c2adb7744c096ae63b2bc2a0cb1d3824f852d"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/zh-TW.lproj/Localizable.strings",
+      "type": "file",
+      "size": 7237,
+      "sha256": "afe302a3364c9fa9f5064408bb9509d1cbc0ef87526c96380f04e1380d59851f"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/zh-TW.lproj/PADActivateWindow.strings",
+      "type": "file",
+      "size": 1285,
+      "sha256": "628747267522424dc5ab0ff1129d45550f9ce7cb2c353e4df89c396f1a0642fd"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/zh-TW.lproj/PADCheckoutWindow.strings",
+      "type": "file",
+      "size": 441,
+      "sha256": "fab3f2b4df3b96b128f97e9db670179f336c397c9023686d91acbe2a754f586d"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/zh-TW.lproj/PADProductNoTrialWindow.strings",
+      "type": "file",
+      "size": 1685,
+      "sha256": "73ad2d9bc896284054d0de6ddc74e628265a73cb5b6ac502d654c767078dd087"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Resources/zh-TW.lproj/PADProductWindow.strings",
+      "type": "file",
+      "size": 1816,
+      "sha256": "15b99eab06d8fed891f2917e15058a2ecf162645ea127d7a6bbb124cfd64275e"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/_CodeSignature/CodeResources",
+      "type": "file",
+      "size": 27772,
+      "sha256": "6696b62ca1865d47bcb4de9644c1dc8ed6db7e0bde92f943dc8fc6e97ec1c9a0"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/Current",
+      "type": "symlink",
+      "target": "A"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Autoupdate",
+      "type": "symlink",
+      "target": "Versions/Current/Autoupdate"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Resources",
+      "type": "symlink",
+      "target": "Versions/Current/Resources"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Sparkle",
+      "type": "symlink",
+      "target": "Versions/Current/Sparkle"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Updater.app",
+      "type": "symlink",
+      "target": "Versions/Current/Updater.app"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate",
+      "type": "file",
+      "size": 693344,
+      "sha256": "ff16cc725f457bb90e67749c256323b597f4c5499bcc97cd6bc92f42bef97b8c"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/Base.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 5831,
+      "sha256": "87445c8c10f7410d4de86c16f3b6649c0fd635e01c203e9a48375a787aaaa2bd"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/Info.plist",
+      "type": "file",
+      "size": 1340,
+      "sha256": "79ded1be7a70a76b7e0930df8a778034096a03e2521e15707f6e5f19ce2b6cd9"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ReleaseNotesColorStyle.css",
+      "type": "file",
+      "size": 231,
+      "sha256": "76bd6999758fd8e51d17e6b482db434f9b4768c02b037af6bd2e3a000ce8cbc1"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/SUStatus.nib",
+      "type": "file",
+      "size": 13047,
+      "sha256": "41de6b08742330a7f137d05f9623766fb297a4eae8f24168b5fe896e682748b2"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/SUUpdateAlert.nib",
+      "type": "file",
+      "size": 18461,
+      "sha256": "45dc5b926853aa6e231328bab3e34b7c0686c04b9221ef78a77aaf9726fdbecf"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/SUUpdatePermissionPrompt.nib/keyedobjects-101300.nib",
+      "type": "file",
+      "size": 25388,
+      "sha256": "1453e71bbe3afb01a54f4e5a7faadcf88b1dcc084adccd760bd513f4a99be541"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/SUUpdatePermissionPrompt.nib/keyedobjects-110000.nib",
+      "type": "file",
+      "size": 25365,
+      "sha256": "56b9920c623e2752273858fe4200247c7cd47edbda95ae96501828a1659f8496"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ar.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 3554,
+      "sha256": "441182787471a3998908044515fe13e92230edaa7e2730638e72a49610f56cba"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ca.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 3501,
+      "sha256": "7ed0d5ca300649a7f13304015008f2dede98ad743a625c17d5a5fedacc1a3b1a"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/cs.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 10774,
+      "sha256": "99e66decf9bc46cf5622eead4e65b3b502e3775a4e8e0f03ef1b41683ea8d518"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/da.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 4882,
+      "sha256": "8d0ff69b79460185f941372655433bad3934f49e63bef0b4171bd66da71e55f0"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/de.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 11648,
+      "sha256": "c7d410cc98ba0764923890ea66ae03bc3b249d4a4463357c002b88d94c43b08f"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/el.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 5934,
+      "sha256": "638981a4f095d8b1dabb6230d452e470359711b81803bc5df8c21e1211fd3757"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/es.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 7040,
+      "sha256": "30cf2b18d30796961d88da28929d08c62ce45904553d004702877dc7449bf0df"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/fa.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 5716,
+      "sha256": "ed9dda9e271f7a97b8a7f327e71a1b6d06e5e061b367e7da3d153e47dc319263"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/fi.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 3252,
+      "sha256": "c14af9bac3fce436222a4ea277a7a6c0f9b42b2d84aceea75e758ce7538acae2"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/fr.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 7855,
+      "sha256": "3d554dcd167b085e25a75248533f21f389593aeace912ab9952c825ffe141ce1"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/he.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 9657,
+      "sha256": "1d795bd7329d04b7ce84b6bdc845f917369e858b2b292f117b89a6666a185723"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/hr.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 6367,
+      "sha256": "920041380a08b3ba50d44e8a83f59de551139845a72748d58f2387c65920b33a"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/hu.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 4449,
+      "sha256": "cc2a16e4d487c6fab357b4f7d0fbbf7ec882371b2130413ffcb1b69cd540d2cf"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/is.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 3954,
+      "sha256": "403feba503410e9455cd0eaafe592a2576eedb24130ccf2cdb13dda4b101f87e"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/it.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 10956,
+      "sha256": "56a7445c1b68d76849ac59b98aa5c20c9002d5e07e9f0a2720486160f85b7366"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ja.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 8697,
+      "sha256": "e404910028af70579cfa208bb4fadd9e3592505fc89af208f4071f2309553fb2"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ko.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 7797,
+      "sha256": "a6269eb3f5a07d0c4f5d7467d5065372085aef7484c518a9d784ffd6c8f5aae4"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/nb.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 5539,
+      "sha256": "ef6f0dcae90c440b47ece09909e9cdf35f3383f34e72a614c8c5c0752ecbffe0"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/nl.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 9574,
+      "sha256": "ca9adf34fb93fe3f394ccc92114bf6a6b1f8a128bb5f362cb9f3247d7c26c77d"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/nn.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 5671,
+      "sha256": "1db8c6853a550aa25382da2d55431a1c1d308d6a37676c4f8593cc1633f8a5ae"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/pl.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 5453,
+      "sha256": "5c54b3f8e1eb3026e142e710e2167f2f839b73ab5ad7f18719230f33ae682aa9"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/pt-BR.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 9976,
+      "sha256": "0292cadc2acfc34875c1e0b54e2d50de3833cd5e20c8660c8effe2b859aac84c"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/pt-PT.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 5984,
+      "sha256": "fc958532d26a8e1e74622d3f558fc26a12800e8c49fb614afd0e1883acce4700"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ro.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 6115,
+      "sha256": "b2bf064222c38a3672b01fe09406f799718cb0fc4e715121662639d6fdfea6ed"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/ru.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 5784,
+      "sha256": "7193af28eb2a09b9fe7119cf6065a2150c6590971b22f98c56f356cd90851923"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/sk.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 5675,
+      "sha256": "e158daaa4f3f91b57cee05ab896f2c1bc467317932cc53bb7c01e7daee9e5238"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/sl.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 5646,
+      "sha256": "c62770c604a6c8c89e283357c8b322d8ce6a85f4d85c09002048331f65f8d980"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/sv.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 5160,
+      "sha256": "4a21ad5bcf8d836d265710c2e4a0a64f07c9551f1c49694d6734a931d23efd39"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/th.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 5339,
+      "sha256": "4b6c8dc2ab69a0425de3aa9dc386c6539348e3983e47aa10f94c17e345a157a5"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/tr.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 6183,
+      "sha256": "b040d3f02d341eba047c15dfcafb60406d0847096a94466ecab512dcfb16abb5"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/uk.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 5842,
+      "sha256": "ff44d58635b3e8409d54b42b72c876a43e17fa98f6ea96b32583b9e88c747ab6"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/zh_CN.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 7475,
+      "sha256": "e7f543b92977e9abc907241c411d8db0f59c4fee480859b3e88e4b495e0976c8"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/zh_HK.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 6469,
+      "sha256": "3fc210132f33d89af3d25d27c7ea19426cf6d304be50254538456e0ec4fb7858"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Resources/zh_TW.lproj/Sparkle.strings",
+      "type": "file",
+      "size": 7625,
+      "sha256": "76321e1dd844c9b6568cb4af7c63bb57d9d1b700109aeedd7e5721d78727b12d"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle",
+      "type": "file",
+      "size": 860560,
+      "sha256": "da7bffe4d4abcf89fcc3f3bfe9eb6bb51c46921902f76442ec47895c55856dd3"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/Info.plist",
+      "type": "file",
+      "size": 2377,
+      "sha256": "e898f3aa916717121d79f00422bc9823d94e2a333faf5e230d55395b8d5aab65"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater",
+      "type": "file",
+      "size": 274352,
+      "sha256": "cf4330509343a50fc5d5f9398446b6dd5257d95567cd243b0f5bb1902851c7da"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/PkgInfo",
+      "type": "file",
+      "size": 8,
+      "sha256": "82502191c9484b04d685374f9879a0066069c49b8acae7a04b01d38d07e8eca0"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/Resources/SUStatus.nib",
+      "type": "file",
+      "size": 13047,
+      "sha256": "41de6b08742330a7f137d05f9623766fb297a4eae8f24168b5fe896e682748b2"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/_CodeSignature/CodeResources",
+      "type": "file",
+      "size": 2446,
+      "sha256": "cc2a02c86875126dc5a2a1954652f3b25de386556141ea3e1ddb5c54f0821ab1"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/Info.plist",
+      "type": "file",
+      "size": 1716,
+      "sha256": "6b8915c2b06d43dddc569216a8d7e724af0a8fb47bf463e75a914112198ba1e2"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader",
+      "type": "file",
+      "size": 172000,
+      "sha256": "93dbf81e5109e560fa022e478a21fa8c0c285c20ce0dd8cfae12ea1e738bc9d1"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/_CodeSignature/CodeResources",
+      "type": "file",
+      "size": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/Info.plist",
+      "type": "file",
+      "size": 1604,
+      "sha256": "90a80bd2b46249ca2e08c9d74c53171b9a41d21cf5796698d6c5444bd16c9dd5"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer",
+      "type": "file",
+      "size": 223648,
+      "sha256": "359a0cbb1dfe792af2defa18f34e288b12a2e8840a7b4522ea151046aa8a99ae"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/_CodeSignature/CodeResources",
+      "type": "file",
+      "size": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/_CodeSignature/CodeResources",
+      "type": "file",
+      "size": 18392,
+      "sha256": "4fd09e7d3a91e4e2ae713f8a14a6e18f880c197b7926a736c7f2960a911d8694"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/Current",
+      "type": "symlink",
+      "target": "B"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/XPCServices",
+      "type": "symlink",
+      "target": "Versions/Current/XPCServices"
+    },
+    {
+      "path": "Contents/Info.plist",
+      "type": "file",
+      "size": 2553,
+      "sha256": "808c227ae781fb2bec75be9ed65b78d6aed6d7357c4298675d4b7b5b9d65c722"
+    },
+    {
+      "path": "Contents/Library/LaunchServices/studio.fireball.OneSwitch.PrivilegedHelper",
+      "type": "file",
+      "size": 250320,
+      "sha256": "05eec224f475c47b5d7660af7258c963edef9c8ab344c06f72579aa605f0deab"
+    },
+    {
+      "path": "Contents/Library/LoginItems/OneSwitchHelper.app/Contents/Info.plist",
+      "type": "file",
+      "size": 1673,
+      "sha256": "5cfc7c216ac66ba1e1fdf2470ee10651d1db7e352c2f76927e869366c0979342"
+    },
+    {
+      "path": "Contents/Library/LoginItems/OneSwitchHelper.app/Contents/MacOS/OneSwitchHelper",
+      "type": "file",
+      "size": 135904,
+      "sha256": "7bc5b2002aad142fc7fa19ae0136dcba5adc6287323cf8cfda1385c7e06bdeec"
+    },
+    {
+      "path": "Contents/Library/LoginItems/OneSwitchHelper.app/Contents/PkgInfo",
+      "type": "file",
+      "size": 8,
+      "sha256": "82502191c9484b04d685374f9879a0066069c49b8acae7a04b01d38d07e8eca0"
+    },
+    {
+      "path": "Contents/Library/LoginItems/OneSwitchHelper.app/Contents/Resources/Base.lproj/Main.storyboardc/Info.plist",
+      "type": "file",
+      "size": 163,
+      "sha256": "ebfd876a0a4abb31a1c45810539e4b73f6f1811df4aa6e5ea87495fa9f5ee3fe"
+    },
+    {
+      "path": "Contents/Library/LoginItems/OneSwitchHelper.app/Contents/Resources/Base.lproj/Main.storyboardc/MainMenu.nib",
+      "type": "file",
+      "size": 29392,
+      "sha256": "92498a55680a88c265d696731dcc34da4a3f3a9ee7d64a44ba6e321e452b8796"
+    },
+    {
+      "path": "Contents/Library/LoginItems/OneSwitchHelper.app/Contents/_CodeSignature/CodeResources",
+      "type": "file",
+      "size": 2931,
+      "sha256": "8585ff16903146e190ee4f123068d8205b0377ab44542757484118ab47e18f0d"
+    },
+    {
+      "path": "Contents/Library/LoginItems/OneSwitchHelper.app/Contents/embedded.provisionprofile",
+      "type": "file",
+      "size": 12456,
+      "sha256": "804422ee577a76b315754cb8a53ef4ef7800764d44f8e5cd773094f996518a49"
+    },
+    {
+      "path": "Contents/MacOS/One Switch",
+      "type": "file",
+      "size": 5940704,
+      "sha256": "ee4551f90014801f0252abea9787911a8ce04e9e6bae1207589eebf1584208fa"
+    },
+    {
+      "path": "Contents/PkgInfo",
+      "type": "file",
+      "size": 8,
+      "sha256": "82502191c9484b04d685374f9879a0066069c49b8acae7a04b01d38d07e8eca0"
+    },
+    {
+      "path": "Contents/Resources/AboutContentView.nib",
+      "type": "file",
+      "size": 16419,
+      "sha256": "7d013e7765ff143792eb51a16fb520680f8b7c66056d50014d081a30d2c7af84"
+    },
+    {
+      "path": "Contents/Resources/AboutView.nib",
+      "type": "file",
+      "size": 12756,
+      "sha256": "39acd7ef4d8966b396fb65d48c916202f2c204fa8a1a5da8824b167ef16da7e2"
+    },
+    {
+      "path": "Contents/Resources/ActivationKit_ActivationKit.bundle/Contents/Info.plist",
+      "type": "file",
+      "size": 1201,
+      "sha256": "c87289cc067ede342bd7b75716454d2fa99a2bba6ff0fc93353545d2b450bc50"
+    },
+    {
+      "path": "Contents/Resources/ActivationKit_ActivationKit.bundle/Contents/Resources/en.lproj/Localizable.strings",
+      "type": "file",
+      "size": 3323,
+      "sha256": "6016696b82b8f1f77e999e37e2744a22a76285035c9979e74603cd39391669b8"
+    },
+    {
+      "path": "Contents/Resources/ActivationKit_ActivationKit.bundle/Contents/Resources/en.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 1193,
+      "sha256": "cea7042ad6bab1692b6d22289ceef6b291a3516ac6d8f048d8aa7280fe12190c"
+    },
+    {
+      "path": "Contents/Resources/ActivationKit_ActivationKit.bundle/Contents/Resources/fr.lproj/Localizable.strings",
+      "type": "file",
+      "size": 3551,
+      "sha256": "d2a58f1547d6fd0ad7f2dcf46a8049ebab380ea6905d193ea0ace9c9c0f432aa"
+    },
+    {
+      "path": "Contents/Resources/ActivationKit_ActivationKit.bundle/Contents/Resources/fr.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 1216,
+      "sha256": "1b9c7b960d80aa10d410b2560d16075e72072816fecaf5fca85144d363dd206b"
+    },
+    {
+      "path": "Contents/Resources/ActivationKit_ActivationKit.bundle/Contents/Resources/sk.lproj/Localizable.strings",
+      "type": "file",
+      "size": 3463,
+      "sha256": "9dcbe14239b901d52c5af11e2c3dbdb0c1ac6452bb6ecc61e158e138456a3d12"
+    },
+    {
+      "path": "Contents/Resources/ActivationKit_ActivationKit.bundle/Contents/Resources/sk.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 1559,
+      "sha256": "15c9b130dd0ec0efe23200327b85108fc9d837b1861b839f8b522694e18427aa"
+    },
+    {
+      "path": "Contents/Resources/ActivationKit_ActivationKit.bundle/Contents/Resources/zh-Hans.lproj/Localizable.strings",
+      "type": "file",
+      "size": 3275,
+      "sha256": "3ba675ec1d26a1a5b3d1411552b343e12238308e6523676f739e0949650d998d"
+    },
+    {
+      "path": "Contents/Resources/ActivationKit_ActivationKit.bundle/Contents/Resources/zh-Hans.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 1186,
+      "sha256": "326a9380e7f6185e274f60642ecc5bdf253a79e9951cc82c67cf5754ee272910"
+    },
+    {
+      "path": "Contents/Resources/ActivationKit_ActivationKit.bundle/Contents/Resources/zh-Hant.lproj/Localizable.strings",
+      "type": "file",
+      "size": 3270,
+      "sha256": "88c5f23878ad0394d05000178cf838e9a2816f68bdcb95480aba9c98448a6502"
+    },
+    {
+      "path": "Contents/Resources/ActivationKit_ActivationKit.bundle/Contents/Resources/zh-Hant.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 1186,
+      "sha256": "9b512c6437e5d96f2fc372fc4964942acbcaf50588015ab30eb2de2b4619008b"
+    },
+    {
+      "path": "Contents/Resources/AppIcon.icns",
+      "type": "file",
+      "size": 55796,
+      "sha256": "3a88dade4df45a8613e18fccaaf779952b12dcc27733ea0b7451e963ad79f8e2"
+    },
+    {
+      "path": "Contents/Resources/Assets.car",
+      "type": "file",
+      "size": 2793736,
+      "sha256": "a3b081cca594ae0a2beb975cc5da2c7205769351f16bd979d2361150ae970a3e"
+    },
+    {
+      "path": "Contents/Resources/AutoStartKit_AutoStartKit.bundle/Contents/Info.plist",
+      "type": "file",
+      "size": 1198,
+      "sha256": "20a8a29718a9dc4ec1e8ee4d3c94bf8822928d51e1e5d4b759cdeed1ae7333f5"
+    },
+    {
+      "path": "Contents/Resources/AutoStartKit_AutoStartKit.bundle/Contents/Resources/en.lproj/Localizable.strings",
+      "type": "file",
+      "size": 118,
+      "sha256": "cba59ca23d0e3da55a39cc5b7d728ec6423fa8c83424101a9359f4339302cafa"
+    },
+    {
+      "path": "Contents/Resources/AutoStartKit_AutoStartKit.bundle/Contents/Resources/zh-Hans.lproj/Localizable.strings",
+      "type": "file",
+      "size": 121,
+      "sha256": "a066a4179bdcedf6b029a3f23c7ebd39345f1fdcb79d700d6493cc913e9d0b00"
+    },
+    {
+      "path": "Contents/Resources/AutoStartKit_AutoStartKit.bundle/Contents/Resources/zh-Hant.lproj/Localizable.strings",
+      "type": "file",
+      "size": 121,
+      "sha256": "4b44cc5ac528c5e0d8718288476d3e83d7d57750a6bda43a9f494c1b15b6b164"
+    },
+    {
+      "path": "Contents/Resources/CustomizeView.nib",
+      "type": "file",
+      "size": 27353,
+      "sha256": "3c85a4c95c637ac893c47c2c432fdada6f782330e6801ff5d6f93b253be243cb"
+    },
+    {
+      "path": "Contents/Resources/DebugView.nib",
+      "type": "file",
+      "size": 15268,
+      "sha256": "5383a2069fb243fcc28f59a4fcd510ae1356a3702632417c5c0f28ed53d4bac8"
+    },
+    {
+      "path": "Contents/Resources/DefaultSwitches.plist",
+      "type": "file",
+      "size": 10080,
+      "sha256": "219c53449d0eea08c62792b46f374452e1e9473e4f42e6004defd3c91760924d"
+    },
+    {
+      "path": "Contents/Resources/DropDownView.nib",
+      "type": "file",
+      "size": 1292,
+      "sha256": "7c4f376bd39434624813012fbfd2f666d90188f335a68b2541a19be40b9e810c"
+    },
+    {
+      "path": "Contents/Resources/DropDownViewItem.nib",
+      "type": "file",
+      "size": 8671,
+      "sha256": "fb76c3a7cf3173aec4bfc82288c9581c12a6e2df04c0a63dc8e41099bcba6c5a"
+    },
+    {
+      "path": "Contents/Resources/DropDownViewSeparatorItem.nib",
+      "type": "file",
+      "size": 1780,
+      "sha256": "a7fa11a720870a51c193d5535453f855e62172c4e82c08fedf8beb5419262ca4"
+    },
+    {
+      "path": "Contents/Resources/EjectDiskPreferences.nib",
+      "type": "file",
+      "size": 23376,
+      "sha256": "78cd57c52c03b66d30f53fa1d07b0cbddce12b207e8d591a30047dc898d1056a"
+    },
+    {
+      "path": "Contents/Resources/EmptySwitchPreferences.nib",
+      "type": "file",
+      "size": 9219,
+      "sha256": "a81c2758940d3b685155745d731bd93efae3ee08301c538454b250f284c0b53a"
+    },
+    {
+      "path": "Contents/Resources/EnableDarkModePreferences.nib",
+      "type": "file",
+      "size": 10535,
+      "sha256": "6e1e552de531ed49f94c9480a557fd1539ff899509e485c72d99687c7709c013"
+    },
+    {
+      "path": "Contents/Resources/GeneralView.nib",
+      "type": "file",
+      "size": 16627,
+      "sha256": "5d9a864649579b0c2b10d07b068be64393b75eca5bcf17be9ff98bdf2debf2b6"
+    },
+    {
+      "path": "Contents/Resources/MainMenu.nib",
+      "type": "file",
+      "size": 22335,
+      "sha256": "ab34ef0698cbbfac58e41679058bc8fc3a7522b9293ac0589e446b073f20b0f9"
+    },
+    {
+      "path": "Contents/Resources/NewTogglesWindow.nib",
+      "type": "file",
+      "size": 5401,
+      "sha256": "1dfea6cd9ea8b8f135d38a47cdb4b0128d6a33715c5f16b3afc682d5b981ff6d"
+    },
+    {
+      "path": "Contents/Resources/NotchWarningKit_NotchWarningKit.bundle/Contents/Info.plist",
+      "type": "file",
+      "size": 1210,
+      "sha256": "785f52ece75d2ebcb8ecdbf0bd677152b31790b82fabb3f420665d71ef09a389"
+    },
+    {
+      "path": "Contents/Resources/NotchWarningKit_NotchWarningKit.bundle/Contents/Resources/en.lproj/Localizable.strings",
+      "type": "file",
+      "size": 366,
+      "sha256": "1c1d4ca52b11532ae40e35fe0ecf7957c34e06da982870df312f8dab3d3db37d"
+    },
+    {
+      "path": "Contents/Resources/NotchWarningKit_NotchWarningKit.bundle/Contents/Resources/zh-Hans.lproj/Localizable.strings",
+      "type": "file",
+      "size": 344,
+      "sha256": "8c68ff96fce3416401c95a09603234043d3f0a255a5c65f4ab4c3dd25379997a"
+    },
+    {
+      "path": "Contents/Resources/NotchWarningKit_NotchWarningKit.bundle/Contents/Resources/zh-Hant.lproj/Localizable.strings",
+      "type": "file",
+      "size": 341,
+      "sha256": "8600482311415e0f28326bb4bda4fe7496ef4a817782217b868e3e79ba6c03ee"
+    },
+    {
+      "path": "Contents/Resources/OneSwitch.momd/Model.mom",
+      "type": "file",
+      "size": 2076,
+      "sha256": "c23eac42a83f69d4b82d3164920b831dd02c4fb07ffa9ecdc0220cc60a7a8b56"
+    },
+    {
+      "path": "Contents/Resources/OneSwitch.momd/VersionInfo.plist",
+      "type": "file",
+      "size": 255,
+      "sha256": "962d4265c2151076a6167c388bcb20df5592bbaee4ae3ebe6f15a40a2f54b898"
+    },
+    {
+      "path": "Contents/Resources/PreferencesCell.nib",
+      "type": "file",
+      "size": 20832,
+      "sha256": "7a7d2ea914a80774a137eeeac59378690d39157bb9b83e404d667768dc369cb2"
+    },
+    {
+      "path": "Contents/Resources/PreferencesWindow.nib",
+      "type": "file",
+      "size": 5528,
+      "sha256": "93b9bfb6355130d1960505959b239437fbce7ab6b87324b564dc3b66ffc71ad8"
+    },
+    {
+      "path": "Contents/Resources/PurchaseCell.nib",
+      "type": "file",
+      "size": 15108,
+      "sha256": "46e5ad10b28a00e86b8c23c254afe0f9cda36216e0721f92d9c043db73d21dc7"
+    },
+    {
+      "path": "Contents/Resources/ScreenCleanCoverView.nib",
+      "type": "file",
+      "size": 14299,
+      "sha256": "4684efa6e1ac8db0c679a07e992eae051a9ab653237b3fa2f8f2246d2f62df6e"
+    },
+    {
+      "path": "Contents/Resources/ShortcutNotificationView.nib",
+      "type": "file",
+      "size": 9734,
+      "sha256": "4a7cf9f6cf3e683861587a8414ead24a20e24427d9b2c802f51249a3465571d4"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Info.plist",
+      "type": "file",
+      "size": 1214,
+      "sha256": "465e9322bdffa56f1909bd6a80bb6c37823a81bbd9e47fd659f185ed3d08d385"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/Assets.car",
+      "type": "file",
+      "size": 106616,
+      "sha256": "791b26709dec32439ea1376eb96f1ad2f1d1d25d120c8f53854149088655930e"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/ca.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2522,
+      "sha256": "0263d3e76ff162991b74d1b478c3493e5d68547cb533ff85de2efccb06101b40"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/cs.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2556,
+      "sha256": "6cb59797fa86abfde35a1368e5a564610c08f937951e74fc426d1b55d4d77514"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/de.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2545,
+      "sha256": "67c087e6d7f2999f72d9416b29d53e0203f0ab4e0376851b1e940ec53ddb0b2f"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/el.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 3124,
+      "sha256": "5a8489a21a1049fdbec1269b028a8de2b7a196def57c4abc15688dfda0375277"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/en.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2413,
+      "sha256": "268754e7e82cadc246bf43590feff67fffe0640e8aa4507f30e6ab9a7a1f20c5"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/es.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2591,
+      "sha256": "d782cf742937efd2f75f85f8f9d31891ad24fd5627b98e6963b165a6c63175e1"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/fr.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2695,
+      "sha256": "67dae09a0ed463526aa24b74b2c00452dcfde6d6926192a6e7ee0e9902fd4d89"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/it.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2596,
+      "sha256": "a725ae7a0f74cfe9a79a1e85574e9333dd399ca5470f3f967732fbb1b4354d16"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/ja.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2785,
+      "sha256": "f48078b9464b3f2cd8633c43526ca3eab23aab9bfb62bd533ecf34249ab68618"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/ko.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2584,
+      "sha256": "8399e2cc4c7ee34f6520311efdf2c7343a24c8dfe7977acd02fcf963dbdb2636"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/nb.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2456,
+      "sha256": "5cdbc5ebede83a62e8537578864d774de4a2c69660010de9cf0713707274b848"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/nl.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2508,
+      "sha256": "46eb3b58971e13c3b7e1c03ddd062ad2cbde582f686d10c1a4d82eadceb301e5"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/pl.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2578,
+      "sha256": "a4dbc5577a67dd31d25a53f695930f5f3b104d2a88e56b1dad5ed2edbfdf5d8c"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/pt-BR.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2537,
+      "sha256": "2330a05168d4d99d39c0028bddefddddd4f16122e6dbc1a44d3f87e3de6e3f38"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/pt.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2528,
+      "sha256": "fa4070fbe7898e511256ddc7bee38d40baeec21fcd94382e3c7ea629ac58f99f"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/ro.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2614,
+      "sha256": "15f5def42f2ac4dddb4382db6a4704f3695d4386db065de0a9aa2c4aa14337e8"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/ru.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 3115,
+      "sha256": "ea686a535611703255acc63b1e6fc7777b5c2322b5051f840bb4f732df908e86"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/sk.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2541,
+      "sha256": "d9361c1da70649da586a207dd2188918d13ed56698fc016b1afc4519664b4508"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/sv.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2551,
+      "sha256": "28cf7e0dc845a58bd72d36273f1b219c838fbe930fbec830d3629633409a6ca3"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/th.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2986,
+      "sha256": "16c4bbc24280e1e7a7c5e384a688e0c22d1180d2d3d36e051e3aa7be68977a5e"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/zh-Hans.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2336,
+      "sha256": "4351e1f718a9caca48714504e4efdea5fe94cc033cd6be8c98f1bc9e381fc62d"
+    },
+    {
+      "path": "Contents/Resources/ShortcutRecorder_ShortcutRecorder.bundle/Contents/Resources/zh-Hant.lproj/ShortcutRecorder.strings",
+      "type": "file",
+      "size": 2336,
+      "sha256": "8ef6a2b3bc42e2fb69864519ed156eb4ab1da806a5fc47f238987740db25dcaa"
+    },
+    {
+      "path": "Contents/Resources/ShortcutsView.nib",
+      "type": "file",
+      "size": 23799,
+      "sha256": "cd5dcd47fa3895edfbf23b5235d16ef4222945226dfc2ef38f84dc6c108db843"
+    },
+    {
+      "path": "Contents/Resources/SwitchCell.nib",
+      "type": "file",
+      "size": 17304,
+      "sha256": "fa1e80c8db9c6252a35c90c815c0ca20781d81464266acffd57b7159e52ffac8"
+    },
+    {
+      "path": "Contents/Resources/SwitchEmptyViewCell.nib",
+      "type": "file",
+      "size": 10615,
+      "sha256": "ea485692ac387e646566de899847ca9c09110b48944d9fb5d562950b247527a2"
+    },
+    {
+      "path": "Contents/Resources/WelcomeKit_WelcomeKit.bundle/Contents/Info.plist",
+      "type": "file",
+      "size": 1189,
+      "sha256": "b7518d0b6c0a9b5b1d3cbf21eb4a88c78adafc423ee8c45456ee91a587e7b8c2"
+    },
+    {
+      "path": "Contents/Resources/WelcomeKit_WelcomeKit.bundle/Contents/Resources/Assets.car",
+      "type": "file",
+      "size": 24120,
+      "sha256": "87d6f7638d8b95c7b979f324731acece478b8530c45fca621912c61c5d89e560"
+    },
+    {
+      "path": "Contents/Resources/WelcomeKit_WelcomeKit.bundle/Contents/Resources/Welcome.storyboardc/5RS-vO-H5w-view-Iip-6a-ua8.nib",
+      "type": "file",
+      "size": 9738,
+      "sha256": "60b79275c1a64cc1c29583fba37c55df2f21ecde719130a49ca510612fa97e79"
+    },
+    {
+      "path": "Contents/Resources/WelcomeKit_WelcomeKit.bundle/Contents/Resources/Welcome.storyboardc/Info.plist",
+      "type": "file",
+      "size": 432,
+      "sha256": "18521e540e34ada3af50cdb21abb3355508700f188069e5b3d1a327104ba685c"
+    },
+    {
+      "path": "Contents/Resources/WelcomeKit_WelcomeKit.bundle/Contents/Resources/Welcome.storyboardc/NSWindowController-6zS-AQ-eTf.nib",
+      "type": "file",
+      "size": 6318,
+      "sha256": "1a7eddcc97a39b858c0caf2ba7d9e7d6aef52d0507f636083a6d83e7f3db847e"
+    },
+    {
+      "path": "Contents/Resources/WelcomeKit_WelcomeKit.bundle/Contents/Resources/en.lproj/Localizable.strings",
+      "type": "file",
+      "size": 142,
+      "sha256": "c8f6797fbeffd1500b4086f43db3efe7517fc3124e23f54f6260482b8368dd16"
+    },
+    {
+      "path": "Contents/Resources/WelcomeKit_WelcomeKit.bundle/Contents/Resources/fr.lproj/Localizable.strings",
+      "type": "file",
+      "size": 146,
+      "sha256": "147469215c3a47b33d4661cfbf4d0a83ae3c9294c63d0c149c0b6ab3821e0c7e"
+    },
+    {
+      "path": "Contents/Resources/WelcomeKit_WelcomeKit.bundle/Contents/Resources/zh-Hans.lproj/Localizable.strings",
+      "type": "file",
+      "size": 154,
+      "sha256": "6441ba18e00a6ad5ca0f33fc9192d531ba4b167ed072256bfd42b2548bb30793"
+    },
+    {
+      "path": "Contents/Resources/WelcomeKit_WelcomeKit.bundle/Contents/Resources/zh-Hant.lproj/Localizable.strings",
+      "type": "file",
+      "size": 154,
+      "sha256": "6e77341a72072b68feaf2df926d4d5a31b17160ee1812539f8786c486a46ebb2"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/AirPodsPage.nib",
+      "type": "file",
+      "size": 1536,
+      "sha256": "6dc2f8cdba73ad3c54ff53897113fb21c0a444ed7a9c6aa7fe99e64b5fe92980"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/BGP-be-igQ-view-JtF-FI-kvD.nib",
+      "type": "file",
+      "size": 13216,
+      "sha256": "170265e0cc117036e3fdca3aa5c2854965dcba4b3834d8fe4cb32423f3728d39"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/DarkModePage.nib",
+      "type": "file",
+      "size": 1538,
+      "sha256": "d1daaf2196adecd5abd334b0318c12bffc54bfca16c9d31cfecd5b1918fe21da"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/FirstPage.nib",
+      "type": "file",
+      "size": 1532,
+      "sha256": "41f6eacc9b7a14bf9405dbc93daaf10147983ba8dcdb4c9c6eefd522c9d6ce5a"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/HideDesktopPage.nib",
+      "type": "file",
+      "size": 1544,
+      "sha256": "6d0f8406b212ff69af66bda90cd5e31f9060c1321471bc83792473d72f95410f"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/IconsetPage.nib",
+      "type": "file",
+      "size": 1536,
+      "sha256": "adcd528be1541ce544ebab803e1fc69f04c40524de73f0ea8d353d4225bb05cf"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/Info.plist",
+      "type": "file",
+      "size": 814,
+      "sha256": "c98f378c489348da399fd5703ae69f8f714912564bccb78ff13bda1c4bf6ff55"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/KeepAwakePage.nib",
+      "type": "file",
+      "size": 1540,
+      "sha256": "fed2d145d280fe3d8c5eb3f401516ae6283cfb93822bb1046a27c19e7bb043f3"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/O6H-oP-k5f-view-vFe-DZ-Ogx.nib",
+      "type": "file",
+      "size": 13236,
+      "sha256": "488bfb3c982496a097277471d1ef6e9831e66e9497cf50839b2c4f467e9ec589"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/Oga-ZK-nFv-view-MWa-nI-JJs.nib",
+      "type": "file",
+      "size": 13024,
+      "sha256": "cc3f63c521056e1139ff07b7a0188813514adf55d5909a2064f1b677fceafb13"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/PurchasePage.nib",
+      "type": "file",
+      "size": 1494,
+      "sha256": "f6e612df4449643d6ea8cffc8e463df62436469d37ce9f404c56a417d9f1e2c4"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/ScreenSaverPage.nib",
+      "type": "file",
+      "size": 1544,
+      "sha256": "160aef84520818c1217cab380e1339f8e600269dabbe67567395c3ec30b9fb32"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/bhu-k1-dtM-view-KSy-gY-jTF.nib",
+      "type": "file",
+      "size": 13189,
+      "sha256": "9838b64ad9271136c4668214d1159061d1e810fb59b35e32f0747bbc9de32d76"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/fHK-XU-QjJ-view-Vnj-tb-GHu.nib",
+      "type": "file",
+      "size": 13184,
+      "sha256": "954dda91da9af6a12c357bf8a5bf36e739b9284e70cf022cca38588a02e7a21d"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/ogk-4R-fj6-view-pU4-oI-IET.nib",
+      "type": "file",
+      "size": 13247,
+      "sha256": "f01854bf440405675a617affa100c9cb3d7a1dce32a7b0f8e26559ffa6301221"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/t2R-5N-kci-view-qnS-WN-Piu.nib",
+      "type": "file",
+      "size": 12870,
+      "sha256": "06d5f39ac4014885ea59019b5f5fad072852ae03dc45e403fa674b3a4963f427"
+    },
+    {
+      "path": "Contents/Resources/WelcomePages.storyboardc/vtm-OQ-EAb-view-Sif-HM-7VR.nib",
+      "type": "file",
+      "size": 13186,
+      "sha256": "eb375ae6dc08cd2ccb509fa1c10d70b15ccf87b9fc96d2b69d306a0159ab5ed8"
+    },
+    {
+      "path": "Contents/Resources/de.lproj/InfoPlist.strings",
+      "type": "file",
+      "size": 452,
+      "sha256": "0fc3a5bf50bef8204b49e85d39c9e06fd7d0dd3228c4a379dee3160745999a6f"
+    },
+    {
+      "path": "Contents/Resources/de.lproj/Localizable.strings",
+      "type": "file",
+      "size": 20800,
+      "sha256": "e078376370b31361d8d04f1dcabf68adede1e01b335ddad438df32ac3492e586"
+    },
+    {
+      "path": "Contents/Resources/de.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 5462,
+      "sha256": "b7d6b905f304720a6ab0b2cb383bb004f60fc46a9ba54e03f6f924408aed9c8b"
+    },
+    {
+      "path": "Contents/Resources/disableDarkMode.scpt",
+      "type": "file",
+      "size": 686,
+      "sha256": "1fd47ffd61589ce6092c5f840a7ebabe7581c0340ed1bd53a6a4c16129421d86"
+    },
+    {
+      "path": "Contents/Resources/dockDisableAutoHide.scpt",
+      "type": "file",
+      "size": 678,
+      "sha256": "89088b34fb0f6dcdf4881eda2eb85ee52ed502546a4aa3f9e9faf5557dde3fbf"
+    },
+    {
+      "path": "Contents/Resources/dockEnableAutoHide.scpt",
+      "type": "file",
+      "size": 678,
+      "sha256": "2560ae15b40d1364c6066d89b0344c17629cf6022fa1f206501e6ab9eaf5a90b"
+    },
+    {
+      "path": "Contents/Resources/dockGetAutoHideState.scpt",
+      "type": "file",
+      "size": 732,
+      "sha256": "256da1248268b37ef684f28f39eefab1b335b08b2e0c2de2f6bca84e3ca53e21"
+    },
+    {
+      "path": "Contents/Resources/eject-disks-sound.mp3",
+      "type": "file",
+      "size": 6268,
+      "sha256": "82dbb830c6482aab49f5ba1b53f4248d37f5ebd1223434c5905802d9e8b3b7cc"
+    },
+    {
+      "path": "Contents/Resources/emptyTrash.scpt",
+      "type": "file",
+      "size": 666,
+      "sha256": "9fbb7cd7825f82ba6a8dcf70238e86e74cc9822ca5b40ff5d59ffbc956c3ecc0"
+    },
+    {
+      "path": "Contents/Resources/en.lproj/InfoPlist.strings",
+      "type": "file",
+      "size": 700,
+      "sha256": "129fcf4b765ff3fe96058c299fc42fefcba258e990c693fd2bc66103a89d968e"
+    },
+    {
+      "path": "Contents/Resources/en.lproj/Localizable.strings",
+      "type": "file",
+      "size": 20182,
+      "sha256": "bb1822328556ce22ced044e8eb5f631ab8845f625408de3a4bc17768f0ff3bbc"
+    },
+    {
+      "path": "Contents/Resources/en.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 5296,
+      "sha256": "f4bd782092fb073b2b1ed9bae111c5dc143146509af1b951c0ea15586abb09df"
+    },
+    {
+      "path": "Contents/Resources/enableDarkMode.scpt",
+      "type": "file",
+      "size": 686,
+      "sha256": "b8fbbd3bdf042bb703d2b2c7375efdaae5cc9c439c1ca13fd45442cbd3b756ab"
+    },
+    {
+      "path": "Contents/Resources/es.lproj/InfoPlist.strings",
+      "type": "file",
+      "size": 728,
+      "sha256": "4bb8ea44c8d7d1c91534598d15e38d55c9249528959a9b14a5a4900e4db02609"
+    },
+    {
+      "path": "Contents/Resources/es.lproj/Localizable.strings",
+      "type": "file",
+      "size": 20086,
+      "sha256": "d9e7109cb4bcac470c89d03ebe4cc3f19fd41c12b168fbed2e6d819cacca505b"
+    },
+    {
+      "path": "Contents/Resources/es.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 5418,
+      "sha256": "99065e11f86db56e7b7ded26b7112bbb52878729e5a7d887584e926e141b58d2"
+    },
+    {
+      "path": "Contents/Resources/fr.lproj/InfoPlist.strings",
+      "type": "file",
+      "size": 764,
+      "sha256": "a7acf29810789f52b2c2ed8401765b8cdb88051276ea68904d40bb3f91c3799e"
+    },
+    {
+      "path": "Contents/Resources/fr.lproj/Localizable.strings",
+      "type": "file",
+      "size": 21760,
+      "sha256": "c44b77e3d8dfbd13a3f76718a2d8737436651d5e1892793f7af27baaec9ff640"
+    },
+    {
+      "path": "Contents/Resources/fr.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 5498,
+      "sha256": "4d9b38f1d158d36ea6cbb176cc409d0fce74995b17eff9299563fc87b2916d78"
+    },
+    {
+      "path": "Contents/Resources/it.lproj/InfoPlist.strings",
+      "type": "file",
+      "size": 726,
+      "sha256": "80abcc573f5a9821b49d37ece570deb6cb684826ba4c08ee8e312a363e891aa8"
+    },
+    {
+      "path": "Contents/Resources/it.lproj/Localizable.strings",
+      "type": "file",
+      "size": 20000,
+      "sha256": "f671728e054fd9d227fe08667f6e501d5cd2056fe876d5409ef334a233e43a57"
+    },
+    {
+      "path": "Contents/Resources/it.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 5512,
+      "sha256": "be5a94457429dd8fd630ac82bdc2d62375672b18ff6885544cbf1a05051a679b"
+    },
+    {
+      "path": "Contents/Resources/ja.lproj/InfoPlist.strings",
+      "type": "file",
+      "size": 614,
+      "sha256": "2c81bc791b560b309de9c2dc040db634fdf9d7f2b371e9140ac03141241c1efa"
+    },
+    {
+      "path": "Contents/Resources/ja.lproj/Localizable.strings",
+      "type": "file",
+      "size": 15404,
+      "sha256": "9abc1c7169eb54dbc950577603d5a3d7680d31072bad01d2f0a73ccc7bb68d9c"
+    },
+    {
+      "path": "Contents/Resources/ja.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 5026,
+      "sha256": "0d878a67f8bf686c9d03c4aad7ddcd0b907933d0ed709971f805a2153e097d1e"
+    },
+    {
+      "path": "Contents/Resources/ko.lproj/InfoPlist.strings",
+      "type": "file",
+      "size": 608,
+      "sha256": "80549be219e0970e5254adcda28e504e79b41df3db3cb579a48c219422ad295d"
+    },
+    {
+      "path": "Contents/Resources/ko.lproj/Localizable.strings",
+      "type": "file",
+      "size": 15148,
+      "sha256": "04858fa45132bd4f29c77a1648a648fef8bd599d28f3416768446c79eedc9d1d"
+    },
+    {
+      "path": "Contents/Resources/ko.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 5296,
+      "sha256": "f4bd782092fb073b2b1ed9bae111c5dc143146509af1b951c0ea15586abb09df"
+    },
+    {
+      "path": "Contents/Resources/pt-BR.lproj/InfoPlist.strings",
+      "type": "file",
+      "size": 706,
+      "sha256": "6debf3ca594f09ca040c401920ea9bdd2fc2a89391594cfa30000c7e77c60fcc"
+    },
+    {
+      "path": "Contents/Resources/pt-BR.lproj/Localizable.strings",
+      "type": "file",
+      "size": 19762,
+      "sha256": "ff8b8920de2b62a1a6aa778fe91740571860d16236eb692cfdc274923ba6f634"
+    },
+    {
+      "path": "Contents/Resources/pt-BR.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 5438,
+      "sha256": "8f8503856028423a5139ab0ef8547609b3e62b3f1454d6194e1f9dce2888c493"
+    },
+    {
+      "path": "Contents/Resources/pt-PT.lproj/InfoPlist.strings",
+      "type": "file",
+      "size": 782,
+      "sha256": "3a82735713931ac911db7631562ae8e116eee89d65767df4ba4ff8da7ae3baf3"
+    },
+    {
+      "path": "Contents/Resources/pt-PT.lproj/Localizable.strings",
+      "type": "file",
+      "size": 19914,
+      "sha256": "dbbded618eeb7d14a599b4486365b775ac95174e7764e35458d18b5c8e8654c2"
+    },
+    {
+      "path": "Contents/Resources/pt-PT.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 5390,
+      "sha256": "2e519c76a5577a46b5aae5354851fa91f6feede360db5bf74a69ad6656ba932c"
+    },
+    {
+      "path": "Contents/Resources/ru.lproj/InfoPlist.strings",
+      "type": "file",
+      "size": 754,
+      "sha256": "4ccc9d6c88cf970011c4e4b0ca01297a6bec79d6e661da6c92ed69fdeb78a3a2"
+    },
+    {
+      "path": "Contents/Resources/ru.lproj/Localizable.strings",
+      "type": "file",
+      "size": 19472,
+      "sha256": "ed863dd61a0b234ed4510c281419d4d8adebed68730a4fd5fe1b3a6bce2b4944"
+    },
+    {
+      "path": "Contents/Resources/ru.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 6870,
+      "sha256": "10d4276660f70e387602a81005c70585172d3ba75bc9d9ea05a5f92e472adbf7"
+    },
+    {
+      "path": "Contents/Resources/screen-clean-animation.json",
+      "type": "file",
+      "size": 8487,
+      "sha256": "c5bbfbc8ff32eb275fe7e69d1fad457bbb2b814bcdbcf6e6cb63bdf78137dee6"
+    },
+    {
+      "path": "Contents/Resources/spotifyGetCurrentTrack.scpt",
+      "type": "file",
+      "size": 804,
+      "sha256": "39942274fa4418aedc9ff747970cba76b6b4d489c0bb83d393ca1493480316bc"
+    },
+    {
+      "path": "Contents/Resources/spotifyGetState.scpt",
+      "type": "file",
+      "size": 830,
+      "sha256": "2b717ef06697bc40e3741ba01e94a60950ebc11f0b61b7f69d9959e314befe43"
+    },
+    {
+      "path": "Contents/Resources/spotifyTogglePlayPause.scpt",
+      "type": "file",
+      "size": 844,
+      "sha256": "b6458dfe3d628f4f65cee0b072b11f11cdae2ccd9ee315403512d74f07020afb"
+    },
+    {
+      "path": "Contents/Resources/trashGetItemsCount.scpt",
+      "type": "file",
+      "size": 796,
+      "sha256": "673f29fc606431ab6ceb63d6d4bc3be500014114140ee483e06d22671259f690"
+    },
+    {
+      "path": "Contents/Resources/xcode-clean-sound.mp3",
+      "type": "file",
+      "size": 10156,
+      "sha256": "470fd6c1a887c5aeb5bd4a8df2d1829e7528287c9bc3889ae1eac0c2baa1882b"
+    },
+    {
+      "path": "Contents/Resources/zh-Hans.lproj/InfoPlist.strings",
+      "type": "file",
+      "size": 550,
+      "sha256": "bd554104379f16c54701451a04129739d8ceb21e19e1d3c6d6d962e8e4eb978f"
+    },
+    {
+      "path": "Contents/Resources/zh-Hans.lproj/Localizable.strings",
+      "type": "file",
+      "size": 14752,
+      "sha256": "8357d65365377f711eb1e2e66686af28e44bbaea38168bd29ba8aa477a62c58e"
+    },
+    {
+      "path": "Contents/Resources/zh-Hans.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 4972,
+      "sha256": "d8094a30fb1ff659adb7e8657dd8748c06b98e8ee82cf9a15a058383e9d2b80e"
+    },
+    {
+      "path": "Contents/Resources/zh-Hant.lproj/InfoPlist.strings",
+      "type": "file",
+      "size": 550,
+      "sha256": "f5331b30e90dd8128c6df46f4bd918c1b33a8156bf2b4aa1afd08c304da3feb8"
+    },
+    {
+      "path": "Contents/Resources/zh-Hant.lproj/Localizable.strings",
+      "type": "file",
+      "size": 14770,
+      "sha256": "2d1fdfcf7d15f62bea3b0dd44dbf8ec8833ddb621020b4cdff244bbc8e6b12ac"
+    },
+    {
+      "path": "Contents/Resources/zh-Hant.lproj/Localizable.stringsdict",
+      "type": "file",
+      "size": 4970,
+      "sha256": "9b4434455ff23c9eec6e531996431ca4c06fcc167c45a469333a962e33d6f7a4"
+    },
+    {
+      "path": "Contents/XPCServices/OneSwitchXPC.xpc/Contents/Info.plist",
+      "type": "file",
+      "size": 1583,
+      "sha256": "f2d77dde616d7d7ef7084cd5c52ba97c41b632362c780966d6301c62fea6906a"
+    },
+    {
+      "path": "Contents/XPCServices/OneSwitchXPC.xpc/Contents/MacOS/OneSwitchXPC",
+      "type": "file",
+      "size": 136544,
+      "sha256": "e561f0902dd28ac8c6bc5577905a9d8e736d7d49b117841ced8314b6bb49a646"
+    },
+    {
+      "path": "Contents/XPCServices/OneSwitchXPC.xpc/Contents/_CodeSignature/CodeResources",
+      "type": "file",
+      "size": 2200,
+      "sha256": "6686de10a28a2fe11b36cbb86dcbacc827cfc4ea116b4dabf1845e5aee629e9b"
+    },
+    {
+      "path": "Contents/_CodeSignature/CodeResources",
+      "type": "file",
+      "size": 57442,
+      "sha256": "14426b5d4810d5831af6f5ac680d269e3dc720c4dcdf12f4a6b9079b210921f3"
+    },
+    {
+      "path": "Contents/embedded.provisionprofile",
+      "type": "file",
+      "size": 12386,
+      "sha256": "3a5f786ae5e785fa00187a16c4cc826cea562b960f487a3fbf5d65cf864c2fd1"
+    }
+  ],
+  "binaries": [
+    {
+      "path": "Contents/Frameworks/DFRFoundation.framework/Versions/A/DFRFoundation",
+      "type": "file",
+      "size": 84192,
+      "sha256": "1582cfb99f48d918ae907be6543312cdf269640cbd289fa3b27d37ca8e8ee6fc",
+      "file": "Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit dynamically linked shared library x86_64] [arm64:Mach-O 64-bit dynamically linked shared library arm64]\nsamples/One Switch.app/Contents/Frameworks/DFRFoundation.framework/Versions/A/DFRFoundation (for architecture x86_64):\tMach-O 64-bit dynamically linked shared library x86_64\nsamples/One Switch.app/Contents/Frameworks/DFRFoundation.framework/Versions/A/DFRFoundation (for architecture arm64):\tMach-O 64-bit dynamically linked shared library arm64",
+      "architectures": "x86_64 arm64"
+    },
+    {
+      "path": "Contents/Frameworks/Paddle.framework/Versions/A/Paddle",
+      "type": "file",
+      "size": 1588496,
+      "sha256": "bc8781603727173d4905257f486499a7c4e8e5fc5da91a55fb9b9de985fa2b5b",
+      "file": "Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit dynamically linked shared library x86_64] [arm64:Mach-O 64-bit dynamically linked shared library arm64]\nsamples/One Switch.app/Contents/Frameworks/Paddle.framework/Versions/A/Paddle (for architecture x86_64):\tMach-O 64-bit dynamically linked shared library x86_64\nsamples/One Switch.app/Contents/Frameworks/Paddle.framework/Versions/A/Paddle (for architecture arm64):\tMach-O 64-bit dynamically linked shared library arm64",
+      "architectures": "x86_64 arm64"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate",
+      "type": "file",
+      "size": 693344,
+      "sha256": "ff16cc725f457bb90e67749c256323b597f4c5499bcc97cd6bc92f42bef97b8c",
+      "file": "Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64:Mach-O 64-bit executable arm64]\nsamples/One Switch.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate (for architecture x86_64):\tMach-O 64-bit executable x86_64\nsamples/One Switch.app/Contents/Frameworks/Sparkle.framework/Versions/B/Autoupdate (for architecture arm64):\tMach-O 64-bit executable arm64",
+      "architectures": "x86_64 arm64"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle",
+      "type": "file",
+      "size": 860560,
+      "sha256": "da7bffe4d4abcf89fcc3f3bfe9eb6bb51c46921902f76442ec47895c55856dd3",
+      "file": "Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit dynamically linked shared library x86_64] [arm64:Mach-O 64-bit dynamically linked shared library arm64]\nsamples/One Switch.app/Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle (for architecture x86_64):\tMach-O 64-bit dynamically linked shared library x86_64\nsamples/One Switch.app/Contents/Frameworks/Sparkle.framework/Versions/B/Sparkle (for architecture arm64):\tMach-O 64-bit dynamically linked shared library arm64",
+      "architectures": "x86_64 arm64"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater",
+      "type": "file",
+      "size": 274352,
+      "sha256": "cf4330509343a50fc5d5f9398446b6dd5257d95567cd243b0f5bb1902851c7da",
+      "file": "Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64:Mach-O 64-bit executable arm64]\nsamples/One Switch.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater (for architecture x86_64):\tMach-O 64-bit executable x86_64\nsamples/One Switch.app/Contents/Frameworks/Sparkle.framework/Versions/B/Updater.app/Contents/MacOS/Updater (for architecture arm64):\tMach-O 64-bit executable arm64",
+      "architectures": "x86_64 arm64"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader",
+      "type": "file",
+      "size": 172000,
+      "sha256": "93dbf81e5109e560fa022e478a21fa8c0c285c20ce0dd8cfae12ea1e738bc9d1",
+      "file": "Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64:Mach-O 64-bit executable arm64]\nsamples/One Switch.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader (for architecture x86_64):\tMach-O 64-bit executable x86_64\nsamples/One Switch.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Downloader.xpc/Contents/MacOS/Downloader (for architecture arm64):\tMach-O 64-bit executable arm64",
+      "architectures": "x86_64 arm64"
+    },
+    {
+      "path": "Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer",
+      "type": "file",
+      "size": 223648,
+      "sha256": "359a0cbb1dfe792af2defa18f34e288b12a2e8840a7b4522ea151046aa8a99ae",
+      "file": "Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64:Mach-O 64-bit executable arm64]\nsamples/One Switch.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer (for architecture x86_64):\tMach-O 64-bit executable x86_64\nsamples/One Switch.app/Contents/Frameworks/Sparkle.framework/Versions/B/XPCServices/Installer.xpc/Contents/MacOS/Installer (for architecture arm64):\tMach-O 64-bit executable arm64",
+      "architectures": "x86_64 arm64"
+    },
+    {
+      "path": "Contents/Library/LaunchServices/studio.fireball.OneSwitch.PrivilegedHelper",
+      "type": "file",
+      "size": 250320,
+      "sha256": "05eec224f475c47b5d7660af7258c963edef9c8ab344c06f72579aa605f0deab",
+      "file": "Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64:Mach-O 64-bit executable arm64]\nsamples/One Switch.app/Contents/Library/LaunchServices/studio.fireball.OneSwitch.PrivilegedHelper (for architecture x86_64):\tMach-O 64-bit executable x86_64\nsamples/One Switch.app/Contents/Library/LaunchServices/studio.fireball.OneSwitch.PrivilegedHelper (for architecture arm64):\tMach-O 64-bit executable arm64",
+      "architectures": "x86_64 arm64"
+    },
+    {
+      "path": "Contents/Library/LoginItems/OneSwitchHelper.app/Contents/MacOS/OneSwitchHelper",
+      "type": "file",
+      "size": 135904,
+      "sha256": "7bc5b2002aad142fc7fa19ae0136dcba5adc6287323cf8cfda1385c7e06bdeec",
+      "file": "Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64:Mach-O 64-bit executable arm64]\nsamples/One Switch.app/Contents/Library/LoginItems/OneSwitchHelper.app/Contents/MacOS/OneSwitchHelper (for architecture x86_64):\tMach-O 64-bit executable x86_64\nsamples/One Switch.app/Contents/Library/LoginItems/OneSwitchHelper.app/Contents/MacOS/OneSwitchHelper (for architecture arm64):\tMach-O 64-bit executable arm64",
+      "architectures": "x86_64 arm64"
+    },
+    {
+      "path": "Contents/MacOS/One Switch",
+      "type": "file",
+      "size": 5940704,
+      "sha256": "ee4551f90014801f0252abea9787911a8ce04e9e6bae1207589eebf1584208fa",
+      "file": "Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64]\nsamples/One Switch.app/Contents/MacOS/One Switch (for architecture x86_64):\tMach-O 64-bit executable x86_64\nsamples/One Switch.app/Contents/MacOS/One Switch (for architecture arm64):\tMach-O 64-bit executable arm64",
+      "architectures": "x86_64 arm64"
+    },
+    {
+      "path": "Contents/XPCServices/OneSwitchXPC.xpc/Contents/MacOS/OneSwitchXPC",
+      "type": "file",
+      "size": 136544,
+      "sha256": "e561f0902dd28ac8c6bc5577905a9d8e736d7d49b117841ced8314b6bb49a646",
+      "file": "Mach-O universal binary with 2 architectures: [x86_64:Mach-O 64-bit executable x86_64] [arm64:Mach-O 64-bit executable arm64]\nsamples/One Switch.app/Contents/XPCServices/OneSwitchXPC.xpc/Contents/MacOS/OneSwitchXPC (for architecture x86_64):\tMach-O 64-bit executable x86_64\nsamples/One Switch.app/Contents/XPCServices/OneSwitchXPC.xpc/Contents/MacOS/OneSwitchXPC (for architecture arm64):\tMach-O 64-bit executable arm64",
+      "architectures": "x86_64 arm64"
+    }
+  ]
+}
