@@ -130,3 +130,10 @@
 - 只读探针（`scripts/onsite-probe /tmp/onsite-baseline.log`）：`automationRaw/Resolved=已授权`、`accessibilityTrusted=true`、`systemEventsRunning=true`、`loginItemState=已开启`；BTM `enabled, allowed, notified`；应用图标 32 个表示（16–2048）、菜单栏 S monogram 18×18 template；`pmset` 无遗留断言；`hasSeenWelcome=true`。
 - Screen Recording 在本机不可用（`screencapture` 失败），菜单栏/Finder/TCC 提示的图标显示仍需用户目视；M1 深色切换、M3 真实锁屏、M8 注销/登录启动均未执行，按边界不记为通过。
 - 现场前置/步骤/记录模板：`evidence/onsite/M1-M3-M8-2026-10-18.md`。自动化 verify-app 11/11、自检 12/12。
+
+## v0.3.7：M1/M8 现场反馈与 M3 交互修复（2026-10-18）
+
+- 用户 12:49 现场反馈：**M1 深色模式验证通过**；**M8 简单测试没问题**（范围未逐项列明，注销/重启登录项与图标目视仍待明确）；**M3 点击「锁定屏幕」后出现二次确认，认为按钮语义已足够、不应再确认**。
+- 修复：移除 `PanelModel.presentLockFlow` 中锁屏动作的 `NSAlert` 二次确认（权限门控仍保留；缺权限时仍显示授权引导）；屏保确认保持不变。
+- v0.3.7 构建：可执行 SHA-256 `6b5dadf0693f235c098ccf4062c7406d4ae326c947d01c3bd714b42074abee6a`；签名身份继续为本地自签名；`--diagnose-runtime` 复核 Automation/Accessibility 均仍已授权、登录项已开启。
+- 版本 0.3.7；verify-app 11/11、自检 12/12；锁屏真实执行需用户复测（M3-1），不代跑、不记通过。
