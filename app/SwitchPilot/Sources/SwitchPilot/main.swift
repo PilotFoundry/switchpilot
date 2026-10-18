@@ -12,6 +12,12 @@ func dumpPanel() -> Int32 {
     if ProcessInfo.processInfo.environment["SWITCHPILOT_HIDE_GUIDE"] != nil {
         model.hideGuideForPreview()
     }
+    if ProcessInfo.processInfo.environment["SWITCHPILOT_PREVIEW_AUDIO_MUTED"] != nil {
+        model.previewSupportedAudio(muted: true)
+    }
+    if ProcessInfo.processInfo.environment["SWITCHPILOT_PREVIEW_AUDIO_UNMUTED"] != nil {
+        model.previewSupportedAudio(muted: false)
+    }
     if ProcessInfo.processInfo.environment["SWITCHPILOT_FORCE_GUIDE"] != nil {
         model.forceGuideForPreview()
     }
@@ -84,6 +90,12 @@ func panelSize() -> Int32 {
     let model = PanelModel()
     if ProcessInfo.processInfo.environment["SWITCHPILOT_HIDE_GUIDE"] != nil {
         model.hideGuideForPreview()
+    }
+    if ProcessInfo.processInfo.environment["SWITCHPILOT_PREVIEW_AUDIO_MUTED"] != nil {
+        model.previewSupportedAudio(muted: true)
+    }
+    if ProcessInfo.processInfo.environment["SWITCHPILOT_PREVIEW_AUDIO_UNMUTED"] != nil {
+        model.previewSupportedAudio(muted: false)
     }
     if ProcessInfo.processInfo.environment["SWITCHPILOT_FORCE_GUIDE"] != nil {
         model.forceGuideForPreview()
