@@ -41,3 +41,9 @@
 模型输入/输出/缓存 token、计费和人工时间均未知。会话记录显示两次 `usage_limit_exceeded` 中断（10:02、10:38 CST）；第二次中断发生在最终提交前，故结果报告初稿已生成而未提交，收尾由接手会话完成。用户授权“现有 Codex 重置卡用完为止”已记录为条件性偏好；重置卡是否被消耗本地无记录，本轮未新购额度。
 
 前次个人版 6–8 项的 2–4 周 / 60–180 万累计 token 仅保留为低置信度规划区间，未被本轮计量校准。不能把它称为实际消耗或保证；正式范围明确后再按逐项验收拆估。近等价/分发版本不在当前承诺范围。
+
+## 正式命名与 v0.2 UI/UX（2026-10-18）
+
+- 正式名：**SwitchPilot**；候选冲突调研（Tack / Perch / Sill / Tact / Switchbar / Barkeep / MenuSwitch / OneBar / Flick / Switchlet 等已被占用）与设计依据见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`。
+- 命名决定不更换 bundle id（`local.personal.SwitchPilot`），避免重置用户已授予的 TCC 授权；分发前的商标/域名检索未做。
+- UI/UX v0.2：首次引导、状态胶囊、保活进度、权限行内化、动作磁贴、权限摘要；实现与自动验收见 `evidence/app-runtime.md`。运行时/TCC/视觉手测仍待用户（TESTPLAN M1–M3、M5、M7）。
