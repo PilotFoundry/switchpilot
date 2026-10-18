@@ -1,6 +1,6 @@
 # Product requirements
 
-Status: current baseline **v0.7.5** (2026-10-18). English is the canonical
+Status: current baseline **v0.7.6** (2026-10-18). English is the canonical
 source for this document.
 
 ## 1. Problem
@@ -72,16 +72,16 @@ See [CORE.md](CORE.md) for the admission rules.
 
 ## 6. UX requirements
 
-- Panel width 380 pt; normal height about 709 pt, guided/permission state up to
-  about 782 pt.
+- Panel width 380 pt; normal height about 731 pt, guided/permission state up to
+  about 804 pt.
 - Settings is a separate window about 460 pt wide.
 - Controls use standard AppKit/SwiftUI buttons, toggles, pickers and menus.
 - Light and dark mode meet the contrast tokens checked by `make smoke`.
 - The menu-bar icon is a template image and does not use color as the only
   state indicator.
 - Permission-required actions are disabled or explained, never fake success.
-- Screen cleaning must show a visible mouse exit and must not offer a keyboard
-  exit by design.
+- Screen cleaning must show a visible mouse exit and a persistent in-panel hint
+  explaining how to exit; it must not offer a keyboard exit by design.
 - Language names are shown in their own language; the current selection is
   visible; a **Quit and Reopen** action is available.
 
