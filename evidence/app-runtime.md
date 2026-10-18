@@ -61,3 +61,13 @@
 - 从 2026-10-18 11:14:46 开始读到 11:23:43 完成自动化验收，墙钟约 **8 分 57 秒**（含重复构建/启动冒烟；不含文档写作与最终审阅）。
 - token、缓存、计费与人工工时：未知（无权威计量），不以估算冒充实测。
 - 本轮未触发 GPT 限额；未使用新的重置卡/额度。
+
+## v0.2 正式命名与面板重设计验收（2026-10-18）
+
+- 正式名 SwitchPilot 确定；bundle id 保持 `local.personal.SwitchPilot`，不重置已授予的 TCC 授权。命名依据见 `artifacts/20261018-1138-oneswitch-naming-ui-redesign.html`。
+- 面板重写：状态胶囊、首次引导卡（`UserDefaults("switchpilot.hasSeenWelcome")`）、保活进度条、外观/锁屏权限行内入口、动作磁贴、权限摘要 footer。
+- `SwitchPilotChecks` 扩为 **10/10**：新增“限时进度 / 无限期无进度”检查。
+- `python3 scripts/verify-app.py`：**8/8 通过**（构建、plists、ad-hoc Hardened Runtime 签名、自检 10/10、启动冒烟、无新增残留进程、原应用不变、脚本语法）。
+- v0.2.0 可执行文件 SHA-256 `f3185f00fc8185aad1008a60c809028df10f4832677c1a6d05da3f7685ea76a7`，CDHash `01e7ecb48834f4b7981a44800bfcae413ce94f9d`。
+- 用户 2026-10-18 口头确认 v0.1 初步验收可行（未提供逐项清单；不据此把 M1–M3 记为已通过）。v0.2 的新面板/引导交互验收（TESTPLAN M7）仍待用户手动确认。
+- 本轮自动化同样未请求 TCC、未启动屏保、未发送锁屏按键、未切换系统外观。

@@ -20,3 +20,8 @@ mvp,automated_verify,2026-10-18T11:23:43+08:00,timestamp,scripts/verify-app.py 8
 mvp,wall_clock,8.9,minutes,baseline read to automated verification; excludes docs writing and manual TCC checks
 mvp,model_tokens,unknown,tokens,no authoritative measurement
 mvp,new_credit_purchases,0,cards,no new purchase; reset-card authorization not exercised this round
+v02,start,2026-10-18T11:30:00+08:00,timestamp,naming + UI redesign milestone started after user acceptance
+v02,automated_verify,2026-10-18T11:37:00+08:00,timestamp,verify-app 8/8 and checks 10/10
+v02,wall_clock,7.0,minutes,naming/design research + implementation + automated verification; excludes user manual checks
+v02,model_tokens,unknown,tokens,no authoritative measurement
+v02,new_credit_purchases,0,cards,no new purchase
