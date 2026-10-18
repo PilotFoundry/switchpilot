@@ -1,6 +1,6 @@
 # Product requirements
 
-Status: current baseline **v0.7.4** (2026-10-18). English is the canonical
+Status: current baseline **v0.7.5** (2026-10-18). English is the canonical
 source for this document.
 
 ## 1. Problem

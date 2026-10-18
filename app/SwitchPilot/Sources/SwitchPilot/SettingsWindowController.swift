@@ -9,13 +9,14 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
 
     private let hosting: NSHostingController<SettingsView>
     private var sizeCancellable: AnyCancellable?
+    private var keyMonitor: Any?
 
     init(model: SettingsModel) {
         let hosting = NSHostingController(rootView: SettingsView(model: model))
         hosting.sizingOptions = [.preferredContentSize]
         self.hosting = hosting
 
-        let window = NSWindow(contentViewController: hosting)
+        let window = SettingsWindow(contentViewController: hosting)
         window.title = L("SwitchPilot 设置")
         window.styleMask = [.titled, .closable]
         window.isReleasedWhenClosed = false
@@ -35,7 +36,37 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
         fatalError("init(coder:) has not been implemented")
     }
 
+    /// Offscreen probe used by `--settings-close-key-test` to verify the
+    /// standard Command-W path without presenting a visible Settings window.
+    static func closeShortcutRegressionProbe() -> Bool {
+        let window = SettingsWindow(
+            contentRect: NSRect(x: -20_000, y: -20_000, width: 460, height: 200),
+            styleMask: [.titled, .closable],
+            backing: .buffered,
+            defer: false
+        )
+        window.isReleasedWhenClosed = false
+        window.orderFront(nil)
+        guard let event = NSEvent.keyEvent(
+            with: .keyDown,
+            location: .zero,
+            modifierFlags: .command,
+            timestamp: 0,
+            windowNumber: window.windowNumber,
+            context: nil,
+            characters: "w",
+            charactersIgnoringModifiers: "w",
+            isARepeat: false,
+            keyCode: 13
+        ) else { return false }
+        let handled = window.performKeyEquivalent(with: event)
+        let closed = !window.isVisible
+        window.orderOut(nil)
+        return handled && closed
+    }
+
     func windowWillClose(_ notification: Notification) {
+        removeKeyMonitor()
         onClose?()
     }
 
@@ -45,6 +76,31 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
         window?.makeKeyAndOrderFront(nil)
         window?.orderFrontRegardless()
         NSApp.activate(ignoringOtherApps: true)
+        installKeyMonitor()
+    }
+
+    /// Belt-and-suspenders for Command-W: the current app has no main menu
+    /// (LSUIElement), so there is no File > Close item to own the shortcut.
+    /// The monitor catches the event before normal dispatch; SettingsWindow's
+    /// performKeyEquivalent remains as the AppKit-level fallback.
+    private func installKeyMonitor() {
+        removeKeyMonitor()
+        keyMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+            if flags == .command,
+               event.charactersIgnoringModifiers?.lowercased() == "w" {
+                self?.window?.performClose(nil)
+                return nil
+            }
+            return event
+        }
+    }
+
+    private func removeKeyMonitor() {
+        if let keyMonitor {
+            NSEvent.removeMonitor(keyMonitor)
+            self.keyMonitor = nil
+        }
     }
 
     private func resizeToFit() {
@@ -63,5 +119,25 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
         var frame = window.frame
         frame.origin.y = top - frame.height
         window.setFrameOrigin(frame.origin)
+    }
+}
+
+
+/// The app is LSUIElement and has no main menu, so AppKit has no File > Close
+/// menu item to resolve Command-W. NSWindow itself does not own that shortcut.
+/// Handle it on the window so the standard Settings window can always close.
+private final class SettingsWindow: NSWindow {
+    override func performKeyEquivalent(with event: NSEvent) -> Bool {
+        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        if flags == .command,
+           event.charactersIgnoringModifiers?.lowercased() == "w" {
+            performClose(nil)
+            return true
+        }
+        return super.performKeyEquivalent(with: event)
+    }
+
+    override func cancelOperation(_ sender: Any?) {
+        performClose(nil)
     }
 }

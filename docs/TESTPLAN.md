@@ -1,6 +1,6 @@
 # Test plan
 
-Status: current baseline **v0.7.4**. English is canonical. Automated checks are
+Status: current baseline **v0.7.5**. English is canonical. Automated checks are
 not a substitute for manual TCC, hardware, login, screen-cleaning or release
 verification.
 
@@ -105,7 +105,7 @@ Expected:
 | Screen cleaning | Overlay, keyboard suspended, mouse exit, hidden timeout, no normal countdown |
 | Login item | Register/unregister, logout/reboot launch |
 | Hotkeys | Default off, enable, conflict error, disable, real trigger |
-| Settings | Revoke disclosure, advanced reset confirmation, no automatic tccutil |
+| Settings | Revoke disclosure, advanced reset confirmation, no automatic tccutil; Command-W/Escape close |
 | UI | Light/dark, small display, larger text, VoiceOver labels |
 | Panel animation | Open/close from status item, 80/60 ms scale+fade, no clipped content, outside click/Escape, Reduce Motion |
 | Material/magnet | Dark/light translucency, readability over bright/dark desktops, left/right status-item edge snapping, screen-edge clamp |

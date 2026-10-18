@@ -2,7 +2,7 @@
 
 ## Current baseline
 
-- Version: **0.7.4**
+- Version: **0.7.5**
 - Status: open-source early release maintained by PilotFoundry; ad-hoc universal
   binary published, not notarized.
 - Implemented: keep awake, dark mode, screen saver, lock screen, display sleep,

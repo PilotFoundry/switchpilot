@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml)
 
-版本 0.7.4 · 由 PilotFoundry 维护的开源、隐私优先 macOS 菜单栏工具，只保留少数可靠、低权限的系统控制。
+版本 0.7.5 · 由 PilotFoundry 维护的开源、隐私优先 macOS 菜单栏工具，只保留少数可靠、低权限的系统控制。
 
 > 本仓库保留完整开发历史，包括早期研究、失败实验和现场验收记录。应用源码与当前英文文档位于根目录；历史材料在 `artifacts/`、`evidence/`、`tooling/` 等目录，详见 [docs/RESEARCH.md](docs/RESEARCH.md)。
 
@@ -64,7 +64,7 @@ SwitchPilot 提供四套 UI 本地化：
 Release 提供由对应 tag 源码构建的 universal（Apple Silicon + Intel）macOS 应用。当前项目没有 Developer ID 证书，因此它是 **ad-hoc 签名、未公证** 的版本。
 
 - 要求：macOS 14 或更高
-- 文件：`SwitchPilot-0.7.4-macos-universal-adhoc.zip`
+- 文件：`SwitchPilot-0.7.5-macos-universal-adhoc.zip`
 - 下载、解压后把 `SwitchPilot.app` 放到 `/Applications`
 - 首次打开可能被 macOS 拦截：右键点击应用 → **打开**
 - 如使用终端，只对该应用执行：

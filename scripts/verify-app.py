@@ -69,7 +69,7 @@ def check_plists():
     entitlements = plistlib.loads((PKG / "Entitlements.plist").read_bytes())
     if info.get("CFBundleIdentifier") != "io.github.pengxianghao21.SwitchPilot":
         raise RuntimeError("unexpected bundle id")
-    if info.get("CFBundleShortVersionString") != "0.7.4":
+    if info.get("CFBundleShortVersionString") != "0.7.5":
         raise RuntimeError(f"unexpected bundle version: {info.get('CFBundleShortVersionString')}")
     if info.get("LSUIElement") is not True:
         raise RuntimeError("LSUIElement must be true")
@@ -154,7 +154,10 @@ def check_panel_hit_test():
     result = run(str(APP_BIN), "--panel-hit-test")
     if result.returncode != 0:
         raise RuntimeError(result.stderr.strip() or "panel hit-test probe failed")
-    return "material view passes clicks through to SwiftUI content"
+    close_key = run(str(APP_BIN), "--settings-close-key-test")
+    if close_key.returncode != 0:
+        raise RuntimeError(close_key.stderr.strip() or "settings Cmd-W probe failed")
+    return "material click-through and settings Cmd-W handling"
 
 
 def check_no_leftover_process():

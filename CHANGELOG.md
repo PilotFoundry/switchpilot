@@ -16,6 +16,14 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
+## [0.7.5] - 2026-10-18
+
+- Make the Settings window close with Command-W. The app is LSUIElement and
+  has no main menu, so there was no File > Close key equivalent; add a
+  SettingsWindow key-equivalent handler plus a local key monitor fallback.
+- Add Escape-to-close on the Settings window.
+- Add `--settings-close-key-test` and extend verify/QA regression checks.
+
 ## [0.7.4] - 2026-10-18
 
 - Remove the duplicate permission status line from the panel footer. Missing
