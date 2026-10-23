@@ -157,7 +157,10 @@ def check_panel_hit_test():
     close_key = run(str(APP_BIN), "--settings-close-key-test")
     if close_key.returncode != 0:
         raise RuntimeError(close_key.stderr.strip() or "settings Cmd-W probe failed")
-    return "material click-through and settings Cmd-W handling"
+    language = run(str(APP_BIN), "--language-freeze-test")
+    if language.returncode != 0:
+        raise RuntimeError(language.stderr.strip() or "language freeze probe failed")
+    return "material click-through, settings Cmd-W and launch-language freeze"
 
 
 def check_no_leftover_process():

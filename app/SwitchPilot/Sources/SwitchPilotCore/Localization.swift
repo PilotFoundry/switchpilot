@@ -33,6 +33,10 @@ public enum AppLanguage: String, CaseIterable, Identifiable, Sendable {
 public enum LanguagePreference {
     public static let defaultsKey = "switchpilot.language"
 
+    /// Resolved once, before AppKit/SwiftUI load. A Settings change updates the
+    /// preference for the next launch but must not retranslate the running UI.
+    public private(set) static var resolvedAtLaunch: AppLanguage?
+
     public static var selected: AppLanguage {
         guard let raw = UserDefaults.standard.string(forKey: defaultsKey),
               let value = AppLanguage(rawValue: raw) else {
@@ -43,6 +47,21 @@ public enum LanguagePreference {
 
     public static func set(_ language: AppLanguage) {
         UserDefaults.standard.set(language.rawValue, forKey: defaultsKey)
+    }
+
+    /// Regression probe: changing the persisted preference must not change the
+    /// active locale of the running process.
+    public static func languageFreezeProbe() -> Bool {
+        let before = AppLocalization.activeCode
+        let original = UserDefaults.standard.string(forKey: defaultsKey)
+        set(.english)
+        let after = AppLocalization.activeCode
+        if let original {
+            UserDefaults.standard.set(original, forKey: defaultsKey)
+        } else {
+            UserDefaults.standard.removeObject(forKey: defaultsKey)
+        }
+        return before == after
     }
 
     /// Apply the saved language before AppKit/SwiftUI resolve localized
@@ -59,6 +78,7 @@ public enum LanguagePreference {
             language = selected
         }
 
+        resolvedAtLaunch = language
         if let code = language.localizationCode {
             UserDefaults.standard.set([code], forKey: "AppleLanguages")
         } else {
@@ -76,6 +96,9 @@ public enum AppLocalization {
             if let parsed = AppLanguage(rawValue: forced), parsed != .system {
                 return parsed.localizationCode
             }
+        }
+        if let resolved = LanguagePreference.resolvedAtLaunch {
+            return resolved.localizationCode
         }
         return LanguagePreference.selected.localizationCode
     }

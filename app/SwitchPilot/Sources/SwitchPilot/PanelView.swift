@@ -523,7 +523,7 @@ struct PanelView: View {
 
     private var footer: some View {
         HStack(spacing: 8) {
-            Button("使用说明") { model.toggleGuide() }
+            Button(model.guideVisible ? L("关闭说明") : L("使用说明")) { model.toggleGuide() }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
             Button("设置…") { model.openSettings() }

@@ -69,9 +69,12 @@ Width: about 460 pt; content is grouped into cards:
 - Hotkeys: fixed shortcuts, enable toggle, conflict/error explanation.
 - Login: optional `SMAppService` login item; honest registration state.
 - **Language**: Follow System / English / 简体中文 / 繁體中文 / 日本語, plus
-  **Quit and Reopen** because a language change requires a relaunch.
-- About: SwitchPilot, version, open-source/MIT positioning, and an
-  **Open source** badge. The About copy does not mention a legacy menu-bar utility.
+  **Quit and Reopen** because a language change requires a relaunch. The active
+  locale is frozen at launch so selecting another language cannot produce a
+  mixed-language Settings window before restart.
+- About: SwitchPilot, version and open-source/MIT positioning. There is no
+  separate "Open source" badge because the repository is already public; the
+  About copy does not mention a legacy menu-bar utility.
 
 Settings refreshes permission state when it opens or the app becomes active.
 Advanced TCC reset commands remain copy-only after explicit disclosure; the app

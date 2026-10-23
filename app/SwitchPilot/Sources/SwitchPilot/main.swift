@@ -190,6 +190,9 @@ if arguments.contains("--panel-hit-test") {
 if arguments.contains("--settings-close-key-test") {
     exit(MainActor.assumeIsolated { SettingsWindowController.closeShortcutRegressionProbe() ? 0 : 1 })
 }
+if arguments.contains("--language-freeze-test") {
+    exit(MainActor.assumeIsolated { LanguagePreference.languageFreezeProbe() ? 0 : 1 })
+}
 
 let application = NSApplication.shared
 let delegate = AppDelegate()
