@@ -33,7 +33,7 @@ Not covered by CI:
 | Build | `scripts/build-app` | Compile, bundle, plist, resources, ad-hoc/local signature |
 | Smoke | `make smoke` | Build, bundle, contrast, four `.lproj` tables |
 | Verification | `scripts/verify-app.py` | 13-step bundle/app/launch/policy check |
-| Policy | `scripts/qa-regression.py` | 14 checks for scope, TCC, APIs, click path and safety boundaries |
+| Policy | `scripts/qa-regression.py` | 15 checks for scope, TCC, APIs, click path, Settings lifecycle and safety boundaries |
 | Release | `scripts/build-release` | Universal build, ad-hoc signature, zip, checksum |
 | Manual | this document | TCC, hardware, UI, localization, Gatekeeper |
 

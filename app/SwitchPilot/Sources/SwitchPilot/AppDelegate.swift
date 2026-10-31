@@ -21,6 +21,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         writeRuntimeDiagnostics()
     }
 
+    func applicationShouldSaveApplicationState(_ sender: NSApplication) -> Bool {
+        false
+    }
+
+    func applicationShouldRestoreApplicationState(_ sender: NSApplication) -> Bool {
+        false
+    }
+
     @MainActor func applicationDidFinishLaunching(_ notification: Notification) {
         let model = PanelModel()
         self.model = model

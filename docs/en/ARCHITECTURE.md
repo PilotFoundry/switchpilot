@@ -24,7 +24,9 @@ app/SwitchPilot/
   controlled by the app.
 - `PanelModel` is the observable UI state and coordinates the core services.
 - `SettingsModel` / `SettingsWindowController` own preferences, permissions,
-  hotkeys, language and login-item controls.
+  hotkeys, language and login-item controls. The Settings window is
+  non-restorable and has no automatic restore path: it appears only from an
+  explicit panel/menu action.
 
 The app is an `LSUIElement` agent: it has no Dock icon by default and is driven
 from the menu bar. It is a single-instance app and supports the

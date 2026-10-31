@@ -20,6 +20,11 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
         window.title = L("SwitchPilot 设置")
         window.styleMask = [.titled, .closable]
         window.isReleasedWhenClosed = false
+        // The Settings window must only appear from an explicit user action.
+        // Do not let AppKit restore it after relaunch or login.
+        window.isRestorable = false
+        window.restorationClass = nil
+        window.isExcludedFromWindowsMenu = true
         window.hidesOnDeactivate = false
         window.center()
         super.init(window: window)

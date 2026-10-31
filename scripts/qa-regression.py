@@ -311,7 +311,22 @@ def panel_click_path():
     return "material click-through / border non-hit-testing / panel activation / settings Cmd-W"
 
 
-# 14. 面板尺寸阈值（复用 --panel-size 离屏诊断，不显示 UI、不请求权限）。
+# 14. 设置窗口生命周期：不得由 AppKit 状态恢复自动重新出现。
+def settings_window_lifecycle():
+    settings = read("app/SwitchPilot/Sources/SwitchPilot/SettingsWindowController.swift")
+    app = read("app/SwitchPilot/Sources/SwitchPilot/AppDelegate.swift")
+    require("window.isRestorable = false" in settings,
+            "Settings 窗口必须标记为非可恢复")
+    require("window.restorationClass = nil" in settings,
+            "Settings 窗口不得设置 restorationClass")
+    require("applicationShouldSaveApplicationState" in app,
+            "缺少 applicationShouldSaveApplicationState=false")
+    require("applicationShouldRestoreApplicationState" in app,
+            "缺少 applicationShouldRestoreApplicationState=false")
+    return "Settings window restoration disabled; explicit-open only"
+
+
+# 15. 面板尺寸阈值（复用 --panel-size 离屏诊断，不显示 UI、不请求权限）。
 def panel_size():
     if not APP_BIN.is_file():
         raise Skip("未找到构建产物；请先由执行者运行 scripts/verify-app.py")
@@ -346,6 +361,7 @@ CHECKS = [
     ("单实例守卫", single_instance_guard),
     ("测试资产完整", test_harness_intact),
     ("面板点击路径", panel_click_path),
+    ("设置窗口生命周期", settings_window_lifecycle),
     ("对比度 token", contrast_tokens),
     ("面板尺寸阈值", panel_size),
 ]

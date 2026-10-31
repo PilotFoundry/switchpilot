@@ -1,5 +1,8 @@
 ## [Unreleased]
 
+- Prevent the Settings window from reappearing without a click: mark it
+  non-restorable and disable AppKit application state restoration. Add a QA
+  lifecycle guard (now 15 checks).
 - Add a documentation consistency workflow and `make docs-check` (links,
   versions, docs map, release references) plus a PR-template Docs impact field.
 - Rewrite the product docs (`CORE`, `PRD`, `DESIGN`, `TECH`, `TESTPLAN`,

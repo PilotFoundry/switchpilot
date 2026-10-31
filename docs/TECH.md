@@ -56,6 +56,8 @@ app/SwitchPilot/
 - At launch, `LanguagePreference.applyAtLaunch()` writes the app-scoped
   `AppleLanguages` value before AppKit/SwiftUI resolve resources.
 - A language change requires a relaunch; Settings offers a restart action.
+- The Settings window is non-restorable and is only opened by an explicit
+  user action; it cannot be reopened by AppKit state restoration.
 - `SWITCHPILOT_LANGUAGE` is a development/screenshot override, not a user
   preference.
 - The language design contract is [en/LOCALIZATION.md](en/LOCALIZATION.md).
