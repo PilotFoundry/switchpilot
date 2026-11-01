@@ -1,23 +1,21 @@
-## [Unreleased]
-
-- Prevent the Settings window from reappearing without a click: mark it
-  non-restorable and disable AppKit application state restoration. Add a QA
-  lifecycle guard (now 15 checks).
-- Add a documentation consistency workflow and `make docs-check` (links,
-  versions, docs map, release references) plus a PR-template Docs impact field.
-- Rewrite the product docs (`CORE`, `PRD`, `DESIGN`, `TECH`, `TESTPLAN`,
-  `EXPANSION`, `RESEARCH`) for the current open-source, four-language,
-  ad-hoc-binary baseline.
-- Add canonical engineering specs for localization, release engineering and
-  brand/attribution.
-- Correct stale personal-use/no-distribution wording in SECURITY, SUPPORT,
-  CONTRIBUTING, AGENTS, SECURITY-INSIGHTS, README and the issue/PR templates.
-- Add an automated release workflow for the universal ad-hoc artifact.
-
 # Changelog
 
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
+
+## [0.7.9] - 2026-11-01
+
+- Remove the redundant "开源" badge from Settings; the repository is already
+  public.
+- Change the panel guide button to "关闭说明" while the guide is visible.
+- Freeze the active localization at launch. Selecting another language updates
+  the preference for the next launch but no longer produces a mixed-language
+  Settings window; the restart message remains accurate.
+- Prevent the Settings window from reappearing without an explicit click by
+  marking it non-restorable and disabling AppKit application state restoration.
+- Add `--language-freeze-test` and a Settings lifecycle QA guard. Verify remains
+  13 checks; QA is now 15 checks.
+- Refresh localization/design docs and settings screenshots.
 
 ## [0.7.8] - 2026-10-18
 

@@ -62,7 +62,7 @@ final class PanelModel: ObservableObject {
     }
 
     var version: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.7.8"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.7.9"
     }
 
     var statusTitle: String {
