@@ -34,42 +34,12 @@ Identity rules:
 - The app icon and README mark must stay in the same family; do not introduce a
   second logo.
 
-## 3. a legacy menu-bar utility attribution
+## 3. Third-party references
 
-SwitchPilot was inspired by a legacy menu-bar utility's menu-bar approach. It is independent.
-
-Allowed:
-
-- Naming a legacy menu-bar utility in README inspiration/attribution.
-- Naming a legacy menu-bar utility in the legal/trademark disclaimer.
-- Explaining that SwitchPilot is not affiliated with, endorsed by or distributed
-  by a legacy menu-bar utility.
-
-Not allowed:
-
-- Using a legacy menu-bar utility logos, screenshots, icon styles or assets.
-- Calling SwitchPilot an official a legacy menu-bar utility product, clone, successor or
-  replacement in a way that implies endorsement.
-- Putting "a legacy menu-bar utility" in the in-app About copy. The app About describes the
-  open-source PilotFoundry project instead.
-- Claiming code or asset derivation from a legacy menu-bar utility.
-
-Canonical About copy:
-
-- English: **An open-source macOS menu-bar utility by PilotFoundry. MIT
-  licensed.**
-- 简体中文：**由 PilotFoundry 维护的开源 macOS 菜单栏小工具，遵循 MIT
-  许可证。**
-- 繁體中文：**由 PilotFoundry 維護的開源 macOS 選單列小工具，採用 MIT
-  授權條款。**
-- 日本語：**PilotFoundry によるオープンソースの macOS メニューバーユーティリティ。MIT ライセンス。**
-
-Canonical attribution:
-
-> SwitchPilot was inspired by a legacy menu-bar utility's menu-bar approach to everyday system
-> controls. It is an independent project and is not affiliated with or endorsed
-> by a legacy menu-bar utility; no a legacy menu-bar utility code, assets or distribution binaries are
-> included.
+- Do not use third-party product logos, screenshots, icon styles or assets.
+- Do not imply sponsorship, endorsement or affiliation with another product.
+- Keep product naming and legal notices accurate; third-party marks remain the
+  property of their respective owners.
 
 ## 4. README and release copy
 

@@ -7,9 +7,7 @@ product-level boundary is [../CORE.md](../CORE.md); the requirements are
 ## Positioning
 
 SwitchPilot is an open-source, low-permission macOS menu-bar app maintained by
-PilotFoundry. It began as a personal tool and was inspired by a legacy menu-bar utility's
-menu-bar approach. It is independent, contains no a legacy menu-bar utility code or assets, and
-is not affiliated with or endorsed by a legacy menu-bar utility.
+PilotFoundry. It began as a personal tool and keeps a deliberately small scope.
 
 The project publishes source and an ad-hoc universal binary. An ad-hoc binary is
 a convenience build, not a notarized distribution. Developer ID signing and

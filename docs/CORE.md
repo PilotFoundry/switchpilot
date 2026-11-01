@@ -7,11 +7,8 @@ boundary. The implementation-level admission checklist lives in
 ## Positioning
 
 SwitchPilot is an open-source, privacy-first macOS menu-bar utility maintained
-by [PilotFoundry](https://github.com/PilotFoundry). It was inspired by One
-Switch's approach of putting everyday system controls in the menu bar, but it is
-an independent project with a deliberately smaller scope. It is not affiliated
-with or endorsed by a legacy menu-bar utility, and contains no a legacy menu-bar utility code, assets or
-distribution binaries.
+by [PilotFoundry](https://github.com/PilotFoundry). It deliberately keeps a small
+scope and does not reproduce a general-purpose system control dashboard.
 
 The project is not a personal-use-only prototype any more: source, releases,
 documentation and issue tracking are public. That changes the maintenance bar,
@@ -73,7 +70,6 @@ not the product scope.
   automatic TCC resets, network access or remote configuration
 - Developer ID signing, notarization, sandboxing and App Store distribution
   while the project has no Developer ID certificate
-- Branding that could imply endorsement by, or affiliation with, a legacy menu-bar utility
 
 ## Distribution boundary
 

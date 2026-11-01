@@ -11,9 +11,8 @@ docs" gate. It catches objective drift that review often misses:
 * docs/README.md not listing every current product/engineering document;
 * release docs drifting away from the release workflow/build script.
 
-Historical material under artifacts/, evidence/ and tooling/ is intentionally
-excluded. English docs are canonical; localized READMEs are checked for the
-version/artifact facts that must agree.
+Only current product/engineering docs are checked. English docs are canonical;
+localized READMEs are checked for the version/artifact facts that must agree.
 """
 
 from __future__ import annotations

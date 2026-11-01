@@ -77,7 +77,6 @@ must restart the app.
 - Do not hide a control because a translation is long; shorten or wrap it.
 - Do not put critical permission/safety information only in a tooltip.
 - Keep localized README download/build facts equivalent to the English README.
-- The in-app About copy must not claim a legacy menu-bar utility affiliation or endorsement.
 
 ## 7. Adding or changing a locale
 

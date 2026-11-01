@@ -6,7 +6,7 @@
 
 版本 0.7.9 · 由 PilotFoundry 维护的开源、隐私优先 macOS 菜单栏工具，只保留少数可靠、低权限的系统控制。
 
-> 本仓库保留完整开发历史，包括早期研究、失败实验和现场验收记录。应用源码与当前英文文档位于根目录；历史材料在 `artifacts/`、`evidence/`、`tooling/` 等目录，详见 [docs/RESEARCH.md](docs/RESEARCH.md)。
+> 本仓库包含应用源码与当前英文文档。开发历史保留在 Git 中，过时的研究材料不再放在当前目录。
 
 <p align="center">
   <img src="docs/images/zh/panel-light.png" width="330" alt="SwitchPilot 面板浅色模式">
@@ -34,7 +34,7 @@
 
 ## 为什么做这个项目
 
-SwitchPilot 受 a legacy menu-bar utility 将常用系统控制放进菜单栏这一思路启发。它是一个刻意保持更小范围的独立项目：日常最常用的往往只是少数系统状态，因此 SwitchPilot 只保留很小的功能面：
+SwitchPilot 刻意保持很小的菜单栏功能面：日常最常用的往往只是少数系统状态，因此只保留真正需要的控制：
 
 - **少而可靠**，而不是 30 个开关的仪表盘。
 - **不用私有 API、不加特权 helper、不做后台自动化。**
@@ -165,4 +165,4 @@ scripts/                     构建、安装、smoke 和对比度检查
 
 MIT © 2026 pengxianghao。详见 [LICENSE](LICENSE)。
 
-SwitchPilot 是独立项目，与 a legacy menu-bar utility 无隶属或背书关系。a legacy menu-bar utility 是其各自权利人的产品；本仓库不包含 a legacy menu-bar utility 代码、素材或分发二进制。
+SwitchPilot 是独立项目。第三方产品名称和商标归其各自权利人所有。

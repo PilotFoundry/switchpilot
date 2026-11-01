@@ -29,9 +29,9 @@ localized README files are entry points; they link back to these English docs.
 
 ## Research and history
 
-[RESEARCH.md](RESEARCH.md) explains how the project evolved and points to the
-archived experiments. Historical material under `artifacts/`, `evidence/` and
-`tooling/` is kept for traceability; it is not current product guidance.
+[RESEARCH.md](RESEARCH.md) explains the project's public-API investigation and
+implementation decisions. Historical research material is intentionally not
+part of the current public tree.
 
 ## Localized entry points
 

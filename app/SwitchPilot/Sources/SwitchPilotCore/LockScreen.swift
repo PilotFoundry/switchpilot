@@ -33,13 +33,13 @@ public enum LockScreenError: Error, CustomStringConvertible {
     }
 }
 
-/// Locks the screen with the same System Events keystroke the the system app used.
+/// Locks the screen with the standard System Events keystroke.
 ///
 /// The keystroke is Ctrl+Cmd+Q, synthesized by System Events. That requires BOTH
 /// Automation consent (to talk to System Events) and Accessibility trust (for UI
 /// scripting), so this type never sends the keystroke unless both are granted.
 public enum LockScreen {
-    /// Same literal the the system behavior ships.
+    /// The exact keystroke sent to System Events.
     public static let lockScript = "tell application \"System Events\" to keystroke \"q\" using {command down, control down}"
 
     public static func permissions() -> LockPermissions {

@@ -2,8 +2,6 @@
 /.tools/
 /samples/
 /analysis/
-/evidence/raw/
-/evidence/private/
 *.app/
 *.dmg
 *.zip

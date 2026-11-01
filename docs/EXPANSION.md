@@ -71,8 +71,7 @@ defined in [en/RELEASE.md](en/RELEASE.md).
 ## 5. Decision log
 
 - v0.7.0: four languages and in-app language selection shipped.
-- v0.7.1: About/README positioning corrected for the open-source release; About
-  no longer describes the app as personal-use-only or mentions a legacy menu-bar utility.
+- v0.7.1: About/README positioning corrected for the open-source release.
 - v0.7.1: ad-hoc universal binary published with checksum and Gatekeeper
   instructions.
 - Next: documentation consistency, release workflow, manual test evidence; no

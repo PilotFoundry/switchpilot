@@ -12,9 +12,7 @@ SwitchPilot focuses on a few high-value controls and keeps their real state
 visible.
 
 The project began as a personal investigation and is now open source under
-PilotFoundry. It is inspired by a legacy menu-bar utility's menu-bar idea but is an independent
-project; it does not include a legacy menu-bar utility code, assets or binaries and is not
-affiliated with or endorsed by a legacy menu-bar utility.
+PilotFoundry. It is an independent project with a deliberately small scope.
 
 ## 2. Audience
 
@@ -40,7 +38,7 @@ affiliated with or endorsed by a legacy menu-bar utility.
 
 ## 4. Non-goals
 
-- A full a legacy menu-bar utility clone or a 30-toggle dashboard.
+- A full system-control dashboard or a 30-toggle clone.
 - Output volume, low-power mode, True Tone, Night Shift, Wi-Fi/Bluetooth,
   desktop-icon hiding, audio-device switching, scenes or custom hotkey
   recording.
@@ -67,7 +65,7 @@ See [CORE.md](CORE.md) for the admission rules.
 | FR-8 | Login at start | Optional `SMAppService` login item controlled in Settings |
 | FR-9 | Global hotkeys | Fixed `⌃⌥⌘K` / `⌃⌥⌘S`; disabled by default |
 | FR-10 | Languages | Four locales; Follow System default; Settings override; restart required |
-| FR-11 | About | Open-source positioning, version and MIT license; no a legacy menu-bar utility claim inside the app |
+| FR-11 | About | Open-source positioning, version and MIT license |
 | FR-12 | Distribution | Universal ad-hoc zip, SHA-256, clear Gatekeeper instructions; no notarization claim |
 
 ## 6. UX requirements

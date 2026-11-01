@@ -1,21 +1,16 @@
 # Research and history
 
-Status: current overview. This document explains where SwitchPilot came from and
-how early findings shaped the current product. It is not a current specification;
-use the documents in [README.md](README.md) for implementation and acceptance.
+Status: current overview. This document explains the public-API investigation
+that shaped SwitchPilot and how the product evolved. It is not a current
+specification; use the documents in [README.md](README.md) for implementation
+and acceptance.
 
-## 1. Origin
+## 1. Starting point
 
 SwitchPilot began as a personal investigation into a few macOS menu-bar controls
-that were either missing or required a long chain of system settings. a legacy menu-bar utility
-was an inspiration for the menu-bar-first idea. SwitchPilot is independent: it
-does not contain a legacy menu-bar utility code, assets or distribution binaries and is not
-affiliated with or endorsed by a legacy menu-bar utility.
-
-The repository keeps the complete development record, including failed
-experiments and local acceptance notes. Historical material lives under
-`artifacts/`, `evidence/` and `tooling/`; it is evidence of the journey, not
-current product guidance.
+that were either missing or required a long chain of system settings. The goal
+was a small, reliable utility implemented with documented system APIs, not a
+general-purpose control center.
 
 ## 2. Feasibility findings
 
@@ -35,19 +30,18 @@ current product guidance.
 
 ## 3. Product evolution
 
-- Early builds were local-only experiments with a personal bundle identifier.
+- Early builds were local experiments that validated one control at a time.
 - The project later moved to an open-source repository under PilotFoundry with a
   public bundle identifier and MIT license.
-- v0.6.0 established the English-first repository and complete history.
+- v0.6.0 established the English-first repository and current documentation.
 - v0.7.0 added Traditional Chinese, Japanese and in-app language selection.
-- v0.7.1 aligned the About copy with the open-source release, removed a legacy menu-bar utility
-  from the in-app About text, and published an ad-hoc universal binary.
-- The current documentation now separates product requirements, design,
-  technical design, test plan, localization and release engineering.
+- v0.7.1 aligned the About copy with the open-source release.
+- v0.7.3–v0.7.9 refined the custom panel, click handling, localization and
+  Settings lifecycle.
 
 ## 4. What survived
 
-The current implementation retains only the controls that passed the admission
+The current implementation retains only controls that passed the admission
 rules in [CORE.md](CORE.md):
 
 - keep awake

@@ -7,10 +7,9 @@
 Version 0.7.9 · An open-source, privacy-first macOS menu bar utility for a few
 reliable system controls, maintained by PilotFoundry.
 
-> This repository preserves the complete development history, including its
-> original research and acceptance notes. The app source and current English
-> documentation live at the root; historical material is under `artifacts/`,
-> `evidence/`, `tooling/` and related paths. See [docs/RESEARCH.md](docs/RESEARCH.md).
+> This repository contains the app source and current English documentation.
+> Development history remains in Git; obsolete research material is not part of
+> the current tree.
 
 <p align="center">
   <img src="docs/images/panel-light.png" width="330" alt="SwitchPilot panel in light mode">
@@ -38,10 +37,8 @@ reliable system controls, maintained by PilotFoundry.
 
 ## Why this project exists
 
-SwitchPilot was inspired by a legacy menu-bar utility's menu-bar approach to everyday system
-controls. It is an independent project with a deliberately smaller scope: most
-day-to-day use comes down to a handful of system states, so SwitchPilot keeps a
-small surface:
+SwitchPilot deliberately keeps a small menu-bar surface: most day-to-day use
+comes down to a handful of system states, so the app stays focused:
 
 - **Few and reliable** instead of a 30-toggle dashboard.
 - **No private APIs, no privileged helper, no background automation.**
@@ -207,6 +204,5 @@ flow; see [SECURITY.md](SECURITY.md).
 
 MIT © 2026 pengxianghao. See [LICENSE](LICENSE).
 
-SwitchPilot is an independent project, not affiliated with or endorsed by One
-Switch. a legacy menu-bar utility is a product of its respective owner; this repository
-contains no a legacy menu-bar utility code, assets or distribution binaries.
+SwitchPilot is an independent project. Third-party product names and marks
+remain the property of their respective owners.

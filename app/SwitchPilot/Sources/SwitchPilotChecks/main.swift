@@ -155,8 +155,8 @@ if ProcessInfo.processInfo.environment["SWITCHPILOT_ICON_DUMP"] != nil {
         if let tiff = image.tiffRepresentation,
            let rep = NSBitmapImageRep(data: tiff),
            let png = rep.representation(using: .png, properties: [:]) {
-            let url = URL(fileURLWithPath: "evidence/raw/app/status-icon-\(Int(size)).png")
-            try? FileManager.default.createDirectory(at: url.deletingLastPathComponent(), withIntermediateDirectories: true)
+            let url = FileManager.default.temporaryDirectory
+                .appendingPathComponent("switchpilot-status-icon-\(Int(size)).png")
             try? png.write(to: url)
         }
     }

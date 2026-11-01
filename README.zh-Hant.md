@@ -6,7 +6,7 @@
 
 版本 0.7.9 · 由 PilotFoundry 維護的開源、隱私優先 macOS 選單列工具，只保留少數可靠、低權限的系統控制。
 
-> 本儲存庫保留完整開發歷史，包括早期研究、失敗實驗和現場驗收記錄。應用程式原始碼與目前英文文件位於根目錄；歷史材料在 `artifacts/`、`evidence/`、`tooling/` 等目錄，詳見 [docs/RESEARCH.md](docs/RESEARCH.md)。
+> 本儲存庫包含應用程式原始碼與目前英文文件。開發歷史保留在 Git 中，過時的研究材料不再放在目前目錄。
 
 <p align="center">
   <img src="docs/images/panel-zh-Hant.png" width="330" alt="SwitchPilot 面板淺色模式">
@@ -34,7 +34,7 @@
 
 ## 為什麼做這個專案
 
-SwitchPilot 受 a legacy menu-bar utility 將常用系統控制放進選單列這一思路啟發。它是一個刻意保持更小範圍的獨立專案：日常最常用的往往只是少數系統狀態，因此 SwitchPilot 只保留很小的功能面：
+SwitchPilot 刻意保持很小的選單列功能面：日常最常用的往往只是少數系統狀態，因此只保留真正需要的控制：
 
 - **少而可靠**，而不是 30 個開關的儀錶盤。
 - **不用私有 API、不加特權 helper、不做後台自動化。**
@@ -165,4 +165,4 @@ scripts/                     構建、安裝、smoke 和對比度檢查
 
 MIT © 2026 pengxianghao。詳見 [LICENSE](LICENSE)。
 
-SwitchPilot 是獨立專案，與 a legacy menu-bar utility 無隸屬或背書關係。a legacy menu-bar utility 是其各自權利人的產品；本儲存庫不包含 a legacy menu-bar utility 代碼、素材或分發二進制。
+SwitchPilot 是獨立專案。第三方產品名稱與商標歸其各自權利人所有。

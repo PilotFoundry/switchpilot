@@ -266,7 +266,7 @@ def test_harness_intact():
     checks_source = read("app/SwitchPilot/Sources/SwitchPilotChecks/main.swift")
     verify_count = len(re.findall(r'^check\("', verify, re.MULTILINE))
     core_count = len(re.findall(r'^    \("', checks_source, re.MULTILINE))
-    require(verify_count >= 11, f"verify-app.py 检查项从 11 缩到 {verify_count}")
+    require(verify_count >= 12, f"verify-app.py 检查项从 12 缩到 {verify_count}")
     require(core_count >= 14, f"SwitchPilotChecks 检查项从 14 缩到 {core_count}")
     for relative in ("scripts/check-contrast.py", "scripts/build-app"):
         require((ROOT / relative).is_file(), f"缺少 {relative}")

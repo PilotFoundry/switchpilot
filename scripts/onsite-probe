@@ -6,7 +6,7 @@ set -eu
 ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
 APP="${SWITCHPILOT_APP:-$HOME/Applications/SwitchPilot.app}"
 STAMP=$(date +%Y%m%d-%H%M%S)
-OUT="${1:-$ROOT/evidence/raw/app/onsite-$STAMP.log}"
+OUT="${1:-/tmp/switchpilot-onsite-$STAMP.log}"
 mkdir -p "$(dirname "$OUT")"
 {
     printf '# SwitchPilot onsite probe %s\n' "$(date '+%Y-%m-%d %H:%M:%S %Z')"

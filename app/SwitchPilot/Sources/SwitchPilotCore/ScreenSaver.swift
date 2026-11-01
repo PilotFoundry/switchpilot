@@ -15,9 +15,9 @@ public enum ScreenSaverError: Error, CustomStringConvertible {
 
 /// Starts the system screen saver by launching the shipped ScreenSaverEngine app.
 ///
-/// This is the same system-facing mechanism the the system behavior exposes; it
-/// is a system-application launch, not a documented SDK API. No TCC permission is
-/// required. A launch is not a proof that the screen saver is actually visible.
+/// This launches the shipped ScreenSaverEngine system application. It is not a
+/// documented SDK API, but it does not require a new TCC permission. A launch is
+/// not proof that the screen saver is actually visible.
 public enum ScreenSaver {
     public static let bundleIdentifier = "com.apple.ScreenSaver.Engine"
 

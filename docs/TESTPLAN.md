@@ -32,7 +32,7 @@ Not covered by CI:
 | Core | `SwitchPilotChecks` | Assertions, presets, permission mapping, screen saver, microphone, display sleep |
 | Build | `scripts/build-app` | Compile, bundle, plist, resources, ad-hoc/local signature |
 | Smoke | `make smoke` | Build, bundle, contrast, four `.lproj` tables |
-| Verification | `scripts/verify-app.py` | 13-step bundle/app/launch/policy check |
+| Verification | `scripts/verify-app.py` | 12-step bundle/app/launch/policy check |
 | Policy | `scripts/qa-regression.py` | 15 checks for scope, TCC, APIs, click path, Settings lifecycle and safety boundaries |
 | Release | `scripts/build-release` | Universal build, ad-hoc signature, zip, checksum |
 | Manual | this document | TCC, hardware, UI, localization, Gatekeeper |
@@ -46,8 +46,8 @@ make smoke
 ```
 
 `verify-app.py` also runs `SwitchPilotChecks` and checks plist/signature,
-launch smoke, the system app integrity, contrast, panel sizes, semantic colors and
-static scripts. CI runs the CI-safe subset and does not request TCC.
+launch smoke, contrast, panel sizes, semantic colors and static scripts. CI runs
+the CI-safe subset and does not request TCC.
 
 ## 4. Localization test matrix
 

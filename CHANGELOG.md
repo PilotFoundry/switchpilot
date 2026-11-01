@@ -93,7 +93,7 @@ semantic versioning while it is pre-1.0.
 - Reword the About section for the open-source release: it now describes
   SwitchPilot as an open-source macOS menu-bar utility maintained by
   PilotFoundry under the MIT license, instead of describing it as a personal,
-  non-distributed a legacy menu-bar utility replacement.
+  non-distributed replacement.
 - Change the About badge from "personal use" to "open source" in every locale.
 - Add an ad-hoc universal binary release asset and multilingual download
   instructions (not notarized; right-click Open required on first launch).

@@ -20,8 +20,8 @@ public enum DarkModeError: Error, CustomStringConvertible {
 
 /// System appearance switching through the public System Events script dictionary.
 ///
-/// No public SDK API sets the global appearance; this is the same target the
-/// the system behavior used. Every write is followed by a readback.
+/// No public SDK API sets the global appearance; this is the System Events
+/// appearance target. Every write is followed by a readback.
 public enum DarkMode {
     private static let readScript = "tell application \"System Events\" to tell appearance preferences to get dark mode"
 

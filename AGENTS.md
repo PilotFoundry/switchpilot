@@ -55,5 +55,5 @@ canonical documentation language.
 
 - Keep changes small and reviewable.
 - Update docs and tests together with behavior changes.
-- Do not rewrite historical evidence under `artifacts/`, `evidence/` or
-  `tooling/`; current specs live in `docs/`.
+- Do not add obsolete research archives to the repository; current specs live in
+  `docs/`.

@@ -73,8 +73,7 @@ Width: about 460 pt; content is grouped into cards:
   locale is frozen at launch so selecting another language cannot produce a
   mixed-language Settings window before restart.
 - About: SwitchPilot, version and open-source/MIT positioning. There is no
-  separate "Open source" badge because the repository is already public; the
-  About copy does not mention a legacy menu-bar utility.
+  separate "Open source" badge because the repository is already public.
 
 Settings refreshes permission state when it opens or the app becomes active.
 Advanced TCC reset commands remain copy-only after explicit disclosure; the app
@@ -131,8 +130,7 @@ Rules:
 - The menu-bar icon is monochrome/template.
 - Social-preview and organization assets live under `assets/org/` and
   `assets/`.
-- a legacy menu-bar utility may be named in README attribution and legal notice, but not in the
-  in-app About copy; the app is independent and does not use a legacy menu-bar utility assets.
+- Do not use third-party product marks, logos or screenshots in project assets.
 
 See [en/BRAND.md](en/BRAND.md) for naming and trademark boundaries.
 

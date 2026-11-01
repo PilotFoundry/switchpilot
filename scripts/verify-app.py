@@ -1,11 +1,9 @@
 #!/usr/bin/env python3
-"""Automated acceptance for the personal SwitchPilot app.
+"""Automated acceptance for the SwitchPilot app.
 
 Only side effects: builds the app, briefly launches it as a menu bar app, then
-terminates it. No permission prompts, no screen saver, no lock screen, no changes
-to the original a legacy menu-bar utility application.
+terminates it. No permission prompts, no screen saver or lock screen changes.
 """
-import hashlib
 import os
 import plistlib
 import subprocess
@@ -18,9 +16,6 @@ PKG = ROOT / "app/SwitchPilot"
 BUILD = PKG / ".build"
 APP = BUILD / "SwitchPilot.app"
 APP_BIN = APP / "Contents/MacOS/SwitchPilot"
-ORIGINAL = Path("/Applications/a legacy menu-bar utility.app")
-ORIGINAL_HASH = "redacted"
-ORIGINAL_VERSION = "unknown"
 
 results = []
 
@@ -171,19 +166,6 @@ def check_no_leftover_process():
     return f"no new leftover SwitchPilot process" + (f" (ignoring {ignored} pre-existing instance)" if ignored else "")
 
 
-def check_original_app():
-    version = run("/usr/bin/defaults", "read", str(ORIGINAL / "Contents/Info.plist"), "CFBundleShortVersionString")
-    if version.stdout.strip() != ORIGINAL_VERSION:
-        raise RuntimeError(f"original version changed: {version.stdout.strip()!r}")
-    digest = hashlib.sha256((ORIGINAL / "Contents/MacOS/a legacy menu-bar utility").read_bytes()).hexdigest()
-    if digest != ORIGINAL_HASH:
-        raise RuntimeError("original main binary hash changed")
-    verify = run("/usr/bin/codesign", "--verify", "--strict", str(ORIGINAL))
-    if verify.returncode != 0:
-        raise RuntimeError(verify.stderr.strip())
-    return f"{ORIGINAL_VERSION} hash/signature unchanged"
-
-
 def check_contrast_tokens():
     result = run("/usr/bin/python3", str(ROOT / "scripts/check-contrast.py"))
     if result.returncode != 0:
@@ -240,11 +222,10 @@ def check_policy_regression():
 
 
 def check_static_scripts():
-    for script in (ROOT / "scripts/rea-queries.py", ROOT / "scripts/verify-app.py"):
-        result = run("/usr/bin/python3", "-m", "py_compile", str(script))
-        if result.returncode != 0:
-            raise RuntimeError(f"{script.name}: {result.stderr.strip()}")
-    for script in (ROOT / "scripts/build-app", ROOT / "scripts/install-app", ROOT / "scripts/uninstall-app", ROOT / "scripts/onsite-probe", ROOT / "scripts/rea"):
+    result = run("/usr/bin/python3", "-m", "py_compile", str(ROOT / "scripts/verify-app.py"))
+    if result.returncode != 0:
+        raise RuntimeError(f"verify-app.py: {result.stderr.strip()}")
+    for script in (ROOT / "scripts/build-app", ROOT / "scripts/install-app", ROOT / "scripts/uninstall-app", ROOT / "scripts/onsite-probe"):
         result = run("/bin/sh", "-n", str(script))
         if result.returncode != 0:
             raise RuntimeError(f"{script.name}: {result.stderr.strip()}")
@@ -258,7 +239,6 @@ check("core checks", check_core_checks)
 check("launch smoke", check_launch_smoke)
 check("panel hit-test", check_panel_hit_test)
 check("leftover process", check_no_leftover_process)
-check("the system app unchanged", check_original_app)
 check("contrast tokens", check_contrast_tokens)
 check("panel sizes", check_panel_sizes)
 check("semantic text colors", check_no_raw_foreground_colors)
