@@ -1,6 +1,6 @@
 # Core principles
 
-Status: current baseline **v0.7.10**. This document defines SwitchPilot's product
+Status: current baseline **v0.7.11**. This document defines SwitchPilot's product
 boundary. The implementation-level admission checklist lives in
 [en/CORE.md](en/CORE.md).
 

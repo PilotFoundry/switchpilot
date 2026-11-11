@@ -3,11 +3,13 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
-## [Unreleased]
+## [0.7.11] - 2026-11-11
 
 - Fix the Settings window jumping back to the front after System Settings is
-  closed. Settings is now explicit-open-only; returning from System Settings
-  refreshes permissions but never re-presents the window. Added a QA guard.
+  closed. The previous external-System-Settings watcher and activation restore
+  path are removed: Settings is explicit-open-only, while permission state
+  still refreshes when the app becomes active.
+- Add a QA guard enforcing the explicit-open-only lifecycle (QA now 16 checks).
 
 ## [0.7.10] - 2026-11-11
 

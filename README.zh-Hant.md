@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml)
 
-版本 0.7.10 · 由 PilotFoundry 維護的開源、隱私優先 macOS 選單列工具，只保留少數可靠、低權限的系統控制。
+版本 0.7.11 · 由 PilotFoundry 維護的開源、隱私優先 macOS 選單列工具，只保留少數可靠、低權限的系統控制。
 
 > 本儲存庫包含應用程式原始碼與目前英文文件。開發歷史保留在 Git 中，過時的研究材料不再放在目前目錄。
 
@@ -64,14 +64,14 @@ SwitchPilot 提供四套 UI 本地化：
 [最新 Release](https://github.com/PilotFoundry/switchpilot/releases/latest) 提供由對應 tag 原始碼建置的 universal（Apple Silicon + Intel）macOS 應用。目前專案沒有 Developer ID 憑證，因此它是 **ad-hoc 簽名、未公證** 的版本。
 
 - 需求：macOS 14 或以上
-- 檔案：`SwitchPilot-0.7.10-macos-universal-adhoc.zip`
+- 檔案：`SwitchPilot-0.7.11-macos-universal-adhoc.zip`
 - 下載、解壓縮後把 `SwitchPilot.app` 放到 `/Applications`
 - 首次開啟可能被 macOS 阻擋：右鍵點擊應用程式 → **打開**
 - 若使用終端機，只對該應用程式執行：
   `xattr -dr com.apple.quarantine /Applications/SwitchPilot.app`
 - 不要全域關閉 Gatekeeper
 
-zip 由 `./scripts/build-release` 建置，SHA-256 檔案會隨 release 一起提供（`SwitchPilot-0.7.10-macos-universal-adhoc.zip.sha256`）。這是方便下載的建置，不是 Developer ID／公證發佈；如需完全可信，請自行從原始碼建置並簽名。
+zip 由 `./scripts/build-release` 建置，SHA-256 檔案會隨 release 一起提供（`SwitchPilot-0.7.11-macos-universal-adhoc.zip.sha256`）。這是方便下載的建置，不是 Developer ID／公證發佈；如需完全可信，請自行從原始碼建置並簽名。
 
 ## 環境要求
 
