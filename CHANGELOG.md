@@ -3,15 +3,18 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
-## [Unreleased]
+## [0.7.10] - 2026-11-11
 
 - Fix the menu-bar panel reopening when the status icon is clicked at the top
   edge of the screen. The outside-click guard now treats the status button's
   hit zone as extending to the top of its screen with inclusive edges, matching
-  macOS menu-bar click routing; a regression case is included in
+  macOS menu-bar click routing. The same guard is used by the global/local
+  outside-click monitors and by the app-resign path, and the global monitor
+  captures the click location at event time.
+- Add top-edge, inclusive-edge and beside-button regression cases to
   `--panel-hit-test`.
-- Remove stale original-app verification wording and align the v0.7.9 check
-  count with the current 12-step verification script.
+- Remove stale original-app verification wording and align the current
+  verification script at 12 checks.
 
 ## [0.7.9] - 2026-11-01
 

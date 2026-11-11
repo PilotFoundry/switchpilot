@@ -19,7 +19,7 @@ body:
     id: app_version
     attributes:
       label: SwitchPilot version
-      placeholder: "e.g. 0.7.9"
+      placeholder: "e.g. 0.7.10"
     validations:
       required: true
   - type: dropdown
