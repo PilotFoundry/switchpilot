@@ -33,7 +33,7 @@ final class SettingsModel: ObservableObject {
     }
 
     var version: String {
-        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.7.11"
+        Bundle.main.object(forInfoDictionaryKey: "CFBundleShortVersionString") as? String ?? "0.7.12"
     }
 
     var hasAnyPermission: Bool {

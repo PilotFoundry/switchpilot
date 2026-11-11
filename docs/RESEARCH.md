@@ -36,7 +36,7 @@ general-purpose control center.
 - v0.6.0 established the English-first repository and current documentation.
 - v0.7.0 added Traditional Chinese, Japanese and in-app language selection.
 - v0.7.1 aligned the About copy with the open-source release.
-- v0.7.3–v0.7.11 refined the custom panel, click handling, localization and
+- v0.7.3–v0.7.12 refined the custom panel, click handling, localization and
   Settings lifecycle.
 
 ## 4. What survived

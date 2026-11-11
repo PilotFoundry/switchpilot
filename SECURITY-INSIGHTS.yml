@@ -15,6 +15,11 @@ project:
   type: application
   license: MIT
   releases:
+    - name: v0.7.12
+      description: Fix repeated panel opens when another app is focused
+      created: '2026-11-11'
+      url: https://github.com/PilotFoundry/switchpilot/releases/tag/v0.7.12
+      type: source
     - name: v0.7.11
       description: Settings explicit-open-only; no auto-return from System Settings
       created: '2026-11-11'
