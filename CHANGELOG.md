@@ -3,6 +3,16 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
+## [Unreleased]
+
+- Fix the menu-bar panel reopening when the status icon is clicked at the top
+  edge of the screen. The outside-click guard now treats the status button's
+  hit zone as extending to the top of its screen with inclusive edges, matching
+  macOS menu-bar click routing; a regression case is included in
+  `--panel-hit-test`.
+- Remove stale original-app verification wording and align the v0.7.9 check
+  count with the current 12-step verification script.
+
 ## [0.7.9] - 2026-11-01
 
 - Remove the redundant "开源" badge from Settings; the repository is already
@@ -13,8 +23,8 @@ semantic versioning while it is pre-1.0.
   Settings window; the restart message remains accurate.
 - Prevent the Settings window from reappearing without an explicit click by
   marking it non-restorable and disabling AppKit application state restoration.
-- Add `--language-freeze-test` and a Settings lifecycle QA guard. Verify remains
-  13 checks; QA is now 15 checks.
+- Add `--language-freeze-test` and a Settings lifecycle QA guard. Verify is
+  12 checks; QA is now 15 checks.
 - Refresh localization/design docs and settings screenshots.
 
 ## [0.7.8] - 2026-10-18

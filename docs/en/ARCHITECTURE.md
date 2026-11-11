@@ -22,6 +22,12 @@ app/SwitchPilot/
   login item. The panel is a borderless non-activating `NSPanel`, not an
   `NSPopover`, so its anchor, transient dismissal and scale/fade timing are
   controlled by the app.
+- Transient dismissal treats the status button's target as extending from the
+  button frame to the top of its screen with inclusive edges. This matters at
+  the menu-bar top edge on macOS 27, where the click is routed to the status
+  button even though `NSEvent.mouseLocation` can sit just above the 22pt button
+  frame. Without that guard, the outside-click monitor closes the panel on
+  mouse-down and the status action immediately reopens it on mouse-up.
 - `PanelModel` is the observable UI state and coordinates the core services.
 - `SettingsModel` / `SettingsWindowController` own preferences, permissions,
   hotkeys, language and login-item controls. The Settings window is

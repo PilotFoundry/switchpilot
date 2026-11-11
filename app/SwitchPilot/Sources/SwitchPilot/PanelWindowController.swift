@@ -69,6 +69,47 @@ final class PanelWindowController {
             frame: NSRect(x: 0, y: 0, width: 100, height: 100)
         )
         return material.hitTest(NSPoint(x: 50, y: 50)) == nil
+            && statusButtonHitTestRegressionProbe()
+    }
+
+    /// A status item is a menu-bar target, not just its 22pt button frame.
+    /// On macOS 27 a pointer pinned to the top of the screen reports a location
+    /// above the button frame; macOS still routes the click to the button. The
+    /// outside-click monitors must use the same inclusive, screen-top-aware
+    /// region or they dismiss on mouse-down and the button action reopens on
+    /// mouse-up.
+    static func pointHitsStatusButton(
+        _ point: NSPoint,
+        buttonFrame: NSRect,
+        screenTop: CGFloat
+    ) -> Bool {
+        guard buttonFrame.width > 0, buttonFrame.height > 0 else { return false }
+        let top = max(buttonFrame.maxY, screenTop)
+        return point.x >= buttonFrame.minX
+            && point.x <= buttonFrame.maxX
+            && point.y >= buttonFrame.minY
+            && point.y <= top
+    }
+
+    private static func statusButtonHitTestRegressionProbe() -> Bool {
+        let frame = NSRect(x: 500, y: 1515, width: 40, height: 36)
+        let screenTop: CGFloat = 1555
+        let cases: [(NSPoint, Bool)] = [
+            (NSPoint(x: 520, y: 1533), true),   // center
+            (NSPoint(x: 520, y: 1515), true),   // inclusive lower edge
+            (NSPoint(x: 520, y: 1551), true),   // inclusive button top
+            (NSPoint(x: 520, y: 1555), true),   // screen-top click
+            (NSPoint(x: 500, y: 1555), true),   // inclusive leading edge
+            (NSPoint(x: 540, y: 1555), true),   // inclusive trailing edge
+            (NSPoint(x: 499, y: 1555), false),  // beside the button
+            (NSPoint(x: 541, y: 1555), false),  // beside the button
+            (NSPoint(x: 520, y: 1514), false),  // below the button
+            (NSPoint(x: 520, y: 1556), false),  // above the screen
+        ]
+        guard cases.allSatisfy({ pointHitsStatusButton($0.0, buttonFrame: frame, screenTop: screenTop) == $0.1 }) else {
+            return false
+        }
+        return !pointHitsStatusButton(.zero, buttonFrame: .zero, screenTop: screenTop)
     }
 
     func show(relativeTo button: NSStatusBarButton) {
@@ -249,14 +290,20 @@ final class PanelWindowController {
         globalClickMonitor = NSEvent.addGlobalMonitorForEvents(
             matching: [.leftMouseDown, .rightMouseDown, .otherMouseDown]
         ) { [weak self] _ in
-            Task { @MainActor in self?.handleGlobalClick() }
+            // Capture the click location before hopping to the main actor: the
+            // pointer may move while the asynchronous task is queued.
+            let point = NSEvent.mouseLocation
+            Task { @MainActor in self?.handleGlobalClick(at: point) }
         }
         resignActiveObserver = NotificationCenter.default.addObserver(
             forName: NSApplication.didResignActiveNotification,
             object: nil,
             queue: .main
         ) { [weak self] _ in
-            Task { @MainActor in self?.close() }
+            Task { @MainActor in
+                guard let self, !self.isCursorOverStatusButton() else { return }
+                self.close()
+            }
         }
     }
 
@@ -291,27 +338,46 @@ final class PanelWindowController {
         close()
     }
 
-    private func handleGlobalClick() {
+    private func handleGlobalClick(at point: NSPoint) {
         guard isShown, !isClosing else { return }
-        let point = NSEvent.mouseLocation
         if panel.frame.contains(point) {
             return
         }
-        if let frame = statusButtonScreenFrame(), frame.contains(point) {
+        if isPointOverStatusButton(point) {
             return
         }
         close()
     }
 
+    private func isPointOverStatusButton(_ point: NSPoint) -> Bool {
+        guard let button = anchorButton,
+              let window = button.window,
+              let screen = window.screen else { return false }
+        return Self.pointHitsStatusButton(
+            point,
+            buttonFrame: buttonScreenFrame(button: button, window: window),
+            screenTop: screen.frame.maxY
+        )
+    }
+
+    private func isCursorOverStatusButton() -> Bool {
+        isShown && !isClosing && isPointOverStatusButton(NSEvent.mouseLocation)
+    }
+
     private func isStatusButtonClick(_ event: NSEvent) -> Bool {
         guard let button = anchorButton,
               let window = button.window,
+              let screen = window.screen,
               event.window === window else { return false }
         let point = window.convertToScreen(NSRect(
             origin: event.locationInWindow,
             size: .zero
         )).origin
-        return buttonScreenFrame(button: button, window: window).contains(point)
+        return Self.pointHitsStatusButton(
+            point,
+            buttonFrame: buttonScreenFrame(button: button, window: window),
+            screenTop: screen.frame.maxY
+        )
     }
 
     private func statusButtonScreenFrame() -> NSRect? {

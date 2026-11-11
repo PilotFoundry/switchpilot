@@ -70,6 +70,13 @@ app/SwitchPilot/
 - The menu-bar panel uses a behind-window `NSVisualEffectView` menu material,
   magnet edge alignment to the status item, and an 80/60 ms scale/fade. The
   offscreen `--dump-panel` path requests an opaque fallback background.
+- Outside-click dismissal treats the status button's hit zone as extending
+  from its frame to the top of its screen with inclusive edges. A pointer pinned
+  against the menu-bar top otherwise reports a point just above the button
+  frame; macOS still routes the click to the button, so a naive hit test closes
+  the panel on mouse-down and the button action reopens it on mouse-up.
+  `PanelWindowController.pointHitsStatusButton` is the shared pure guard and is
+  covered by `--panel-hit-test`.
 - `scripts/build-release` builds release binaries for `arm64` and `x86_64`,
   combines them with `lipo`, assembles the app, copies all localizations,
   ad-hoc signs it, and writes a universal zip plus portable SHA-256 file.
@@ -99,8 +106,7 @@ make smoke
 ```
 
 - `verify-app.py` covers build, plist, signature, core checks, launch smoke,
-  original-app integrity, contrast, panel size, semantic colors, policy
-  regression and static scripts.
+  contrast, panel size, semantic colors, policy regression and static scripts.
 - Smoke checks all four locales and localized `InfoPlist` files.
 - CI is deliberately TCC-free; manual TCC, login, audio, screen and Gatekeeper
   checks are documented in [en/TESTING.md](en/TESTING.md) and
