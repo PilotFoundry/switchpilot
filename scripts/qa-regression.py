@@ -326,7 +326,23 @@ def settings_window_lifecycle():
     return "Settings window restoration disabled; explicit-open only"
 
 
-# 15. 面板尺寸阈值（复用 --panel-size 离屏诊断，不显示 UI、不请求权限）。
+# 15. Settings 只能由显式用户动作打开；系统设置关闭后不得自动跳回。
+def settings_explicit_open_only():
+    app = read("app/SwitchPilot/Sources/SwitchPilot/AppDelegate.swift")
+    require("sawSystemSettingsFrontmost" not in app,
+            "不得重新引入 System Settings 关闭后的自动恢复状态")
+    require("externalSettingsWatch" not in app,
+            "不得重新引入 System Settings 外部轮询")
+    require("workspaceAppTerminated" not in app,
+            "不得在 System Settings 退出时自动展示 Settings")
+    require("com.apple.systempreferences" not in app,
+            "AppDelegate 不应再处理 System Settings 的自动返回")
+    require(app.count("settingsWindow?.present()") == 1,
+            "Settings 只允许在 openSettings() 中显式 present 一次")
+    return "Settings is explicit-open-only; closed Settings is never restored"
+
+
+# 16. 面板尺寸阈值（复用 --panel-size 离屏诊断，不显示 UI、不请求权限）。
 def panel_size():
     if not APP_BIN.is_file():
         raise Skip("未找到构建产物；请先由执行者运行 scripts/verify-app.py")
@@ -362,6 +378,7 @@ CHECKS = [
     ("测试资产完整", test_harness_intact),
     ("面板点击路径", panel_click_path),
     ("设置窗口生命周期", settings_window_lifecycle),
+    ("设置显式打开策略", settings_explicit_open_only),
     ("对比度 token", contrast_tokens),
     ("面板尺寸阈值", panel_size),
 ]

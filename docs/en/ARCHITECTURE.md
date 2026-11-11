@@ -32,7 +32,8 @@ app/SwitchPilot/
 - `SettingsModel` / `SettingsWindowController` own preferences, permissions,
   hotkeys, language and login-item controls. The Settings window is
   non-restorable and has no automatic restore path: it appears only from an
-  explicit panel/menu action.
+  explicit panel/menu action. Returning from System Settings refreshes
+  permission state but never re-presents a hidden or closed Settings window.
 
 The app is an `LSUIElement` agent: it has no Dock icon by default and is driven
 from the menu bar. It is a single-instance app and supports the

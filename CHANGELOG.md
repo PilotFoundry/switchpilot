@@ -3,6 +3,12 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
+## [Unreleased]
+
+- Fix the Settings window jumping back to the front after System Settings is
+  closed. Settings is now explicit-open-only; returning from System Settings
+  refreshes permissions but never re-presents the window. Added a QA guard.
+
 ## [0.7.10] - 2026-11-11
 
 - Fix the menu-bar panel reopening when the status icon is clicked at the top

@@ -9,9 +9,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     private var model: PanelModel?
     private var settingsModel: SettingsModel?
     private var settingsWindow: SettingsWindowController?
-    private var externalSettingsWatch: Timer?
-    private var sawSystemSettingsFrontmost = false
-    private var externalWatchStartedAt: Date?
     private var hotKeys: HotKeyManager?
     private var microphoneMuted = false
     private var microphoneCancellable: AnyCancellable?
@@ -94,14 +91,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         ) { [weak self] note in
             Task { @MainActor in self?.workspaceAppActivated(note) }
         }
-        workspaceCenter.addObserver(
-            forName: NSWorkspace.didTerminateApplicationNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] note in
-            Task { @MainActor in self?.workspaceAppTerminated(note) }
-        }
-
         NotificationCenter.default.addObserver(
             forName: NSApplication.didBecomeActiveNotification,
             object: nil,
@@ -190,61 +179,11 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
     }
 
     @MainActor private func workspaceAppActivated(_ note: Notification) {
-        guard let app = note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication else { return }
-        if app.bundleIdentifier != Bundle.main.bundleIdentifier {
-            panelController?.close()
-        }
-        if app.bundleIdentifier == "com.apple.systempreferences" {
-            sawSystemSettingsFrontmost = true
-            return
-        }
-        guard sawSystemSettingsFrontmost, settingsWindow?.window != nil else { return }
-        sawSystemSettingsFrontmost = false
-        settingsWindow?.present()
-        settingsModel?.refreshAsync()
-    }
-
-    @MainActor private func workspaceAppTerminated(_ note: Notification) {
         guard let app = note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
-              app.bundleIdentifier == "com.apple.systempreferences",
-              settingsWindow?.window != nil else { return }
-        sawSystemSettingsFrontmost = false
-        settingsWindow?.present()
-        settingsModel?.refreshAsync()
-    }
-
-    @MainActor private func startExternalSettingsWatch() {
-        guard externalSettingsWatch == nil else { return }
-        sawSystemSettingsFrontmost = false
-        externalSettingsWatch = Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { [weak self] _ in
-            Task { @MainActor in self?.pollExternalSettings() }
-        }
-    }
-
-    @MainActor private func stopExternalSettingsWatch() {
-        externalSettingsWatch?.invalidate()
-        externalSettingsWatch = nil
-        sawSystemSettingsFrontmost = false
-    }
-
-    /// While the SwitchPilot settings window is open, notice when the user has
-    /// been in System Settings and then leaves it (close/quit/switch back).
-    /// Bring the settings window forward and refresh the real permission state;
-    /// the user keeps a place to press "re-check" instead of losing the window.
-    @MainActor private func pollExternalSettings() {
-        guard settingsWindow?.window != nil else {
-            stopExternalSettingsWatch()
-            return
-        }
-        let front = NSWorkspace.shared.frontmostApplication?.bundleIdentifier
-        if front == "com.apple.systempreferences" {
-            sawSystemSettingsFrontmost = true
-            return
-        }
-        guard sawSystemSettingsFrontmost else { return }
-        sawSystemSettingsFrontmost = false
-        settingsWindow?.present()
-        settingsModel?.refreshAsync()
+              app.bundleIdentifier != Bundle.main.bundleIdentifier else { return }
+        // Settings presentation is explicit-only. Opening or closing System
+        // Settings must never bring the Settings window back to the front.
+        panelController?.close()
     }
 
     @MainActor func openSettings() {
@@ -252,18 +191,14 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
         if settingsWindow == nil {
             let settingsModel = SettingsModel(hotKeys: hotKeys)
             self.settingsModel = settingsModel
-            let controller = SettingsWindowController(model: settingsModel)
-            controller.onClose = { [weak self] in self?.stopExternalSettingsWatch() }
-            settingsWindow = controller
+            settingsWindow = SettingsWindowController(model: settingsModel)
         }
         settingsModel?.refreshAsync()
         settingsWindow?.present()
-        startExternalSettingsWatch()
     }
 
     @MainActor func applicationWillTerminate(_ notification: Notification) {
         panelController?.close(animated: false)
-        externalSettingsWatch?.invalidate()
         hotKeys?.stop()
         model?.shutdown()
     }

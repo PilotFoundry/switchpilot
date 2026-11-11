@@ -5,8 +5,6 @@ import SwiftUI
 
 @MainActor
 final class SettingsWindowController: NSWindowController, NSWindowDelegate {
-    var onClose: (() -> Void)?
-
     private let hosting: NSHostingController<SettingsView>
     private var sizeCancellable: AnyCancellable?
     private var keyMonitor: Any?
@@ -72,7 +70,6 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
 
     func windowWillClose(_ notification: Notification) {
         removeKeyMonitor()
-        onClose?()
     }
 
     func present() {
