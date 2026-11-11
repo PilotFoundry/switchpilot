@@ -3,6 +3,13 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
+## [Unreleased]
+
+- Fix repeated panel opens when clicking the menu-bar icon while another app
+  (for example a browser) is focused. Remove the NSWorkspace application-
+  activation auto-dismiss path; panel dismissal is now owned by the click
+  monitors and the cursor-guarded `didResignActive` path. Add a QA guard.
+
 ## [0.7.11] - 2026-11-11
 
 - Fix the Settings window jumping back to the front after System Settings is

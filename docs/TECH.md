@@ -73,6 +73,11 @@ app/SwitchPilot/
 - Settings is explicit-open-only: neither app activation nor returning from
   System Settings re-presents it. Permission state is refreshed on activation,
   but the Settings window is never auto-raised.
+- External application activation must not dismiss the panel: a status-bar
+  click can briefly activate the previously frontmost app, so an NSWorkspace
+  activation observer would close the panel just before the status action
+  toggles it open again. Dismissal is owned by the click monitors and the
+  cursor-guarded `didResignActive` path.
 - Outside-click dismissal treats the status button's hit zone as extending
   from its frame to the top of its screen with inclusive edges. A pointer pinned
   against the menu-bar top otherwise reports a point just above the button

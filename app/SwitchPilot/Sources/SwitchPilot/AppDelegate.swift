@@ -83,14 +83,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
             }
         }
 
-        let workspaceCenter = NSWorkspace.shared.notificationCenter
-        workspaceCenter.addObserver(
-            forName: NSWorkspace.didActivateApplicationNotification,
-            object: nil,
-            queue: .main
-        ) { [weak self] note in
-            Task { @MainActor in self?.workspaceAppActivated(note) }
-        }
         NotificationCenter.default.addObserver(
             forName: NSApplication.didBecomeActiveNotification,
             object: nil,
@@ -176,14 +168,6 @@ final class AppDelegate: NSObject, NSApplicationDelegate {
 
     @MainActor private func resizePanel() {
         panelController?.resizeToFit()
-    }
-
-    @MainActor private func workspaceAppActivated(_ note: Notification) {
-        guard let app = note.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
-              app.bundleIdentifier != Bundle.main.bundleIdentifier else { return }
-        // Settings presentation is explicit-only. Opening or closing System
-        // Settings must never bring the Settings window back to the front.
-        panelController?.close()
     }
 
     @MainActor func openSettings() {

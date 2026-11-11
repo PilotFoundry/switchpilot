@@ -326,7 +326,22 @@ def settings_window_lifecycle():
     return "Settings window restoration disabled; explicit-open only"
 
 
-# 15. Settings 只能由显式用户动作打开；系统设置关闭后不得自动跳回。
+# 15. 外部应用激活不得关闭面板；关闭统一由点击监控/resign 路径负责。
+def panel_external_activation_guard():
+    app = read("app/SwitchPilot/Sources/SwitchPilot/AppDelegate.swift")
+    controller = read("app/SwitchPilot/Sources/SwitchPilot/PanelWindowController.swift")
+    require("NSWorkspace.didActivateApplicationNotification" not in app,
+            "不得用外部应用激活通知关闭面板")
+    require("workspaceAppActivated" not in app,
+            "不得恢复 workspaceAppActivated 自动关闭路径")
+    require("didResignActive" in controller,
+            "必须保留 didResignActive 关闭路径")
+    require("isCursorOverStatusButton" in controller,
+            "didResignActive 必须保留状态按钮光标守卫")
+    return "external app activation cannot close the panel; click/resign own dismissal"
+
+
+# 16. Settings 只能由显式用户动作打开；系统设置关闭后不得自动跳回。
 def settings_explicit_open_only():
     app = read("app/SwitchPilot/Sources/SwitchPilot/AppDelegate.swift")
     require("sawSystemSettingsFrontmost" not in app,
@@ -378,6 +393,7 @@ CHECKS = [
     ("测试资产完整", test_harness_intact),
     ("面板点击路径", panel_click_path),
     ("设置窗口生命周期", settings_window_lifecycle),
+    ("外部激活面板策略", panel_external_activation_guard),
     ("设置显式打开策略", settings_explicit_open_only),
     ("对比度 token", contrast_tokens),
     ("面板尺寸阈值", panel_size),
