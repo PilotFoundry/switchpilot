@@ -1,6 +1,6 @@
 # Test plan
 
-Status: current baseline **v0.7.12**. English is canonical. Automated checks are
+Status: current baseline **v0.7.13**. English is canonical. Automated checks are
 not a substitute for manual TCC, hardware, login, screen-cleaning or release
 verification.
 

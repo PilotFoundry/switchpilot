@@ -3,7 +3,7 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
-## [Unreleased]
+## [0.7.13] - 2026-11-14
 
 - Harden panel activation: use an explicit user-action activation helper so the
   first click inside the panel reaches its control instead of only activating

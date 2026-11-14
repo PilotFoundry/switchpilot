@@ -4,7 +4,7 @@
 
 [![CI](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml/badge.svg)](https://github.com/PilotFoundry/switchpilot/actions/workflows/ci.yml)
 
-Version 0.7.12 · An open-source, privacy-first macOS menu bar utility for a few
+Version 0.7.13 · An open-source, privacy-first macOS menu bar utility for a few
 reliable system controls, maintained by PilotFoundry.
 
 > This repository contains the app source and current English documentation.
@@ -77,7 +77,7 @@ asset is a universal (Apple Silicon + Intel) macOS app built from the tagged sou
 does not currently have a Developer ID certificate.
 
 - Requirement: macOS 14 or later
-- Asset: `SwitchPilot-0.7.12-macos-universal-adhoc.zip`
+- Asset: `SwitchPilot-0.7.13-macos-universal-adhoc.zip`
 - Download, unzip, move `SwitchPilot.app` to `/Applications`
 - On first launch macOS may block it: **right-click the app → Open**
 - If you prefer a terminal command, limit it to this app:
@@ -85,7 +85,7 @@ does not currently have a Developer ID certificate.
 - Do not disable Gatekeeper system-wide
 
 The zip is built by `./scripts/build-release`; its SHA-256 checksum is published
-next to the asset (`SwitchPilot-0.7.12-macos-universal-adhoc.zip.sha256`). This is a convenience build, not a Developer ID/notarized
+next to the asset (`SwitchPilot-0.7.13-macos-universal-adhoc.zip.sha256`). This is a convenience build, not a Developer ID/notarized
 distribution. Build from source if you want to inspect or sign it yourself.
 
 ## Requirements
