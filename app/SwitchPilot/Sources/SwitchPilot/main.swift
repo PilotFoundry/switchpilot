@@ -187,6 +187,9 @@ if arguments.contains("--dump-panel") {
 if arguments.contains("--panel-hit-test") {
     exit(MainActor.assumeIsolated { PanelWindowController.hitTestRegressionProbe() ? 0 : 1 })
 }
+if arguments.contains("--panel-geometry-test") {
+    exit(MainActor.assumeIsolated { PanelGeometry.regressionProbe() ? 0 : 1 })
+}
 if arguments.contains("--panel-dismissal-policy-test") {
     exit(MainActor.assumeIsolated { PanelDismissalPolicy.regressionProbe() ? 0 : 1 })
 }

@@ -210,26 +210,10 @@ final class PanelWindowController {
 
         let buttonInWindow = button.convert(button.bounds, to: nil)
         let anchor = buttonWindow.convertToScreen(buttonInWindow)
-        let visible = screen.visibleFrame
-        let gap: CGFloat = 4
-        let edgeGap: CGFloat = 4
-        // Magnet alignment: on the left half of the screen the panel's leading
-        // edge snaps near the status item's leading edge; on the right half its
-        // trailing edge snaps near the item's trailing edge. The result is then
-        // clamped to the visible screen so the panel never leaves the display.
-        var x: CGFloat
-        if anchor.midX < visible.midX {
-            x = anchor.minX - edgeGap
-        } else {
-            x = anchor.maxX - size.width + edgeGap
-        }
-        x = min(max(x, visible.minX + edgeGap), visible.maxX - size.width - edgeGap)
-        let y = anchor.minY - gap - size.height
-        return NSRect(
-            x: x,
-            y: max(y, visible.minY + 8),
-            width: size.width,
-            height: size.height
+        return PanelGeometry.frame(
+            anchor: anchor,
+            visible: screen.visibleFrame,
+            size: size
         )
     }
 

@@ -29,9 +29,9 @@
 - Automated release workflow for the ad-hoc universal artifact is in
   `.github/workflows/release.yml`; it rebuilds and replaces the release zip and
   checksum when a release is published or manually dispatched.
-- Documentation is split into current product docs in `docs/`, engineering specs
-  in `docs/en/`, and historical research/evidence under `RESEARCH.md` and the
-  archive paths.
+- Documentation is split into current product docs in `docs/` and engineering
+  specs in `docs/en/`; obsolete research archives are not part of the current
+  tree.
 
 ## Not planned
 

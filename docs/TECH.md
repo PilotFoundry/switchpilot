@@ -74,6 +74,8 @@ app/SwitchPilot/
 - The menu-bar panel uses a behind-window `NSVisualEffectView` menu material,
   magnet edge alignment to the status item, and an 80/60 ms scale/fade. The
   offscreen `--dump-panel` path requests an opaque fallback background.
+  Placement is handled by the pure `PanelGeometry` helper, tested for left/right
+  edge snapping, screen-edge clamping and negative-origin multi-display frames.
 - Settings is explicit-open-only: neither app activation nor returning from
   System Settings re-presents it. Permission state is refreshed on activation,
   but the Settings window is never auto-raised.

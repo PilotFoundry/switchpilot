@@ -158,7 +158,10 @@ def check_panel_hit_test():
     dismissal = run(str(APP_BIN), "--panel-dismissal-policy-test")
     if dismissal.returncode != 0:
         raise RuntimeError(dismissal.stderr.strip() or "panel dismissal policy probe failed")
-    return "material click-through, settings Cmd-W, launch-language freeze and panel dismissal"
+    geometry = run(str(APP_BIN), "--panel-geometry-test")
+    if geometry.returncode != 0:
+        raise RuntimeError(geometry.stderr.strip() or "panel geometry probe failed")
+    return "material click-through, settings Cmd-W, language freeze, dismissal and geometry"
 
 
 def check_no_leftover_process():

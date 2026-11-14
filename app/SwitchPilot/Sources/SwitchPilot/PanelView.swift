@@ -526,13 +526,19 @@ struct PanelView: View {
             Button(model.guideVisible ? L("关闭说明") : L("使用说明")) { model.toggleGuide() }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
+                .accessibilityLabel(L(model.guideVisible ? "关闭说明" : "使用说明"))
+                .accessibilityHint(L("显示或收起操作说明"))
             Button("设置…") { model.openSettings() }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
+                .accessibilityLabel(L("设置"))
+                .accessibilityHint(L("打开 SwitchPilot 设置"))
             Spacer()
             Button("退出") { model.quit() }
                 .buttonStyle(.bordered)
                 .controlSize(.small)
+                .accessibilityLabel(L("退出 SwitchPilot"))
+                .accessibilityHint(L("退出菜单栏应用"))
         }
     }
 

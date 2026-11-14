@@ -12,6 +12,10 @@ semantic versioning while it is pre-1.0.
   parked over the icon; a normal app switch still dismisses the panel.
 - Add a panel-dismissal policy regression probe to `verify-app.py` and extend
   the activation source guard.
+- Extract panel placement into a testable `PanelGeometry` helper covering
+  left/right edge alignment, screen clamping and negative-origin displays.
+- Add accessibility labels/hints to footer controls and remove stale
+  `build-pilot` and archive-path references.
 
 ## [0.7.12] - 2026-11-11
 
