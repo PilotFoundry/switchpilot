@@ -155,7 +155,10 @@ def check_panel_hit_test():
     language = run(str(APP_BIN), "--language-freeze-test")
     if language.returncode != 0:
         raise RuntimeError(language.stderr.strip() or "language freeze probe failed")
-    return "material click-through, settings Cmd-W and launch-language freeze"
+    dismissal = run(str(APP_BIN), "--panel-dismissal-policy-test")
+    if dismissal.returncode != 0:
+        raise RuntimeError(dismissal.stderr.strip() or "panel dismissal policy probe failed")
+    return "material click-through, settings Cmd-W, launch-language freeze and panel dismissal"
 
 
 def check_no_leftover_process():

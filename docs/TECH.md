@@ -67,6 +67,10 @@ app/SwitchPilot/
 - `scripts/build-app` builds the package (debug by default), assembles the
   `.app`, copies `Info.plist`, icon and every `.lproj`, then signs it.
 - `scripts/install-app` copies the bundle to `~/Applications`.
+- The status-item panel, Settings window and screen-cleaning overlays use an
+  explicit activation helper. `NSApp.activate()` alone can leave the previously
+  focused app frontmost on macOS 27; the helper activates the accessory app so
+  the first click inside the panel reaches its control.
 - The menu-bar panel uses a behind-window `NSVisualEffectView` menu material,
   magnet edge alignment to the status item, and an 80/60 ms scale/fade. The
   offscreen `--dump-panel` path requests an opaque fallback background.
@@ -77,7 +81,10 @@ app/SwitchPilot/
   click can briefly activate the previously frontmost app, so an NSWorkspace
   activation observer would close the panel just before the status action
   toggles it open again. Dismissal is owned by the click monitors and the
-  cursor-guarded `didResignActive` path.
+  `didResignActive` path.
+- `PanelDismissalPolicy` distinguishes an actual status-item press from a
+  cursor merely parked over the icon. A parked cursor no longer suppresses
+  dismissal when another app becomes active.
 - Outside-click dismissal treats the status button's hit zone as extending
   from its frame to the top of its screen with inclusive edges. A pointer pinned
   against the menu-bar top otherwise reports a point just above the button

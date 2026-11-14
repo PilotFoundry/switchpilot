@@ -293,8 +293,14 @@ def panel_click_path():
             "material view 的 hitTest 必须返回 nil")
     require("materialView = PassthroughVisualEffectView()" in controller,
             "实际使用的不是 click-through material view")
-    require("NSApp.activate(ignoringOtherApps: true)" in controller,
-            "面板打开时必须激活 app，避免首次点击只激活窗口")
+    require("activateSwitchPilotForUserAction()" in controller,
+            "面板打开时必须走可用的激活 helper，避免首次点击只激活窗口")
+    for path in (
+        "app/SwitchPilot/Sources/SwitchPilot/SettingsWindowController.swift",
+        "app/SwitchPilot/Sources/SwitchPilot/ScreenCleaningManager.swift",
+    ):
+        require("activateSwitchPilotForUserAction()" in read(path),
+                f"{path} 必须使用可用的激活 helper")
     require(".allowsHitTesting(false)" in panel_view,
             "边框 overlay 不得参与点击命中")
     settings = read("app/SwitchPilot/Sources/SwitchPilot/SettingsWindowController.swift")
@@ -336,8 +342,10 @@ def panel_external_activation_guard():
             "不得恢复 workspaceAppActivated 自动关闭路径")
     require("didResignActive" in controller,
             "必须保留 didResignActive 关闭路径")
-    require("isCursorOverStatusButton" in controller,
-            "didResignActive 必须保留状态按钮光标守卫")
+    require("PanelDismissalPolicy.shouldCloseAfterResign" in controller,
+            "didResignActive 必须使用可测试的面板关闭策略")
+    require("pressedMouseButtons" in controller,
+            "didResignActive 必须区分实际按键与光标停留")
     return "external app activation cannot close the panel; click/resign own dismissal"
 
 

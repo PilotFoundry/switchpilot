@@ -3,6 +3,16 @@
 All notable user-visible changes are recorded here. This project follows
 semantic versioning while it is pre-1.0.
 
+## [Unreleased]
+
+- Harden panel activation: use an explicit user-action activation helper so the
+  first click inside the panel reaches its control instead of only activating
+  the window.
+- Make resign-active dismissal distinguish a status-item press from a cursor
+  parked over the icon; a normal app switch still dismisses the panel.
+- Add a panel-dismissal policy regression probe to `verify-app.py` and extend
+  the activation source guard.
+
 ## [0.7.12] - 2026-11-11
 
 - Fix repeated panel opens when clicking the menu-bar icon while another app

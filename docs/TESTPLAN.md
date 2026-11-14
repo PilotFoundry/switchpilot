@@ -46,8 +46,8 @@ make smoke
 ```
 
 `verify-app.py` also runs `SwitchPilotChecks` and checks plist/signature,
-launch smoke, contrast, panel sizes, semantic colors and static scripts. CI runs
-the CI-safe subset and does not request TCC.
+launch smoke, contrast, panel sizes, semantic colors, panel dismissal policy and
+static scripts. CI runs the CI-safe subset and does not request TCC.
 
 ## 4. Localization test matrix
 

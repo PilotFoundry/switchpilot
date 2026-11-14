@@ -114,7 +114,7 @@ final class ScreenCleaningManager {
         isActive = false
         if wasActive {
             onStateChange?(false, L("已退出清洁模式"))
-            NSApp.activate(ignoringOtherApps: false)
+            activateSwitchPilotForUserAction()
         }
     }
 
@@ -166,7 +166,7 @@ final class ScreenCleaningManager {
             windows.append(window)
             overlays.append(overlay)
         }
-        NSApp.activate(ignoringOtherApps: true)
+        activateSwitchPilotForUserAction()
     }
 
     @objc fileprivate func exitFromOverlay(_ sender: Any?) {

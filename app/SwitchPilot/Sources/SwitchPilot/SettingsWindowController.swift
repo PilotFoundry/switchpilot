@@ -77,7 +77,7 @@ final class SettingsWindowController: NSWindowController, NSWindowDelegate {
         window?.center()
         window?.makeKeyAndOrderFront(nil)
         window?.orderFrontRegardless()
-        NSApp.activate(ignoringOtherApps: true)
+        activateSwitchPilotForUserAction()
         installKeyMonitor()
     }
 

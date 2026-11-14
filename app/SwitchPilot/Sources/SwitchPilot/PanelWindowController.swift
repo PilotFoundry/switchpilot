@@ -128,7 +128,7 @@ final class PanelWindowController {
         // first is what makes the first click on a SwiftUI button perform its
         // action instead of merely activating the window. It also gives the
         // Accessibility consent prompt a foreground app to attach to.
-        NSApp.activate(ignoringOtherApps: true)
+        activateSwitchPilotForUserAction()
         panel.makeKeyAndOrderFront(nil)
         isShown = true
         installClickMonitors()
@@ -301,7 +301,15 @@ final class PanelWindowController {
             queue: .main
         ) { [weak self] _ in
             Task { @MainActor in
-                guard let self, !self.isCursorOverStatusButton() else { return }
+                guard let self else { return }
+                let cursorOverStatus = self.isPointOverStatusButton(NSEvent.mouseLocation)
+                let mouseButtonDown = NSEvent.pressedMouseButtons != 0
+                guard PanelDismissalPolicy.shouldCloseAfterResign(
+                    isShown: self.isShown,
+                    isClosing: self.isClosing,
+                    cursorOverStatusButton: cursorOverStatus,
+                    mouseButtonDown: mouseButtonDown
+                ) else { return }
                 self.close()
             }
         }
@@ -358,10 +366,6 @@ final class PanelWindowController {
             buttonFrame: buttonScreenFrame(button: button, window: window),
             screenTop: screen.frame.maxY
         )
-    }
-
-    private func isCursorOverStatusButton() -> Bool {
-        isShown && !isClosing && isPointOverStatusButton(NSEvent.mouseLocation)
     }
 
     private func isStatusButtonClick(_ event: NSEvent) -> Bool {
